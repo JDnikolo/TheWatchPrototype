@@ -24,7 +24,7 @@ public class FirstPersonCamera : MonoBehaviour
         // Up/Down camera movement -
         var tilt = m_cinemachineCamera.transform.localEulerAngles.x -
                    m_mouseInput.y * cameraSensitivityY * Time.deltaTime;
-        tilt -= (tilt > 180) ? 360 : 0;
+        if (tilt > 180) tilt -= 360;
         tilt = Mathf.Clamp(tilt, -cameraTiltLimit, cameraTiltLimit);
         m_cinemachineCamera.transform.localEulerAngles =
             new Vector3(tilt, m_cinemachineCamera.transform.localEulerAngles.y, 0);
