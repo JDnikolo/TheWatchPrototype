@@ -4,10 +4,10 @@ using UnityEngine.InputSystem;
 
 public class FirstPersonCamera : MonoBehaviour
 {
-    [SerializeField] private float cameraSensitivityX = Mathf.PI * 0.01f;
-    [SerializeField] private float cameraSensitivityY = Mathf.PI * 0.01f;
+    [SerializeField] private float cameraSensitivityX = 20.0f;
+    [SerializeField] private float cameraSensitivityY = 20.0f;
     [SerializeField] private float cameraTiltLimit = 85f;
-    
+
     private CinemachineCamera m_cinemachineCamera;
     private Vector2 m_mouseInput;
 
@@ -16,7 +16,7 @@ public class FirstPersonCamera : MonoBehaviour
         m_cinemachineCamera = GetComponentInChildren<CinemachineCamera>();
         Cursor.lockState = CursorLockMode.Locked;
     }
-    
+
     // Update is called once per frame
     private void Update()
     {
