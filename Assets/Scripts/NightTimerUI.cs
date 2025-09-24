@@ -3,6 +3,7 @@ using UnityEngine.Events;
 using TMPro;
 using System;
 using System.Globalization;
+using Unity.VisualScripting;
 
 public class NightTimerUI : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class NightTimerUI : MonoBehaviour
     /// Event invoked when the timer's target time is set.
     /// </summary>
     [Tooltip("Invoked when the timer's target time is set.")]
+    [HideInInspector]
     public UnityEvent<float> OnTargetTimeSet;
 
 
@@ -35,7 +37,9 @@ public class NightTimerUI : MonoBehaviour
     /// Event invoked when the timer reaches its target time.
     /// </summary>
     [Tooltip("Invoked when the timer reaches its target time.")]
+    [HideInInspector] //For some reason this keeps throwing errors in the inspector?
     public UnityEvent OnTimerFinished;
+
     /// <summary>
     /// The time the timer has counted up so far.
     /// </summary>
