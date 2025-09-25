@@ -280,14 +280,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3543872c63c07541a17e6cd1abcb14a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _clockParent: {fileID: 983618473107064161}
-  _targetTime: 7200
-  OnTargetTimeSet:
+  TargetTimeSet:
     m_PersistentCalls:
       m_Calls: []
-  OnTimerFinished:
+  TimerFinished:
     m_PersistentCalls:
       m_Calls: []
+  clockParent: {fileID: 983618473107064161}
+  targetTime: 7200
 --- !u!1 &3234825687278572578
 GameObject:
   m_ObjectHideFlags: 0
