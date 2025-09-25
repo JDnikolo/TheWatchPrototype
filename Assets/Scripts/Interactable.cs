@@ -3,8 +3,7 @@ using UnityEngine.UI;
 
 public class InteractableWithDialogue : MonoBehaviour
 {
-    [Header("Floating Name Settings")]
-    public string displayName = "";       
+    [Header("Floating Name Settings")] public string displayName = "";
     public Vector3 offset = new Vector3(0, 0, 0);
     public int fontSize = 10000;
     public Color textColor = Color.white;
@@ -12,96 +11,82 @@ public class InteractableWithDialogue : MonoBehaviour
     /*------------------------------------*/
 
     [Header("Player Detection")]
-    public float showDistance = 3.5f;   // Distance at which player can interact / see name of the object
+    public float showDistance = 3.5f; // Distance at which player can interact / see name of the object
+
     public string playerTag = "Player";
     /*------------------------------------*/
 
-    [Header("Dialogue UI")]
-    public GameObject dialoguePanel;   // UI panel for dialogue
-    public Text dialogueText;          // Text field inside the panel
+    [Header("Dialogue UI")] public GameObject dialoguePanel; // UI panel for dialogue
+    public Text dialogueText; // Text field inside the panel
     [TextArea] public string dialogueMessage = "Hello! This is a test dialogue."; // Default dialogue message
 
-    private GameObject textObject; // GameObject holding the floating 3D text
-    private TextMesh textMesh;     // The actual 3D TextMesh
-    private Transform player;      // Reference to player transform
+    private GameObject m_textObject; // GameObject holding the floating 3D text
+    private TextMesh m_textMesh; // The actual 3D TextMesh
+    private Transform m_player; // Reference to player transform
 
-    private bool isDialogueOpen = false; // Track if dialogue is open
+    private bool m_isDialogueOpen; // Track if dialogue is open
 
     // References to player scripts (used to disable controls while in dialogue)
-    private FirstPersonPlayerController playerMovement;
-    private FirstPersonCamera playerCamera;
-
-
+    // This will get replaced with the input manager, we simply swap the action map from player to ui control
+    private FirstPersonPlayerController m_playerMovement;
+    private FirstPersonCamera m_playerCamera;
 
     void Start()
     {
         InitializePlayerReferences(); // Find player + get movement/camera scripts
-        CreateFloatingName();         // Create floating name above object
-        HideDialogue();               // Hide dialogue UI at the start
+        CreateFloatingName(); // Create floating name above object
+        HideDialogue(); // Hide dialogue UI at the start
     }
-
-
 
     void Update()
     {
-        if (player == null) return;
+        if (m_player == null) return;
 
-        float distance = Vector3.Distance(player.position, transform.position);
+        var distance = Vector3.Distance(m_player.position, transform.position);
 
-        HandleFloatingName(distance);   // Show/Hide floating name depending on distance
-        HandleDialogueInput(distance);  // Handle click to open/close dialogue
+        HandleFloatingName(distance); // Show/Hide floating name depending on distance
+        HandleDialogueInput(distance); // Handle click to open/close dialogue
     }
-
-
-
-
-    #region Initialization
-
-
-
+#region Initialization
     /// <summary>
     /// Finds the player in the scene using tag, 
     /// and stores references to movement/camera scripts for disabling later.
     /// </summary>
     private void InitializePlayerReferences()
     {
-        GameObject playerObj = GameObject.FindGameObjectWithTag(playerTag);
+        var playerObj = GameObject.FindGameObjectWithTag(playerTag);
         if (playerObj != null)
         {
-            player = playerObj.transform;
+            m_player = playerObj.transform;
 
             // Get player control scripts
-            playerMovement = player.GetComponent<FirstPersonPlayerController>();
-            playerCamera = player.GetComponentInChildren<FirstPersonCamera>();
+            m_playerMovement = m_player.GetComponent<FirstPersonPlayerController>();
+            m_playerCamera = m_player.GetComponentInChildren<FirstPersonCamera>();
         }
     }
-
-
 
     /// <summary>
     /// Creates a 3D TextMesh object above this object to display its name.
     /// </summary>
     private void CreateFloatingName()
     {
-        textObject = new GameObject("FloatingText");
-        textObject.transform.SetParent(transform);
-        textObject.transform.localPosition = offset; // Offset from object center
-        textObject.transform.localRotation = Quaternion.identity;
-        textObject.transform.localScale = Vector3.one;
+        m_textObject = new GameObject("FloatingText");
+        m_textObject.transform.SetParent(transform);
+        m_textObject.transform.localPosition = offset; // Offset from object center
+        m_textObject.transform.localRotation = Quaternion.identity;
+        m_textObject.transform.localScale = Vector3.one;
 
-        textMesh = textObject.AddComponent<TextMesh>();
-        textMesh.text = string.IsNullOrEmpty(displayName) ? gameObject.name : displayName;
-        textMesh.characterSize = characterSize;
-        textMesh.fontSize = fontSize;
-        textMesh.color = textColor;
-        textMesh.anchor = TextAnchor.MiddleCenter;
-        textMesh.alignment = TextAlignment.Center;
+        m_textMesh = m_textObject.AddComponent<TextMesh>();
+        m_textMesh.text = string.IsNullOrEmpty(displayName) ? gameObject.name : displayName;
+        m_textMesh.characterSize = characterSize;
+        m_textMesh.fontSize = fontSize;
+        m_textMesh.color = textColor;
+        m_textMesh.anchor = TextAnchor.MiddleCenter;
+        m_textMesh.alignment = TextAlignment.Center;
 
-        textMesh.gameObject.SetActive(false); // Hidden by default
+        m_textMesh.gameObject.SetActive(false); // Hidden by default
     }
-
-
-
+    
     /// <summary>
     /// Ensures dialogue panel is hidden at the start.
     /// </summary>
@@ -110,21 +95,9 @@ public class InteractableWithDialogue : MonoBehaviour
         if (dialoguePanel != null)
             dialoguePanel.SetActive(false);
     }
+#endregion
 
-
-
-    #endregion
-
-
-
-
-
-    #region Floating Name
-
-
-
-
-
+#region Floating Name
     /// <summary>
     /// Handles showing/hiding floating name depending on player's distance.
     /// </summary>
@@ -132,43 +105,29 @@ public class InteractableWithDialogue : MonoBehaviour
     {
         if (distance <= showDistance)
         {
-            if (!textMesh.gameObject.activeSelf)
-                textMesh.gameObject.SetActive(true);
+            if (!m_textMesh.gameObject.activeSelf)
+                m_textMesh.gameObject.SetActive(true);
 
             RotateTextTowardsPlayer();
         }
         else
         {
-            if (textMesh.gameObject.activeSelf)
-                textMesh.gameObject.SetActive(false);
+            if (m_textMesh.gameObject.activeSelf)
+                m_textMesh.gameObject.SetActive(false);
         }
     }
-
-
-
 
     /// <summary>
     /// Rotates the floating name so it always faces the player.
     /// </summary>
     private void RotateTextTowardsPlayer()
     {
-        textObject.transform.LookAt(player);
-        textObject.transform.rotation = Quaternion.LookRotation(textObject.transform.position - player.position);
+        m_textObject.transform.LookAt(m_player);
+        m_textObject.transform.rotation = Quaternion.LookRotation(m_textObject.transform.position - m_player.position);
     }
+#endregion
 
-
-
-    #endregion
-
-
-
-
-
-
-
-    #region Dialogue
-
-
+#region Dialogue
     /// <summary>
     /// Handles left mouse click to open/close dialogue if in range.
     /// </summary>
@@ -176,19 +135,17 @@ public class InteractableWithDialogue : MonoBehaviour
     {
         if (distance <= showDistance && Input.GetMouseButtonDown(0))
         {
-            if (!isDialogueOpen)
+            if (!m_isDialogueOpen)
                 OpenDialogue();
             else
                 CloseDialogue();
         }
-        else if (distance > showDistance && isDialogueOpen)
+        else if (distance > showDistance && m_isDialogueOpen)
         {
             CloseDialogue();
         }
     }
-
-
-
+    
     /// <summary>
     /// Opens the dialogue panel, shows the text, and disables player control.
     /// </summary>
@@ -198,12 +155,10 @@ public class InteractableWithDialogue : MonoBehaviour
         {
             dialoguePanel.SetActive(true);
             dialogueText.text = dialogueMessage;
-            isDialogueOpen = true;
+            m_isDialogueOpen = true;
             TogglePlayerControl(false);
         }
     }
-
-
 
     /// <summary>
     /// Closes the dialogue panel and re-enables player control.
@@ -213,19 +168,17 @@ public class InteractableWithDialogue : MonoBehaviour
         if (dialoguePanel != null)
             dialoguePanel.SetActive(false);
 
-        isDialogueOpen = false;
+        m_isDialogueOpen = false;
         TogglePlayerControl(true);
     }
-
-
-
+    
     /// <summary>
     /// Enables/disables movement and camera control while in dialogue.
     /// </summary>
     private void TogglePlayerControl(bool enabled)
     {
-        if (playerMovement != null) playerMovement.enabled = enabled;
-        if (playerCamera != null) playerCamera.enabled = enabled;
+        if (m_playerMovement != null) m_playerMovement.enabled = enabled;
+        if (m_playerCamera != null) m_playerCamera.enabled = enabled;
     }
-    #endregion
+#endregion
 }
