@@ -10,12 +10,6 @@ public class FirstPersonCamera : MonoBehaviour
 
 	private Vector2 m_mouseInput;
 
-	private void Awake()
-	{
-		//Its fine for now but the cursor should not be controlled by this script
-		Cursor.lockState = CursorLockMode.Locked;
-	}
-	
 	// Update is called once per frame
 	private void Update()
 	{
@@ -29,5 +23,7 @@ public class FirstPersonCamera : MonoBehaviour
 
 	private void SetClampedValue(ref InputAxis axis, float change) => axis.Value = axis.ClampValue(axis.Value + change);
 
-	public void OnLook(InputValue value) => m_mouseInput = value.Get<Vector2>();
+	//public void OnLook(InputValue value) => m_mouseInput = value.Get<Vector2>();
+
+	public void OnLook(Vector2 value) => m_mouseInput = value;
 }

@@ -128,7 +128,6 @@ public class NightTimerUI : MonoBehaviour
         var time = TimeSpan.FromSeconds(m_timeElapsed);
         var secondsRotation = 90 - (time.Seconds) * 6f;
         if (time.Seconds > 30) secondsRotation = -90 + (time.Seconds - 30) * 6f;
-        Debug.Log(string.Format("Angle: {0} Seconds: {1}", secondsRotation, time.Seconds));
         m_secondsHand.rotation = Quaternion.Euler(0, 0, secondsRotation);
         m_currentTimeHand.rotation = Quaternion.Euler(0, 0,
             90.0f - 180.0f * (m_timeElapsed / targetTime));
