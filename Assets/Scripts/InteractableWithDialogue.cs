@@ -53,7 +53,6 @@ public class InteractableWithDialogue : MonoBehaviour
         HandleFloatingName(distance); // Show/Hide floating name depending on distance
         HandleDialogueInput(distance); // Handle click to open/close dialogue
     }
-
     #region Initialization
     /// <summary>
     /// Finds the player in the scene using tag, 
