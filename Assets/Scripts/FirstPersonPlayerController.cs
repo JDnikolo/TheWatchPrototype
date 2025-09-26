@@ -6,7 +6,7 @@ public class FirstPersonPlayerController : MonoBehaviour
 {
     [SerializeField] private CinemachineCamera cinemachineCamera;
 
-    [Header("Movement")] [SerializeField] private float movementSpeed = 5.0f;
+    [Header("Movement")][SerializeField] private float movementSpeed = 5.0f;
     [SerializeField] private float maximumSpeed = 10f;
 
     private Rigidbody m_rigidbody;
@@ -29,5 +29,6 @@ public class FirstPersonPlayerController : MonoBehaviour
         }
     }
 
-    public void OnMove(InputValue value) => m_movementDirection = value.Get<Vector2>();
+    //public void OnMove(InputValue value) => m_movementDirection = value.Get<Vector2>();
+    public void OnMove(Vector2 value) => m_movementDirection = value;
 }
