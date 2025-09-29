@@ -21,9 +21,9 @@ namespace Interactables
 			if (interactable) interactable.OnInteract();
 		}
 
-		private void OnCollisionEnter(Collision collision)
+		private void OnTriggerEnter(Collider other)
 		{
-			if (collision.gameObject.CompareTag("Player")) m_fireOnMain = true;
+			if (other.gameObject.CompareTag("Player")) m_fireOnMain = true;
 		}
 	}
 }

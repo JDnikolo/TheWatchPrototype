@@ -6,11 +6,13 @@ public static class Utilities
 	{
 		inputManager.ToggleUIMap(false);
 		inputManager.TogglePlayerMap(true);
+		inputManager.ToggleCursor(false);
 	}
 	
 	public static void ForceUIInput(this InputManager inputManager)
 	{
 		inputManager.TogglePlayerMap(false);
 		inputManager.ToggleUIMap(true);
+		inputManager.ToggleCursor(true);
 	}
 }
