@@ -4,14 +4,13 @@ using UnityEngine.UI;
 public class InteractableWithDialogue : MonoBehaviour
 {
     [Header("Floating Name Settings")] public string displayName = "";
-    public Vector3 offset = new Vector3(0, 0, 0);
+    public Vector3 offset = new(0, 0, 0);
     public int fontSize = 10000;
     public Color textColor = Color.white;
     public float characterSize = 0.002f;
     /*------------------------------------*/
 
-    [Header("Player Detection")]
-    public float showDistance = 3.5f; // Distance at which player can interact / see name of the object
+    [Header("Player Detection")] public float showDistance = 3.5f; // Distance at which player can interact / see name of the object
 
     public string playerTag = "Player";
     /*------------------------------------*/
@@ -38,6 +37,12 @@ public class InteractableWithDialogue : MonoBehaviour
         HideDialogue(); // Hide dialogue UI at the start
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, showDistance);
+    }
+
     void Update()
     {
         if (m_player == null) return;
@@ -47,6 +52,7 @@ public class InteractableWithDialogue : MonoBehaviour
         HandleFloatingName(distance); // Show/Hide floating name depending on distance
         HandleDialogueInput(distance); // Handle click to open/close dialogue
     }
+
 #region Initialization
     /// <summary>
     /// Finds the player in the scene using tag, 
@@ -86,7 +92,7 @@ public class InteractableWithDialogue : MonoBehaviour
 
         m_textMesh.gameObject.SetActive(false); // Hidden by default
     }
-    
+
     /// <summary>
     /// Ensures dialogue panel is hidden at the start.
     /// </summary>
@@ -145,7 +151,7 @@ public class InteractableWithDialogue : MonoBehaviour
             CloseDialogue();
         }
     }
-    
+
     /// <summary>
     /// Opens the dialogue panel, shows the text, and disables player control.
     /// </summary>
@@ -171,7 +177,7 @@ public class InteractableWithDialogue : MonoBehaviour
         m_isDialogueOpen = false;
         TogglePlayerControl(true);
     }
-    
+
     /// <summary>
     /// Enables/disables movement and camera control while in dialogue.
     /// </summary>

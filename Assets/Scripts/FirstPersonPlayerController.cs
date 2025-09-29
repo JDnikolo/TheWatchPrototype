@@ -1,3 +1,4 @@
+using Managers;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,29 +6,28 @@ using UnityEngine.InputSystem;
 public class FirstPersonPlayerController : MonoBehaviour
 {
     [SerializeField] private CinemachineCamera cinemachineCamera;
-
-    [Header("Movement")] [SerializeField] private float movementSpeed = 5.0f;
+    [SerializeField] private new Rigidbody rigidbody;
+    [SerializeField] private string moveAxisName = "Move";
+    
+    [Header("Movement")] 
+    [SerializeField] private float movementSpeed = 5.0f;
     [SerializeField] private float maximumSpeed = 10f;
+    
+    private InputAction m_moveAction;
 
-    private Rigidbody m_rigidbody;
-    private Vector2 m_movementDirection = new(0, 0);
-
-    private void Awake()
+    private void Start()
     {
-        m_rigidbody = GetComponent<Rigidbody>();
-        m_rigidbody.maxLinearVelocity = maximumSpeed;
+        rigidbody.maxLinearVelocity = maximumSpeed;
+        m_moveAction = InputManager.Instance.GetPlayerAction(moveAxisName);
     }
 
     private void FixedUpdate()
     {
-        if (!m_movementDirection.Equals(Vector3.zero))
-        {
-            var movement = cinemachineCamera.transform.right * m_movementDirection.x +
-                           cinemachineCamera.transform.forward * m_movementDirection.y;
-            movement.y = 0f;
-            m_rigidbody.AddForce(movementSpeed * Time.fixedDeltaTime * movement.normalized, ForceMode.VelocityChange);
-        }
+        var movementDirection = m_moveAction.ReadValue<Vector2>();
+        if (movementDirection.Equals(Vector2.zero)) return;
+        var movement = cinemachineCamera.transform.right * movementDirection.x +
+                       cinemachineCamera.transform.forward * movementDirection.y;
+        movement.y = 0f;
+        rigidbody.AddForce(movementSpeed * Time.fixedDeltaTime * movement.normalized, ForceMode.VelocityChange);
     }
-
-    public void OnMove(InputValue value) => m_movementDirection = value.Get<Vector2>();
 }

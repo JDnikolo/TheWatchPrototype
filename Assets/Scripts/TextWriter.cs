@@ -1,28 +1,28 @@
 using System.Text;
+using Managers;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class TextWriter : MonoBehaviour
 {
-	[Header("Linked behaviors")] [SerializeField]
-	private TextMeshProUGUI textWriter;
-
-	[SerializeField] private TextAsset textAsset;
+	[Header("Linked behaviors")] 
+	[SerializeField] private TextMeshProUGUI textWriter;
 	[SerializeField] private Slider slider;
 
-	[Header("Control schemes")] [SerializeField]
-	private InputActionAsset actionAsset;
-	
-	[SerializeField] private string uiMapName = "UI";
+	[Header("Control schemes")] 
 	[SerializeField] private string skipActionName = "SkipDialogue";
 
-	[Header("Delays")] [SerializeField] private float characterDelay;
+	[Header("Delays")] 
+	[SerializeField] private float characterDelay;
 	[SerializeField] private float periodDelay;
 	[SerializeField] private float commaDelay;
 	[SerializeField] private float spaceDelay;
 
+	private TextAsset m_textAsset;
+	private TextWriterFinished m_onFinished;
 	private InputAction m_skipAction;
 	private StringBuilder m_stringBuilder = new();
 	private float m_timer;
@@ -31,12 +31,29 @@ public class TextWriter : MonoBehaviour
 	private bool m_write;
 	private bool m_forceFinish;
 
-	private void Start()
+	public void WriteText(TextWriterInput textWriterInput)
 	{
-		m_skipAction = actionAsset.FindActionMap(uiMapName).FindAction(skipActionName);
-		slider.onValueChanged.AddListener(SliderChanged);
+		m_textAsset = textWriterInput.textToDisplay;
+		m_onFinished = textWriterInput.onTextWriterFinished;
 		StartWriting();
 	}
+
+	public void DisposeText()
+	{
+		m_textAsset = null;
+		StopWriting();
+	}
+	
+	private void Start()
+	{
+		m_skipAction = InputManager.Instance.GetUIAction(skipActionName);
+		slider.onValueChanged.AddListener(SliderChanged);
+		FullReset();
+	}
+
+	private void OnEnable() => FullReset();
+
+	private void OnDisable() => StopWriting();
 
 	private void SliderChanged(float value) => textWriter.pageToDisplay = Mathf.RoundToInt(value) + 1;
 
@@ -46,11 +63,12 @@ public class TextWriter : MonoBehaviour
 		{
 			m_forceFinish = false;
 			CheckPages();
+			OnFinished();
 		}
 		
 		if (!m_write) return;
 		var changed = false;
-		var text = textAsset.Text;
+		var text = m_textAsset.Text;
 		if (m_skipAction.WasPressedThisFrame())
 		{
 			m_forceFinish = true;
@@ -67,6 +85,7 @@ public class TextWriter : MonoBehaviour
 				if (seek >= text.Length)
 				{
 					m_write = false;
+					OnFinished();
 					break;
 				}
 
@@ -98,7 +117,12 @@ public class TextWriter : MonoBehaviour
 			CheckPages();
 		}
 
-		if (!m_write) ResetWriter();
+		if (!m_write) ResetInternals();
+	}
+
+	private void OnFinished()
+	{
+		if (m_onFinished) m_onFinished.OnTextWriterFinished();
 	}
 
 	private void CheckPages()
@@ -133,19 +157,24 @@ public class TextWriter : MonoBehaviour
 
 	private void StartWriting()
 	{
-		ResetWriter();
 		FullReset();
 		m_write = true;
 	}
 
 	private void StopWriting()
 	{
-		ResetWriter();
 		FullReset();
 		m_write = false;
 	}
 
-	private void ResetWriter()
+	private void FullReset()
+	{
+		ResetInternals();
+		ResetSlider();
+		ResetWriter();
+	}
+
+	private void ResetInternals()
 	{
 		m_stringBuilder.Clear();
 		m_previousPageCount = 0;
@@ -153,10 +182,14 @@ public class TextWriter : MonoBehaviour
 		m_seek = 0;
 	}
 
-	private void FullReset()
+	private void ResetWriter()
 	{
 		textWriter.SetText(m_stringBuilder);
 		textWriter.pageToDisplay = 1;
+	}
+
+	private void ResetSlider()
+	{
 		SetSlider(0);
 		slider.SetValueWithoutNotify(0f);
 	}
