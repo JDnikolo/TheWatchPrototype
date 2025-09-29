@@ -4,7 +4,6 @@ using TMPro;
 using System;
 using System.Globalization;
 using UnityEngine.Serialization;
-using Unity.VisualScripting;
 using UnityEngine.UI;
 
 public class NightTimerUI : MonoBehaviour
@@ -12,26 +11,17 @@ public class NightTimerUI : MonoBehaviour
     /// <summary>
     /// Event invoked when the timer's target time is set.
     /// </summary>
-    [FormerlySerializedAs("TargetTimeSet")]
-    [Tooltip("Invoked when the timer's target time is set.")]
-    [HideInInspector]
-    public UnityEvent<float> targetTimeSet;
+    public event Action<float> TargetTimeSet;
 
     /// <summary>
     /// Event invoked when the timer reaches its target time.
     /// </summary>
-    [FormerlySerializedAs("TimerFinished")]
-    [Tooltip("Invoked when the timer reaches its target time.")]
-    [HideInInspector]
-    //For some reason this keeps throwing errors in the inspector?
-    public UnityEvent timerFinished;
+    public event Action TimerFinished;
 
     [SerializeField]
     [Tooltip("The parent GameObject containing the clock hand sprites.")]
     private GameObject clockParent;
 
-    [SerializeField]
-    [Tooltip("The time that the counter will count towards.")]
     private float targetTime = 2 * 60 * 60.0f;
 
     /// <summary>
@@ -42,7 +32,7 @@ public class NightTimerUI : MonoBehaviour
     /// <summary>
     /// Secondary timer used to update the timer UI once per second.
     /// </summary>
-    private float m_secondTimer = 1.0f;
+    private float m_secondTimer = 0.0f;
 
     /// <summary>
     /// Boolean 
@@ -69,10 +59,14 @@ public class NightTimerUI : MonoBehaviour
         m_currentTimeHand = clockHands[3];
         m_secondsHand = clockHands[4];
 
-        m_clockMask = gameObject.GetComponent<RectMask2D>();
+        m_clockMask = GetComponent<RectMask2D>();
         m_clockBackground = GetComponent<Image>();
 
         m_timeElapsed = 0.0f;
+    }
+
+    private void Start()
+    {
         UpdateText();
         UpdateClock();
     }
@@ -83,7 +77,7 @@ public class NightTimerUI : MonoBehaviour
         if (m_timeElapsed <= targetTime) m_timeElapsed += Time.deltaTime;
         else
         {
-            timerFinished.Invoke();
+            TimerFinished?.Invoke();
             m_isCounting = false;
         }
 
@@ -150,7 +144,7 @@ public class NightTimerUI : MonoBehaviour
     public void SetTargetTime(float newvalue)
     {
         targetTime = newvalue;
-        targetTimeSet.Invoke(newvalue);
+        TargetTimeSet?.Invoke(newvalue);
 
         m_timeElapsed = 0.0f;
         m_secondTimer = 0.0f;
