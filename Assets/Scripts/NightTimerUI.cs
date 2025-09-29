@@ -4,28 +4,24 @@ using TMPro;
 using System;
 using System.Globalization;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class NightTimerUI : MonoBehaviour
 {
     /// <summary>
     /// Event invoked when the timer's target time is set.
     /// </summary>
-    [FormerlySerializedAs("TargetTimeSet")] [Tooltip("Invoked when the timer's target time is set.")] [HideInInspector]
-    public UnityEvent<float> targetTimeSet;
+    public event Action<float> TargetTimeSet;
 
     /// <summary>
     /// Event invoked when the timer reaches its target time.
     /// </summary>
-    [FormerlySerializedAs("TimerFinished")]
-    [Tooltip("Invoked when the timer reaches its target time.")]
-    [HideInInspector]
-    //For some reason this keeps throwing errors in the inspector?
-    public UnityEvent timerFinished;
+    public event Action TimerFinished;
 
-    [SerializeField] [Tooltip("The parent GameObject containing the clock hand sprites.")]
+    [SerializeField]
+    [Tooltip("The parent GameObject containing the clock hand sprites.")]
     private GameObject clockParent;
 
-    [SerializeField] [Tooltip("The time that the counter will count towards.")]
     private float targetTime = 2 * 60 * 60.0f;
 
     /// <summary>
@@ -36,7 +32,7 @@ public class NightTimerUI : MonoBehaviour
     /// <summary>
     /// Secondary timer used to update the timer UI once per second.
     /// </summary>
-    private float m_secondTimer = 1.0f;
+    private float m_secondTimer = 0.0f;
 
     /// <summary>
     /// Boolean 
@@ -50,7 +46,10 @@ public class NightTimerUI : MonoBehaviour
     private RectTransform m_shiftEndHand;
     private RectTransform m_currentTimeHand;
     private RectTransform m_secondsHand;
-    
+    // References to the timer's components used to display and hide it.
+    private Image m_clockBackground;
+    private RectMask2D m_clockMask;
+
     private void Awake()
     {
         m_timerText = GetComponentsInChildren<TextMeshProUGUI>()[1];
@@ -59,8 +58,15 @@ public class NightTimerUI : MonoBehaviour
         m_shiftEndHand = clockHands[2];
         m_currentTimeHand = clockHands[3];
         m_secondsHand = clockHands[4];
+
+        m_clockMask = GetComponent<RectMask2D>();
+        m_clockBackground = GetComponent<Image>();
+
         m_timeElapsed = 0.0f;
-        SetupClockHands();
+    }
+
+    private void Start()
+    {
         UpdateText();
         UpdateClock();
     }
@@ -71,7 +77,7 @@ public class NightTimerUI : MonoBehaviour
         if (m_timeElapsed <= targetTime) m_timeElapsed += Time.deltaTime;
         else
         {
-            timerFinished.Invoke();
+            TimerFinished?.Invoke();
             m_isCounting = false;
         }
 
@@ -86,20 +92,27 @@ public class NightTimerUI : MonoBehaviour
     }
 
     /// <summary>
+    /// Hides the timer.
+    /// </summary>
+    public void Hide()
+    {
+        m_clockMask.enabled = false;
+        m_clockMask.softness = new Vector2Int(3000, 3000);
+    }
+    /// <summary>
+    /// Makes the timer visible.
+    /// </summary>
+    public void Show()
+    {
+        m_clockMask.enabled = true;
+        m_clockMask.softness = new Vector2Int(0, 0);
+    }
+
+    /// <summary>
     /// Enables or disables the timer. Enables the timer by default.
     /// </summary>
     /// <param name="value">Set to true to enable, false to disable.</param>
     public void SetEnabled(bool value = true) => m_isCounting = value;
-
-    /// <summary>
-    /// Sets the positions of the shift end clock hand according to the timer's target time.
-    /// </summary>
-    public void SetupClockHands()
-    {
-        var time = TimeSpan.FromSeconds(targetTime);
-        m_shiftEndHand.rotation = Quaternion.Euler(0, 0,
-            (time.Hours) * -30.0f + (time.Minutes % 30) * -15.0f);
-    }
 
     /// <summary>
     /// Updates the rotations of the timer's clock hands.
@@ -107,10 +120,11 @@ public class NightTimerUI : MonoBehaviour
     private void UpdateClock()
     {
         var time = TimeSpan.FromSeconds(m_timeElapsed);
-        m_secondsHand.rotation = Quaternion.Euler(0, 0, (time.Seconds) * -6.0f);
-        var endangle = (TimeSpan.FromSeconds(targetTime).Hours) * -30.0f +
-                       (TimeSpan.FromSeconds(targetTime).Minutes % 30) * -15.0f;
-        m_currentTimeHand.rotation = Quaternion.Euler(0, 0, endangle * (m_timeElapsed / targetTime));
+        var secondsRotation = 90 - (time.Seconds) * 6f;
+        if (time.Seconds > 30) secondsRotation = -90 + (time.Seconds - 30) * 6f;
+        m_secondsHand.rotation = Quaternion.Euler(0, 0, secondsRotation);
+        m_currentTimeHand.rotation = Quaternion.Euler(0, 0,
+            90.0f - 180.0f * (m_timeElapsed / targetTime));
     }
 
     /// <summary>
@@ -130,12 +144,11 @@ public class NightTimerUI : MonoBehaviour
     public void SetTargetTime(float newvalue)
     {
         targetTime = newvalue;
-        targetTimeSet.Invoke(newvalue);
+        TargetTimeSet?.Invoke(newvalue);
 
         m_timeElapsed = 0.0f;
         m_secondTimer = 0.0f;
 
-        SetupClockHands();
         UpdateText();
         UpdateClock();
     }
@@ -147,7 +160,6 @@ public class NightTimerUI : MonoBehaviour
     public void FastForwardSeconds(float seconds)
     {
         m_timeElapsed += Mathf.Clamp(seconds, 0, targetTime - m_timeElapsed);
-        SetupClockHands();
         UpdateText();
         UpdateClock();
     }
@@ -159,7 +171,7 @@ public class NightTimerUI : MonoBehaviour
     public void FastForwardProgress(float percent)
     {
         m_timeElapsed += Mathf.Clamp(targetTime * percent, 0, targetTime - m_timeElapsed);
-        SetupClockHands();
+
         UpdateText();
         UpdateClock();
     }
@@ -171,7 +183,7 @@ public class NightTimerUI : MonoBehaviour
     public void SetTimeElapsedSeconds(float seconds)
     {
         m_timeElapsed = Mathf.Clamp(seconds, 0, Mathf.Infinity);
-        SetupClockHands();
+
         UpdateText();
         UpdateClock();
     }
@@ -180,7 +192,7 @@ public class NightTimerUI : MonoBehaviour
     /// Parses the given string to set the timer's elapsed time to the specified amount of seconds.
     /// </summary>
     /// <param name="secondsstring"></param>
-    public void SetCurrentCount(string secondsstring) => 
+    public void SetCurrentCount(string secondsstring) =>
         SetTimeElapsedSeconds(float.Parse(secondsstring, CultureInfo.InvariantCulture));
 
     /// <summary>
@@ -190,7 +202,7 @@ public class NightTimerUI : MonoBehaviour
     public void SetProgress(float percent)
     {
         m_timeElapsed = Mathf.Clamp(percent * targetTime, 0, targetTime);
-        SetupClockHands();
+
         UpdateText();
         UpdateClock();
     }

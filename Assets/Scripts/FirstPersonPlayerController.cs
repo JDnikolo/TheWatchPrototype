@@ -8,11 +8,11 @@ public class FirstPersonPlayerController : MonoBehaviour
     [SerializeField] private CinemachineCamera cinemachineCamera;
     [SerializeField] private new Rigidbody rigidbody;
     [SerializeField] private string moveAxisName = "Move";
-    
-    [Header("Movement")] 
+
+    [Header("Movement")]
     [SerializeField] private float movementSpeed = 5.0f;
     [SerializeField] private float maximumSpeed = 10f;
-    
+
     private InputAction m_moveAction;
 
     private void Start()

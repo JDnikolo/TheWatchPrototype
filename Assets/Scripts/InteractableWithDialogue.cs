@@ -29,6 +29,7 @@ public class InteractableWithDialogue : MonoBehaviour
     // This will get replaced with the input manager, we simply swap the action map from player to ui control
     private FirstPersonPlayerController m_playerMovement;
     private FirstPersonCamera m_playerCamera;
+    private int timesInteracted = 0;
 
     void Start()
     {
@@ -53,7 +54,7 @@ public class InteractableWithDialogue : MonoBehaviour
         HandleDialogueInput(distance); // Handle click to open/close dialogue
     }
 
-#region Initialization
+    #region Initialization
     /// <summary>
     /// Finds the player in the scene using tag, 
     /// and stores references to movement/camera scripts for disabling later.
@@ -101,9 +102,9 @@ public class InteractableWithDialogue : MonoBehaviour
         if (dialoguePanel != null)
             dialoguePanel.SetActive(false);
     }
-#endregion
+    #endregion
 
-#region Floating Name
+    #region Floating Name
     /// <summary>
     /// Handles showing/hiding floating name depending on player's distance.
     /// </summary>
@@ -131,9 +132,9 @@ public class InteractableWithDialogue : MonoBehaviour
         m_textObject.transform.LookAt(m_player);
         m_textObject.transform.rotation = Quaternion.LookRotation(m_textObject.transform.position - m_player.position);
     }
-#endregion
+    #endregion
 
-#region Dialogue
+    #region Dialogue
     /// <summary>
     /// Handles left mouse click to open/close dialogue if in range.
     /// </summary>
@@ -176,6 +177,8 @@ public class InteractableWithDialogue : MonoBehaviour
 
         m_isDialogueOpen = false;
         TogglePlayerControl(true);
+
+        if (NightManager.Instance) NightManager.Instance.RegisterInteraction(timesInteracted++);
     }
 
     /// <summary>
@@ -186,5 +189,5 @@ public class InteractableWithDialogue : MonoBehaviour
         if (m_playerMovement != null) m_playerMovement.enabled = enabled;
         if (m_playerCamera != null) m_playerCamera.enabled = enabled;
     }
-#endregion
+    #endregion
 }

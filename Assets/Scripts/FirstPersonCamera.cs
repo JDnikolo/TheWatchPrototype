@@ -7,8 +7,8 @@ public class FirstPersonCamera : MonoBehaviour
 {
 	[SerializeField] private CinemachinePanTilt cinemachinePanTilt;
 	[SerializeField] private string lookAxisName = "Look";
-	
-	[Header("Rotation")] 
+
+	[Header("Rotation")]
 	[SerializeField] private float cameraSensitivityX = Mathf.PI * 0.01f;
 	[SerializeField] private float cameraSensitivityY = Mathf.PI * 0.01f;
 
