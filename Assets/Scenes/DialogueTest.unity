@@ -620,18 +620,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 930243071}
     m_Modifications:
-    - target: {fileID: 1346324362305923988, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1346324362305923988, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1346324362305923988, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5720372964167957556, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -712,25 +700,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7609542076849768315, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7609542076849768315, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7609542076849768315, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9082568508184238379, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
       propertyPath: m_Name
       value: DialogueWindow
-      objectReference: {fileID: 0}
-    - target: {fileID: 9082568508184238379, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1260,6 +1232,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToggleStar (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 9132917111220414420, guid: 8c51ea65123146e4d9b3b87dcbed8656, type: 3}
+      propertyPath: textWriterInput.textToDisplay
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e04ca3ce8efe5d4fa47d1263a67e5b5, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1364,7 +1340,6 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1896359400}
   - {fileID: 377112382}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1636,6 +1611,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToggleStar (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 9132917111220414420, guid: 8c51ea65123146e4d9b3b87dcbed8656, type: 3}
+      propertyPath: textWriterInput.textToDisplay
+      value: 
+      objectReference: {fileID: 11400000, guid: 7112a36f65f0fa944b110c3f2c19b637, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1846,6 +1825,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToggleStar (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 9132917111220414420, guid: 8c51ea65123146e4d9b3b87dcbed8656, type: 3}
+      propertyPath: textWriterInput.textToDisplay
+      value: 
+      objectReference: {fileID: 11400000, guid: a7b689b3dad55c54b8cf0a77ccae3f3b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1976,81 +1959,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_ActionId: dad70c86-b58c-4b17-88ad-f5e53adf419e
---- !u!1 &1896359399
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1896359400}
-  - component: {fileID: 1896359402}
-  - component: {fileID: 1896359401}
-  m_Layer: 5
-  m_Name: Crosshair
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1896359400
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1896359399}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 930243071}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1896359401
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1896359399}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1896359402
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1896359399}
-  m_CullTransparentMesh: 1
 --- !u!1001 &1910642416
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2103,6 +2011,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ToggleStar (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 9132917111220414420, guid: 8c51ea65123146e4d9b3b87dcbed8656, type: 3}
+      propertyPath: textWriterInput.textToDisplay
+      value: 
+      objectReference: {fileID: 11400000, guid: d2c5cd265f10d9648be0f3164cede038, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2201,15 +2113,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 573187738379397998, guid: 8c51ea65123146e4d9b3b87dcbed8656, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.02
+      value: -0.594
       objectReference: {fileID: 0}
     - target: {fileID: 573187738379397998, guid: 8c51ea65123146e4d9b3b87dcbed8656, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.9
+      value: 0.405
       objectReference: {fileID: 0}
     - target: {fileID: 573187738379397998, guid: 8c51ea65123146e4d9b3b87dcbed8656, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.93
+      value: 8.849
       objectReference: {fileID: 0}
     - target: {fileID: 573187738379397998, guid: 8c51ea65123146e4d9b3b87dcbed8656, type: 3}
       propertyPath: m_LocalRotation.w

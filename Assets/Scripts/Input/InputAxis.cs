@@ -15,7 +15,7 @@ namespace Input
 
 		public void Update()
 		{
-			if (m_action == null) m_value = default;
+			if (m_action == null || !m_action.enabled) m_value = default;
 			else m_value = m_action.ReadValue<T>();
 		}
 	}
