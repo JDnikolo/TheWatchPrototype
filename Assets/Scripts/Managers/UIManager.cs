@@ -6,7 +6,7 @@ namespace Managers
 	public sealed class UIManager : Singleton<UIManager>
 	{
 		[SerializeField] private TextWriter textWriter;
-
+		
 		public void OpenDialogue(TextWriterInput textWriterInput)
 		{
 			textWriter.gameObject.SetActive(true);

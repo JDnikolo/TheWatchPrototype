@@ -19,9 +19,6 @@ namespace Managers
 		{
 			m_playerMap = actionAsset.FindActionMap(playerMapName);
 			m_uiMap = actionAsset.FindActionMap(uiMapName);
-			TogglePlayerMap(true);
-			ToggleUIMap(false);
-			ToggleCursor(false);
 		}
 
 		public void ToggleCursor(bool enable)

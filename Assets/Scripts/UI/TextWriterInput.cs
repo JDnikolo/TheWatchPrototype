@@ -1,4 +1,5 @@
 ﻿using System;
+using Localization;
 
 namespace UI
 {

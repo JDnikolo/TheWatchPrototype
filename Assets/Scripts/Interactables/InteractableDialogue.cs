@@ -8,7 +8,7 @@ namespace Interactables
 	{
 		[SerializeField] private TextWriterInput textWriterInput;
 		
-		public override void OnInteract()
+		public override void Interact()
 		{
 			InputManager.Instance.ForceUIInput();
 			UIManager.Instance.OpenDialogue(textWriterInput);
