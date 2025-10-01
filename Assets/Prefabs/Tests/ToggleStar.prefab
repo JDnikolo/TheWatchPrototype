@@ -97,7 +97,6 @@ GameObject:
   - component: {fileID: 5461900738982781156}
   - component: {fileID: 6014440435709346389}
   - component: {fileID: 9132917111220414420}
-  - component: {fileID: 59894566688943074}
   m_Layer: 0
   m_Name: ToggleStar
   m_TagString: Untagged
@@ -209,19 +208,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d6f35bd5da24d778c030990e7a6fd85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textWriterInput:
-    textToDisplay: {fileID: 11400000, guid: 9a943c629cf6b7545965acca682fff6c, type: 2}
-    onTextWriterFinished: {fileID: 59894566688943074}
---- !u!114 &59894566688943074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5801635946611624972}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f866ceb5556a4975b79601c30215c877, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  closeActionName: SkipDialogue
+  textAsset: {fileID: 11400000, guid: 95c790e1590ae4c4587b76d1c130698a, type: 2}
+  textWriterFinished: {fileID: 0}

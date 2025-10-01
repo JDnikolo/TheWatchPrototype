@@ -1,12 +1,18 @@
-﻿using System;
-using Localization;
+﻿using Localization;
 
 namespace UI
 {
-	[Serializable]
 	public struct TextWriterInput
 	{
-		public TextAsset textToDisplay;
-		public TextWriterFinished onTextWriterFinished;
+		public TextAsset TextToDisplay;
+		public ITextWriterFinished OnTextWriterFinished;
+
+		public static readonly TextWriterInput Empty = new();
+		
+		public TextWriterInput(TextAsset textToDisplay, ITextWriterFinished onTextWriterFinished)
+		{
+			TextToDisplay = textToDisplay;
+			OnTextWriterFinished = onTextWriterFinished;
+		}
 	}
 }

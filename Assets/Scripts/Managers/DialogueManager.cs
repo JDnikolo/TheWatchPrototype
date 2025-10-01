@@ -3,9 +3,11 @@ using UnityEngine;
 
 namespace Managers
 {
-	public sealed class UIManager : Singleton<UIManager>
+	public sealed class DialogueManager : Singleton<DialogueManager>
 	{
 		[SerializeField] private TextWriter textWriter;
+		
+		public TextWriter TextWriter => textWriter;
 		
 		public void OpenDialogue(TextWriterInput textWriterInput)
 		{

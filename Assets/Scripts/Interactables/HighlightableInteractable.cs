@@ -9,7 +9,7 @@ namespace Interactables
 		
 		public override void Interact()
 		{
-			throw new System.NotImplementedException();
+			if (interactable) interactable.Interact();
 		}
 
 		public void Highlight(bool enabled)

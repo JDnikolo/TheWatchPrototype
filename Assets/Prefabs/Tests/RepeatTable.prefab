@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 5486901383011391647}
   - component: {fileID: 4127737109468647741}
   - component: {fileID: 8055861115523935430}
-  - component: {fileID: 5387222079903742956}
   m_Layer: 0
   m_Name: RepeatTable
   m_TagString: Untagged
@@ -111,22 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d6f35bd5da24d778c030990e7a6fd85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Interactables.InteractableDialogue
-  textWriterInput:
-    textToDisplay: {fileID: 11400000, guid: 77cac5f9468e7fb45b4ae7059188df7d, type: 2}
-    onTextWriterFinished: {fileID: 5387222079903742956}
---- !u!114 &5387222079903742956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6561506909976248195}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f866ceb5556a4975b79601c30215c877, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI.CloseTextWriter
-  closeActionName: SkipDialogue
+  textAsset: {fileID: 11400000, guid: 77cac5f9468e7fb45b4ae7059188df7d, type: 2}
+  textWriterFinished: {fileID: 0}
 --- !u!1 &8363725160208958558
 GameObject:
   m_ObjectHideFlags: 0

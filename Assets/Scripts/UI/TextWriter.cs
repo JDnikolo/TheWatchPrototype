@@ -4,7 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using TextAsset = Localization.TextAsset;
 
 namespace UI
 {
@@ -23,8 +22,7 @@ namespace UI
 		[SerializeField] private float commaDelay;
 		[SerializeField] private float spaceDelay;
 
-		private TextAsset m_textAsset;
-		private TextWriterFinished m_onFinished;
+		private TextWriterInput m_input;
 		private InputAction m_skipAction;
 		private StringBuilder m_stringBuilder = new();
 		private float m_timer;
@@ -35,14 +33,13 @@ namespace UI
 
 		public void WriteText(TextWriterInput textWriterInput)
 		{
-			m_textAsset = textWriterInput.textToDisplay;
-			m_onFinished = textWriterInput.onTextWriterFinished;
+			m_input = textWriterInput;
 			StartWriting();
 		}
 
 		public void DisposeText()
 		{
-			m_textAsset = null;
+			m_input = TextWriterInput.Empty;
 			StopWriting();
 		}
 	
@@ -61,17 +58,31 @@ namespace UI
 
 		private void Update()
 		{
+			var skipDialogue = ShouldSkipDialogue();
 			if (m_forceFinish)
 			{
 				m_forceFinish = false;
 				CheckPages();
-				OnFinished();
 			}
-		
-			if (!m_write) return;
+
+			if (!m_write)
+			{
+				if (skipDialogue)
+				{
+					if (m_input.OnTextWriterFinished != null) m_input.OnTextWriterFinished.OnTextWriterFinished(this);
+					else
+					{
+						DialogueManager.Instance.CloseDialogue();
+						InputManager.Instance.ForcePlayerInput();
+					}
+				}
+
+				return;
+			}
+
 			var changed = false;
-			var text = m_textAsset.Text;
-			if (m_skipAction.WasPressedThisFrame())
+			var text = m_input.TextToDisplay.Text;
+			if (skipDialogue)
 			{
 				m_forceFinish = true;
 				m_write = false;
@@ -87,7 +98,6 @@ namespace UI
 					if (seek >= text.Length)
 					{
 						m_write = false;
-						OnFinished();
 						break;
 					}
 
@@ -121,11 +131,8 @@ namespace UI
 
 			if (!m_write) ResetInternals();
 		}
-
-		private void OnFinished()
-		{
-			if (m_onFinished) m_onFinished.OnTextWriterFinished();
-		}
+		
+		private bool ShouldSkipDialogue() => m_skipAction.WasPressedThisFrame();
 
 		private void CheckPages()
 		{

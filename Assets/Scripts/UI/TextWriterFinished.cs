@@ -2,8 +2,8 @@
 
 namespace UI
 {
-	public abstract class TextWriterFinished : MonoBehaviour
+	public abstract class TextWriterFinished : MonoBehaviour, ITextWriterFinished
 	{
-		public abstract void OnTextWriterFinished();
+		public abstract void OnTextWriterFinished(TextWriter textWriter);
 	}
 }
