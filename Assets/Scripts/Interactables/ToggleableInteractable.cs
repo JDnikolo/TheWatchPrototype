@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Interactables
 {
+	[AddComponentMenu("Interactables/Toggleable Interactable")]
 	public sealed class ToggleableInteractable : InteractableToggle, IHighlightableInteractable
 	{
 		[SerializeField] private Interactable interactable;

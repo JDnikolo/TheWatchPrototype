@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using Utilities;
 
 namespace Interactables.Triggers
 {
+	[AddComponentMenu("Interactables/Triggers/Interactable Single Trigger")]
 	public class InteractableSingleTrigger : InteractableTrigger
 	{
 		private bool m_playerEntered;

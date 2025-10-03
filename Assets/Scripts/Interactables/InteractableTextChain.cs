@@ -1,10 +1,12 @@
-﻿using Localization;
+﻿using Localization.Text;
 using Managers;
-using UI;
+using UI.Text;
 using UnityEngine;
+using Utilities;
 
 namespace Interactables
 {
+	[AddComponentMenu("Interactables/Interactable Text Chain")]
 	public sealed class InteractableTextChain : Interactable, ITextWriterFinished
 	{
 		[SerializeField] private TextChain textChain;
@@ -16,7 +18,7 @@ namespace Interactables
 		{
 			m_chainIndex = 0;
 			InputManager.Instance.ForceUIInput();
-			DialogueManager.Instance.OpenDialogue(new TextWriterInput(textChain.TextAssets[m_chainIndex],
+			DialogueManager.Instance.OpenTextWriter(new TextWriterInput(textChain.TextAssets[m_chainIndex],
 				m_chainIndex < textChain.TextAssets.Length ? this : textWriterFinished));
 		}
 

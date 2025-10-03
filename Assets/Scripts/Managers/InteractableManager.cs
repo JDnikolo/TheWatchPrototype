@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace Managers
 {
+	[AddComponentMenu("Managers/Interactable Manager")]
 	public sealed class InteractableManager : Singleton<InteractableManager>, IStartable
 	{
 		[SerializeField] private string interactActionName = "Interact";

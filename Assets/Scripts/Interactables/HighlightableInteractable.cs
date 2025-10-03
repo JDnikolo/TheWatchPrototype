@@ -2,7 +2,8 @@
 
 namespace Interactables
 {
-	public class HighlightableInteractable : Interactable, IHighlightable
+	[AddComponentMenu("Interactables/Highlightable Interactable")]
+	public sealed class HighlightableInteractable : Interactable, IHighlightable
 	{
 		[SerializeField] private Interactable interactable;
 		[SerializeField] private new MeshRenderer renderer;

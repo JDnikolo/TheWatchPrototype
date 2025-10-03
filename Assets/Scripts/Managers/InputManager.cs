@@ -3,23 +3,29 @@ using UnityEngine.InputSystem;
 
 namespace Managers
 {
+	[AddComponentMenu("Managers/Input Manager")]
 	public sealed class InputManager : Singleton<InputManager>
 	{
 		[SerializeField] private InputActionAsset actionAsset;
 		[SerializeField] private string playerMapName = "Player";
 		[SerializeField] private string uiMapName = "UI";
 
+		public Vector2 mousePosition;
 		private InputActionMap m_playerMap;
 		private InputActionMap m_uiMap;
 
 		public bool PlayerMapEnabled => m_playerMap.enabled;
 		public bool UIMapEnabled => m_uiMap.enabled;
-		
+
+		public static Vector2 MousePosition => Mouse.current.position.ReadValue();
+
 		private void Start()
 		{
 			m_playerMap = actionAsset.FindActionMap(playerMapName);
 			m_uiMap = actionAsset.FindActionMap(uiMapName);
 		}
+
+		private void Update() => mousePosition = MousePosition;
 
 		public void ToggleCursor(bool enable)
 		{

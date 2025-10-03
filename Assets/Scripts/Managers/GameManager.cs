@@ -4,9 +4,11 @@ using UnityEngine;
 
 namespace Managers
 {
+	[AddComponentMenu("Managers/Game Manager")]
 	public sealed class GameManager : Singleton<GameManager>
 	{
 		private readonly List<IStartable> m_startables = new();
+		private readonly Stack<Action> m_invokeStack = new();
 		
 		private enum GameState : byte
 		{
@@ -20,6 +22,11 @@ namespace Managers
 		internal void AddStartable(IStartable startable)
 		{
 			if (startable != null) m_startables.Add(startable);
+		}
+
+		public void InvokeOnNextUpdate(Action action)
+		{
+			if (action != null) m_invokeStack.Push(action);
 		}
 
 		private void Update()
@@ -40,6 +47,7 @@ namespace Managers
 					m_gameState = GameState.Play;
 					break;
 				case GameState.Play:
+					while (m_invokeStack.TryPop(out var action)) action.Invoke();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

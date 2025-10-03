@@ -2,7 +2,7 @@
 
 namespace Input
 {
-	public sealed class InputAxis<T> where T : struct
+	public struct InputAxis<T> where T : struct
 	{
 		private InputAction m_action;
 		private T m_value;

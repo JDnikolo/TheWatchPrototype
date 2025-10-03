@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
+    [AddComponentMenu("UI/Night Timer")]
     public class NightTimerUI : MonoBehaviour
     {
         /// <summary>

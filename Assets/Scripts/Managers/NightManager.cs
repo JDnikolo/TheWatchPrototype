@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class NightManager : Singleton<NightManager>
+    [AddComponentMenu("Managers/Night Manager")]
+    public sealed class NightManager : Singleton<NightManager>
     {
         private NightTimerUI m_timer;
 

@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Player
 {
+    [AddComponentMenu(menuName: "Player/Player Movement Handler")]
     public sealed class PlayerMovementHandler : MonoBehaviour
     {
         [SerializeField] private CinemachineCamera cinemachineCamera;

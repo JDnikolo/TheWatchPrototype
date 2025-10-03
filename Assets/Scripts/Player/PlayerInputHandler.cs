@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Player
 {
+	[AddComponentMenu(menuName: "Player/Player Input Handler")]
 	public sealed class PlayerInputHandler : MonoBehaviour, IStartable
 	{
 		[SerializeField] private string moveAxisName = "Move";
@@ -11,8 +12,8 @@ namespace Player
 		
 		public byte StartOrder => 0;
 
-		private InputAxis<Vector2> m_moveAxis = new();
-		private InputAxis<Vector2> m_lookAxis = new();
+		private InputAxis<Vector2> m_moveAxis;
+		private InputAxis<Vector2> m_lookAxis;
 		
 		public void OnStart()
 		{

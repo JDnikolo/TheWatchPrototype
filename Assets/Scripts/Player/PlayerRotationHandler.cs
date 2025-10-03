@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Player
 {
+	[AddComponentMenu(menuName: "Player/Player Rotation Handler")]
 	public sealed class PlayerRotationHandler : MonoBehaviour
 	{
 		[SerializeField] private CinemachinePanTilt cinemachinePanTilt;
