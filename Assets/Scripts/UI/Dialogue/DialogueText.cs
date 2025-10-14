@@ -19,7 +19,7 @@ namespace UI.Dialogue
 			{
 				parent.SetActive(true);
 				textMesh.text = text;
-				GameManager.Instance.InvokeOnNextUpdate(UpdateRects);
+				GameManager.Instance.InvokeOnNextFrameUpdate(UpdateRects);
 			}
 
 			public void HideText()

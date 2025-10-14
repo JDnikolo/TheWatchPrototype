@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 953085086759558293}
   - component: {fileID: 1889490728590329770}
   - component: {fileID: 6425680393131743169}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,10 +94,12 @@ GameObject:
   - component: {fileID: 573187738379397998}
   - component: {fileID: 4832631825888140616}
   - component: {fileID: 3884264074387692945}
-  - component: {fileID: 5461900738982781156}
-  - component: {fileID: 6014440435709346389}
+  - component: {fileID: 3646990963225450167}
+  - component: {fileID: 5138169592722369542}
+  - component: {fileID: 3483696168396704731}
+  - component: {fileID: 2433012650439156507}
   - component: {fileID: 9132917111220414420}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ToggleStar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,8 +142,8 @@ Rigidbody:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
+  m_ImplicitCom: 0
+  m_ImplicitTensor: 0
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
@@ -166,9 +168,9 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2
+  m_Radius: 0.1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5461900738982781156
+--- !u!114 &3646990963225450167
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -177,12 +179,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5801635946611624972}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eda58a8c40984c8abc0cf0612005e7d3, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a758f07b7b14fb7839a44f5748542d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactables:
-  - {fileID: 6014440435709346389}
---- !u!114 &6014440435709346389
+  highlightable: {fileID: 5138169592722369542}
+  rigidbody: {fileID: 4832631825888140616}
+--- !u!114 &5138169592722369542
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,11 +193,39 @@ MonoBehaviour:
   m_GameObject: {fileID: 5801635946611624972}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cc80e56839b41ad931543dff171ac6a, type: 3}
+  m_Script: {fileID: 11500000, guid: b519160058fc4694be8a54d05a09092b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: {fileID: 9132917111220414420}
+  highlightables:
+  - {fileID: 3483696168396704731}
+  - {fileID: 2433012650439156507}
+--- !u!114 &3483696168396704731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5801635946611624972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caecac44db4f4cbdb0b6521a1b52bb98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   renderer: {fileID: 6425680393131743169}
+--- !u!114 &2433012650439156507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5801635946611624972}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f929be7f12b74e42a434f0f035c5a72c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactActionName: Interact
+  interactable: {fileID: 9132917111220414420}
 --- !u!114 &9132917111220414420
 MonoBehaviour:
   m_ObjectHideFlags: 0

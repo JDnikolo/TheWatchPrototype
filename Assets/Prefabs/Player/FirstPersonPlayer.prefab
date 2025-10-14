@@ -322,7 +322,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8138365040519800164}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: c5026a431179d0f49a60a7c821719013, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -353,8 +353,7 @@ MonoBehaviour:
   cinemachineCamera: {fileID: 0}
   inputHandler: {fileID: 3304813312186962764}
   rigidbody: {fileID: 2287137413774365962}
-  movementSpeed: 10
-  maximumSpeed: 2
+  velocityData: {fileID: 11400000, guid: 9eb368ab64aabdb40a871e58c17402fb, type: 2}
 --- !u!114 &4574841571084182995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,7 +368,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FirstPersonCamera
   cinemachinePanTilt: {fileID: 0}
   inputHandler: {fileID: 3304813312186962764}
-  lookAxisName: Look
   cameraSensitivityX: 20
   cameraSensitivityY: 20
 --- !u!114 &3304813312186962764

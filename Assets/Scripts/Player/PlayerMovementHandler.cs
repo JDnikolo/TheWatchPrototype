@@ -1,5 +1,7 @@
+using Character;
 using Unity.Cinemachine;
 using UnityEngine;
+using Utilities;
 
 namespace Player
 {
@@ -9,20 +11,30 @@ namespace Player
         [SerializeField] private CinemachineCamera cinemachineCamera;
         [SerializeField] private PlayerInputHandler inputHandler;
         [SerializeField] private new Rigidbody rigidbody;
-
-        [Header("Movement")]
-        [SerializeField] private float movementSpeed = 5.0f;
-        [SerializeField] private float maximumSpeed = 10f;
-
-        private void Start() => rigidbody.maxLinearVelocity = maximumSpeed;
+        [SerializeField] private CharacterVelocityData velocityData;
+        
+        private void Start() => rigidbody.maxLinearVelocity = velocityData.MaxVelocity;
 
         private void FixedUpdate()
         {
-            if (!inputHandler.TryGetMoveAxis(out var moveAxis)) return;
-            var movement = cinemachineCamera.transform.right * moveAxis.x +
-                           cinemachineCamera.transform.forward * moveAxis.y;
-            movement.y = 0f;
-            rigidbody.AddForce(movementSpeed * Time.fixedDeltaTime * movement.normalized, ForceMode.VelocityChange);
+            var finalVector = Vector3.zero;
+            var deltaTime = Time.fixedDeltaTime;
+            var linearVelocity = rigidbody.velocity;
+            var acceleration = velocityData.Acceleration;
+            if (inputHandler.TryGetMoveAxis(out var moveAxis) && moveAxis != Vector2.zero)
+            {
+                finalVector = cinemachineCamera.transform.right * moveAxis.x +
+                              cinemachineCamera.transform.forward * moveAxis.y;
+                finalVector.y = 0f;
+                finalVector = finalVector.normalized * acceleration;
+            }
+            else
+            {
+                finalVector.CorrectForDirection(Vector3.forward, linearVelocity, 0f, acceleration, deltaTime);
+                finalVector.CorrectForDirection(Vector3.right, linearVelocity, 0f, acceleration, deltaTime);
+            }
+
+            rigidbody.AddForce(finalVector, ForceMode.Acceleration);
         }
     }
 }
