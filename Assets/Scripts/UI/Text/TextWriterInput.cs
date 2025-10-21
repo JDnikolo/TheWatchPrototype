@@ -1,4 +1,5 @@
-﻿using Localization.Text;
+﻿using Callbacks.Text;
+using Localization.Text;
 
 namespace UI.Text
 {

@@ -1,4 +1,5 @@
-﻿using Localization.Dialogue;
+﻿using Callbacks.Dialogue;
+using Localization.Dialogue;
 using Localization.Text;
 using Managers;
 using UI.Dialogue;
@@ -12,12 +13,13 @@ namespace Interactables.Actions
 	{
 		[SerializeField] private DialogueObject dialogueObject;
 		[SerializeField] private TextObject questionToDisplay;
+		[SerializeField] private DialogueWriterFinished dialogueWriterFinished;
 		
 		public override void Interact()
 		{
 			InputManager.Instance.ForceUIInput();
 			DialogueManager.Instance.OpenDialogueWriter(new DialogueWriterInput(
-				dialogueObject, questionToDisplay, null));
+				dialogueObject, questionToDisplay, dialogueWriterFinished));
 		}
 	}
 }

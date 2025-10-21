@@ -4,6 +4,10 @@ namespace Localization.Dialogue
 {
 	public abstract class DialogueOptionCondition : ScriptableObject, IDialogueCondition
 	{
-		public abstract bool IsVisible();
+		[SerializeField] private bool showIfDisabled;
+		
+		public bool ShowIfDisabled => showIfDisabled;
+		
+		public abstract bool IsSelectable();
 	}
 }

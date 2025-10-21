@@ -2,6 +2,6 @@
 {
 	public interface IDialogueCondition
 	{
-		bool IsVisible();
+		bool IsSelectable();
 	}
 }

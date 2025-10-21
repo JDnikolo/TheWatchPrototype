@@ -1,4 +1,5 @@
-﻿using Localization.Text;
+﻿using Callbacks.Text;
+using Localization.Text;
 using Managers;
 using UI.Text;
 using UnityEngine;

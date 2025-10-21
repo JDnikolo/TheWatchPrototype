@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Localization.Dialogue;
 using UnityEngine;
 
@@ -12,13 +13,15 @@ namespace UI.Dialogue
 			[SerializeField] private DialogueButton[] buttons;
 			[SerializeField] private GameObject parent;
 
-			public void ShowButtons(DialogueOption[] options)
+			public void ShowButtons(IList<DialogueOption> options)
 			{
 				parent.SetActive(true);
-				if (options.Length != buttons.Length)
-					throw new InvalidOperationException($"This is the wrong button set for {options.Length} buttons!");
-				for (var i = 0; i < options.Length; i++) buttons[i].AssignDialogueOption(options[i]);
+				if (options.Count != buttons.Length)
+					throw new InvalidOperationException($"This is the wrong button set for {options.Count} buttons!");
+				for (var i = 0; i < options.Count; i++) ShowButton(options[i], i);
 			}
+
+			public void ShowButton(DialogueOption option, int index) => buttons[index].AssignDialogueOption(option);
 
 			public void HideButtons()
 			{

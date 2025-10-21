@@ -1,4 +1,5 @@
-﻿using Localization.Dialogue;
+﻿using Callbacks.Dialogue;
+using Localization.Dialogue;
 using Localization.Text;
 
 namespace UI.Dialogue

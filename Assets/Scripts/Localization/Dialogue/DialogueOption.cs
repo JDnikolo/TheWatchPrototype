@@ -11,6 +11,8 @@ namespace Localization.Dialogue
 		
 		public TextObject TextToDisplay => textToDisplay;
 
-		public bool Selectable => !condition || condition.IsVisible();
+		public bool Visible => Selectable || condition.ShowIfDisabled;
+
+		public bool Selectable => !condition || condition.IsSelectable();
 	}
 }

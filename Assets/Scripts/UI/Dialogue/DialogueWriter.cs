@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Localization.Dialogue;
 using Localization.Text;
 using Managers;
@@ -14,6 +15,7 @@ namespace UI.Dialogue
 		[SerializeField] private DialogueText choiceText;
 		[SerializeField] private DialogueText questionText;
 
+		private List<DialogueOption> m_visibleOptions = new();
 		private DialogueOption m_selectedOption;
 		private TextObject m_choiceToDisplay;
 		private DialogueWriterInput m_input;
@@ -26,12 +28,24 @@ namespace UI.Dialogue
 			m_input = input;
 			questionText.ShowText(m_input.QuestionToDisplay.Text);
 			ResetWriter();
+			m_buttonsInUse = 0;
 			var options = m_input.DialogueToDisplay.Options;
 			var optionsLength = options.Length;
 			if (optionsLength < 1 || optionsLength > buttonSets.Length)
 				throw new InvalidOperationException($"Dialogue writer unable to handle {optionsLength} options!");
-			m_buttonsInUse = optionsLength - 1;
-			buttonSets[m_buttonsInUse].ShowButtons(options);
+			for (var i = 0; i < options.Length; i++)
+			{
+				var option = options[i];
+				if (!option.Visible) continue;
+				m_visibleOptions.Add(option);
+				m_buttonsInUse += 1;
+			}
+			
+			if (m_buttonsInUse == 0)
+				throw new InvalidOperationException("Dialogue writer unable to handle 0 visible options!");
+			m_buttonsInUse -= 1;
+			buttonSets[m_buttonsInUse].ShowButtons(m_visibleOptions);
+			m_visibleOptions.Clear();
 		}
 
 		public void DisposeDialogue()
@@ -48,6 +62,7 @@ namespace UI.Dialogue
 			m_selectedOption = null;
 			m_choiceToDisplay = null;
 			m_buttonsInUse = -1;
+			m_visibleOptions.Clear();
 		}
 		
 		public void DisplayOption(DialogueOption option)
