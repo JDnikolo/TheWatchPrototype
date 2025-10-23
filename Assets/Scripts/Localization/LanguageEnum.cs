@@ -1,9 +1,9 @@
 ﻿namespace Localization
 {
-	public enum TextsEnum
+	public enum LanguageEnum
 	{
-		Test,
+		English,
 		// ReSharper disable once InconsistentNaming
-		ENUM_LENGTH,
+		ENUM_LENGTH
 	}
 }

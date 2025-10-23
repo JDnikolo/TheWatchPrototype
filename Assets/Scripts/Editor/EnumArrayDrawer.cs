@@ -10,11 +10,12 @@ namespace Editor
 	{
 		public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
 		{
+			var enumAttribute = (EnumArrayAttribute) attribute;
 			string name;
 			try
 			{
 				var arrayPosition = int.Parse(property.propertyPath.Split('[', ']')[1]);
-				name = Enum.GetName(((EnumArrayAttribute) attribute).EnumType, arrayPosition);
+				name = Enum.GetName(enumAttribute.EnumType, arrayPosition);
 				if (name is null or "ENUM_LENGTH") name = "UNKNOWN";
 			}
 			catch
@@ -22,7 +23,7 @@ namespace Editor
 				name = "ERROR";
 			}
 			
-			EditorGUI.ObjectField(rect, property, new GUIContent(name));
+			EditorGUI.PropertyField(rect, property, new GUIContent(name));
 		}
 	}
 }

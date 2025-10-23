@@ -1,3 +1,4 @@
+using Attributes;
 using UnityEngine;
 
 namespace Localization.Text
@@ -5,8 +6,9 @@ namespace Localization.Text
     [CreateAssetMenu(fileName = "Text", menuName = "Localization/Text/Text")]
     public class TextObject : LocalizationAsset
     {
-        [SerializeField] [TextArea] private string text;
+        [SerializeField] [EnumArray(typeof(LanguageEnum))]
+        private string[] texts;
 
-        public string Text => text;
+        public string Text => null;
     }
 }
