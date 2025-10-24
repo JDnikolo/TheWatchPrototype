@@ -37,9 +37,9 @@ namespace UI.Text
 
 		public void WriteText(TextWriterInput input)
 		{
+			StartWriting();
 			m_onFinished = input.OnTextWriterFinished;
 			m_text = input.TextToDisplay.Text;
-			StartWriting();
 		}
 
 		public void DisposeText() => StopWriting();
@@ -48,7 +48,6 @@ namespace UI.Text
 		{
 			m_skipAction = InputManager.Instance.GetUIAction(skipActionName);
 			slider.onValueChanged.AddListener(SliderChanged);
-			FullReset();
 		}
 
 		private void OnEnable() => FullReset();
@@ -72,8 +71,9 @@ namespace UI.Text
 				{
 					if (m_onFinished != null)
 					{
-						m_onFinished.OnTextWriterFinished(this);
+						var onFinished = m_onFinished;
 						m_onFinished = null;
+						onFinished.OnTextWriterFinished(this);
 					}
 					else
 					{
@@ -182,6 +182,7 @@ namespace UI.Text
 
 		private void FullReset()
 		{
+			m_onFinished = null;
 			ResetInternals();
 			ResetSlider();
 			ResetWriter();
@@ -189,7 +190,6 @@ namespace UI.Text
 
 		private void ResetInternals()
 		{
-			m_onFinished = null;
 			m_stringBuilder.Clear();
 			m_previousPageCount = 0;
 			m_timer = 0;

@@ -26,10 +26,8 @@ namespace Interactables.Actions
 		public void OnTextWriterFinished(TextWriter textWriter)
 		{
 			m_chainIndex += 1;
-			textWriter.WriteText(new TextWriterInput(textChain.TextAssets[m_chainIndex], GetTextWriterFinished()));
+			textWriter.WriteText(new TextWriterInput(textChain.TextAssets[m_chainIndex],
+				m_chainIndex < textChain.TextAssets.Length - 1 ? this : textWriterFinished));
 		}
-
-		private ITextWriterFinished GetTextWriterFinished() =>
-			m_chainIndex < textChain.TextAssets.Length - 1 ? this : textWriterFinished;
 	}
 }
