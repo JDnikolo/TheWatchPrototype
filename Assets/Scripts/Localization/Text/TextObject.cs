@@ -12,6 +12,7 @@ namespace Localization.Text
         [SerializeField] private string speaker;
 
         public string Text => texts[(int)LanguageManager.Instance.CurrentLanguage];
+        
         public string Speaker => speaker;
     }
 }

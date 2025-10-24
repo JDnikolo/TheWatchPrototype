@@ -1,8 +1,6 @@
 ﻿using System;
-using Managers;
-using TMPro;
+using UI.Text;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Dialogue
 {
@@ -11,24 +9,20 @@ namespace UI.Dialogue
 		[Serializable]
 		public struct DialogueText
 		{
-			[SerializeField] private TextMeshProUGUI textMesh;
-			[SerializeField] private ContentSizeFitter panelFitter;
+			[SerializeField] private TextWithBackground textWriter;
 			[SerializeField] private GameObject parent;
 
 			public void ShowText(string text)
 			{
 				parent.SetActive(true);
-				textMesh.text = text;
-				GameManager.Instance.InvokeOnNextFrameUpdate(UpdateRects);
+				textWriter.SetText(text);
 			}
 
 			public void HideText()
 			{
-				textMesh.text = null;
+				textWriter.SetText(null);
 				parent.SetActive(false);
 			}
-
-			private void UpdateRects() => panelFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
 		}
 	}
 }

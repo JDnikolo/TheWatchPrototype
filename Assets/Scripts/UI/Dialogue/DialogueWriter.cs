@@ -26,9 +26,9 @@ namespace UI.Dialogue
 		
 		public void WriteDialogue(DialogueWriterInput input)
 		{
+			ResetWriter();
 			m_onFinished = input.OnDialogueWriterFinished;
 			questionText.ShowText(input.QuestionToDisplay.Text);
-			ResetWriter();
 			m_buttonsInUse = 0;
 			var options = input.DialogueToDisplay.Options;
 			var optionsLength = options.Length;

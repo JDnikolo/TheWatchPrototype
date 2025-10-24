@@ -14,7 +14,7 @@ namespace UI.Text
 	{
 		[Header("Linked behaviors")] 
 		[SerializeField] private TextMeshProUGUI textWriter;
-		[SerializeField] private TextMeshProUGUI speakerWriter;
+		[SerializeField] private TextWithBackground speakerWriter;
 		[SerializeField] private Slider slider;
 
 		[Header("Control schemes")] 
