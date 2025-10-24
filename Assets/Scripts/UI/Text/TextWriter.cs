@@ -14,6 +14,7 @@ namespace UI.Text
 	{
 		[Header("Linked behaviors")] 
 		[SerializeField] private TextMeshProUGUI textWriter;
+		[SerializeField] private TextMeshProUGUI speakerWriter;
 		[SerializeField] private Slider slider;
 
 		[Header("Control schemes")] 
@@ -38,6 +39,7 @@ namespace UI.Text
 		public void WriteText(TextWriterInput input)
 		{
 			m_onFinished = input.OnTextWriterFinished;
+			speakerWriter.SetText(input.TextToDisplay.Speaker);
 			m_text = input.TextToDisplay.Text;
 			StartWriting();
 		}
