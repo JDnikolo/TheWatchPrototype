@@ -1,4 +1,5 @@
 using System.Text;
+using Callbacks.Text;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -24,27 +25,25 @@ namespace UI.Text
 		[SerializeField] private float commaDelay;
 		[SerializeField] private float spaceDelay;
 
-		private TextWriterInput m_input;
+		private ITextWriterFinished m_onFinished;
 		private InputAction m_skipAction;
 		private StringBuilder m_stringBuilder = new();
+		private string m_text;
 		private float m_timer;
 		private int m_previousPageCount;
 		private int m_seek;
 		private bool m_write;
 		private bool m_forceFinish;
 
-		public void WriteText(TextWriterInput textWriterInput)
+		public void WriteText(TextWriterInput input)
 		{
-			m_input = textWriterInput;
+			m_onFinished = input.OnTextWriterFinished;
+			m_text = input.TextToDisplay.Text;
 			StartWriting();
 		}
 
-		public void DisposeText()
-		{
-			m_input = TextWriterInput.Empty;
-			StopWriting();
-		}
-	
+		public void DisposeText() => StopWriting();
+
 		private void Start()
 		{
 			m_skipAction = InputManager.Instance.GetUIAction(skipActionName);
@@ -71,7 +70,11 @@ namespace UI.Text
 			{
 				if (skipDialogue)
 				{
-					if (m_input.OnTextWriterFinished != null) m_input.OnTextWriterFinished.OnTextWriterFinished(this);
+					if (m_onFinished != null)
+					{
+						m_onFinished.OnTextWriterFinished(this);
+						m_onFinished = null;
+					}
 					else
 					{
 						DialogueManager.Instance.CloseTextWriter();
@@ -83,13 +86,12 @@ namespace UI.Text
 			}
 
 			var changed = false;
-			var text = m_input.TextToDisplay.Text;
 			if (skipDialogue)
 			{
 				m_forceFinish = true;
 				m_write = false;
 				changed = true;
-				m_stringBuilder.Append(text.Substring(m_seek));
+				m_stringBuilder.Append(m_text.Substring(m_seek));
 			}
 			else
 			{
@@ -97,14 +99,14 @@ namespace UI.Text
 				while (m_timer < 0)
 				{
 					var seek = m_seek++;
-					if (seek >= text.Length)
+					if (seek >= m_text.Length)
 					{
 						m_write = false;
 						break;
 					}
 
 					changed = true;
-					var character = text[seek];
+					var character = m_text[seek];
 					switch (character)
 					{
 						case '.':
@@ -187,10 +189,12 @@ namespace UI.Text
 
 		private void ResetInternals()
 		{
+			m_onFinished = null;
 			m_stringBuilder.Clear();
 			m_previousPageCount = 0;
 			m_timer = 0;
 			m_seek = 0;
+			m_text = null;
 		}
 
 		private void ResetWriter()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Callbacks.Dialogue;
 using Localization.Dialogue;
 using Localization.Text;
 using Managers;
@@ -15,21 +16,21 @@ namespace UI.Dialogue
 		[SerializeField] private DialogueText choiceText;
 		[SerializeField] private DialogueText questionText;
 
+		private IDialogueWriterFinished m_onFinished;
 		private List<DialogueOption> m_visibleOptions = new();
 		private DialogueOption m_selectedOption;
 		private TextObject m_choiceToDisplay;
-		private DialogueWriterInput m_input;
 		private int m_buttonsInUse = -1;
 		
 		public DialogueOption SelectedOption => m_selectedOption;
 		
 		public void WriteDialogue(DialogueWriterInput input)
 		{
-			m_input = input;
-			questionText.ShowText(m_input.QuestionToDisplay.Text);
+			m_onFinished = input.OnDialogueWriterFinished;
+			questionText.ShowText(input.QuestionToDisplay.Text);
 			ResetWriter();
 			m_buttonsInUse = 0;
-			var options = m_input.DialogueToDisplay.Options;
+			var options = input.DialogueToDisplay.Options;
 			var optionsLength = options.Length;
 			if (optionsLength < 1 || optionsLength > buttonSets.Length)
 				throw new InvalidOperationException($"Dialogue writer unable to handle {optionsLength} options!");
@@ -50,7 +51,6 @@ namespace UI.Dialogue
 
 		public void DisposeDialogue()
 		{
-			m_input = DialogueWriterInput.Empty;
 			questionText.HideText();
 			if (buttonSets.ContainsKey(m_buttonsInUse)) buttonSets[m_buttonsInUse].HideButtons();
 			ResetWriter();
@@ -59,6 +59,7 @@ namespace UI.Dialogue
 		private void ResetWriter()
 		{
 			choiceText.HideText();
+			m_onFinished = null;
 			m_selectedOption = null;
 			m_choiceToDisplay = null;
 			m_buttonsInUse = -1;
@@ -81,8 +82,7 @@ namespace UI.Dialogue
 		public void SelectOption(DialogueOption option)
 		{
 			m_selectedOption = option;
-			if (m_input.OnDialogueWriterFinished != null)
-				m_input.OnDialogueWriterFinished.OnDialogueWriterFinsished(this);
+			if (m_onFinished != null) m_onFinished.OnDialogueWriterFinsished(this);
 			else
 			{
 				DialogueManager.Instance.CloseDialogueWriter();

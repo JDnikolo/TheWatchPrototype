@@ -1,4 +1,5 @@
 using Attributes;
+using Managers;
 using UnityEngine;
 
 namespace Localization.Text
@@ -9,6 +10,6 @@ namespace Localization.Text
         [SerializeField] [EnumArray(typeof(LanguageEnum))]
         private string[] texts;
 
-        public string Text => null;
+        public string Text => texts[(int) LanguageManager.Instance.CurrentLanguage];
     }
 }

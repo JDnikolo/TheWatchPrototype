@@ -18,12 +18,18 @@ namespace Managers
 		
 		private enum GameState : byte
 		{
+			Idle,
+			Preload,
 			SetupStart,
 			Setup,
 			Play,
 		}
 
-		private GameState m_gameState = GameState.SetupStart;
+		private GameState m_gameState = GameState.Preload;
+		
+		internal void Stop() => m_gameState = GameState.Idle;
+
+		internal void Restart() => m_gameState = GameState.SetupStart;
 		
 		internal void AddStartable(IStartable startable)
 		{
@@ -48,6 +54,12 @@ namespace Managers
 		{
 			switch (m_gameState)
 			{
+				case GameState.Idle:
+					break;
+				case GameState.Preload:
+					SettingsManager.Instance.Load();
+					m_gameState = GameState.SetupStart;
+					break;
 				case GameState.SetupStart:
 					m_startables.Sort(SortByOrderReversed);
 					m_gameState = GameState.Setup;
