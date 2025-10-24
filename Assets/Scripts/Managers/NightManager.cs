@@ -7,7 +7,7 @@ namespace Managers
     [AddComponentMenu("Managers/Night Manager")]
     public sealed class NightManager : Singleton<NightManager>
     {
-        private NightTimerUI m_timer;
+        [SerializeField] private NightTimerUI m_timer;
 
         [Category("Time")]
         [SerializeField]
@@ -24,7 +24,6 @@ namespace Managers
 
         private void Start()
         {
-            m_timer = GameObject.FindGameObjectWithTag("NightTimer").GetComponent<NightTimerUI>();
             m_timer.SetTargetTime(nightTime);
             m_timer.TimerFinished += OnTimerFinished;
         }
