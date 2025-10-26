@@ -21,7 +21,7 @@ namespace Managers
         [Tooltip("How much the time jump is reduced on repeated interaction with the same interactable.")]
         [Range(0.0f, 1.0f)]
         private float repeatReduction = 0.1f;
-
+        
         private void Start()
         {
             m_timer.SetTargetTime(nightTime);
@@ -38,7 +38,7 @@ namespace Managers
         /// <summary>
         /// Register the player interaction with an Interactable.
         /// </summary>
-        /// <param name="timesInteracted">The amount of times the player has alread interacted with the Interactable.</param>
+        /// <param name="timesInteracted">The amount of times the player has already interacted with the Interactable.</param>
         public void RegisterInteraction(int timesInteracted)
         {
             var reduction = (timesInteracted == 0) ? 1 : repeatReduction / timesInteracted;
@@ -49,5 +49,7 @@ namespace Managers
         {
             //TODO: Finish the night section
         }
+
+        public void ShowTimer() => m_timer.Show();
     }
 }

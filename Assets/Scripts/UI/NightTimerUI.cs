@@ -97,15 +97,15 @@ namespace UI
         /// </summary>
         public void Hide()
         {
-            m_clockMask.enabled = false;
-            m_clockMask.softness = new Vector2Int(3000, 3000);
+            m_clockBackground.enabled = false;
+            m_clockMask.softness = new Vector2Int(30000, 30000);
         }
         /// <summary>
         /// Makes the timer visible.
         /// </summary>
         public void Show()
         {
-            m_clockMask.enabled = true;
+            m_clockBackground.enabled = true;
             m_clockMask.softness = new Vector2Int(0, 0);
         }
 
