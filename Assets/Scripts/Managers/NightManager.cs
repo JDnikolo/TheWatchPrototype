@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using UI;
 using UnityEngine;
@@ -22,28 +24,37 @@ namespace Managers
         [Range(0.0f, 1.0f)]
         private float repeatReduction = 0.1f;
         
+        private Dictionary<string, int> m_interactionLog = new Dictionary<string, int>();
+        
         private void Start()
         {
             m_timer.SetTargetTime(nightTime);
             m_timer.TimerFinished += OnTimerFinished;
         }
-
-
+        
         /// <summary>
         /// Fast-Forward the night timer by <paramref name="time"/> seconds.
         /// </summary>
         /// <param name="time"></param>
-        public void ForwardTime(float time) => m_timer.FastForwardSeconds(time);
+        private void ForwardTime(float time) => m_timer.FastForwardSeconds(time);
 
         /// <summary>
         /// Register the player interaction with an Interactable.
         /// </summary>
-        /// <param name="timesInteracted">The amount of times the player has already interacted with the Interactable.</param>
-        public void RegisterInteraction(int timesInteracted)
+        public void RegisterInteraction(string interactionID, int timeToAdd = 0)
         {
-            var reduction = (timesInteracted == 0) ? 1 : repeatReduction / timesInteracted;
-            ForwardTime(reduction * interactionTimeJump);
+            var reduction = 1.0f;
+            
+            if (!m_interactionLog.TryAdd(interactionID, 1))
+            {
+                reduction = repeatReduction / ++m_interactionLog[interactionID];
+            }
+            if (timeToAdd == 0) ForwardTime(reduction * interactionTimeJump);
+            else ForwardTime(reduction * timeToAdd);
+            ShowTimer();
         }
+
+        public void ResetInteractionLog() => m_interactionLog.Clear();
 
         private void OnTimerFinished()
         {
