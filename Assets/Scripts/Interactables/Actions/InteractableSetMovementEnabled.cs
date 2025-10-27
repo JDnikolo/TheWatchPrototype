@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Interactables.Actions
 {
-    [AddComponentMenu("Interactables/Set Movement Interactable")]
+    [AddComponentMenu("Interactables/Movement/Set Movement Interactable")]
     public sealed class InteractableSetMovementEnabled : Interactable
     {
         [SerializeField] private AgentStart behaviorToSet;

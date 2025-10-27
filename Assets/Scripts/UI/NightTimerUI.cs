@@ -78,6 +78,7 @@ namespace UI
             if (m_timeElapsed <= targetTime) m_timeElapsed += Time.deltaTime;
             else
             {
+                m_timerText.text = "Shift Over!";
                 TimerFinished?.Invoke();
                 m_isCounting = false;
             }
