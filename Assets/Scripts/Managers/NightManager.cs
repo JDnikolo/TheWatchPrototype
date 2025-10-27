@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Callbacks;
 using UI;
 using UnityEngine;
 
@@ -23,9 +24,11 @@ namespace Managers
         [Tooltip("How much the time jump is reduced on repeated interaction with the same interactable.")]
         [Range(0.0f, 1.0f)]
         private float repeatReduction = 0.1f;
+        [SerializeReference] private NightEndActions m_nightEndActions;
         
         private Dictionary<string, int> m_interactionLog = new Dictionary<string, int>();
-        
+    
+
         private void Start()
         {
             m_timer.SetTargetTime(nightTime);
@@ -58,6 +61,7 @@ namespace Managers
 
         private void OnTimerFinished()
         {
+            m_nightEndActions?.DoActions();
             //TODO: Finish the night section
         }
 
