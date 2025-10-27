@@ -54,9 +54,16 @@ namespace Managers
 			if (enable) m_uiMap.Enable();
 			else m_uiMap.Disable();
 		}
+
+		public InputActionMap GetInputMap(string mapName)
+		{
+			if (mapName == playerMapName) return m_playerMap;
+			if (mapName == uiMapName) return m_uiMap;
+			return actionAsset.FindActionMap(mapName);
+		}
 		
-		public InputAction GetPlayerAction(string name) => m_playerMap.FindAction(name);
+		public InputAction GetPlayerAction(string actionName) => m_playerMap.FindAction(actionName);
 		
-		public InputAction GetUIAction(string name) => m_uiMap.FindAction(name);
+		public InputAction GetUIAction(string actionName) => m_uiMap.FindAction(actionName);
 	}
 }

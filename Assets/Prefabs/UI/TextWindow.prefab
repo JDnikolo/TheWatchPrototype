@@ -660,7 +660,14 @@ MonoBehaviour:
   textWriter: {fileID: 2748921938342076261}
   speakerWriter: {fileID: 7947424648473113866}
   slider: {fileID: 199741164770470234}
-  skipActionName: SkipDialogue
+  skipDialogue:
+    inputs:
+    - actionMap: UI
+      actionName: SkipDialogue
+    - actionMap: Player
+      actionName: Interact
+    - actionMap: Player
+      actionName: Shout
   characterDelay: 0.02
   periodDelay: 0.1
   commaDelay: 0.2

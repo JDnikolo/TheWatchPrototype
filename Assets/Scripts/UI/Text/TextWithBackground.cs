@@ -14,8 +14,12 @@ namespace UI.Text
 		public void SetText(string text)
 		{
 			textMesh.text = text;
-			if (string.IsNullOrEmpty(text)) UpdateBackgroundWidth(padding * 2f);
-			else GameManager.Instance.InvokeOnNextFrameUpdate(UpdateBackground);
+			if (string.IsNullOrEmpty(text)) SetVisible(false);
+			else
+			{
+				SetVisible(true);
+				GameManager.Instance.InvokeOnNextFrameUpdate(UpdateBackground);
+			}
 		}
 
 		private void UpdateBackground()
@@ -29,6 +33,12 @@ namespace UI.Text
 			var delta = background.sizeDelta;
 			delta.x = width;
 			background.sizeDelta = delta;
+		}
+
+		private void SetVisible(bool visible)
+		{
+			background.gameObject.SetActive(visible);
+			textMesh.gameObject.SetActive(visible);
 		}
 	}
 }
