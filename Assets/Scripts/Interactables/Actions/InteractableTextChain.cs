@@ -20,7 +20,7 @@ namespace Interactables.Actions
 			m_chainIndex = 0;
 			InputManager.Instance.ForceUIInput();
 			DialogueManager.Instance.OpenTextWriter(new TextWriterInput(textChain.TextAssets[m_chainIndex],
-				m_chainIndex < textChain.TextAssets.Length ? this : textWriterFinished));
+				m_chainIndex < textChain.TextAssets.Length - 1 ? this : textWriterFinished));
 		}
 
 		public void OnTextWriterFinished(TextWriter textWriter)
