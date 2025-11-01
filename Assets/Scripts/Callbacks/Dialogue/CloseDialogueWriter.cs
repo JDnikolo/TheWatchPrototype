@@ -15,7 +15,7 @@ namespace Callbacks.Dialogue
 		public override void OnDialogueWriterFinsished(DialogueWriter dialogueWriter)
 		{
 			base.OnDialogueWriterFinsished(dialogueWriter);
-			DialogueManager.Instance.CloseDialogueWriter();
+			UIManager.Instance.CloseDialogueWriter();
 			if (enablePlayerInput) InputManager.Instance.ForcePlayerInput();
 			if (interactable) interactable.Interact();
 		}

@@ -14,7 +14,7 @@ namespace Callbacks.Text
 		
 		public override void OnTextWriterFinished(TextWriter textWriter)
 		{
-			DialogueManager.Instance.CloseTextWriter();
+			UIManager.Instance.CloseTextWriter();
 			if (enablePlayerInput) InputManager.Instance.ForcePlayerInput();
 			if (interactable) interactable.Interact();
 		}

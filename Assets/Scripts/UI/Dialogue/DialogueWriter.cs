@@ -85,7 +85,7 @@ namespace UI.Dialogue
 			if (m_onFinished != null) m_onFinished.OnDialogueWriterFinsished(this);
 			else
 			{
-				DialogueManager.Instance.CloseDialogueWriter();
+				UIManager.Instance.CloseDialogueWriter();
 				InputManager.Instance.ForcePlayerInput();
 			}
 		}

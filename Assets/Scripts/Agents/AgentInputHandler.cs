@@ -21,6 +21,8 @@ namespace Agents
 				if (value is IMovementBehaviorSelected special) special.OnSelected();
 			}
 		}
+		
+		public Rigidbody Rigidbody => rigidbody;
 
 		public CharacterVelocityData MovementData => movementData;
 		

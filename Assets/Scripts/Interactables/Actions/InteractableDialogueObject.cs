@@ -18,7 +18,7 @@ namespace Interactables.Actions
 		public override void Interact()
 		{
 			InputManager.Instance.ForceUIInput();
-			DialogueManager.Instance.OpenDialogueWriter(new DialogueWriterInput(
+			UIManager.Instance.OpenDialogueWriter(new DialogueWriterInput(
 				dialogueObject, questionToDisplay, dialogueWriterFinished));
 		}
 	}

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Player
 {
 	[AddComponentMenu(menuName: "Player/Player Input Handler")]
-	public sealed class PlayerInputHandler : MonoBehaviour, IStartable
+	public sealed class PlayerInputHandler : MonoBehaviour
 	{
 		[SerializeField] private string moveAxisName = "Move";
 		[SerializeField] private string lookAxisName = "Look";
@@ -14,16 +14,12 @@ namespace Player
 
 		private InputAxis<Vector2> m_moveAxis;
 		private InputAxis<Vector2> m_lookAxis;
-		
-		public void OnStart()
-		{
-			m_moveAxis.AssignAction(InputManager.Instance.GetPlayerAction(moveAxisName));
-			m_lookAxis.AssignAction(InputManager.Instance.GetPlayerAction(lookAxisName));
-		}
 
 		private void Update()
 		{
+			if (!m_moveAxis.Assigned) m_moveAxis.AssignAction(InputManager.Instance.GetPlayerAction(moveAxisName));
 			m_moveAxis.Update();
+			if (!m_lookAxis.Assigned) m_lookAxis.AssignAction(InputManager.Instance.GetPlayerAction(lookAxisName));
 			m_lookAxis.Update();
 		}
 

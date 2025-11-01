@@ -7,13 +7,13 @@ namespace Agents
 	public sealed class AgentMovementHandler : MonoBehaviour
 	{
 		[SerializeField] private AgentInputHandler inputHandler;
-		[SerializeField] private new Rigidbody rigidbody;
 		
 		private void FixedUpdate()
 		{
 			var finalVector = Vector3.zero;
 			var deltaTime = Time.fixedDeltaTime;
-			var linearVelocity = rigidbody.velocity;
+			var rigidBody = inputHandler.Rigidbody;
+			var linearVelocity = rigidBody.velocity;
 			var acceleration = inputHandler.MovementData.Acceleration;
 			if (inputHandler.TryGetMoveAxis(out var moveAxis))
 			{
@@ -37,7 +37,7 @@ namespace Agents
 				finalVector.CorrectForDirection(Vector3.right, linearVelocity, 0f, acceleration, deltaTime);
 			}
 
-			rigidbody.AddForce(finalVector, ForceMode.Acceleration);
+			rigidBody.AddForce(finalVector, ForceMode.Acceleration);
 		}
 	}
 }

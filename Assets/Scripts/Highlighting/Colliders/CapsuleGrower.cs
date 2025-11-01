@@ -4,14 +4,17 @@ namespace Highlighting.Colliders
 {
 	public sealed class CapsuleGrower : ColliderGrower
 	{
-		[SerializeField] private new CapsuleCollider collider;
-
+		private CapsuleCollider m_collider;
 		private float m_radius;
-		
-		private void Start() => m_radius = collider.radius;
 
-		public override void GrowCollider(float growFactor) => collider.radius = m_radius * growFactor;
+		public CapsuleGrower(CapsuleCollider collider)
+		{
+			m_collider = collider;
+			if (collider) m_radius = collider.radius;
+		}
 
-		public override void ShrinkCollider() => collider.radius = m_radius;
+		public override void GrowCollider(float growFactor) => m_collider.radius = m_radius * growFactor;
+
+		public override void ShrinkCollider() => m_collider.radius = m_radius;
 	}
 }

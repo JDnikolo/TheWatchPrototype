@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using Collections;
 using UnityEngine;
+using Utilities;
 
 namespace Managers
 {
 	[AddComponentMenu("Managers/Game Manager")]
 	public sealed class GameManager : Singleton<GameManager>
 	{
-		private readonly List<IStartable> m_startables = new();
-		
 		private readonly FrameUpdateCollection m_frameUpdateCollection = new();
 		private readonly Stack<Action> m_frameInvokeStack = new();
 		
@@ -20,8 +19,6 @@ namespace Managers
 		{
 			Idle,
 			Preload,
-			SetupStart,
-			Setup,
 			Play,
 		}
 
@@ -29,12 +26,7 @@ namespace Managers
 		
 		internal void Stop() => m_gameState = GameState.Idle;
 
-		internal void Restart() => m_gameState = GameState.SetupStart;
-		
-		internal void AddStartable(IStartable startable)
-		{
-			if (startable != null) m_startables.Add(startable);
-		}
+		internal void Restart() => m_gameState = GameState.Play;
 
 		public void InvokeOnNextFrameUpdate(Action action)
 		{
@@ -58,19 +50,7 @@ namespace Managers
 					break;
 				case GameState.Preload:
 					SettingsManager.Instance.Load();
-					m_gameState = GameState.SetupStart;
-					break;
-				case GameState.SetupStart:
-					m_startables.Sort(SortByOrderReversed);
-					m_gameState = GameState.Setup;
-					break;
-				case GameState.Setup:
-					for (var i = m_startables.Count - 1; i >= 0; i--)
-					{
-						m_startables[i].OnStart();
-						m_startables.RemoveAt(i);
-					}
-					
+					InputManager.Instance.ForcePlayerInput();
 					m_gameState = GameState.Play;
 					break;
 				case GameState.Play:
@@ -92,7 +72,5 @@ namespace Managers
 			while (m_fixedInvokeStack.TryPop(out var action)) action.Invoke();
 			m_fixedUpdateCollection.Update();
 		}
-
-		private int SortByOrderReversed(IStartable x, IStartable y) => y.StartOrder.CompareTo(x.StartOrder);
 	}
 }

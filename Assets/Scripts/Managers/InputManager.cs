@@ -9,8 +9,7 @@ namespace Managers
 		[SerializeField] private InputActionAsset actionAsset;
 		[SerializeField] private string playerMapName = "Player";
 		[SerializeField] private string uiMapName = "UI";
-
-		public Vector2 mousePosition;
+		
 		private InputActionMap m_playerMap;
 		private InputActionMap m_uiMap;
 
@@ -24,8 +23,6 @@ namespace Managers
 			m_playerMap = actionAsset.FindActionMap(playerMapName);
 			m_uiMap = actionAsset.FindActionMap(uiMapName);
 		}
-
-		private void Update() => mousePosition = MousePosition;
 
 		public void ToggleCursor(bool enable)
 		{

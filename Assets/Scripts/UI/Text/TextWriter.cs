@@ -10,7 +10,7 @@ using Utilities;
 namespace UI.Text
 {
 	[AddComponentMenu("UI/Text/Text Writer")]
-	public class TextWriter : MonoBehaviour
+	public sealed class TextWriter : MonoBehaviour
 	{
 		[Header("Linked behaviors")] 
 		[SerializeField] private TextMeshProUGUI textWriter;
@@ -34,6 +34,7 @@ namespace UI.Text
 		private int m_previousPageCount;
 		private int m_seek;
 		private bool m_write;
+		private bool m_skipText;
 		private bool m_forceFinish;
 
 		public void WriteText(TextWriterInput input)
@@ -46,6 +47,8 @@ namespace UI.Text
 
 		public void DisposeText() => StopWriting();
 
+		public void SkipText() => m_skipText = true;
+		
 		private void Start()
 		{
 			m_skipAction = InputManager.Instance.GetUIAction(skipActionName);
@@ -60,7 +63,13 @@ namespace UI.Text
 
 		private void Update()
 		{
-			var skipDialogue = ShouldSkipDialogue();
+			var skipDialogue = m_skipAction.WasPressedThisFrame();
+			if (m_skipText)
+			{
+				m_skipText = false;
+				skipDialogue = true;
+			}
+			
 			if (m_forceFinish)
 			{
 				m_forceFinish = false;
@@ -79,7 +88,7 @@ namespace UI.Text
 					}
 					else
 					{
-						DialogueManager.Instance.CloseTextWriter();
+						UIManager.Instance.CloseTextWriter();
 						InputManager.Instance.ForcePlayerInput();
 					}
 				}
@@ -137,8 +146,6 @@ namespace UI.Text
 
 			if (!m_write) ResetInternals();
 		}
-		
-		private bool ShouldSkipDialogue() => m_skipAction.WasPressedThisFrame();
 
 		private void CheckPages()
 		{
@@ -157,13 +164,10 @@ namespace UI.Text
 	
 		private void SetSlider(int pageCount)
 		{
-			if (pageCount < 2)
-			{
-				slider.maxValue = 1;
-				slider.enabled = false;
-			}
+			if (pageCount < 2) slider.gameObject.SetActive(false);
 			else
 			{
+				slider.gameObject.SetActive(true);
 				slider.maxValue = pageCount - 1;
 				slider.enabled = true;
 				slider.SetValueWithoutNotify(slider.maxValue);

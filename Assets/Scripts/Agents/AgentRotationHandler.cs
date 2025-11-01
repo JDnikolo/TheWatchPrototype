@@ -10,10 +10,10 @@ namespace Agents
 		private void FixedUpdate()
 		{
 			if (!inputHandler.TryGetRotationAxis(out var rotationAxis)) return;
-			var localTransform = transform;
-			var eulerAngles = localTransform.eulerAngles;
+			var agentTransform = inputHandler.Rigidbody.transform;
+			var eulerAngles = agentTransform.eulerAngles;
 			eulerAngles.y += rotationAxis * inputHandler.RotationData.Acceleration * Mathf.Rad2Deg * Time.fixedDeltaTime;
-			localTransform.eulerAngles = eulerAngles;
+			agentTransform.eulerAngles = eulerAngles;
 		}
 	}
 }

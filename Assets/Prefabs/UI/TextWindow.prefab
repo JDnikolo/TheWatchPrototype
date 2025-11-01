@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -145,6 +145,7 @@ GameObject:
   - component: {fileID: 7609542076849768315}
   - component: {fileID: 1155888755612617037}
   - component: {fileID: 5421809096813513638}
+  - component: {fileID: 1492316170355365232}
   m_Layer: 5
   m_Name: Handle
   m_TagString: Untagged
@@ -169,7 +170,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 20}
+  m_SizeDelta: {x: 45, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1155888755612617037
 CanvasRenderer:
@@ -209,6 +210,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1492316170355365232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330949038091083067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AspectMode: 1
+  m_AspectRatio: 1
 --- !u!1 &595682698896341528
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,9 +446,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 12.5, y: 25}
+  m_AnchoredPosition: {x: -12.5, y: 25}
   m_SizeDelta: {x: 25, y: -50}
-  m_Pivot: {x: 2, y: 0}
+  m_Pivot: {x: 1, y: 0}
 --- !u!114 &199741164770470234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,6 +547,7 @@ GameObject:
   - component: {fileID: 7388128646438628830}
   - component: {fileID: 3841741368521297928}
   - component: {fileID: 5495020908629248620}
+  - component: {fileID: 8109843389572574421}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -596,6 +612,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.2
+--- !u!114 &8109843389572574421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6767131920929058710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb9a70273674f8fbace8d1f22acbb47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9082568508184238379
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,14 +688,7 @@ MonoBehaviour:
   textWriter: {fileID: 2748921938342076261}
   speakerWriter: {fileID: 7947424648473113866}
   slider: {fileID: 199741164770470234}
-  skipDialogue:
-    inputs:
-    - actionMap: UI
-      actionName: SkipDialogue
-    - actionMap: Player
-      actionName: Interact
-    - actionMap: Player
-      actionName: Shout
+  skipActionName: SkipDialogue
   characterDelay: 0.02
   periodDelay: 0.1
   commaDelay: 0.2

@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace Highlighting.Colliders
+﻿namespace Highlighting.Colliders
 {
-	public abstract class ColliderGrower : MonoBehaviour
+	public abstract class ColliderGrower
 	{
 		public abstract void GrowCollider(float growFactor);
 		

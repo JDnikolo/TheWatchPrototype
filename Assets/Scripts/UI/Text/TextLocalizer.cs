@@ -7,14 +7,12 @@ using UnityEngine;
 namespace UI.Text
 {
 	[AddComponentMenu("UI/Text/Localized Text")]
-	public sealed class TextLocalizer : MonoBehaviour, IOnLocalizationUpdate, IStartable
+	public sealed class TextLocalizer : MonoBehaviour, IOnLocalizationUpdate
 	{
 		[SerializeField] private TextMeshProUGUI textMesh;
 		[SerializeField] private TextObject textToDisplay;
 
-		public byte StartOrder => 0;
-
-		public void OnStart() => LanguageManager.Instance.AddLocalizer(this);
+		public void Awake() => LanguageManager.Instance.AddLocalizer(this);
 
 		private void OnDestroy() => LanguageManager.Instance.RemoveLocalizer(this);
 

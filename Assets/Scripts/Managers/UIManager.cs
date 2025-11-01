@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Managers
 {
-	[AddComponentMenu("Managers/Dialogue Manager")]
-	public sealed class DialogueManager : Singleton<DialogueManager>
+	[AddComponentMenu("Managers/UI Manager")]
+	public sealed class UIManager : Singleton<UIManager>
 	{
 		[SerializeField] private TextWriter textWriter;
 		[SerializeField] private DialogueWriter dialogueWriter;
@@ -22,6 +22,12 @@ namespace Managers
 			textWriter.gameObject.SetActive(false);
 		}
 
+		public void SkipText()
+		{
+			if (!textWriter.gameObject.activeInHierarchy) return;
+			textWriter.SkipText();
+		}
+		
 		public void OpenDialogueWriter(DialogueWriterInput input)
 		{
 			dialogueWriter.gameObject.SetActive(true);

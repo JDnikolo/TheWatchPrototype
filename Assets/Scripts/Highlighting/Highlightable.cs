@@ -5,7 +5,7 @@ namespace Highlighting
 	public abstract class Highlightable : MonoBehaviour, IHighlightable
 	{
 		private bool m_highlighted;
-		
+
 		public void Highlight(bool enabled)
 		{
 			if (m_highlighted == enabled) return;
