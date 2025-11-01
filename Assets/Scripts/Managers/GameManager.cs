@@ -19,6 +19,7 @@ namespace Managers
 		{
 			Idle,
 			Preload,
+			BeforePlay,
 			Play,
 		}
 
@@ -50,6 +51,10 @@ namespace Managers
 					break;
 				case GameState.Preload:
 					SettingsManager.Instance.Load();
+					m_gameState = GameState.BeforePlay;
+					break;
+				case GameState.BeforePlay:
+					//This will be replaced later
 					InputManager.Instance.ForcePlayerInput();
 					m_gameState = GameState.Play;
 					break;
