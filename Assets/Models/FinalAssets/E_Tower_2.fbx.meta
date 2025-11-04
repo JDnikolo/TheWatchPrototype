@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: 9c5c6005b402a2749b697478171aa889
+guid: 3d9cd8ab11e507241a1b7d159116b80f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bricks
+    second: {fileID: 2100000, guid: 997c8e37afd7dff4e8edc3506509d048, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wall
+    second: {fileID: 2100000, guid: 0d87be78187e2cc429d3a206f86c538c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -35,7 +45,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.1
+    globalScale: 2
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -90,7 +100,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.001
+    globalScale: 2
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
