@@ -13,11 +13,12 @@ namespace Managers
 		private const string GameplaySection = "Gameplay";
 		private const string InputSection = "Input";
 		
+		protected override bool Override => false;
+		
 		private static string FilePath => Path.Combine(Application.persistentDataPath, "Settings.cfg");
 		
 		public void Load()
 		{
-			Debug.Log("Loading settings");
 			var filePath = FilePath;
 			if (!File.Exists(filePath)) return;
 			using (var reader = new ConfigReader(File.OpenText(filePath)))
@@ -46,7 +47,6 @@ namespace Managers
 
 		public void Save()
 		{
-			Debug.Log("Saving settings");
 			using (var writer = new ConfigWriter(File.CreateText(FilePath)))
 			{
 				writer.WriteSection(AudioSection);

@@ -1,17 +1,21 @@
-﻿using UnityEngine;
+﻿using System.Threading;
+using UnityEngine;
 
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-	public static T Instance { get; private set; }
+	private static T m_instance;
+
+	public static T Instance => m_instance;
 	
+	protected abstract bool Override { get; }
+
+	//Now fully atomic
 	protected virtual void Awake()
 	{
-		if (!Instance) Instance = this as T;
-		else Destroy(gameObject);
+		if (Override) Interlocked.Exchange(ref m_instance, this as T);
+		else Interlocked.CompareExchange(ref m_instance, this as T, null);
 	}
 
-	protected virtual void OnDestroy()
-	{
-		if (Instance == this) Instance = null;
-	}
+	//Now fully atomic
+	protected virtual void OnDestroy() => Interlocked.CompareExchange(ref m_instance, null, this as T);
 }

@@ -6,21 +6,22 @@ using UnityEngine.InputSystem;
 namespace Highlighting
 {
 	[AddComponentMenu("Highlighting/Interaction Highlightable")]
-	public sealed class HighlightableInteraction : Highlightable
+	public sealed class HighlightableInteraction : Highlightable, IFrameUpdatable
 	{
 		[SerializeField] private string interactActionName = "Interact";
 		[SerializeField] private Interactable interactable;
 		
 		private InputAction m_interactAction;
+		private Updatable m_updatable;
 		
-		private void Update()
+		public byte UpdateOrder => 0;
+		
+		public void OnFrameUpdate()
 		{
 			m_interactAction ??= InputManager.Instance.GetPlayerAction(interactActionName);
 			if (m_interactAction.WasPressedThisFrame() && interactable) interactable.Interact();
 		}
 
-		private void OnValidate() => enabled = false;
-
-		protected override void HighlightInternal(bool enabled) => this.enabled = enabled;
+		protected override void HighlightInternal(bool enabled) => m_updatable.SetUpdating(enabled, this);
 	}
 }

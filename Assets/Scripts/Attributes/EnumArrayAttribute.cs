@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Attributes
 {
-	public class EnumArrayAttribute : PropertyAttribute
+	public sealed class EnumArrayAttribute : PropertyAttribute
 	{
 		public readonly Type EnumType;
 

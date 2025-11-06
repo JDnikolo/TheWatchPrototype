@@ -2,7 +2,7 @@
 
 namespace Character
 {
-	[CreateAssetMenu(fileName = "CharacterVelocityData", menuName = "Character/Character Velocity Data")]
+	[CreateAssetMenu(fileName = "Velocity", menuName = "Character/Character Velocity Data")]
 	public sealed class CharacterVelocityData : ScriptableObject
 	{
 		[SerializeField] private float acceleration;

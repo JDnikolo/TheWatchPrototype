@@ -24,10 +24,10 @@ namespace Utilities
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Vector3 FromFlatVector(this Vector2 position) => new(position.x, 0f, position.y);
 		
-		public static void CorrectForDirection(this ref Vector3 finalVector, Vector3 direction, 
-			Vector3 linearVelocity, float desiredSpeed, float acceleration, float deltaTime)
+		public static void CorrectForDirection(this ref Vector2 finalVector, Vector2 direction, 
+			Vector2 linearVelocity, float desiredSpeed, float acceleration, float deltaTime)
 		{
-			var directionSpeed = Vector3.Dot(direction, linearVelocity);
+			var directionSpeed = Vector2.Dot(direction, linearVelocity);
 			bool towards;
 			//We want to accelerate towards the direction
 			if (desiredSpeed > directionSpeed) towards = true;

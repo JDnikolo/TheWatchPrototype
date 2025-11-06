@@ -1,24 +1,25 @@
-﻿using UnityEngine;
+﻿using Managers;
+using UnityEngine;
 using Utilities;
 
 namespace Agents
 {
-	[AddComponentMenu(menuName: "Agent/Agent Movement Handler")]
-	public sealed class AgentMovementHandler : MonoBehaviour
+	[AddComponentMenu("Agents/Agent Movement Handler")]
+	public sealed class AgentMovementHandler : MonoBehaviour, IFixedUpdatable
 	{
 		[SerializeField] private AgentInputHandler inputHandler;
-		
-		private void FixedUpdate()
+
+		public byte UpdateOrder => 0;
+
+		public void OnFixedUpdate()
 		{
-			var finalVector = Vector3.zero;
+			var finalVector = Vector2.zero;
 			var deltaTime = Time.fixedDeltaTime;
 			var rigidBody = inputHandler.Rigidbody;
-			var linearVelocity = rigidBody.velocity;
+			var linearVelocity = rigidBody.velocity.ToFlatVector();
 			var acceleration = inputHandler.MovementData.Acceleration;
 			if (inputHandler.TryGetMoveAxis(out var moveAxis))
 			{
-				var moveDirection = new Vector3(moveAxis.x, 0f, moveAxis.y);
-				var correctionDirection = Vector3.Cross(Vector3.up, moveDirection);
 				var maxVelocity = inputHandler.MovementData.MaxVelocity;
 				float multiplier;
 				var length = moveAxis.z;
@@ -26,18 +27,24 @@ namespace Agents
 									inputHandler.SlowdownMultiplier;
 				if (length < brakeDistance) multiplier = length / brakeDistance;
 				else multiplier = 1f;
-				finalVector.CorrectForDirection(moveDirection, linearVelocity, 
-					maxVelocity * multiplier, acceleration, deltaTime);
-				finalVector.CorrectForDirection(correctionDirection, 
+				var moveDirection = new Vector3(moveAxis.x, 0f, moveAxis.y);
+				var correctionDirection = Vector3.Cross(Vector3.up, moveDirection);
+				finalVector.CorrectForDirection(moveDirection.ToFlatVector().normalized, 
+					linearVelocity, maxVelocity * multiplier, acceleration, deltaTime);
+				finalVector.CorrectForDirection(correctionDirection.ToFlatVector().normalized, 
 					linearVelocity, 0f, acceleration, deltaTime);
 			}
 			else
 			{
-				finalVector.CorrectForDirection(Vector3.forward, linearVelocity, 0f, acceleration, deltaTime);
-				finalVector.CorrectForDirection(Vector3.right, linearVelocity, 0f, acceleration, deltaTime);
+				finalVector.CorrectForDirection(Vector2.right, linearVelocity, 0f, acceleration, deltaTime);
+				finalVector.CorrectForDirection(Vector2.up, linearVelocity, 0f, acceleration, deltaTime);
 			}
 
-			rigidBody.AddForce(finalVector, ForceMode.Acceleration);
+			rigidBody.AddForce(finalVector.FromFlatVector(), ForceMode.Acceleration);
 		}
+		
+		private void Awake() => GameManager.Instance.AddFixedUpdateSafe(this);
+
+		private void OnDestroy() => GameManager.Instance.RemoveFixedUpdateSafe(this);
 	}
 }

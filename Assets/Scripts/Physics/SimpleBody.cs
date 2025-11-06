@@ -2,7 +2,7 @@
 
 namespace Physics
 {
-	[AddComponentMenu(menuName: "Physics/Simple Body")]
+	[AddComponentMenu("Physics/Simple Body")]
 	public sealed class SimpleBody : MonoBehaviour
 	{
 		//Velocity

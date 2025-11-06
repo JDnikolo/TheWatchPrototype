@@ -94,8 +94,9 @@ GameObject:
   - component: {fileID: 573187738379397998}
   - component: {fileID: 4832631825888140616}
   - component: {fileID: 3884264074387692945}
-  - component: {fileID: 3646990963225450167}
+  - component: {fileID: 6160534030399873444}
   - component: {fileID: 5138169592722369542}
+  - component: {fileID: 3646990963225450167}
   - component: {fileID: 3483696168396704731}
   - component: {fileID: 2433012650439156507}
   - component: {fileID: 9132917111220414420}
@@ -170,7 +171,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3646990963225450167
+--- !u!114 &6160534030399873444
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,12 +180,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5801635946611624972}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a758f07b7b14fb7839a44f5748542d7, type: 3}
+  m_Script: {fileID: 11500000, guid: 4aa6e372b35843178038a3c8ab4f1e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   highlightable: {fileID: 5138169592722369542}
   collider: {fileID: 3884264074387692945}
-  colliderGrowFactor: 1.2
+  minHighlightDistance: 0
+  maxHighlightDistance: 5
 --- !u!114 &5138169592722369542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,8 +200,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightables:
+  - {fileID: 3646990963225450167}
   - {fileID: 3483696168396704731}
   - {fileID: 2433012650439156507}
+--- !u!114 &3646990963225450167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5801635946611624972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a758f07b7b14fb7839a44f5748542d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collider: {fileID: 3884264074387692945}
+  colliderGrowFactor: 1.2
 --- !u!114 &3483696168396704731
 MonoBehaviour:
   m_ObjectHideFlags: 0

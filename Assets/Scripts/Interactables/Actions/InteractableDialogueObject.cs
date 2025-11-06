@@ -1,5 +1,6 @@
 ﻿using Callbacks.Dialogue;
 using Localization.Dialogue;
+using Localization.Speaker;
 using Localization.Text;
 using Managers;
 using UI.Dialogue;
@@ -12,7 +13,7 @@ namespace Interactables.Actions
 	public sealed class InteractableDialogueObject : Interactable
 	{
 		[SerializeField] private DialogueObject dialogueObject;
-		[SerializeField] private TextObject questionToDisplay;
+		[SerializeField] private SpeakerObject questionToDisplay;
 		[SerializeField] private DialogueWriterFinished dialogueWriterFinished;
 		
 		public override void Interact()

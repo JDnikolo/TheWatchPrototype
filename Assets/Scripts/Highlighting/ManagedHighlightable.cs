@@ -17,8 +17,8 @@ namespace Highlighting
 		public float MinHighlightDistance => minHighlightDistance;
 
 		public float MaxHighlightDistance  => maxHighlightDistance;
-		
-		protected virtual void Start()
+
+		private void Start()
 		{
 			if (!collider) throw new Exception("Collider required for highlighting.");
 			m_rigidbody = collider.attachedRigidbody;

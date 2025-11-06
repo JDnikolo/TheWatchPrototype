@@ -4,11 +4,14 @@ using UnityEngine;
 
 namespace Player
 {
-	[AddComponentMenu(menuName: "Player/Player Input Handler")]
+	[AddComponentMenu("Player/Player Input Handler")]
 	public sealed class PlayerInputHandler : MonoBehaviour
 	{
+		[SerializeField] private new Rigidbody rigidbody;
 		[SerializeField] private string moveAxisName = "Move";
 		[SerializeField] private string lookAxisName = "Look";
+		
+		public Rigidbody Rigidbody => rigidbody;
 		
 		public byte StartOrder => 0;
 

@@ -59,10 +59,8 @@ namespace UI
             m_shiftEndHand = clockHands[2];
             m_currentTimeHand = clockHands[3];
             m_secondsHand = clockHands[4];
-
             m_clockMask = GetComponent<RectMask2D>();
             m_clockBackground = GetComponent<Image>();
-
             m_timeElapsed = 0.0f;
         }
 

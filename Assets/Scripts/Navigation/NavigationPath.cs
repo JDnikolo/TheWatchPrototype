@@ -2,7 +2,7 @@
 
 namespace Navigation
 {
-	[AddComponentMenu(menuName: "Navigation/Navigation Path")]
+	[AddComponentMenu("Navigation/Navigation Path")]
 	public sealed class NavigationPath : MonoBehaviour
 	{
 		[SerializeField] private Transform[] waypoints;

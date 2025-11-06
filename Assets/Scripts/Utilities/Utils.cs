@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Managers;
-using UnityEditor;
+﻿using Managers;
 using UnityEngine;
 
 namespace Utilities
@@ -13,9 +10,14 @@ namespace Utilities
 		/// </summary>
 		public static bool IsPlayerObject(this GameObject gameObject)
 		{
-			var playerObject = PlayerManager.Instance.PlayerObject;
-			if (!playerObject) return false;
-			return gameObject == playerObject;
+			var playerManager = PlayerManager.Instance;
+			if (playerManager != null)
+			{
+				var playerObject = playerManager.PlayerObject;
+				if (playerObject) return gameObject == playerObject;
+			}
+
+			return false;
 		}
 
 		/// <summary>

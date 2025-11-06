@@ -1,4 +1,5 @@
-﻿using UI.Dialogue;
+﻿using Callbacks.Dialogue.Selectors;
+using UI.Dialogue;
 using UnityEngine;
 
 namespace Callbacks.Dialogue

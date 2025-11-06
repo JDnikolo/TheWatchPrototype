@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Managers;
+using UnityEngine;
 using Utilities;
 
 namespace Interactables.Triggers
@@ -11,7 +12,7 @@ namespace Interactables.Triggers
 		private bool m_playerEntered;
 		private bool m_previousState;
 
-		private void Update()
+		private void CheckState()
 		{
 			if (m_previousState == m_playerEntered) return;
 			m_previousState = m_playerEntered;
@@ -21,12 +22,14 @@ namespace Interactables.Triggers
 
 		private void OnTriggerEnter(Collider other)
 		{
-			if (other.gameObject.IsPlayerObject()) m_playerEntered = true;
+			if (!other.attachedRigidbody.gameObject.IsPlayerObject()) return;
+			GameManager.Instance.InvokeOnNextFrameUpdateSafe(CheckState);
 		}
 
 		private void OnTriggerExit(Collider other)
 		{
-			if (other.gameObject.IsPlayerObject()) m_playerEntered = false;
+			if (!other.attachedRigidbody.gameObject.IsPlayerObject()) return;
+			GameManager.Instance.InvokeOnNextFrameUpdateSafe(CheckState);
 		}
 	}
 }

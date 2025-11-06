@@ -13,16 +13,17 @@ namespace Managers
 		private InputActionMap m_playerMap;
 		private InputActionMap m_uiMap;
 
-		public bool PlayerMapEnabled => m_playerMap.enabled;
-		public bool UIMapEnabled => m_uiMap.enabled;
+		protected override bool Override => false;
+		
+		private InputActionMap PlayerMap => m_playerMap ??= actionAsset.FindActionMap(playerMapName);
 
+		private InputActionMap UIMap => m_uiMap ??= actionAsset.FindActionMap(uiMapName);
+
+		public bool PlayerMapEnabled => PlayerMap.enabled;
+		
+		public bool UIMapEnabled => UIMap.enabled;
+		
 		public static Vector2 MousePosition => Mouse.current.position.ReadValue();
-
-		private void Start()
-		{
-			m_playerMap = actionAsset.FindActionMap(playerMapName);
-			m_uiMap = actionAsset.FindActionMap(uiMapName);
-		}
 
 		public void ToggleCursor(bool enable)
 		{
@@ -40,27 +41,27 @@ namespace Managers
 
 		public void TogglePlayerMap(bool enable)
 		{
-			if (enable == m_playerMap.enabled) return;
-			if (enable) m_playerMap.Enable();
-			else m_playerMap.Disable();
+			if (enable == PlayerMap.enabled) return;
+			if (enable) PlayerMap.Enable();
+			else PlayerMap.Disable();
 		}
 
 		public void ToggleUIMap(bool enable)
 		{
-			if (enable == m_uiMap.enabled) return;
-			if (enable) m_uiMap.Enable();
-			else m_uiMap.Disable();
+			if (enable == UIMap.enabled) return;
+			if (enable) UIMap.Enable();
+			else UIMap.Disable();
 		}
 
 		public InputActionMap GetInputMap(string mapName)
 		{
-			if (mapName == playerMapName) return m_playerMap;
-			if (mapName == uiMapName) return m_uiMap;
+			if (mapName == playerMapName) return PlayerMap;
+			if (mapName == uiMapName) return UIMap;
 			return actionAsset.FindActionMap(mapName);
 		}
 		
-		public InputAction GetPlayerAction(string actionName) => m_playerMap.FindAction(actionName);
+		public InputAction GetPlayerAction(string actionName) => PlayerMap.FindAction(actionName);
 		
-		public InputAction GetUIAction(string actionName) => m_uiMap.FindAction(actionName);
+		public InputAction GetUIAction(string actionName) => UIMap.FindAction(actionName);
 	}
 }
