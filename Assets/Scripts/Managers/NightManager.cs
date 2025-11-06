@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Callbacks;
 using UI;
+using UI.Night;
 using UnityEngine;
 
 namespace Managers
@@ -10,7 +11,7 @@ namespace Managers
     public sealed class NightManager : Singleton<NightManager>
     {
         //Serialized field, should be called 'timer' not 'm_timer'
-        [SerializeField] private NightTimerUI m_timer;
+        [SerializeField] private NightTimer m_timer;
 
         [Category("Time")]
         [SerializeField]

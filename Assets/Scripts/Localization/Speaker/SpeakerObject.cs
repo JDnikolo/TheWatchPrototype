@@ -1,3 +1,4 @@
+using Character;
 using Localization.Text;
 using UnityEngine;
 
@@ -7,7 +8,8 @@ namespace Localization.Speaker
     public class SpeakerObject : TextObject
     {
         [SerializeField] private string speaker;
+        [SerializeField] private CharacterProfileData profile;
         
-        public string Speaker => speaker;
+        public CharacterProfileData Profile => profile;
     }
 }

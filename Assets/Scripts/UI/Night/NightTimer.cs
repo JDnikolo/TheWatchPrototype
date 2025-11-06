@@ -4,10 +4,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Night
 {
-    [AddComponentMenu("UI/Night Timer")]
-    public class NightTimerUI : MonoBehaviour
+    [AddComponentMenu("UI/Night/Night Timer")]
+    public class NightTimer : MonoBehaviour, IFrameUpdatable
     {
         /// <summary>
         /// Event invoked when the timer's target time is set.
@@ -38,7 +38,7 @@ namespace UI
         /// <summary>
         /// Boolean 
         /// </summary>
-        private bool m_isCounting = true;
+        private Updatable m_updatable;
 
         private TextMeshProUGUI m_timerText;
 
@@ -51,6 +51,8 @@ namespace UI
         private Image m_clockBackground;
         private RectMask2D m_clockMask;
 
+        public byte UpdateOrder => byte.MaxValue;
+        
         private void Awake()
         {
             m_timerText = GetComponentsInChildren<TextMeshProUGUI>()[1];
@@ -62,6 +64,7 @@ namespace UI
             m_clockMask = GetComponent<RectMask2D>();
             m_clockBackground = GetComponent<Image>();
             m_timeElapsed = 0.0f;
+            m_updatable.SetUpdating(true, this);
         }
 
         private void Start()
@@ -70,15 +73,14 @@ namespace UI
             UpdateClock();
         }
 
-        private void Update()
+        public void OnFrameUpdate()
         {
-            if (!m_isCounting) return;
             if (m_timeElapsed <= targetTime) m_timeElapsed += Time.deltaTime;
             else
             {
                 m_timerText.text = "Shift Over!";
                 TimerFinished?.Invoke();
-                m_isCounting = false;
+                m_updatable.SetUpdating(false, this);
             }
 
             //Only update display once a second
@@ -112,7 +114,7 @@ namespace UI
         /// Enables or disables the timer. Enables the timer by default.
         /// </summary>
         /// <param name="value">Set to true to enable, false to disable.</param>
-        public void SetEnabled(bool value = true) => m_isCounting = value;
+        public void SetEnabled(bool value = true) => m_updatable.SetUpdating(value, this);
 
         /// <summary>
         /// Updates the rotations of the timer's clock hands.

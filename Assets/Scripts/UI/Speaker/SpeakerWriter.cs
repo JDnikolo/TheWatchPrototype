@@ -57,7 +57,9 @@ namespace UI.Speaker
 		{
 			StartWriting();
 			m_onFinished = input.OnTextWriterFinished;
-			speakerWriter.WriteText(input.TextToDisplay.Speaker);
+			var profile = input.TextToDisplay.Profile;
+			if (profile) speakerWriter.WriteText(profile.CharacterName);
+			else speakerWriter.WriteText(null);
 			m_text = input.TextToDisplay.Text;
 		}
 
