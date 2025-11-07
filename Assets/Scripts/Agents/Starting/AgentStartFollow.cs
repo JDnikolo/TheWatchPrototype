@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Agents.Starting
 {
-	[AddComponentMenu("Agent/Starting/Start Follow")]
+	[AddComponentMenu("Agents/Starting/Start Follow")]
 	public sealed class AgentStartFollow : AgentStart
 	{
 		[SerializeField] private MovementFollowBehavior followBehavior;

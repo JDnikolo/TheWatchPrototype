@@ -9,6 +9,8 @@ namespace Managers
 	{
 		private HashSet<IOnLocalizationUpdate> m_localizers = new();
 		
+		protected override bool Override => false;
+		
 		public LanguageEnum CurrentLanguage { get; private set; }
 
 		public void AddLocalizer(IOnLocalizationUpdate localizer) => m_localizers.Add(localizer);
@@ -18,7 +20,6 @@ namespace Managers
 		public void SetNewLanguage(LanguageEnum language)
 		{
 			CurrentLanguage = language;
-			Debug.Log($"New language: {language}");
 			foreach (var localizer in m_localizers) localizer.OnLocalizationUpdate();
 		}
 	}

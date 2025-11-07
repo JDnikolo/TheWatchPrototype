@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Physics
 {
-	[AddComponentMenu(menuName: "Physics/Aggregate Collider")]
+	[AddComponentMenu("Physics/Aggregate Collider")]
 	public sealed class CollisionAggregate : MonoBehaviour
 	{
 		[SerializeField] private CollisionReceiver[] collisionReceivers;

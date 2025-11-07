@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Agents
 {
-	[AddComponentMenu("Agent/Agent Brain")]
+	[AddComponentMenu("Agents/Agent Brain")]
 	public sealed class AgentBrain : MonoBehaviour
 	{
 		[SerializeField] private AgentInputHandler inputHandler;

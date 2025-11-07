@@ -15,12 +15,12 @@ namespace UI.Dialogue
 			public void ShowText(string text)
 			{
 				parent.SetActive(true);
-				textWriter.SetText(text);
+				textWriter.WriteText(text);
 			}
 
 			public void HideText()
 			{
-				textWriter.SetText(null);
+				textWriter.WriteText(null);
 				parent.SetActive(false);
 			}
 		}

@@ -8,7 +8,7 @@ using Utilities;
 namespace UI.Dialogue
 {
 	[AddComponentMenu("UI/Dialogue/Dialogue Button")]
-	public class DialogueButton : MonoBehaviour
+	public class DialogueButton : MonoBehaviour, IFrameUpdatable
 	{
 		[Header("Colors")]
 		[SerializeField] private Color normalColor = Color.white;
@@ -34,9 +34,14 @@ namespace UI.Dialogue
 		private bool m_optionEnabled;
 		private bool m_hovering;
 		private bool m_selected;
+
+		private InputAction SelectAction => m_selectAction ??= InputManager.Instance.GetUIAction(selectActionName);
+
+		public byte UpdateOrder => 0;
 		
 		public void AssignDialogueOption(DialogueOption option)
 		{
+			GameManager.Instance.AddFrameUpdateSafe(this);
 			m_option = option;
 			m_optionEnabled = m_option && m_option.Selectable;
 			image.color = GetButtonColor();
@@ -45,6 +50,7 @@ namespace UI.Dialogue
 
 		public void ResetDialogueOption()
 		{
+			GameManager.Instance.RemoveFrameUpdateSafe(this);
 			m_option = null;
 			m_optionEnabled = false;
 			ResetButton();
@@ -56,11 +62,7 @@ namespace UI.Dialogue
 			m_hovering = false;
 		}
 
-		private void Start() => m_selectAction = InputManager.Instance.GetUIAction(selectActionName);
-
-		private void OnEnable() => image.color = GetButtonColor();
-
-		private void Update()
+		public void OnFrameUpdate()
 		{
 			var hovering = IsMouseOver(InputManager.MousePosition);
 			if (m_hovering != hovering)
@@ -71,9 +73,10 @@ namespace UI.Dialogue
 			}
 			
 			//Mouse was just pressed
-			if (m_selectAction.WasPressedThisFrame()) m_selected = hovering;
+			var selectAction = SelectAction;
+			if (selectAction.WasPressedThisFrame()) m_selected = hovering;
 			//Mouse was just released
-			else if (m_selectAction.WasReleasedThisFrame())
+			else if (selectAction.WasReleasedThisFrame())
 			{
 				if (m_selected) parent.SelectOption(m_option);
 				m_selected = false;
@@ -161,6 +164,8 @@ namespace UI.Dialogue
 			return false;
 		}
 		
+		private void OnEnable() => image.color = GetButtonColor();
+
 		private void OnDisable() => image.color = GetButtonColor();
 
 		private Color GetButtonColor() => m_optionEnabled ? normalColor : disabledColor;

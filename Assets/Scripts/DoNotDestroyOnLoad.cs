@@ -2,5 +2,15 @@
 
 public sealed class DoNotDestroyOnLoad : MonoBehaviour
 {
-	private void Awake() => DontDestroyOnLoad(this);
+	private static DoNotDestroyOnLoad m_instance;
+	
+	private void Awake()
+	{
+		if (!m_instance)
+		{
+			m_instance = this;
+			DontDestroyOnLoad(this);
+		}
+		else Destroy(gameObject);
+	}
 }

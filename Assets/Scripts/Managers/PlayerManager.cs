@@ -6,10 +6,12 @@ namespace Managers
 	public sealed class PlayerManager : Singleton<PlayerManager>
 	{
 		[SerializeField] private GameObject playerObject;
-		[SerializeField] private new Camera camera;
+		[SerializeField] private Camera playerCamera;		
+		
+		protected override bool Override => true;
 		
 		public GameObject PlayerObject => playerObject;
 		
-		public Camera Camera => camera;
+		public Camera PlayerCamera => playerCamera;
 	}
 }

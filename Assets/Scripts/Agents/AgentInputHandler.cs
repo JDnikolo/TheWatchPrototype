@@ -1,12 +1,14 @@
-﻿using Agents.Behaviors;
+﻿using System;
+using Agents.Behaviors;
 using Character;
+using Managers;
 using UnityEngine;
 using Utilities;
 
 namespace Agents
 {
-	[AddComponentMenu(menuName: "Agent/Agent Input Handler")]
-	public sealed class AgentInputHandler : MonoBehaviour
+	[AddComponentMenu("Agents/Agent Input Handler")]
+	public sealed class AgentInputHandler : MonoBehaviour, IFrameUpdatable
 	{
 		[SerializeField] private new Rigidbody rigidbody;
 		[SerializeField] private CharacterVelocityData movementData;
@@ -33,14 +35,14 @@ namespace Agents
 		public Vector2 Velocity => rigidbody.velocity.ToFlatVector();
 
 		public float SlowdownMultiplier => m_movementBehavior?.SlowDownMultiplier ?? 1f;
+		
+		public byte UpdateOrder => 0;
 
 		private MovementBehavior m_movementBehavior;
 		private Vector3 m_moveAxis;
 		private float m_rotationAxis;
-		
-		private void Start() => rigidbody.maxLinearVelocity = movementData.MaxVelocity;
 
-		private void Update()
+		public void OnFrameUpdate()
 		{
 			if (m_movementBehavior == null) return;
 			var agentTransform = transform;
@@ -78,5 +80,11 @@ namespace Agents
 			rotationAxis = 0;
 			return false;
 		}
+		
+		private void Awake() => GameManager.Instance.AddFrameUpdateSafe(this);
+
+		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdateSafe(this);
+
+		private void OnValidate() => rigidbody.maxLinearVelocity = movementData.MaxVelocity;
 	}
 }

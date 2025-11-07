@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Callbacks.Dialogue;
 using Localization.Dialogue;
+using Localization.Speaker;
 using Localization.Text;
 using Managers;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace UI.Dialogue
 		private IDialogueWriterFinished m_onFinished;
 		private List<DialogueOption> m_visibleOptions = new();
 		private DialogueOption m_selectedOption;
-		private TextObject m_choiceToDisplay;
+		private SpeakerObject m_choiceToDisplay;
 		private int m_buttonsInUse = -1;
 		
 		public DialogueOption SelectedOption => m_selectedOption;

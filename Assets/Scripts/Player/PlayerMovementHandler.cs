@@ -1,40 +1,53 @@
 using Character;
+using Managers;
 using Unity.Cinemachine;
 using UnityEngine;
 using Utilities;
 
 namespace Player
 {
-    [AddComponentMenu(menuName: "Player/Player Movement Handler")]
-    public sealed class PlayerMovementHandler : MonoBehaviour
+    [AddComponentMenu("Player/Player Movement Handler")]
+    public sealed class PlayerMovementHandler : MonoBehaviour, IFixedUpdatable
     {
         [SerializeField] private CinemachineCamera cinemachineCamera;
         [SerializeField] private PlayerInputHandler inputHandler;
-        [SerializeField] private new Rigidbody rigidbody;
         [SerializeField] private CharacterVelocityData velocityData;
-        
-        private void Start() => rigidbody.maxLinearVelocity = velocityData.MaxVelocity;
 
-        private void FixedUpdate()
+        public byte UpdateOrder => 0;
+
+        public void OnFixedUpdate()
         {
-            var finalVector = Vector3.zero;
+            var finalVector = Vector2.zero;
             var deltaTime = Time.fixedDeltaTime;
-            var linearVelocity = rigidbody.velocity;
+            var rigidBody = inputHandler.Rigidbody;
+            var linearVelocity = rigidBody.velocity.ToFlatVector();
             var acceleration = velocityData.Acceleration;
+            var cameraTransform = cinemachineCamera.transform;
             if (inputHandler.TryGetMoveAxis(out var moveAxis) && moveAxis != Vector2.zero)
             {
-                finalVector = cinemachineCamera.transform.right * moveAxis.x +
-                              cinemachineCamera.transform.forward * moveAxis.y;
-                finalVector.y = 0f;
+                finalVector = (cameraTransform.right * moveAxis.x + 
+                               cameraTransform.forward * moveAxis.y).ToFlatVector();
                 finalVector = finalVector.normalized * acceleration;
             }
             else
             {
-                finalVector.CorrectForDirection(Vector3.forward, linearVelocity, 0f, acceleration, deltaTime);
-                finalVector.CorrectForDirection(Vector3.right, linearVelocity, 0f, acceleration, deltaTime);
+                finalVector.CorrectForDirection(cameraTransform.forward.ToFlatVector().normalized, 
+                    linearVelocity, 0f, acceleration, deltaTime);
+                finalVector.CorrectForDirection(cameraTransform.right.ToFlatVector().normalized, 
+                    linearVelocity, 0f, acceleration, deltaTime);
             }
 
-            rigidbody.AddForce(finalVector, ForceMode.Acceleration);
+            rigidBody.AddForce(finalVector.FromFlatVector(), ForceMode.Acceleration);
+        }
+
+        private void Awake() => GameManager.Instance.AddFixedUpdateSafe(this);
+
+        private void OnDestroy() => GameManager.Instance.RemoveFixedUpdateSafe(this);
+
+        private void OnValidate()
+        {
+            var rigidBody = inputHandler.Rigidbody;
+            if (rigidBody && velocityData) rigidBody.maxLinearVelocity = velocityData.MaxVelocity;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Localization.Text;
+﻿using Localization.Speaker;
+using Localization.Text;
 using UnityEngine;
 
 namespace Localization.Dialogue
@@ -6,10 +7,10 @@ namespace Localization.Dialogue
 	[CreateAssetMenu(fileName = "DialogueOption", menuName = "Localization/Dialogue/Dialogue option")]
 	public class DialogueOption : ScriptableObject
 	{
-		[SerializeField] private TextObject textToDisplay;
+		[SerializeField] private SpeakerObject textToDisplay;
 		[SerializeField] private DialogueOptionCondition condition;
 		
-		public TextObject TextToDisplay => textToDisplay;
+		public SpeakerObject TextToDisplay => textToDisplay;
 
 		public bool Visible => Selectable || condition.ShowIfDisabled;
 

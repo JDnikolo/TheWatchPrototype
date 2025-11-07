@@ -14,29 +14,9 @@ namespace Managers
 		private IManagedHighlightable m_raycastTarget;
 		private IManagedHighlightable m_previousTarget;
 		
+		protected override bool Override => false;
+		
 		public byte UpdateOrder => 0;
-
-		private void Start()
-		{
-			var gameManager = GameManager.Instance;
-			if (gameManager)
-			{
-				gameManager.AddFrameUpdate(this);
-				gameManager.AddFixedUpdate(this);
-			}
-		}
-
-		protected override void OnDestroy()
-		{
-			var gameManager = GameManager.Instance;
-			if (gameManager)
-			{
-				gameManager.RemoveFrameUpdate(this);
-				gameManager.RemoveFixedUpdate(this);
-			}
-			
-			base.OnDestroy();
-		}
 
 		public void OnFrameUpdate()
 		{
@@ -48,7 +28,11 @@ namespace Managers
 
 		public void OnFixedUpdate()
 		{
-			var cameraTransform = PlayerManager.Instance.Camera.transform;
+			var playerManager = PlayerManager.Instance;
+			if (!playerManager) return;
+			var camera = playerManager.PlayerCamera;
+			if (!camera) return;
+			var cameraTransform = camera.transform;
 			if (UnityEngine.Physics.Raycast(cameraTransform.position, cameraTransform.forward,
 					out var hit, 3f, highlightMask.value) && m_rigidbodies.TryGetValue(
 					hit.rigidbody, out var interactable) && CheckDistances(hit.rigidbody, 

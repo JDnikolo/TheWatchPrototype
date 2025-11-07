@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Callbacks;
 using UI;
+using UI.Night;
 using UnityEngine;
 
 namespace Managers
@@ -10,7 +10,8 @@ namespace Managers
     [AddComponentMenu("Managers/Night Manager")]
     public sealed class NightManager : Singleton<NightManager>
     {
-        [SerializeField] private NightTimerUI m_timer;
+        //Serialized field, should be called 'timer' not 'm_timer'
+        [SerializeField] private NightTimer m_timer;
 
         [Category("Time")]
         [SerializeField]
@@ -24,10 +25,13 @@ namespace Managers
         [Tooltip("How much the time jump is reduced on repeated interaction with the same interactable.")]
         [Range(0.0f, 1.0f)]
         private float repeatReduction = 0.1f;
+        //Same here
         [SerializeReference] private NightEndActions m_nightEndActions;
-        
+
+        //What will this be used for?
         private Dictionary<string, int> m_interactionLog = new Dictionary<string, int>();
-    
+
+        protected override bool Override => true;
 
         private void Start()
         {

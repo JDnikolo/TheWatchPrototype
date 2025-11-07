@@ -1,10 +1,12 @@
+using Managers;
 using Unity.Cinemachine;
 using UnityEngine;
+using Utilities;
 
 namespace Player
 {
-	[AddComponentMenu(menuName: "Player/Player Rotation Handler")]
-	public sealed class PlayerRotationHandler : MonoBehaviour
+	[AddComponentMenu("Player/Player Rotation Handler")]
+	public sealed class PlayerRotationHandler : MonoBehaviour, IFrameUpdatable
 	{
 		[SerializeField] private CinemachinePanTilt cinemachinePanTilt;
 		[SerializeField] private PlayerInputHandler inputHandler;
@@ -12,8 +14,10 @@ namespace Player
 		[Header("Rotation")]
 		[SerializeField] private float cameraSensitivityX = Mathf.PI * 0.01f;
 		[SerializeField] private float cameraSensitivityY = Mathf.PI * 0.01f;
+
+		public byte UpdateOrder => 0;
 		
-		private void Update()
+		public void OnFrameUpdate()
 		{
 			if (!inputHandler.TryGetLookAxis(out var lookAxis)) return;
 			lookAxis *= Time.deltaTime;
@@ -23,6 +27,10 @@ namespace Player
 			eulerAngles.y = cinemachinePanTilt.PanAxis.Value;
 			transform.localEulerAngles = eulerAngles;
 		}
+		
+		private void Awake() => GameManager.Instance.AddFrameUpdateSafe(this);
+
+		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdateSafe(this);
 
 		private void SetClampedValue(ref InputAxis axis, float change) => axis.Value = axis.ClampValue(axis.Value + change);
 	}

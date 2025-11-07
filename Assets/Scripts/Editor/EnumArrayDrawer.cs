@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Editor
 {
 	[CustomPropertyDrawer(typeof(EnumArrayAttribute))]
-	public class EnumArrayDrawer : PropertyDrawer
+	public sealed class EnumArrayDrawer : PropertyDrawer
 	{
 		public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
 		{

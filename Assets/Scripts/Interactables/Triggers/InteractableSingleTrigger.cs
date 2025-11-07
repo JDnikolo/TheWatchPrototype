@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Managers;
+using UnityEngine;
 using Utilities;
 
 namespace Interactables.Triggers
@@ -8,17 +9,11 @@ namespace Interactables.Triggers
 	{
 		private bool m_playerEntered;
 		
-		private void Update()
-		{
-			if (!m_playerEntered) return;
-			enabled = false;
-			m_playerEntered = false;
-			OnInteract();
-		}
-
 		private void OnTriggerEnter(Collider other)
 		{
-			if (other.gameObject.IsPlayerObject()) m_playerEntered = true;
+			if (m_playerEntered || !other.attachedRigidbody.gameObject.IsPlayerObject()) return;
+			m_playerEntered = true;
+			GameManager.Instance.InvokeOnNextFrameUpdateSafe(OnInteract);
 		}
 	}
 }
