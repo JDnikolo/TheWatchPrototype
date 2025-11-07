@@ -1,4 +1,5 @@
 ﻿using Logic;
+using Logic.Boolean;
 using UnityEngine;
 
 namespace Interactables.Actions
@@ -7,7 +8,7 @@ namespace Interactables.Actions
 	public sealed class InteractableLogic : Interactable
 	{
 		[SerializeField] private Interactable interactable;
-		[SerializeField] private LogicGate logicGate;
+		[SerializeField] private LogicBoolean logicGate;
 
 		public override void Interact()
 		{

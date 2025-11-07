@@ -1,7 +1,6 @@
 ﻿using UI.Dialogue;
 using UI.Fade;
 using UI.Speaker;
-using UI.Text;
 using UnityEngine;
 using Utilities;
 

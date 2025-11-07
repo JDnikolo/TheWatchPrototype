@@ -11,8 +11,5 @@ namespace Localization.Text
 		private string[] texts;
 
 		public string Text => texts[(int) LanguageManager.Instance.CurrentLanguage];
-#if UNITY_EDITOR
-		public string DefaultText => texts[0];
-#endif
 	}
 }

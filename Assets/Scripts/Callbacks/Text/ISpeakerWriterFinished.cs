@@ -1,5 +1,4 @@
 ﻿using UI.Speaker;
-using UI.Text;
 
 namespace Callbacks.Text
 {

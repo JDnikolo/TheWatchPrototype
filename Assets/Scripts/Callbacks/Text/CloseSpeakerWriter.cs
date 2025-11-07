@@ -1,7 +1,6 @@
 ﻿using Interactables;
 using Managers;
 using UI.Speaker;
-using UI.Text;
 using UnityEngine;
 using Utilities;
 
