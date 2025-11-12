@@ -1,3 +1,4 @@
+using Audio;
 using Character;
 using Localization.Text;
 using UnityEngine;
@@ -9,7 +10,10 @@ namespace Localization.Speaker
     {
         [SerializeField] private string speaker;
         [SerializeField] private CharacterProfileData profile;
+        [SerializeField] private ClipAggregate audio;
         
         public CharacterProfileData Profile => profile;
+        
+        public ClipAggregate Audio => audio;
     }
 }

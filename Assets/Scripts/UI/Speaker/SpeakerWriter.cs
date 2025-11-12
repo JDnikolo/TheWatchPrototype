@@ -1,4 +1,5 @@
 using System.Text;
+using Audio;
 using Callbacks.Text;
 using Managers;
 using TMPro;
@@ -16,19 +17,23 @@ namespace UI.Speaker
 		[Header("Linked behaviors")] 
 		[SerializeField] private TextMeshProUGUI textWriter;
 		[SerializeField] private TextWithBackground speakerWriter;
+		[SerializeField] private AudioSource speakerSource;
 		[SerializeField] private Slider slider;
 
 		[Header("Control schemes")] 
 		[SerializeField] private string skipActionName = "SkipDialogue";
 
-		[Header("Delays")] [SerializeField] private float characterDelay;
+		[Header("Delays")] 
+		[SerializeField] private float characterDelay;
 		[SerializeField] private float periodDelay;
 		[SerializeField] private float commaDelay;
 		[SerializeField] private float spaceDelay;
 
+		private readonly StringBuilder m_stringBuilder = new();
+		
 		private ISpeakerWriterFinished m_onFinished;
 		private InputAction m_skipAction;
-		private StringBuilder m_stringBuilder = new();
+		private ClipAggregate m_audio;
 		private string m_text;
 		private float m_timer;
 		private int m_previousPageCount;
@@ -36,6 +41,7 @@ namespace UI.Speaker
 		private bool m_write;
 		private bool m_skipText;
 		private bool m_forceFinish;
+		private bool m_startNewAudio;
 
 		public byte UpdateOrder => 0;
 
@@ -61,6 +67,7 @@ namespace UI.Speaker
 			if (profile) speakerWriter.WriteText(profile.CharacterName);
 			else speakerWriter.WriteText(null);
 			m_text = input.TextToDisplay.Text;
+			m_audio = input.TextToDisplay.Audio;
 		}
 
 		public void DisposeText() => StopWriting();
@@ -111,10 +118,19 @@ namespace UI.Speaker
 				m_write = false;
 				changed = true;
 				m_stringBuilder.Append(m_text.Substring(m_seek));
+				speakerSource.Stop();
 			}
 			else
 			{
-				m_timer -= Time.deltaTime;
+				if (m_startNewAudio)
+				{
+					if (speakerSource.isPlaying) goto Skip;
+					m_startNewAudio = false;
+					StartNextSpeaker();
+				}
+
+				var deltaTime = Time.deltaTime;
+				m_timer -= deltaTime;
 				while (m_timer < 0)
 				{
 					var seek = m_seek++;
@@ -126,33 +142,60 @@ namespace UI.Speaker
 
 					changed = true;
 					var character = m_text[seek];
-					switch (character)
-					{
-						case '.':
-							m_timer += periodDelay;
-							break;
-						case ' ':
-							m_timer += spaceDelay;
-							break;
-						case ',':
-							m_timer += commaDelay;
-							break;
-						default:
-							m_timer += characterDelay;
-							break;
-					}
-
+					m_timer += GetDelay(character);
+					if (character == '.') m_startNewAudio = true;
 					m_stringBuilder.Append(character);
 				}
+				
+				Skip: ;
 			}
 
 			if (changed)
 			{
+				if (!m_startNewAudio && !speakerSource.isPlaying) StartNextSpeaker();
 				textWriter.SetText(m_stringBuilder);
 				CheckPages();
 			}
 
 			if (!m_write) ResetInternals();
+		}
+
+		private void StartNextSpeaker()
+		{
+			if (!m_audio) return;
+			//var speakerTime = CalculateSpeakerTime();
+			var clip = m_audio.Clips.GetRandom();
+			speakerSource.clip = clip;
+			m_audio.Settings.Apply(speakerSource);
+			speakerSource.Play();
+		}
+
+		private float CalculateSpeakerTime()
+		{
+			var delay = 0f;
+			for (var i = m_seek; i < m_text.Length; i++)
+			{
+				var character = m_text[i];
+				delay += GetDelay(character);
+				if (character  == '.') break;
+			}
+
+			return delay;
+		}
+		
+		private float GetDelay(char character)
+		{
+			switch (character)
+			{
+				case '.':
+					return periodDelay;
+				case ' ':
+					return spaceDelay;
+				case ',':
+					return commaDelay;
+				default:
+					return characterDelay;
+			}
 		}
 
 		private void CheckPages()
@@ -197,6 +240,7 @@ namespace UI.Speaker
 		private void FullReset()
 		{
 			m_onFinished = null;
+			m_audio = null;
 			ResetInternals();
 			ResetSlider();
 			ResetWriter();
@@ -209,6 +253,7 @@ namespace UI.Speaker
 			m_timer = 0;
 			m_seek = 0;
 			m_text = null;
+			m_startNewAudio = true;
 		}
 
 		private void ResetWriter()

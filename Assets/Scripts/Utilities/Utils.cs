@@ -1,5 +1,9 @@
-﻿using Managers;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Managers;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Utilities
 {
@@ -40,6 +44,15 @@ namespace Utilities
 			inputManager.TogglePlayerMap(false);
 			inputManager.ToggleUIMap(true);
 			inputManager.ToggleCursor(true);
+		}
+
+		public static T GetRandom<T>(this IList<T> list)
+		{
+			if (list == null) throw new ArgumentNullException(nameof(list));
+			var length = list.Count;
+			if (length == 0) throw new InvalidOperationException("List is empty");
+			if (length == 1) return list[0];
+			return list[Random.Range(0, length)];
 		}
 	}
 }
