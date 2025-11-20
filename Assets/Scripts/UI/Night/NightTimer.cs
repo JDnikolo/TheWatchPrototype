@@ -1,5 +1,7 @@
 using System;
 using System.Globalization;
+using Runtime;
+using Runtime.FrameUpdate;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,7 +53,7 @@ namespace UI.Night
         private Image m_clockBackground;
         private RectMask2D m_clockMask;
 
-        public byte UpdateOrder => byte.MaxValue;
+        public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.GameUI;
         
         private void Awake()
         {

@@ -1,8 +1,8 @@
 ﻿using Callbacks.Dialogue;
 using Localization.Dialogue;
 using Localization.Speaker;
-using Localization.Text;
 using Managers;
+using Managers.Persistent;
 using UI.Dialogue;
 using UnityEngine;
 using Utilities;

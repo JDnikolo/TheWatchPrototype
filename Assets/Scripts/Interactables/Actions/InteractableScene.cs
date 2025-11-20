@@ -1,4 +1,4 @@
-﻿using Managers;
+﻿using Managers.Persistent;
 using UnityEngine;
 
 namespace Interactables.Actions

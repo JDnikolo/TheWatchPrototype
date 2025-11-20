@@ -825,7 +825,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9082568508184238379, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
       propertyPath: m_Name
-      value: TextWindow
+      value: SpeakerWindow
       objectReference: {fileID: 0}
     - target: {fileID: 9082568508184238379, guid: b6407e02177b60641897f1b3dc5254ed, type: 3}
       propertyPath: m_IsActive
@@ -1033,6 +1033,7 @@ GameObject:
   - component: {fileID: 416748473}
   - component: {fileID: 416748468}
   - component: {fileID: 416748472}
+  - component: {fileID: 416748474}
   - component: {fileID: 416748469}
   - component: {fileID: 416748471}
   - component: {fileID: 416748470}
@@ -1152,7 +1153,21 @@ MonoBehaviour:
   interactables:
   - {fileID: 416748468}
   - {fileID: 416748472}
+  - {fileID: 416748474}
   - {fileID: 416748469}
+--- !u!114 &416748474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416748465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8a073ee6db04ecaa03f4464b8f040fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enable: 1
 --- !u!1 &451391333
 GameObject:
   m_ObjectHideFlags: 0
@@ -1193,7 +1208,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 485537320}
+  - component: {fileID: 485537325}
   - component: {fileID: 485537324}
+  - component: {fileID: 485537326}
   - component: {fileID: 485537323}
   - component: {fileID: 485537322}
   m_Layer: 0
@@ -1231,6 +1248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Managers.UIManager
   fadeScreen: {fileID: 551953561}
+  canvas: {fileID: 0}
   fadeDuration: 1
   textWriter: {fileID: 1992376740}
   dialogueWriter: {fileID: 828544548}
@@ -1258,6 +1276,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93b97d7b644e475984df8599bded7b9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &485537325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485537319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66cd5620e8e0410e94115145baa14b95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightMask:
+    serializedVersion: 2
+    m_Bits: 8
+--- !u!114 &485537326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485537319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0fe8afd7d47496985b1cba687efd8b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &513532357 stripped

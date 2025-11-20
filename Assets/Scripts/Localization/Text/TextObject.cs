@@ -1,5 +1,5 @@
 ﻿using Attributes;
-using Managers;
+using Managers.Persistent;
 using UnityEngine;
 
 namespace Localization.Text

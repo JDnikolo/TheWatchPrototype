@@ -47,5 +47,8 @@ namespace Utilities
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static float CalculateStoppingDistance(this float velocity, float deceleration) =>
 			(velocity * velocity) / (2 * deceleration);
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static Vector2 Invert(this Vector2 vector) => new(-vector.x, -vector.y);
 	}
 }

@@ -1,5 +1,6 @@
 using Character;
-using Managers;
+using Managers.Persistent;
+using Runtime.FixedUpdate;
 using Unity.Cinemachine;
 using UnityEngine;
 using Utilities;
@@ -13,7 +14,7 @@ namespace Player
         [SerializeField] private PlayerInputHandler inputHandler;
         [SerializeField] private CharacterVelocityData velocityData;
 
-        public byte UpdateOrder => 0;
+        public FixedUpdatePosition FixedUpdateOrder => FixedUpdatePosition.Player;
 
         public void OnFixedUpdate()
         {
@@ -21,13 +22,15 @@ namespace Player
             var deltaTime = Time.fixedDeltaTime;
             var rigidBody = inputHandler.Rigidbody;
             var linearVelocity = rigidBody.velocity.ToFlatVector();
+            var maxVelocity = velocityData.MaxVelocity;
             var acceleration = velocityData.Acceleration;
             var cameraTransform = cinemachineCamera.transform;
             if (inputHandler.TryGetMoveAxis(out var moveAxis) && moveAxis != Vector2.zero)
             {
-                finalVector = (cameraTransform.right * moveAxis.x + 
-                               cameraTransform.forward * moveAxis.y).ToFlatVector();
-                finalVector = finalVector.normalized * acceleration;
+                finalVector.CorrectForDirection(cameraTransform.forward.ToFlatVector().normalized, 
+                    linearVelocity, moveAxis.y * maxVelocity, acceleration, deltaTime);
+                finalVector.CorrectForDirection(cameraTransform.right.ToFlatVector().normalized, 
+                    linearVelocity, moveAxis.x * maxVelocity, acceleration, deltaTime);
             }
             else
             {
@@ -43,11 +46,5 @@ namespace Player
         private void Awake() => GameManager.Instance.AddFixedUpdateSafe(this);
 
         private void OnDestroy() => GameManager.Instance.RemoveFixedUpdateSafe(this);
-
-        private void OnValidate()
-        {
-            var rigidBody = inputHandler.Rigidbody;
-            if (rigidBody && velocityData) rigidBody.maxLinearVelocity = velocityData.MaxVelocity;
-        }
     }
 }

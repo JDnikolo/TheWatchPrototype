@@ -100,13 +100,15 @@ namespace Collections
             return m_toRemove.Add(item);
         }
 
-        public void Update()
+        public void Update(byte position)
         {
-            m_toAdd.RemoveWhere(AddLast);
             m_toRemove.RemoveWhere(RemoveFirst);
+            m_toAdd.RemoveWhere(AddLast);
             foreach (var pair in m_collections)
-            foreach (var item in pair.Value)
-                Update(item);
+            {
+                if (pair.Key > position) break;
+                foreach (var item in pair.Value) Update(item);
+            }
         }
 
         private bool AddLast(T item)

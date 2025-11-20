@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Managers;
+﻿using Managers;
+using Managers.Persistent;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using UnityEngine.InputSystem;
 
 namespace Utilities
 {
@@ -30,9 +28,9 @@ namespace Utilities
 		/// <remarks>Disables cursor.</remarks>
 		public static void ForcePlayerInput(this InputManager inputManager)
 		{
-			inputManager.ToggleUIMap(false);
-			inputManager.TogglePlayerMap(true);
-			inputManager.ToggleCursor(false);
+			inputManager.RequiresPlayerMap = true;
+			inputManager.RequiresUIMap = false;
+			InputManager.ToggleCursor(false);
 		}
 
 		/// <summary>
@@ -41,18 +39,15 @@ namespace Utilities
 		/// <remarks>Enables cursor.</remarks>
 		public static void ForceUIInput(this InputManager inputManager)
 		{
-			inputManager.TogglePlayerMap(false);
-			inputManager.ToggleUIMap(true);
-			inputManager.ToggleCursor(true);
+			inputManager.RequiresUIMap = true;
+			inputManager.RequiresPlayerMap = false;
+			InputManager.ToggleCursor(true);
 		}
 
-		public static T GetRandom<T>(this IList<T> list)
+		public static void SetEnabled(this InputActionMap map, bool enabled)
 		{
-			if (list == null) throw new ArgumentNullException(nameof(list));
-			var length = list.Count;
-			if (length == 0) throw new InvalidOperationException("List is empty");
-			if (length == 1) return list[0];
-			return list[Random.Range(0, length)];
+			if (enabled) map.Enable();
+			else map.Disable();
 		}
 	}
 }

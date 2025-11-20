@@ -27,14 +27,8 @@ namespace Editor
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
-			//We want double so we draw it normally
-			if (!m_anyClick.boolValue)
-			{
-				EditorGUILayout.PropertyField(m_onSecondaryClick);
-				return;
-			}
-			
-			if (m_onSecondaryClick.objectReferenceValue)
+			if (!m_anyClick.boolValue) EditorGUILayout.PropertyField(m_onSecondaryClick);
+			else if (m_onSecondaryClick.objectReferenceValue)
 			{
 				m_onSecondaryClick.objectReferenceValue = null;
 				serializedObject.ApplyModifiedProperties();

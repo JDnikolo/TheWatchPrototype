@@ -1,7 +1,6 @@
 ﻿using Callbacks.Dialogue;
 using Localization.Dialogue;
 using Localization.Speaker;
-using Localization.Text;
 
 namespace UI.Dialogue
 {

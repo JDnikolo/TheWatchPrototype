@@ -1,7 +1,7 @@
-﻿using System;
-using Agents.Behaviors;
+﻿using Agents.Behaviors;
 using Character;
-using Managers;
+using Managers.Persistent;
+using Runtime.FrameUpdate;
 using UnityEngine;
 using Utilities;
 
@@ -36,7 +36,7 @@ namespace Agents
 
 		public float SlowdownMultiplier => m_movementBehavior?.SlowDownMultiplier ?? 1f;
 		
-		public byte UpdateOrder => 0;
+		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.Agent;
 
 		private MovementBehavior m_movementBehavior;
 		private Vector3 m_moveAxis;

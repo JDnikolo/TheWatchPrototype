@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Attributes
 {
+	[AttributeUsage(AttributeTargets.Field)]
 	public sealed class EnumArrayAttribute : PropertyAttribute
 	{
 		public readonly Type EnumType;

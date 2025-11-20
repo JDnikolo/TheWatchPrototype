@@ -1,5 +1,6 @@
 ﻿using Interactables;
 using Managers;
+using Managers.Persistent;
 using UI.Speaker;
 using UnityEngine;
 using Utilities;

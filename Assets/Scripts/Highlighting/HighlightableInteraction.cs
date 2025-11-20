@@ -1,5 +1,7 @@
 ﻿using Interactables;
-using Managers;
+using Managers.Persistent;
+using Runtime;
+using Runtime.FrameUpdate;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,8 +15,8 @@ namespace Highlighting
 		
 		private InputAction m_interactAction;
 		private Updatable m_updatable;
-		
-		public byte UpdateOrder => 0;
+
+		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.Default;
 		
 		public void OnFrameUpdate()
 		{

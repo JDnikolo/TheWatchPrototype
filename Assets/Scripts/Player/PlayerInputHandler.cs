@@ -1,24 +1,26 @@
 ﻿using Input;
-using Managers;
+using Managers.Persistent;
+using Runtime.FrameUpdate;
 using UnityEngine;
+using Utilities;
 
 namespace Player
 {
 	[AddComponentMenu("Player/Player Input Handler")]
-	public sealed class PlayerInputHandler : MonoBehaviour
+	public sealed class PlayerInputHandler : MonoBehaviour, IFrameUpdatable
 	{
 		[SerializeField] private new Rigidbody rigidbody;
 		[SerializeField] private string moveAxisName = "Move";
 		[SerializeField] private string lookAxisName = "Look";
 		
 		public Rigidbody Rigidbody => rigidbody;
-		
-		public byte StartOrder => 0;
 
 		private InputAxis<Vector2> m_moveAxis;
 		private InputAxis<Vector2> m_lookAxis;
 
-		private void Update()
+		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.Player;
+
+		public void OnFrameUpdate()
 		{
 			if (!m_moveAxis.Assigned) m_moveAxis.AssignAction(InputManager.Instance.GetPlayerAction(moveAxisName));
 			m_moveAxis.Update();
@@ -49,5 +51,9 @@ namespace Player
 			lookAxis = m_lookAxis.Value;
 			return true;
 		}
+		
+		private void Awake() => GameManager.Instance.AddFrameUpdateSafe(this);
+
+		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdateSafe(this);
 	}
 }

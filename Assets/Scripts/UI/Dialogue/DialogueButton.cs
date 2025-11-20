@@ -1,5 +1,6 @@
 ﻿using Localization.Dialogue;
-using Managers;
+using Managers.Persistent;
+using Runtime.FrameUpdate;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -37,7 +38,7 @@ namespace UI.Dialogue
 
 		private InputAction SelectAction => m_selectAction ??= InputManager.Instance.GetUIAction(selectActionName);
 
-		public byte UpdateOrder => 0;
+		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.GameUI;
 		
 		public void AssignDialogueOption(DialogueOption option)
 		{

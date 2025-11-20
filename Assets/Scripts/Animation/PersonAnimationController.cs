@@ -1,26 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Callbacks.Text;
 using Interactables;
-using Managers;
 using UnityEngine;
-using Utilities;
 
 namespace Animation
 {
    public class PersonAnimationController : MonoBehaviour, IFixedUpdatable
    {
-  
+
       [SerializeField] private Animator animator;
-      
+
       [SerializeField] private bool blendIdle = true;
       [SerializeReference] private AnimationBlender animationBlender;
-   
-      private Dictionary<int, float> m_animationTimers = new Dictionary<int, float>();
-      private Dictionary<int, Interactable> m_animationFinishedCallbacks = new Dictionary<int, Interactable>();
-      
-      public byte UpdateOrder { get; } = byte.MaxValue;
+
+      private Dictionary<int, float> m_animationTimers = new();
+      private Dictionary<int, Interactable> m_animationFinishedCallbacks = new();
+
+      public byte UpdateOrder => byte.MaxValue;
 
       public void OnFixedUpdate()
       {
@@ -30,7 +27,7 @@ namespace Animation
          foreach (var key in m_animationTimers.Keys.ToList())
          {
             m_animationTimers[key] -= Time.fixedDeltaTime;
-            
+
             if (!(m_animationTimers[key] <= 0)) continue;
             StopAnimation(key);
          }
@@ -40,7 +37,7 @@ namespace Animation
       {
          var parameter = animator.parameters.FirstOrDefault(param => param.nameHash == animationHash);
 
-         if (parameter == null)         
+         if (parameter == null)
          {
             Debug.LogWarning("Animation not found: " + animationHash);
             return;
@@ -63,14 +60,15 @@ namespace Animation
          }
 
          if (!(duration > 0)) return;
-         
+
          if (!m_animationTimers.TryAdd(animationHash, duration))
          {
-            
+
             m_animationTimers[animationHash] = duration;
          }
-         if (callback is null) return; 
-         
+
+         if (callback is null) return;
+
          if (!m_animationFinishedCallbacks.TryAdd(animationHash, callback))
          {
             m_animationFinishedCallbacks[animationHash] = callback;
@@ -81,7 +79,7 @@ namespace Animation
       {
          var parameter = animator.parameters.FirstOrDefault(param => param.nameHash == animationHash);
 
-         if (parameter == null)         
+         if (parameter == null)
          {
             Debug.LogWarning("Animation not found: " + animationHash);
             return;
@@ -103,55 +101,58 @@ namespace Animation
             default:
                throw new ArgumentOutOfRangeException();
          }
+
          if (m_animationTimers.ContainsKey(animationHash)) m_animationTimers.Remove(animationHash);
-         
+
          if (m_animationFinishedCallbacks.ContainsKey(animationHash))
          {
             var callback = m_animationFinishedCallbacks[animationHash];
             m_animationFinishedCallbacks.Remove(animationHash);
             if (callOnFinish) callback.Interact();
-            
+
          }
       }
 
-      public void SetAnimationParameter(int parameterHash, float value, float duration = -1.0f, Interactable callback = null)
+      public void SetAnimationParameter(int parameterHash, float value, float duration = -1.0f,
+         Interactable callback = null)
       {
          var parameter = animator.parameters.FirstOrDefault(param => param.nameHash == parameterHash);
-         
+
          if (parameter == null)
          {
             Debug.LogWarning("Animation parameter not found: " + parameterHash);
             return;
          }
-         
+
          animator.SetFloat(parameterHash, value);
-         
+
          if (!(duration > 0)) return;
-         
+
          if (!m_animationTimers.TryAdd(parameterHash, duration)) m_animationTimers[parameterHash] = duration;
-         
+
          if (!m_animationFinishedCallbacks.TryAdd(parameterHash, callback))
          {
             m_animationFinishedCallbacks[parameterHash] = callback;
          }
       }
-      
-      public void SetAnimationParameter(int parameterHash, int value, float duration = -1.0f, Interactable callback = null)
+
+      public void SetAnimationParameter(int parameterHash, int value, float duration = -1.0f,
+         Interactable callback = null)
       {
          var parameter = animator.parameters.FirstOrDefault(param => param.nameHash == parameterHash);
-         
+
          if (parameter == null)
          {
             Debug.LogWarning("Animation parameter not found: " + parameterHash);
             return;
          }
-         
+
          animator.SetInteger(parameterHash, value);
-         
+
          if (!(duration > 0)) return;
-         
+
          if (!m_animationTimers.TryAdd(parameterHash, duration)) m_animationTimers[parameterHash] = duration;
-         
+
          if (!m_animationFinishedCallbacks.TryAdd(parameterHash, callback))
          {
             m_animationFinishedCallbacks[parameterHash] = callback;

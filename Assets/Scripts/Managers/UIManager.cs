@@ -1,4 +1,6 @@
-﻿using UI.Dialogue;
+﻿using Managers.Persistent;
+using Runtime;
+using UI.Dialogue;
 using UI.Fade;
 using UI.Speaker;
 using UnityEngine;
@@ -10,12 +12,15 @@ namespace Managers
 	public sealed class UIManager : Singleton<UIManager>
 	{
 		[SerializeField] private FadeScreen fadeScreen;
+		[SerializeField] private Canvas canvas;
 		[SerializeField] private float fadeDuration = 1f;
 		
 		[SerializeField] private SpeakerWriter textWriter;
 		[SerializeField] private DialogueWriter dialogueWriter;
 		
 		protected override bool Override => true;
+		
+		public Canvas Canvas => canvas;
 		
 		public void OpenTextWriter(SpeakerWriterInput input)
 		{
@@ -34,12 +39,6 @@ namespace Managers
 			textWriter.DisposeText();
 			GameManager.Instance.RemoveFrameUpdateSafe(textWriter);
 			textWriter.gameObject.SetActive(false);
-		}
-
-		public void SkipSpeaker()
-		{
-			if (!textWriter.gameObject.activeInHierarchy) return;
-			textWriter.SkipText();
 		}
 		
 		public void OpenDialogueWriter(DialogueWriterInput input)

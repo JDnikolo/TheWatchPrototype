@@ -1,4 +1,5 @@
-using Managers;
+using Managers.Persistent;
+using Runtime.FrameUpdate;
 using Unity.Cinemachine;
 using UnityEngine;
 using Utilities;
@@ -15,7 +16,7 @@ namespace Player
 		[SerializeField] private float cameraSensitivityX = Mathf.PI * 0.01f;
 		[SerializeField] private float cameraSensitivityY = Mathf.PI * 0.01f;
 
-		public byte UpdateOrder => 0;
+		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.Player;
 		
 		public void OnFrameUpdate()
 		{
@@ -27,11 +28,12 @@ namespace Player
 			eulerAngles.y = cinemachinePanTilt.PanAxis.Value;
 			transform.localEulerAngles = eulerAngles;
 		}
+
+		private void SetClampedValue(ref InputAxis axis, float change) =>
+			axis.Value = axis.ClampValue(axis.Value + change);
 		
 		private void Awake() => GameManager.Instance.AddFrameUpdateSafe(this);
 
 		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdateSafe(this);
-
-		private void SetClampedValue(ref InputAxis axis, float change) => axis.Value = axis.ClampValue(axis.Value + change);
 	}
 }

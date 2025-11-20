@@ -1,4 +1,6 @@
-﻿namespace Managers
+﻿using Runtime;
+
+namespace Managers
 {
 	public sealed class LocalManager : Singleton<LocalManager>
 	{

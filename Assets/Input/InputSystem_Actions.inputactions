@@ -592,9 +592,9 @@
                 },
                 {
                     "name": "SkipDialogue",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "2fb741f4-6bb6-4ab8-97c9-4a7e408a85e5",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -607,6 +607,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Primary",
+                    "type": "Button",
+                    "id": "9371b9cc-a4ac-44bc-95ec-3aa413aab13d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Secondary",
+                    "type": "Button",
+                    "id": "2ccc0a1c-1d41-41d9-8e67-2ff238c8609d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -722,7 +740,7 @@
                 },
                 {
                     "name": "Joystick",
-                    "id": "e25d9774-381c-4a61-b47c-7b6b299ad9f9",
+                    "id": "900062dc-7516-4758-bbcc-d0f29fc04858",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
@@ -733,7 +751,7 @@
                 },
                 {
                     "name": "up",
-                    "id": "3db53b26-6601-41be-9887-63ac74e79d19",
+                    "id": "727ab0bf-4f7b-4fa6-84fa-2499180a04b8",
                     "path": "<Joystick>/stick/up",
                     "interactions": "",
                     "processors": "",
@@ -744,7 +762,7 @@
                 },
                 {
                     "name": "down",
-                    "id": "0cb3e13e-3d90-4178-8ae6-d9c5501d653f",
+                    "id": "ab530485-d239-452e-8563-2ec60f7ea63b",
                     "path": "<Joystick>/stick/down",
                     "interactions": "",
                     "processors": "",
@@ -755,7 +773,7 @@
                 },
                 {
                     "name": "left",
-                    "id": "0392d399-f6dd-4c82-8062-c1e9c0d34835",
+                    "id": "69f0665c-2c32-430e-944e-26394e773921",
                     "path": "<Joystick>/stick/left",
                     "interactions": "",
                     "processors": "",
@@ -766,7 +784,7 @@
                 },
                 {
                     "name": "right",
-                    "id": "942a66d9-d42f-43d6-8d70-ecb4ba5363bc",
+                    "id": "0ef0a297-9359-4d7f-b3a8-e0203fd95200",
                     "path": "<Joystick>/stick/right",
                     "interactions": "",
                     "processors": "",
@@ -778,7 +796,7 @@
                 {
                     "name": "Keyboard",
                     "id": "ff527021-f211-4c02-933e-5976594c46ed",
-                    "path": "2DVector",
+                    "path": "2DVector(mode=2)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1041,12 +1059,84 @@
                 },
                 {
                     "name": "",
+                    "id": "d057d786-0d50-4ae4-a40a-9b1a7a1d6e2e",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "SkipDialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "695d2172-9ebd-4909-a815-ad1ad4faa787",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "SkipDialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "356b3e91-0778-4a5d-a956-17065b9c7cee",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "SelectDialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "04799cf2-6c88-44ad-81ef-9bb28233f1c6",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Primary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ed0fb8c2-842c-4033-ac63-fbf346acf209",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Secondary",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PersistentGame",
+            "id": "125f0d9b-effe-47ee-a233-9243563b0f02",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "e8f5d972-d0bf-4f74-a2b3-7e3483cc2e83",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "24382458-d665-4273-8f38-5d57d96155c2",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -2,6 +2,8 @@ using System.Text;
 using Audio;
 using Callbacks.Text;
 using Managers;
+using Managers.Persistent;
+using Runtime.FrameUpdate;
 using TMPro;
 using UI.Text;
 using UnityEngine;
@@ -39,11 +41,11 @@ namespace UI.Speaker
 		private int m_previousPageCount;
 		private int m_seek;
 		private bool m_write;
-		private bool m_skipText;
+		private bool m_allowSkip;
 		private bool m_forceFinish;
 		private bool m_startNewAudio;
 
-		public byte UpdateOrder => 0;
+		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.GameUI;
 
 		private InputAction SkipAction
 		{
@@ -61,30 +63,33 @@ namespace UI.Speaker
 
 		public void WriteText(SpeakerWriterInput input)
 		{
-			StartWriting();
+			FullReset();
+			m_write = true;
+			m_allowSkip = false;
 			m_onFinished = input.OnTextWriterFinished;
 			var profile = input.TextToDisplay.Profile;
 			if (profile) speakerWriter.WriteText(profile.CharacterName);
 			else speakerWriter.WriteText(null);
 			m_text = input.TextToDisplay.Text;
 			m_audio = input.TextToDisplay.Audio;
+			GameManager.Instance.InvokeOnNextFrameUpdate(EnableSkip);
 		}
 
-		public void DisposeText() => StopWriting();
+		public void EnableSkip() => m_allowSkip = true;
+		
+		public void DisableSkip() => m_allowSkip = false;
 
-		public void SkipText() => m_skipText = true;
+		public void DisposeText()
+		{
+			FullReset();
+			m_write = false;
+		}
 
 		private void SliderChanged(float value) => textWriter.pageToDisplay = Mathf.RoundToInt(value) + 1;
 
 		public void OnFrameUpdate()
 		{
-			var skipDialogue = SkipAction.WasPressedThisFrame();
-			if (m_skipText)
-			{
-				m_skipText = false;
-				skipDialogue = true;
-			}
-
+			var skipDialogue = m_allowSkip && SkipAction.WasPressedThisFrame();
 			if (m_forceFinish)
 			{
 				m_forceFinish = false;
@@ -95,6 +100,7 @@ namespace UI.Speaker
 			{
 				if (skipDialogue)
 				{
+					speakerSource.Stop();
 					if (m_onFinished != null)
 					{
 						var onFinished = m_onFinished;
@@ -120,39 +126,33 @@ namespace UI.Speaker
 				m_stringBuilder.Append(m_text.Substring(m_seek));
 				speakerSource.Stop();
 			}
-			else
+			else if (m_write)
 			{
-				if (m_startNewAudio)
+				if (m_startNewAudio && !speakerSource.isPlaying)
 				{
-					if (speakerSource.isPlaying) goto Skip;
 					m_startNewAudio = false;
 					StartNextSpeaker();
 				}
-
-				var deltaTime = Time.deltaTime;
-				m_timer -= deltaTime;
-				while (m_timer < 0)
+				
+				m_timer -= Time.deltaTime;
+				if (m_timer < 0)
 				{
 					var seek = m_seek++;
-					if (seek >= m_text.Length)
+					if (seek < m_text.Length)
 					{
-						m_write = false;
-						break;
+						changed = true;
+						var character = m_text[seek];
+						m_timer += GetDelay(character);
+						if (character == '.') m_startNewAudio = true;
+						m_stringBuilder.Append(character);
 					}
-
-					changed = true;
-					var character = m_text[seek];
-					m_timer += GetDelay(character);
-					if (character == '.') m_startNewAudio = true;
-					m_stringBuilder.Append(character);
+					else m_write = false;
 				}
-				
-				Skip: ;
 			}
 
 			if (changed)
 			{
-				if (!m_startNewAudio && !speakerSource.isPlaying) StartNextSpeaker();
+				if (!skipDialogue && !m_startNewAudio && !speakerSource.isPlaying) StartNextSpeaker();
 				textWriter.SetText(m_stringBuilder);
 				CheckPages();
 			}
@@ -169,7 +169,7 @@ namespace UI.Speaker
 			m_audio.Settings.Apply(speakerSource);
 			speakerSource.Play();
 		}
-
+		/*
 		private float CalculateSpeakerTime()
 		{
 			var delay = 0f;
@@ -182,7 +182,7 @@ namespace UI.Speaker
 
 			return delay;
 		}
-		
+		*/
 		private float GetDelay(char character)
 		{
 			switch (character)
@@ -223,18 +223,6 @@ namespace UI.Speaker
 				slider.enabled = true;
 				slider.SetValueWithoutNotify(slider.maxValue);
 			}
-		}
-
-		private void StartWriting()
-		{
-			FullReset();
-			m_write = true;
-		}
-
-		private void StopWriting()
-		{
-			FullReset();
-			m_write = false;
 		}
 
 		private void FullReset()

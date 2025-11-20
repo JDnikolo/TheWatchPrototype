@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using Callbacks.Dialogue;
 using Localization.Dialogue;
 using Localization.Speaker;
-using Localization.Text;
 using Managers;
+using Managers.Persistent;
 using UnityEngine;
 using Utilities;
 

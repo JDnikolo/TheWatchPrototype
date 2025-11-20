@@ -1,5 +1,7 @@
 ﻿using Callbacks.Fade;
-using Managers;
+using Managers.Persistent;
+using Runtime;
+using Runtime.FrameUpdate;
 using UnityEngine;
 using Utilities;
 using Image = UnityEngine.UI.Image;
@@ -17,7 +19,7 @@ namespace UI.Fade
 		private float m_fadeDuration;
 		private bool m_fadeDirection;
 		
-		public byte UpdateOrder => byte.MaxValue;
+		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.FadeScreen;
 
 		private void Awake()
 		{

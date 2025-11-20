@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using Managers.Persistent;
+using Runtime.FixedUpdate;
 using UnityEngine;
 
 namespace Interactables.Actions
@@ -10,8 +11,8 @@ namespace Interactables.Actions
 		
 		public override void Interact()
 		{
-			var gameManager = GameManager.Instance;
-			if (gameManager) gameManager.RequiredFixedUpdate = enable;
+			if (enable) GameManager.Instance.FixedUpdateInvoke = FixedUpdatePosition.All;
+			else GameManager.Instance.FixedUpdateInvoke = FixedUpdatePosition.None;
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using Managers.Persistent;
+using Runtime.FrameUpdate;
 using UnityEngine;
 
 namespace Interactables.Actions
@@ -10,8 +11,8 @@ namespace Interactables.Actions
 		
 		public override void Interact()
 		{
-			var gameManager = GameManager.Instance;
-			if (gameManager) gameManager.RequiresFrameUpdate = enable;
+			if (enable) GameManager.Instance.FrameUpdateInvoke = FrameUpdatePosition.All;
+			else GameManager.Instance.FrameUpdateInvoke = FrameUpdatePosition.None;
 		}
 	}
 }

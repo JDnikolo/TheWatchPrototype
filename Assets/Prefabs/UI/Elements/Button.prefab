@@ -110,13 +110,41 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5255152848558015223, guid: 9ba1709cc8b794841b553226d4737bae, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 5589007590389471793}
+    - targetCorrespondingSourceObject: {fileID: 5255152848558015223, guid: 9ba1709cc8b794841b553226d4737bae, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 7440685575945560443}
   m_SourcePrefab: {fileID: 100100000, guid: 9ba1709cc8b794841b553226d4737bae, type: 3}
+--- !u!114 &30358502670528912 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5258551920236201811, guid: 9ba1709cc8b794841b553226d4737bae, type: 3}
+  m_PrefabInstance: {fileID: 5229237693266163395}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36018170390688820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 463f6a5d7a7143128743a836ef3beff0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &36018170390688820 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5255152848558015223, guid: 9ba1709cc8b794841b553226d4737bae, type: 3}
   m_PrefabInstance: {fileID: 5229237693266163395}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5589007590389471793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36018170390688820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3a10fc50ab43478903d63e4ff4961a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textWriter: {fileID: 30358502670528912}
+  textToDisplay: {fileID: 0}
 --- !u!114 &7440685575945560443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,11 +157,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ddff467d196410f9cf03fcdcf89a8d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layoutParent: {fileID: 0}
   image: {fileID: 306516007351973148}
-  enabledColor: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 1}
-  disabledColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
-  selectedColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
-  pressedColor: {r: 0.15, g: 0.15, b: 0.15, a: 1}
+  color:
+    enabledColor: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 1}
+    disabledColor: {r: 0.101960786, g: 0.101960786, b: 0.101960786, a: 1}
+    selectedColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    pressedColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
+  primaryActionName: Primary
+  secondaryActionName: Secondary
   anyClick: 1
   onPrimaryClick: {fileID: 0}
   onSecondaryClick: {fileID: 0}

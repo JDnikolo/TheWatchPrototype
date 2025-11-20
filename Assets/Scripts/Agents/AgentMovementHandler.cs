@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using Managers.Persistent;
+using Runtime.FixedUpdate;
 using UnityEngine;
 using Utilities;
 
@@ -9,7 +10,7 @@ namespace Agents
 	{
 		[SerializeField] private AgentInputHandler inputHandler;
 
-		public byte UpdateOrder => 0;
+		public FixedUpdatePosition FixedUpdateOrder => FixedUpdatePosition.Agent;
 
 		public void OnFixedUpdate()
 		{

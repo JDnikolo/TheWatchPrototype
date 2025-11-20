@@ -1,5 +1,4 @@
 ﻿using Localization.Speaker;
-using Localization.Text;
 using UnityEngine;
 
 namespace Localization.Dialogue

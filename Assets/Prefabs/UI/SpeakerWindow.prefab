@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 1155888755612617037}
   - component: {fileID: 5421809096813513638}
   - component: {fileID: 1492316170355365232}
+  - component: {fileID: 4894779245198588432}
   m_Layer: 5
   m_Name: Handle
   m_TagString: Untagged
@@ -224,6 +225,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 1
+--- !u!114 &4894779245198588432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330949038091083067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d42857e0bd4d15aace394572d5fef5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  writer: {fileID: 6344765542685752972}
 --- !u!1 &595682698896341528
 GameObject:
   m_ObjectHideFlags: 0
@@ -509,7 +523,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -594,7 +608,6 @@ GameObject:
   - component: {fileID: 7388128646438628830}
   - component: {fileID: 3841741368521297928}
   - component: {fileID: 5495020908629248620}
-  - component: {fileID: 8109843389572574421}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -659,18 +672,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.2
---- !u!114 &8109843389572574421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6767131920929058710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fb9a70273674f8fbace8d1f22acbb47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9082568508184238379
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
-﻿using Logic;
-using Logic.Boolean;
+﻿using Logic.Boolean;
 using UnityEngine;
 
 namespace Interactables.Actions
