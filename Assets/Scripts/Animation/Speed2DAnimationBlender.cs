@@ -16,21 +16,19 @@ namespace Animation
         
         public override void SetBlendValues()
         {
-            var forwardSpeed = Vector3.Dot(rootRigidbody.velocity, lookDirectionTransform.forward);
-            var rightSpeed = Vector3.Dot(rootRigidbody.velocity, lookDirectionTransform.right);
+            var forwardSpeed = Vector3.Dot(rootRigidbody.velocity.normalized, lookDirectionTransform.forward.normalized);
+            var rightSpeed = Vector3.Dot(rootRigidbody.velocity.normalized, lookDirectionTransform.right.normalized);
             
-            animator.SetFloat(m_blendForward, forwardSpeed / m_maxSpeed);
-            animator.SetFloat(m_blendRight, rightSpeed / m_maxSpeed);
+            animator.SetFloat(m_blendForward, forwardSpeed);
+            animator.SetFloat(m_blendRight, rightSpeed);
         }
-        private void Awake()
-        {
-            m_maxSpeed = rootRigidbody.maxLinearVelocity;
-            m_blendForward = Animator.StringToHash(idleForwardParameterName);
-            m_blendRight = Animator.StringToHash(idleRightParameterName);
-        }
+        
         private void OnValidate()
         {
             m_maxSpeed = rootRigidbody.maxLinearVelocity;
+            m_maxSpeed = rootRigidbody.maxLinearVelocity;
+            m_blendForward = Animator.StringToHash(idleForwardParameterName);
+            m_blendRight = Animator.StringToHash(idleRightParameterName);
         }
     }
 }
