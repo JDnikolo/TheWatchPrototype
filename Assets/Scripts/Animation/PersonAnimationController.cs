@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interactables;
+using Managers.Persistent;
+using Runtime.FixedUpdate;
 using UnityEngine;
+using Utilities;
 
 namespace Animation
 {
@@ -17,7 +20,7 @@ namespace Animation
       private Dictionary<int, float> m_animationTimers = new();
       private Dictionary<int, Interactable> m_animationFinishedCallbacks = new();
 
-      public byte UpdateOrder => byte.MaxValue;
+      public FixedUpdatePosition FixedUpdateOrder => FixedUpdatePosition.Animation;
 
       public void OnFixedUpdate()
       {

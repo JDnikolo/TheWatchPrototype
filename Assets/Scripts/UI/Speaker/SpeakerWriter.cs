@@ -72,6 +72,7 @@ namespace UI.Speaker
 			else speakerWriter.WriteText(null);
 			m_text = input.TextToDisplay.Text;
 			m_audio = input.TextToDisplay.Audio;
+			JournalManager.Instance.AddText(input.TextToDisplay);
 			GameManager.Instance.InvokeOnNextFrameUpdate(EnableSkip);
 		}
 

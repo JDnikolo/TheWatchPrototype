@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 namespace UI.Journal
 {
-    public class JournalEntry : MonoBehaviour
+    [AddComponentMenu("UI/Journal/Journal Entry")]
+    public sealed class JournalEntry : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI quoteText;
@@ -12,10 +13,7 @@ namespace UI.Journal
         
         public void SetNameText(string speakerName)
         {
-            if (speakerName == "")
-            {
-                nameText.gameObject.SetActive(false);
-            }
+            if (speakerName == "") nameText.gameObject.SetActive(false);
             nameText.text = speakerName;
             contentSizeFitter.enabled = true;
         }

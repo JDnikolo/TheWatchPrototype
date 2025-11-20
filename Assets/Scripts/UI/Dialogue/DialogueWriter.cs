@@ -83,6 +83,7 @@ namespace UI.Dialogue
 		public void SelectOption(DialogueOption option)
 		{
 			m_selectedOption = option;
+			JournalManager.Instance.AddText(option.TextToDisplay);
 			if (m_onFinished != null) m_onFinished.OnDialogueWriterFinsished(this);
 			else
 			{

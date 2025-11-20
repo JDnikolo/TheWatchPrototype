@@ -2,6 +2,7 @@
 using Runtime;
 using UI.Dialogue;
 using UI.Fade;
+using UI.Journal;
 using UI.Speaker;
 using UnityEngine;
 using Utilities;
@@ -17,6 +18,7 @@ namespace Managers
 		
 		[SerializeField] private SpeakerWriter textWriter;
 		[SerializeField] private DialogueWriter dialogueWriter;
+		[SerializeField] private JournalPanel journalPanel;
 		
 		protected override bool Override => true;
 		
@@ -52,6 +54,25 @@ namespace Managers
 			if (!dialogueWriter.gameObject.activeInHierarchy) return;
 			dialogueWriter.DisposeDialogue();
 			dialogueWriter.gameObject.SetActive(false);
+		}
+		
+		public void OpenJournalPanel()
+		{
+			if (journalPanel.IsPanelVisible) return;
+			journalPanel.ShowJournalPanel();
+			InputManager.Instance.ForceUIInput();
+			InputManager.Instance.GetUIAction("SkipDialogue").Disable();
+			InputManager.Instance.GetUIAction("SelectDialogue").Disable();
+		}
+
+		public void CloseJournalPanel()
+		{
+			if (!journalPanel.IsPanelVisible) return;
+			journalPanel.HideJournalPanel();
+			InputManager.Instance.GetUIAction("SkipDialogue").Enable();
+			InputManager.Instance.GetUIAction("SelectDialogue").Enable();
+			if (!dialogueWriter.gameObject.activeInHierarchy && !textWriter.gameObject.activeInHierarchy) 
+				InputManager.Instance.ForcePlayerInput();
 		}
 
 		public void FadeScreen(FadeScreenInput input)

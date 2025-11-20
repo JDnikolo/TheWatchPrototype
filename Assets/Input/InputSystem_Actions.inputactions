@@ -1119,9 +1119,18 @@
             "id": "125f0d9b-effe-47ee-a233-9243563b0f02",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Pause",
                     "type": "Button",
                     "id": "e8f5d972-d0bf-4f74-a2b3-7e3483cc2e83",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Journal",
+                    "type": "Button",
+                    "id": "83537ee0-34c7-4914-a2e5-53adbc2fda57",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -1132,11 +1141,22 @@
                 {
                     "name": "",
                     "id": "24382458-d665-4273-8f38-5d57d96155c2",
-                    "path": "",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "New action",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2528bc9-80ff-4541-a74c-96bed831df4c",
+                    "path": "<Keyboard>/backquote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Journal",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
