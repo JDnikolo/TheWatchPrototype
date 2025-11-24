@@ -1,38 +1,68 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Localization.Speaker;
+﻿using Localization.Speaker;
+using Managers.Persistent;
 using Runtime;
+using Runtime.FixedUpdate;
+using Runtime.FrameUpdate;
+using Runtime.LateUpdate;
 using UI.Journal;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using Utilities;
 
 namespace Managers
 {
     [AddComponentMenu("Managers/Journal Manager")]
-    public sealed class JournalManager : Singleton<JournalManager>
+    public sealed partial class JournalManager : Singleton<JournalManager>, IFrameUpdatable
     {
-        [SerializeField] private JournalPanel m_journalPanel;
+        [SerializeField] private JournalPanel journalPanel;
+        [SerializeField] private string journalActionName = "Journal";
         
-        private HashSet<SpeakerObject> m_viewedTexts = new();
-        private Dictionary<int, SpeakerObject> m_mapToSpeaker = new();
-        private List<int> m_textOrder = new();
-
+        private PauseManager.State m_journalState;
+        private InputAction m_journalAction;
+        private Updatable m_updatable;
+        
         protected override bool Override => true;
 
-        public void AddText(SpeakerObject speaker)
+        public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.JournalManager;
+
+        public bool CanOpenJournal
         {
-            if (m_viewedTexts.Add(speaker)) m_mapToSpeaker.Add(speaker.GetHashCode(), speaker);
-            m_textOrder.Add(speaker.GetHashCode());
-            m_journalPanel.AddNewJournalEntry(speaker);
+            get => m_updatable.Updating;
+            set => m_updatable.SetUpdating(value, this);
         }
 
-        public List<SpeakerObject> GetTexts() => m_textOrder.Select(i => m_mapToSpeaker[i]).ToList();
-
-        public void ClearJournal()
+        public State PauseState
         {
-            m_textOrder.Clear();
-            m_mapToSpeaker.Clear();
-            m_viewedTexts.Clear();
-            m_journalPanel.ClearPanel();
+            get => new() {CanOpenJournal = CanOpenJournal};
+            set => CanOpenJournal = value.CanOpenJournal;
         }
+        
+        public void OnFrameUpdate()
+        {
+            m_journalAction ??= InputManager.Instance.PersistentGameMap.GetAction(journalActionName);
+            if (CanOpenJournal && m_journalAction.WasPressedThisFrame())
+            {
+                var journalObject = journalPanel.gameObject;
+                if (!journalObject.activeInHierarchy)
+                {
+                    m_journalState.LoadStates();
+                    var gameManager = GameManager.Instance;
+                    gameManager.FrameUpdateInvoke = FrameUpdatePosition.JournalManager;
+                    gameManager.LateUpdateInvoke = LateUpdatePosition.None;
+                    gameManager.FixedUpdateInvoke = FixedUpdatePosition.None;
+                    InputManager.Instance.ForceUIInput();
+                    journalObject.SetActive(true);
+                }
+                else
+                {
+                    m_journalState.SaveStates();
+                    journalObject.SetActive(false);
+                }
+            }
+        }
+        
+        public void AddText(SpeakerObject speaker) => journalPanel.AddNewJournalEntry(speaker);
+
+        public void ClearJournal() => journalPanel.ClearPanel();
     }
 }

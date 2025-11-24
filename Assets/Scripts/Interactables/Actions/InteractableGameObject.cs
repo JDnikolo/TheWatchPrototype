@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Interactables.Actions
 {
-    [AddComponentMenu("Interactables/Game Object Interactable")]
+    [AddComponentMenu("Interactables/Toggle Game Object")]
     public sealed class InteractableGameObject : Interactable
     {
         [SerializeField] private GameObject target;

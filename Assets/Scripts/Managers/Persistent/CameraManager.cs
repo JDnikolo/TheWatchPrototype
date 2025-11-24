@@ -12,6 +12,8 @@ namespace Managers.Persistent
 
 		protected override bool Override => false;
 		
+		public Camera Camera => m_camera;
+		
 		protected override void Awake()
 		{
 			SetPersistent();

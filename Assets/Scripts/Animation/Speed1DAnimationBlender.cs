@@ -21,9 +21,5 @@ namespace Animation
             m_maxSpeed = rootRigidbody.maxLinearVelocity;
             m_blend = Animator.StringToHash(idleAnimationBlendName);
         }
-        private void OnValidate()
-        {
-            m_maxSpeed = rootRigidbody.maxLinearVelocity;
-        }
     }
 }

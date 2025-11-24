@@ -6,19 +6,21 @@ using UI;
 using UI.Layout;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using ILayoutElement = UI.Layout.ILayoutElement;
 
 namespace Managers
 {
 	[AddComponentMenu("Managers/Layout Manager")]
-	public sealed class LayoutManager : Singleton<LayoutManager>, IFrameUpdatable
+	public sealed partial class LayoutManager : Singleton<LayoutManager>, IFrameUpdatable
 	{
 		[SerializeField] private string navigateActionName = "Navigate";
 
 		private List<ILayoutElement> m_parentHierarchy = new();
-		private Stack<ILayoutElement> m_reverserStack = new();
 		private ILayoutElement m_currentElement;
 		private ILayoutInput m_currentInput;
 
+		private Stack<ILayoutElement> m_tempStack = new();
 		private InputAction m_navigateAction;
 		private Direction m_input;
 		private Updatable m_updatable;
@@ -27,10 +29,28 @@ namespace Managers
 
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.LayoutManager;
 
+		public State PauseState
+		{
+			get => new()
+			{
+				ParentHierarchy = m_parentHierarchy.ToArray(),
+				CurrentElement = m_currentElement,
+				CurrentInput = m_currentInput,
+			};
+			set
+			{
+				Select(null);
+				m_parentHierarchy.AddRange(value.ParentHierarchy);
+				m_currentElement = value.CurrentElement;
+				m_currentInput = value.CurrentInput;
+			}
+		}
+
 		public void OnFrameUpdate()
 		{
-			m_navigateAction ??= InputManager.Instance.GetUIAction(navigateActionName);
-			if (m_currentInput != null)
+			m_navigateAction ??= InputManager.Instance.UIMap.GetAction(navigateActionName);
+			var currentInput = m_currentInput;
+			if (currentInput != null)
 			{
 				Direction input;
 				Vector2 axis;
@@ -45,7 +65,7 @@ namespace Managers
 
 				if (m_input != input) m_input = input;
 				else input = UIConstants.Direction_None;
-				m_currentInput.OnInput(axis, input);
+				currentInput.OnInput(axis, input);
 			}
 		}
 
@@ -82,7 +102,7 @@ namespace Managers
 				PushParents(element);
 				index = 0;
 				var parents = m_parentHierarchy.Count;
-				while (m_reverserStack.TryPop(out var parent))
+				while (m_tempStack.TryPop(out var parent))
 				{
 					if (index >= parents) break;
 					var oldParent = m_parentHierarchy[index];
@@ -90,7 +110,7 @@ namespace Managers
 					index += 1;
 				}
 
-				m_reverserStack.Clear();
+				m_tempStack.Clear();
 				index -= 1;
 				for (var i = m_parentHierarchy.Count - 1; i > index; i--)
 				{
@@ -110,7 +130,7 @@ namespace Managers
 				PushParents(element);
 				index = 0;
 				var parents = m_parentHierarchy.Count;
-				while (m_reverserStack.TryPop(out var parent))
+				while (m_tempStack.TryPop(out var parent))
 				{
 					if (index >= parents || m_parentHierarchy[index] != parent)
 					{
@@ -121,9 +141,17 @@ namespace Managers
 					index += 1;
 				}
 
-				m_reverserStack.Clear();
+				m_tempStack.Clear();
 				element.Select();
 			}
+		}
+
+		internal void ForceSelect(ILayoutElement element)
+		{
+			m_parentHierarchy.Clear();
+			m_currentElement = null;
+			m_currentInput = null;
+			Select(element);
 		}
 		
 		private void PushParents(ILayoutElement element)
@@ -132,7 +160,7 @@ namespace Managers
 			var parent = element.Parent;
 			while (parent != null)
 			{
-				m_reverserStack.Push(parent);
+				m_tempStack.Push(parent);
 				parent = parent.Parent;
 			}
 		}
@@ -142,9 +170,14 @@ namespace Managers
 			base.OnDestroy();
 			m_parentHierarchy.Clear();
 			m_parentHierarchy = null;
-			m_reverserStack.Clear();
-			m_reverserStack = null;
+			m_tempStack.Clear();
+			m_tempStack = null;
 			m_currentElement = null;
 		}
+#if UNITY_EDITOR
+		public List<ILayoutElement> ParentHierarchy => m_parentHierarchy;
+		public ILayoutElement CurrentElement => m_currentElement;
+		public ILayoutInput CurrentInput => m_currentInput;
+#endif
 	}
 }

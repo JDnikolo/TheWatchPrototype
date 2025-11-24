@@ -83,5 +83,9 @@ namespace Managers
 				gameManager.RemoveFixedUpdate(this);
 			}
 		}
+#if UNITY_EDITOR
+		public Dictionary<Rigidbody, IManagedHighlightable> Rigidbodies => m_rigidbodies;
+		public IManagedHighlightable RaycastTarget => m_raycastTarget;
+#endif
 	}
 }

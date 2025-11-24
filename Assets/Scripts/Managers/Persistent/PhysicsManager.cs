@@ -11,6 +11,10 @@ namespace Managers.Persistent
 		
 		private bool m_requirePhysics;
 		private bool m_requirePhysics2D;
+		
+		protected override bool Override => false;
+
+		public FixedUpdatePosition FixedUpdateOrder => FixedUpdatePosition.PhysicsManager;
 
 		public bool RequirePhysics
 		{
@@ -34,10 +38,6 @@ namespace Managers.Persistent
 			}
 		}
 		
-		protected override bool Override => false;
-
-		public FixedUpdatePosition FixedUpdateOrder => FixedUpdatePosition.PhysicsManager;
-
 		public void Stop() => RequirePhysics = RequirePhysics2D = false;
 
 		public void OnFixedUpdate()

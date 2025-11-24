@@ -2,7 +2,6 @@
 using Runtime;
 using UI.Dialogue;
 using UI.Fade;
-using UI.Journal;
 using UI.Speaker;
 using UnityEngine;
 using Utilities;
@@ -12,13 +11,12 @@ namespace Managers
 	[AddComponentMenu("Managers/UI Manager")]
 	public sealed class UIManager : Singleton<UIManager>
 	{
-		[SerializeField] private FadeScreen fadeScreen;
 		[SerializeField] private Canvas canvas;
+		[SerializeField] private FadeScreen fadeScreen;
 		[SerializeField] private float fadeDuration = 1f;
 		
 		[SerializeField] private SpeakerWriter textWriter;
 		[SerializeField] private DialogueWriter dialogueWriter;
-		[SerializeField] private JournalPanel journalPanel;
 		
 		protected override bool Override => true;
 		
@@ -26,9 +24,10 @@ namespace Managers
 		
 		public void OpenTextWriter(SpeakerWriterInput input)
 		{
-			if (!textWriter.gameObject.activeInHierarchy)
+			var textObject = textWriter.gameObject;
+			if (!textObject.activeInHierarchy)
 			{
-				textWriter.gameObject.SetActive(true);
+				textObject.SetActive(true);
 				GameManager.Instance.AddFrameUpdateSafe(textWriter);
 			}
 	
@@ -37,42 +36,26 @@ namespace Managers
 
 		public void CloseTextWriter()
 		{
-			if (!textWriter.gameObject.activeInHierarchy) return;
+			var textObject = textWriter.gameObject;
+			if (!textObject.activeInHierarchy) return;
 			textWriter.DisposeText();
 			GameManager.Instance.RemoveFrameUpdateSafe(textWriter);
-			textWriter.gameObject.SetActive(false);
+			textObject.SetActive(false);
 		}
 		
 		public void OpenDialogueWriter(DialogueWriterInput input)
 		{
-			if (!dialogueWriter.gameObject.activeInHierarchy) dialogueWriter.gameObject.SetActive(true);
+			var dialogueObject = dialogueWriter.gameObject;
+			if (!dialogueObject.activeInHierarchy) dialogueObject.SetActive(true);
 			dialogueWriter.WriteDialogue(input);
 		}
 
 		public void CloseDialogueWriter()
 		{
-			if (!dialogueWriter.gameObject.activeInHierarchy) return;
+			var dialogueObject = dialogueWriter.gameObject;
+			if (!dialogueObject.activeInHierarchy) return;
 			dialogueWriter.DisposeDialogue();
-			dialogueWriter.gameObject.SetActive(false);
-		}
-		
-		public void OpenJournalPanel()
-		{
-			if (journalPanel.IsPanelVisible) return;
-			journalPanel.ShowJournalPanel();
-			InputManager.Instance.ForceUIInput();
-			InputManager.Instance.GetUIAction("SkipDialogue").Disable();
-			InputManager.Instance.GetUIAction("SelectDialogue").Disable();
-		}
-
-		public void CloseJournalPanel()
-		{
-			if (!journalPanel.IsPanelVisible) return;
-			journalPanel.HideJournalPanel();
-			InputManager.Instance.GetUIAction("SkipDialogue").Enable();
-			InputManager.Instance.GetUIAction("SelectDialogue").Enable();
-			if (!dialogueWriter.gameObject.activeInHierarchy && !textWriter.gameObject.activeInHierarchy) 
-				InputManager.Instance.ForcePlayerInput();
+			dialogueObject.SetActive(false);
 		}
 
 		public void FadeScreen(FadeScreenInput input)

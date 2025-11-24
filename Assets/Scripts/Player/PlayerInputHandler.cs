@@ -22,9 +22,9 @@ namespace Player
 
 		public void OnFrameUpdate()
 		{
-			if (!m_moveAxis.Assigned) m_moveAxis.AssignAction(InputManager.Instance.GetPlayerAction(moveAxisName));
+			if (!m_moveAxis.Assigned) m_moveAxis.AssignAction(InputManager.Instance.PlayerMap.GetAction(moveAxisName));
 			m_moveAxis.Update();
-			if (!m_lookAxis.Assigned) m_lookAxis.AssignAction(InputManager.Instance.GetPlayerAction(lookAxisName));
+			if (!m_lookAxis.Assigned) m_lookAxis.AssignAction(InputManager.Instance.PlayerMap.GetAction(lookAxisName));
 			m_lookAxis.Update();
 		}
 

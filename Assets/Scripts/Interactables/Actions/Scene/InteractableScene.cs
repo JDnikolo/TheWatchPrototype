@@ -1,0 +1,13 @@
+﻿using Managers.Persistent;
+using UnityEngine;
+
+namespace Interactables.Actions.Scene
+{
+	[AddComponentMenu("Interactables/Scene/Load New Scene")]
+	public sealed class InteractableScene : Interactable
+	{
+		[SerializeField] private string sceneName;
+		
+		public override void Interact() => SceneManager.Instance.LoadNewScene(sceneName);
+	}
+}

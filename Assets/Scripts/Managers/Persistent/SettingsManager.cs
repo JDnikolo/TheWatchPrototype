@@ -18,7 +18,7 @@ namespace Managers.Persistent
 
 		protected override bool Override => false;
 
-		private static string FilePath => Path.Combine(Application.persistentDataPath, "Settings.cfg");
+		public static string FilePath => Path.Combine(Application.persistentDataPath, "Settings.cfg");
 
 		public void Load()
 		{

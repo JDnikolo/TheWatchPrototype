@@ -32,5 +32,8 @@ namespace Managers.Persistent
 			m_localizers.Clear();
 			m_localizers = null;
 		}
+#if UNITY_EDITOR
+		public HashSet<ILocalizationUpdatable> Localizers => m_localizers;
+#endif
 	}
 }

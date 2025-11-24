@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Collections
 {
-	public struct SwapStack<T>
+	public struct SwapStack<T> : IDisposable
 	{
 		private Stack<T> m_mainCollection;
 		private Stack<T> m_swapCollection;
@@ -13,7 +14,7 @@ namespace Collections
 			m_swapCollection = swapCollection;
 		}
 
-		public void Push(T item) => m_swapCollection.Push(item);
+		public void Push(T item) => m_swapCollection?.Push(item);
 
 		public Stack<T> Swap()
 		{
@@ -23,8 +24,15 @@ namespace Collections
 		
 		public void Clear()
 		{
-			m_mainCollection.Clear();
-			m_swapCollection.Clear();
+			m_mainCollection?.Clear();
+			m_swapCollection?.Clear();
+		}
+
+		public void Dispose()
+		{
+			Clear();
+			m_mainCollection = null;
+			m_swapCollection = null;
 		}
 	}
 }

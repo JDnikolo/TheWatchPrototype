@@ -93,6 +93,7 @@ namespace UI.Layout.Elements
 
 		private bool ShouldChangeParents()
 		{
+			if (elements == null) return false;
 			var length = elements.Length;
 			ILayoutElement parent = this;
 			ILayoutInput topInput = null;

@@ -2,7 +2,7 @@
 
 namespace Interactables.Actions
 {
-    [AddComponentMenu("Interactables/Movement/Set Position Interactable")]
+    [AddComponentMenu("Interactables/Set Game Object Position")]
     public sealed class InteractableSetPosition : Interactable
     {
         [SerializeField] private GameObject objectToMove;

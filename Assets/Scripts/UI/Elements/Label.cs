@@ -3,6 +3,7 @@ using Localization.Text;
 using Managers.Persistent;
 using Runtime;
 using UI.Text;
+using UnityEditor;
 using UnityEngine;
 
 namespace UI.Elements
@@ -39,5 +40,20 @@ namespace UI.Elements
 			var languageManager = LanguageManager.Instance;
 			if (languageManager) languageManager.RemoveLocalizer(this);
 		}
+#if UNITY_EDITOR
+		private void OnValidate()
+		{
+			var text = textToDisplay;
+			if (text)
+			{
+				var obj = gameObject;
+				if (obj.name != text.name)
+				{
+					obj.name = text.name;
+					EditorUtility.SetDirty(obj);
+				}
+			}
+		}
+#endif
 	}
 }

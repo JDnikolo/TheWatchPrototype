@@ -6,12 +6,14 @@ using Utilities;
 namespace UI.Text
 {
 	[AddComponentMenu("UI/Text/Text With Background")]
-	public sealed class TextWithBackground : TextWriter
+	public sealed class TextWithBackground : TextWriter, ITextMeshProvider
 	{
 		[SerializeField] private TextMeshProUGUI textMesh;
 		[SerializeField] private RectTransform background;
 		[SerializeField] private float padding = 25f;
 
+		public TextMeshProUGUI TextMesh => textMesh;
+		
 		public override void WriteText(string text)
 		{
 			textMesh.text = text;

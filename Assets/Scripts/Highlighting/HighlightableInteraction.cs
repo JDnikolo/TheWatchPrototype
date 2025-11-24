@@ -20,7 +20,7 @@ namespace Highlighting
 		
 		public void OnFrameUpdate()
 		{
-			m_interactAction ??= InputManager.Instance.GetPlayerAction(interactActionName);
+			m_interactAction ??= InputManager.Instance.PlayerMap.GetAction(interactActionName);
 			if (m_interactAction.WasPressedThisFrame() && interactable) interactable.Interact();
 		}
 

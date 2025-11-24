@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Managers.Persistent
 {
 	[AddComponentMenu("Managers/Persistent/Game Manager")]
-	public sealed class GameManager : Singleton<GameManager>
+	public sealed partial class GameManager : Singleton<GameManager>
 	{
 		private FrameUpdateCollection m_frameUpdateCollection = new();
 		private SwapStack<Action> m_frameInvokeStack = new(new Stack<Action>(), new Stack<Action>());
@@ -52,6 +52,8 @@ namespace Managers.Persistent
 
 		private GameState m_gameState = GameState.Preload;
 
+		protected override bool Override => false;
+		
 		public FrameUpdatePosition FrameUpdateInvoke
 		{
 			get => m_frameUpdateInvoke;
@@ -70,7 +72,21 @@ namespace Managers.Persistent
 			set => m_lateUpdateInvoke = value;
 		}
 
-		protected override bool Override => false;
+		public State PauseState
+		{
+			get => new()
+			{
+				FrameUpdatePosition = FrameUpdateInvoke,
+				LateUpdatePosition = LateUpdateInvoke,
+				FixedUpdatePosition = FixedUpdateInvoke,
+			};
+			set
+			{
+				FrameUpdateInvoke = value.FrameUpdatePosition;
+				LateUpdateInvoke = value.LateUpdatePosition;
+				FixedUpdateInvoke = value.FixedUpdatePosition;
+			}
+		}
 		
 		internal void BeginLoad()
 		{
@@ -125,7 +141,7 @@ namespace Managers.Persistent
 		
 		//Do not call from within the same update frame
 		public void RemoveFixedUpdate(IFixedUpdatable updatable) => m_fixedUpdateCollection.Remove(updatable);
-		
+
 		private void Update()
 		{
 			switch (m_gameState)
@@ -176,15 +192,24 @@ namespace Managers.Persistent
 			base.OnDestroy();
 			m_frameUpdateCollection.Clear();
 			m_frameUpdateCollection = null;
-			m_frameInvokeStack.Clear();
+			m_frameInvokeStack.Dispose();
 			m_frameInvokeStack = default;
+			m_lateUpdateCollection.Clear();
+			m_lateUpdateCollection = null;
+			m_lateInvokeStack.Dispose();
+			m_lateInvokeStack = default;
 			m_fixedUpdateCollection.Clear();
 			m_fixedUpdateCollection = null;
-			m_fixedInvokeStack.Clear();
+			m_fixedInvokeStack.Dispose();
 			m_fixedInvokeStack = default;
 			m_beforePlay.Clear();
 			m_beforePlay = null;
 			m_localManager = null;
 		}
+#if UNITY_EDITOR
+		public OrderedCollection<IFrameUpdatable> FrameUpdateCollection => m_frameUpdateCollection;
+		public OrderedCollection<ILateUpdatable> LateUpdateCollection => m_lateUpdateCollection;
+		public OrderedCollection<IFixedUpdatable> FixedUpdateCollection => m_fixedUpdateCollection;
+#endif
 	}
 }

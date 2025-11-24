@@ -47,20 +47,6 @@ namespace UI.Speaker
 
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.GameUI;
 
-		private InputAction SkipAction
-		{
-			get
-			{
-				if (m_skipAction == null)
-				{
-					m_skipAction = InputManager.Instance.GetUIAction(skipActionName);
-					slider.onValueChanged.AddListener(SliderChanged);
-				}
-
-				return m_skipAction;
-			}
-		}
-
 		public void WriteText(SpeakerWriterInput input)
 		{
 			FullReset();
@@ -90,7 +76,13 @@ namespace UI.Speaker
 
 		public void OnFrameUpdate()
 		{
-			var skipDialogue = m_allowSkip && SkipAction.WasPressedThisFrame();
+			if (m_skipAction == null)
+			{
+				m_skipAction = InputManager.Instance.UIMap.GetAction(skipActionName);
+				slider.onValueChanged.AddListener(SliderChanged);
+			}
+			
+			var skipDialogue = m_allowSkip && m_skipAction.WasPressedThisFrame();
 			if (m_forceFinish)
 			{
 				m_forceFinish = false;

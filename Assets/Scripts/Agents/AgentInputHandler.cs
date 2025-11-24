@@ -84,7 +84,16 @@ namespace Agents
 		private void Awake() => GameManager.Instance.AddFrameUpdateSafe(this);
 
 		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdateSafe(this);
-
-		private void OnValidate() => rigidbody.maxLinearVelocity = movementData.MaxVelocity;
+#if UNITY_EDITOR
+		private void OnValidate()
+		{
+			var rigidBody = rigidbody;
+			if (rigidBody)
+			{
+				var data = movementData;
+				if (data) rigidBody.maxLinearVelocity = data.MaxVelocity;
+			}
+		}
+#endif
 	}
 }

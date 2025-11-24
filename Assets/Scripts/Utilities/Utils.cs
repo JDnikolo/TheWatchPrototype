@@ -28,9 +28,9 @@ namespace Utilities
 		/// <remarks>Disables cursor.</remarks>
 		public static void ForcePlayerInput(this InputManager inputManager)
 		{
-			inputManager.RequiresPlayerMap = true;
-			inputManager.RequiresUIMap = false;
-			InputManager.ToggleCursor(false);
+			inputManager.PlayerMap.Enabled = true;
+			inputManager.UIMap.Enabled = false;
+			inputManager.ToggleCursor(false);
 		}
 
 		/// <summary>
@@ -39,9 +39,9 @@ namespace Utilities
 		/// <remarks>Enables cursor.</remarks>
 		public static void ForceUIInput(this InputManager inputManager)
 		{
-			inputManager.RequiresUIMap = true;
-			inputManager.RequiresPlayerMap = false;
-			InputManager.ToggleCursor(true);
+			inputManager.UIMap.Enabled = true;
+			inputManager.PlayerMap.Enabled = false;
+			inputManager.ToggleCursor(true);
 		}
 
 		public static void SetEnabled(this InputActionMap map, bool enabled)

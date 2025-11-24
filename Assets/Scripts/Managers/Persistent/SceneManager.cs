@@ -28,17 +28,11 @@ namespace Managers.Persistent
 			loadingBar.gameObject.SetActive(true);
 			var loadedScenes = UnitySceneManager.loadedSceneCount;
 			for (var i = 1; i < loadedScenes; i++) m_scenesToUnload.Push(UnitySceneManager.GetSceneAt(i));
-			GameManager.Instance.InvokeOnNextFrameUpdate(BeginLoading);
+			var gameManager = GameManager.Instance;
+			gameManager.InvokeOnNextFrameUpdate(gameManager.BeginLoad);
 		}
 
-		private void BeginLoading()
-		{
-			PhysicsManager.Instance.Stop();
-			InputManager.Instance.Stop();
-			GameManager.Instance.BeginLoad();
-		}
-
-		public void ProcessScenes()
+		internal void ProcessScenes()
 		{
 			if (m_asyncOperation != null)
 			{

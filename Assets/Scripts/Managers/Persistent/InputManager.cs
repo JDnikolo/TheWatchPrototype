@@ -4,33 +4,28 @@ using Runtime;
 using Runtime.FrameUpdate;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Utilities;
 
 namespace Managers.Persistent
 {
 	[AddComponentMenu("Managers/Persistent/Input Manager")]
-	public sealed class InputManager : Singleton<InputManager>, IFrameUpdatable
+	public sealed partial class InputManager : Singleton<InputManager>, IFrameUpdatable
 	{
 		[SerializeField] private InputActionAsset actionAsset;
 		[SerializeField] private string playerMapName = "Player";
 		[SerializeField] private string uiMapName = "UI";
 		[SerializeField] private string persistentGameName = "PersistentGame";
 		
-		private InputActionMap m_playerMap;
-		private InputActionMap m_uiMap;
-		private InputActionMap m_persistentGameMap;
+		private InputMap m_playerMap = new(ControlMap.Player);
+		private InputMap m_uiMap = new(ControlMap.UI);
+		private InputMap m_persistentGameMap = new(ControlMap.PersistentGame);
 		private ControlScheme m_controlScheme;
 		private Updatable m_updatable;
-		
+		private int m_activeControls;
+		private bool m_cursorVisible;
+
 		protected override bool Override => false;
 
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.InputManager;
-		
-		private InputActionMap PlayerMap => m_playerMap ??= actionAsset.FindActionMap(playerMapName);
-
-		private InputActionMap UIMap => m_uiMap ??= actionAsset.FindActionMap(uiMapName);
-		
-		private InputActionMap PersistentGameMap => m_persistentGameMap ??= actionAsset.FindActionMap(persistentGameName);
 		
 		public static Vector2 MousePosition => Mouse.current.position.ReadValue();
 		
@@ -61,49 +56,45 @@ namespace Managers.Persistent
 				}
 			}
 		}
+
+		public State PauseState
+		{
+			get => new()
+			{
+				ActiveControls = m_activeControls,
+				CursorVisible = m_cursorVisible,
+			};
+			set
+			{
+				m_activeControls = value.ActiveControls;
+				SetFromFlag(m_playerMap);
+				SetFromFlag(m_uiMap);
+				SetFromFlag(m_persistentGameMap);
+				ToggleCursor(value.CursorVisible);
+				CheckUpdate();
+			}
+		}
 		
-		public bool RequiresPlayerMap
-		{
-			get => PlayerMap.enabled;
-			set
-			{
-				if (PlayerMap.enabled == value) return;
-				PlayerMap.SetEnabled(value);
-				CheckUpdate();
-			}
-		}
-
-		public bool RequiresUIMap
-		{
-			get => UIMap.enabled;
-			set
-			{
-				if (UIMap.enabled == value) return;
-				UIMap.SetEnabled(value);
-				CheckUpdate();
-			}
-		}
-
-		public bool RequiresPersistentGameMap
-		{
-			get => PersistentGameMap.enabled;
-			set
-			{
-				if (PersistentGameMap.enabled == value) return;
-				PersistentGameMap.SetEnabled(value);
-				CheckUpdate();
-			}
-		}
-
-		private void CheckUpdate() => m_updatable.SetUpdating(
-			PlayerMap.enabled || UIMap.enabled || PersistentGameMap.enabled, this);
-
-		public void Stop() => RequiresPlayerMap = RequiresPlayerMap = false;
+		public InputMap PlayerMap => m_playerMap;
 		
+		public InputMap UIMap => m_uiMap;
+		
+		public InputMap PersistentGameMap => m_persistentGameMap;
+		
+		public void Stop()
+		{
+			m_playerMap.ForceDisable();
+			m_uiMap.ForceDisable();
+			m_persistentGameMap.ForceDisable();
+			m_activeControls = 0;
+			CheckUpdate();
+		}
+
 		public void OnFrameUpdate() => InputSystem.Update();
-
-		public static void ToggleCursor(bool enable)
+		
+		public void ToggleCursor(bool enable)
 		{
+			m_cursorVisible = enable;
 			if (enable)
 			{
 				Cursor.lockState = CursorLockMode.None;
@@ -115,29 +106,51 @@ namespace Managers.Persistent
 				Cursor.visible = false;
 			}
 		}
-		
-		public InputAction GetPlayerAction(string actionName) => PlayerMap.FindAction(actionName);
-		
-		public InputAction GetUIAction(string actionName) => UIMap.FindAction(actionName);
-		
-		public InputAction GetPersistentGameAction(string actionName) => PersistentGameMap.FindAction(actionName);
 
+		private void CheckUpdate() => m_updatable.SetUpdating(m_activeControls != 0, this);
+
+		private void SetFlag(int mask, bool value)
+		{
+			if (value) m_activeControls |= mask;
+			else m_activeControls &= ~mask;
+			CheckUpdate();
+		}
+
+		private void SetFromFlag(InputMap map)
+		{
+			if ((map.BitFlag & m_activeControls) != 0) map.ForceEnable();
+			else map.ForceDisable();
+		}
+		
+		private InputActionMap GetMapByControl(ControlMap map)
+		{
+			switch (map)
+			{
+				case ControlMap.Player:
+					return actionAsset.FindActionMap(playerMapName);
+				case ControlMap.UI:
+					return actionAsset.FindActionMap(uiMapName);
+				case ControlMap.PersistentGame:
+					return actionAsset.FindActionMap(persistentGameName);
+				default:
+					throw new ArgumentOutOfRangeException(nameof(map), map, null);
+			}
+		}
+		
 		protected override void Awake()
 		{
 			base.Awake();
-			PlayerMap.Disable();
-			UIMap.Disable();
-			PersistentGameMap.Disable();
+			Stop();
 		}
 
 		protected override void OnDestroy()
 		{
 			base.OnDestroy();
-			PlayerMap.Disable();
+			m_playerMap.Dispose();
 			m_playerMap = null;
-			UIMap.Disable();
+			m_uiMap.Dispose();
 			m_uiMap = null;
-			PersistentGameMap.Disable();
+			m_persistentGameMap.Dispose();
 			m_persistentGameMap = null;
 		}
 	}

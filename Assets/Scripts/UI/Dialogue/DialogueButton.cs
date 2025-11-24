@@ -36,8 +36,6 @@ namespace UI.Dialogue
 		private bool m_hovering;
 		private bool m_selected;
 
-		private InputAction SelectAction => m_selectAction ??= InputManager.Instance.GetUIAction(selectActionName);
-
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.GameUI;
 		
 		public void AssignDialogueOption(DialogueOption option)
@@ -74,7 +72,7 @@ namespace UI.Dialogue
 			}
 			
 			//Mouse was just pressed
-			var selectAction = SelectAction;
+			var selectAction = m_selectAction ??= InputManager.Instance.UIMap.GetAction(selectActionName);
 			if (selectAction.WasPressedThisFrame()) m_selected = hovering;
 			//Mouse was just released
 			else if (selectAction.WasReleasedThisFrame())

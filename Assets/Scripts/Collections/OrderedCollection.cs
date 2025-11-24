@@ -147,5 +147,8 @@ namespace Collections
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => new Enumerator(this);
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+#if UNITY_EDITOR
+        public SortedDictionary<byte, HashSet<T>> Collections => m_collections;
+#endif
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Interactables.Actions
 {
-	[AddComponentMenu("Interactables/Fade Screen Interactable")]
+	[AddComponentMenu("Interactables/Toggle Fade Screen")]
 	public sealed class InteractableFadeScreen : Interactable
 	{
 		[SerializeField] private bool fadeDirection;

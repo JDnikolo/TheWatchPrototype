@@ -290,11 +290,12 @@ namespace UI.Elements
 		}
 		
 		private void OnDestroy() => m_receiver = null;
-		
+#if UNITY_EDITOR
 		private void OnValidate()
 		{
 			color.Validate(slider, enabled);
 			knob.enabled = enabled;
 		}
+#endif
 	}
 }

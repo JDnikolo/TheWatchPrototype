@@ -22,12 +22,11 @@ namespace UI.Elements
 		[SerializeField] private bool anyClick;
 		[SerializeField] private Interactable onPrimaryClick;
 		[SerializeField] [HideInInspector] private Interactable onSecondaryClick;
-
-		[SerializeField] private bool debug;
 		
 		private InputAction m_primaryAction;
 		private InputAction m_secondaryAction;
 		private bool m_mouseOver;
+		private bool m_pressed;
 		private bool m_selected;
 
 		public void OnSelected()
@@ -44,8 +43,8 @@ namespace UI.Elements
 		
 		public void OnInput(Vector2 axis, ref Direction input)
 		{
-			m_primaryAction ??= InputManager.Instance.GetUIAction(primaryActionName);
-			m_secondaryAction ??= InputManager.Instance.GetUIAction(secondaryActionName);
+			m_primaryAction ??= InputManager.Instance.UIMap.GetAction(primaryActionName);
+			m_secondaryAction ??= InputManager.Instance.UIMap.GetAction(secondaryActionName);
 			Interactable target = null;
 			if (m_primaryAction.WasPressedThisFrame()) target = onPrimaryClick;
 			else if (m_secondaryAction.WasPressedThisFrame()) target = onSecondaryClick;
@@ -69,12 +68,14 @@ namespace UI.Elements
 		{
 			if (!m_mouseOver) return;
 			color.ApplyPressed(image);
+			m_pressed = true;
 		}
 
 		public void OnPointerUp(PointerEventData eventData)
 		{
-			if (!m_mouseOver) return;
-			color.ApplySelected(image);
+			if (!m_pressed) return;
+			if (m_mouseOver || m_selected) color.ApplySelected(image);
+			else color.ApplyEnabled(image);
 		}
 
 		public void OnPointerClick(PointerEventData eventData)
@@ -104,7 +105,10 @@ namespace UI.Elements
 		}
 
 		private void OnDisable() => color.ApplyDisabled(image);
-
+#if UNITY_EDITOR
+		public bool Selected => m_selected;
+		
 		private void OnValidate() => color.Validate(image, enabled);
+#endif
 	}
 }

@@ -6,9 +6,17 @@ namespace Utilities
 {
 	public static partial class Utils
 	{
-		public static float AudioToPercentage(this float value) => Mathf.Pow(10f, value / 20f);
-		
-		public static float PercentageToAudio(this float value) => Mathf.Log10(value) * 20f;
+		public static float AudioToPercentage(this float value)
+		{
+			if (value == 0f) return 1f;
+			return Mathf.Pow(10f, value / 20f);
+		}
+
+		public static float PercentageToAudio(this float value)
+		{
+			if (value == 0f) return -80f;
+			return Mathf.Log10(value) * 20f;
+		}
 
 		public static float GetFloatSafe(this AudioMixer mixer, string name)
 		{
