@@ -10,7 +10,7 @@ using Utilities;
 namespace UI.ComboBox
 {
 	[AddComponentMenu("UI/Elements/ComboBox/ComboBox Element")]
-	public sealed class ComboElement : ButtonBase, ILayoutInputCallback
+	public sealed class ComboElement : ButtonBase, ILayoutInputCallback, IComboHook
 	{
 		[SerializeField] [DisableInInspector] private ComboPanel comboParent;
 		[SerializeField] private string primaryActionName = "Primary";

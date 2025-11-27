@@ -6,6 +6,7 @@ using UI.ComboBox;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Utilities;
 
 namespace Managers
 {
@@ -13,7 +14,6 @@ namespace Managers
 	public sealed class ComboManager : Singleton<ComboManager>, IFrameUpdatable
 	{
 		[SerializeField] private ComboPanel comboPanel;
-		[SerializeField] private Transform comboRoot;
 
 		private List<RaycastResult> m_results = new();
 		private LayoutManager.State m_state;
@@ -25,12 +25,13 @@ namespace Managers
 
 		public void OnFrameUpdate()
 		{
-			if (!comboPanel.gameObject.activeSelf || !InputManager.WasPointerPressedThisFrame) return;
+			if (!comboPanel.gameObject.activeSelf || !InputManager.WasPointerReleasedThisFrame) return;
 			var uiManager = UIManager.Instance;
 			uiManager.Raycaster.Raycast(
 				new PointerEventData(EventSystem.current) {position = InputManager.PointerPosition}, m_results);
 			//We clicked elsewhere so we want to close it
-			if (m_results.Count == 0 || !m_results[0].gameObject.GetComponent<ComboElement>()) CloseComboPanel();
+			if (m_results.Count == 0 || m_results[0].gameObject.transform.GetDeferredComponent<IComboHook>() == null) 
+				CloseComboPanel();
 			m_results.Clear();
 		}
 		

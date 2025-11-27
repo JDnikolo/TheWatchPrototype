@@ -55,7 +55,7 @@ namespace Managers.Persistent
 
 		public static Vector2 PointerPosition => Pointer.current.position.ReadValue();
 
-		public static bool WasPointerPressedThisFrame => Pointer.current.press.wasPressedThisFrame;
+		public static bool WasPointerReleasedThisFrame => Pointer.current.press.wasReleasedThisFrame;
 		
 		public void SetNewControlScheme(ControlSchemeEnum scheme)
 		{
