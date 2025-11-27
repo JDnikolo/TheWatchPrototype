@@ -1,20 +1,19 @@
 ﻿using UI.Layout.Elements;
-using UnityEditor;
 using UnityEngine;
+using Utilities;
 
 namespace UI.Elements
 {
 	public abstract class ElementBase : MonoBehaviour
 	{
-		[SerializeField] private Element layoutParent;
+		[SerializeField] [HideInInspector] private Element layoutParent;
+
+		public Element LayoutParent => layoutParent;
 #if UNITY_EDITOR
-		public void SetLayoutParent(Element newLayoutParent)
+		protected virtual void OnValidate()
 		{
-			if (layoutParent == newLayoutParent) return;
-			layoutParent = newLayoutParent;
-			EditorUtility.SetDirty(this);
+			if (TryGetComponent(out Element newLayoutParent)) this.DirtyReplace(ref layoutParent, newLayoutParent);
 		}
 #endif
-		protected Element LayoutParent => layoutParent;
 	}
 }

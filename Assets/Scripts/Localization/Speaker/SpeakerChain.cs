@@ -3,7 +3,7 @@
 namespace Localization.Speaker
 {
 	[CreateAssetMenu(fileName = "SpeakerChain", menuName = "Localization/Speaker/Speaker Chain")]
-	public class SpeakerChain : LocalizationAsset
+	public class SpeakerChain : ScriptableObject
 	{
 		[SerializeField] private SpeakerObject[] textAssets;
 		

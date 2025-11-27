@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Runtime.Automation;
 using UnityEngine;
 using Utilities;
+using Node = System.Collections.Generic.LinkedListNode<UI.Layout.ILayoutElement>;
 
 namespace UI.Layout.Elements
 {
@@ -11,28 +13,23 @@ namespace UI.Layout.Elements
 		[SerializeField] private Axis direction;
 		[SerializeField] private bool selectable;
 		[SerializeField] private bool circular;
-		[SerializeField] private LayoutElement[] elements;
+		[SerializeField] private bool inverted;
 
-		public ILayoutElement FirstChild
-		{
-			get
-			{
-				if (!selectable && elements.Length != 0 && elements[m_lastIndex] is ILayoutInput)
-					return elements[m_lastIndex];
-				return null;
-			}
-		}
+		private readonly LinkedList<ILayoutElement> m_elements = new();
+		private Node m_firstConnectingNode;
+		private Node m_lastConnectingNode;
+		private Node m_selectedNode;
 
-		private int m_lastIndex;
+		public ILayoutElement FirstChild => selectable ? null : m_selectedNode?.Value;
 
 		public ILayoutElement OnSelectNewElement(ILayoutElement oldElement, Direction input)
 		{
 			if (oldElement == null) return null;
 			ILayoutElement element = this;
 			if (oldElement.Parent != element) return null;
-			var index = FindElement(oldElement);
-			if (index < 0) return null;
-			m_lastIndex = index;
+			var lastNode = FindForward(oldElement);
+			if (lastNode == null) return null;
+			m_selectedNode = lastNode;
 			if (selectable) return this;
 			if (circular)
 			{
@@ -43,10 +40,10 @@ namespace UI.Layout.Elements
 					case Direction.Right:
 						return FirstChild;
 					case Direction.Up:
-						m_lastIndex = elements.Length - 1;
+						m_selectedNode = m_elements.Last;
 						return FirstChild;
 					case Direction.Down:
-						m_lastIndex = 0;
+						m_selectedNode = m_elements.First;
 						return FirstChild;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(input), input, null);
@@ -58,28 +55,252 @@ namespace UI.Layout.Elements
 
 		public void OnSelectingNewHierarchy(ILayoutElement newElement, ILayoutElement oldElement)
 		{
-			var index = FindElement(oldElement);
-			if (index < 0) index = 0;
-			m_lastIndex = index;
+			m_selectedNode = FindForward(oldElement);
+			if (m_selectedNode == null) SetFirstNode();
 		}
 
-		private int FindElement(ILayoutElement oldElement)
+		public void AddFirst(ILayoutElement element)
 		{
-			var index = -1;
-			for (var i = 0; i < elements.Length; i++)
+			if (element == null) return;
+			var firstElement = m_elements.First;
+			m_elements.AddFirst(element);
+			element.Parent = this;
+			if (element is ILayoutInput input)
 			{
-				ILayoutElement element = elements[i];
-				if (element == oldElement)
+				if (m_firstConnectingNode != null) SetFirstElement((ILayoutInput) m_firstConnectingNode.Value, input);
+				m_firstConnectingNode = m_elements.First;
+				SetFirstElement(input, this);
+				if (m_firstConnectingNode == m_elements.Last) SetLastElement(input, this);
+				else if (m_elements.Count > 1)
 				{
-					index = i;
-					break;
+					if (firstElement.Value is ILayoutInput firstInput) SetFirstElement(firstInput, element);
+					SetLastElement(input, firstElement.Value);
 				}
 			}
 
-			return index;
+			if (m_elements.Count == 1) SetFirstNode();
+		}
+
+		public void AddLast(ILayoutElement element)
+		{
+			if (element == null) return;
+			var lastElement = m_elements.Last;
+			m_elements.AddLast(element);
+			element.Parent = this;
+			if (element is ILayoutInput input)
+			{
+				if (m_lastConnectingNode != null) SetLastElement((ILayoutInput) m_lastConnectingNode.Value, input);
+				m_lastConnectingNode = m_elements.Last;
+				SetLastElement(input, this);
+				if (m_lastConnectingNode == m_elements.First) SetFirstElement(input, this);
+				else if (m_elements.Count > 1)
+				{
+					if (lastElement.Value is ILayoutInput lastInput) SetLastElement(lastInput, element);
+					SetFirstElement(input, lastElement.Value);
+				}
+			}
+
+			if (m_elements.Count == 1) SetFirstNode();
+		}
+
+		public void Clear()
+		{
+			m_elements.Clear();
+			m_firstConnectingNode = null;
+			m_lastConnectingNode = null;
+			m_selectedNode = null;
+		}
+		
+		public void RemoveFirst() => Remove(m_elements.First);
+		
+		public void RemoveLast() => Remove(m_elements.Last);
+		
+		public void RemoveAt(ILayoutElement element)
+		{
+			var node = FindForward(element);
+			if (node == null) return;
+			Remove(node);
+		}
+
+		public void Remove(Node node)
+		{
+			if (node == null) return;
+			ILayoutInput input;
+			if (node == m_firstConnectingNode)
+			{
+				input = (ILayoutInput) m_lastConnectingNode.Value;
+				SetFirstElement(input, null);
+				if (m_firstConnectingNode == m_elements.Last) SetLastElement(input, null);
+				else
+				{
+					m_firstConnectingNode = FindFirstConnectingIndex(m_firstConnectingNode.Next);
+					if (m_firstConnectingNode != null) 
+						SetFirstElement((ILayoutInput) m_firstConnectingNode.Value, this);
+				}
+			}
+			else if (node == m_lastConnectingNode)
+			{
+				input = (ILayoutInput) m_lastConnectingNode.Value;
+				SetLastElement(input, null);
+				if (m_lastConnectingNode == m_elements.First) SetFirstElement(input, null);
+				else
+				{
+					m_lastConnectingNode = FindLastConnectingIndex(m_lastConnectingNode.Previous);
+					if (m_lastConnectingNode != null) 
+						SetFirstElement((ILayoutInput) m_lastConnectingNode.Value, this);
+				}
+			}
+
+			input = node.Value as ILayoutInput;
+			if (input != null)
+			{
+				ILayoutInput previousInput;
+				ILayoutInput nextInput;
+				switch (direction)
+				{
+					case Axis.Horizontal:
+						if (IsChildInput(input.LeftNeighbor, out previousInput)) 
+							previousInput.RightNeighbor = input.RightNeighbor;
+						if (IsChildInput(input.RightNeighbor, out nextInput)) 
+							nextInput.LeftNeighbor = input.LeftNeighbor;
+						break;
+					case Axis.Vertical:
+						if (IsChildInput(input.TopNeighbor, out previousInput)) 
+							previousInput.BottomNeighbor = input.BottomNeighbor;
+						if (IsChildInput(input.BottomNeighbor, out nextInput)) 
+							nextInput.TopNeighbor = input.TopNeighbor;
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+
+			m_elements.Remove(node);
+		}
+		
+		private void SetFirstElement(ILayoutInput element, ILayoutElement neighbor)
+		{
+			switch (direction)
+			{
+				case Axis.Horizontal:
+					element.LeftNeighbor = neighbor;
+					break;
+				case Axis.Vertical:
+					element.TopNeighbor = neighbor;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+		private void SetLastElement(ILayoutInput element, ILayoutElement neighbor)
+		{
+			switch (direction)
+			{
+				case Axis.Horizontal:
+					element.RightNeighbor = neighbor;
+					break;
+				case Axis.Vertical:
+					element.BottomNeighbor = neighbor;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+		
+		private Node FindForward(ILayoutElement element, Node node = null)
+		{
+			if (element != null && m_elements.Count != 0)
+			{
+				node ??= m_elements.First;
+				do
+				{
+					if (node.Value == element) return node;
+					node = node.Next;
+				} while (node != null);
+			}
+
+			return null;
+		}
+		
+		private Node FindBackward(ILayoutElement element, Node node = null)
+		{
+			if (element != null && m_elements.Count != 0)
+			{
+				node ??= m_elements.Last;
+				do
+				{
+					if (node.Value == element) return node;
+					node = node.Previous;
+				} while (node != null);
+			}
+
+			return null;
+		}
+
+		private Node FindFirstConnectingIndex(Node node = null)
+		{
+			if (m_elements.Count != 0)
+			{
+				node ??= m_elements.First;
+				do
+				{
+					if (node.Value is ILayoutInput) return node;
+					node = node.Next;
+				} while (node != null);
+			}
+
+
+			return null;
+		}
+
+		private Node FindLastConnectingIndex(Node node = null)
+		{
+			if (m_elements.Count != 0)
+			{
+				node ??= m_elements.Last;
+				do
+				{
+					if (node.Value is ILayoutInput) return node;
+					node = node.Previous;
+				} while (node != null);
+			}
+
+			return null;
+		}
+		
+		private bool IsChildElement(ILayoutElement element) => element != null && ReferenceEquals(element.Parent, this);
+		
+		private bool IsInput(ILayoutElement element, out ILayoutInput input)
+		{
+			input = element as ILayoutInput;
+			return input != null;
+		}
+
+		private bool IsChildInput(ILayoutElement element, out ILayoutInput input) => 
+			IsInput(element, out input) && IsChildElement(element);
+
+		private void SetFirstNode()
+		{
+			if (inverted) m_selectedNode = m_elements.Last;
+			else m_selectedNode = m_elements.First;
+		}
+		
+		public override void OnPrewarm()
+		{
+			base.OnPrewarm();
+			this.CollectChildren<LayoutElement, ILayoutElement>(m_elements);
+			m_firstConnectingNode = FindFirstConnectingIndex();
+			m_lastConnectingNode = FindLastConnectingIndex();
+			SetFirstNode();
 		}
 
 #if UNITY_EDITOR
+		public LinkedList<ILayoutElement> Elements => m_elements;
+		public Node FirstConnectedNode => m_firstConnectingNode;
+		public Node LastConnectedNode => m_lastConnectingNode;
+		public Node SelectedNode => m_selectedNode;
+		
 		public LayoutBlockedDirections BlockedDirections => LayoutBlockedDirections.Up | LayoutBlockedDirections.Down;
 
 		private HierarchyTester<LayoutElement> m_tester;
@@ -87,101 +308,28 @@ namespace UI.Layout.Elements
 		protected override void OnValidate()
 		{
 			base.OnValidate();
-			if (!ShouldChangeParents()) return;
 			SetElementParents();
-		}
-
-		private bool ShouldChangeParents()
-		{
-			if (elements == null) return false;
-			var length = elements.Length;
-			ILayoutElement parent = this;
-			ILayoutInput topInput = null;
-			for (var index = 0; index < length; index++)
-			{
-				var element = elements[index];
-				if (element.Parent != parent) return true;
-				var nextIndex = index + 1;
-				var overflows = nextIndex >= length;
-				if (element is ILayoutInput testInput)
-				{
-					topInput = testInput;
-					if (index == 0)
-					{
-						switch (direction)
-						{
-							case Axis.Horizontal:
-								if (testInput.LeftNeighbor != this || testInput.TopNeighbor == this) return true;
-								break;
-							case Axis.Vertical:
-								if (testInput.TopNeighbor != this || testInput.LeftNeighbor == this) return true;
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
-
-					if (overflows)
-					{
-						switch (direction)
-						{
-							case Axis.Horizontal:
-								if (testInput.RightNeighbor != this || testInput.BottomNeighbor == this) return true;
-								break;
-							case Axis.Vertical:
-								if (testInput.BottomNeighbor != this || testInput.RightNeighbor == this) return true;
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
-				}
-
-				if (!overflows)
-				{
-					var nextElement = elements[index + 1];
-					if (nextElement is ILayoutInput bottomInput && topInput != null)
-					{
-						switch (direction)
-						{
-							case Axis.Horizontal:
-								if (topInput.RightNeighbor != nextElement || bottomInput.LeftNeighbor != element ||
-									topInput.BottomNeighbor == nextElement || bottomInput.TopNeighbor == element)
-									return true;
-								break;
-							case Axis.Vertical:
-								if (topInput.BottomNeighbor != nextElement || bottomInput.TopNeighbor != element ||
-									topInput.RightNeighbor == nextElement || bottomInput.LeftNeighbor == element)
-									return true;
-								break;
-							default:
-								throw new ArgumentOutOfRangeException();
-						}
-					}
-				}
-			}
-
-			return false;
 		}
 
 		public override void OnHierarchyChanged()
 		{
 			base.OnHierarchyChanged();
-			if (!m_tester.PerformTest(this, ref elements)) return;
 			SetElementParents();
 		}
 
 		private void SetElementParents()
 		{
-			var length = elements.Length;
+			var parent = transform;
+			var length = parent.childCount;
 			ILayoutInput topInput = null;
 			for (var index = 0; index < length; index++)
 			{
-				var element = elements[index];
-				element.SetManagedParent(this);
+				var managedElement = parent.GetChild(index).GetComponent<LayoutManaged>();
+				if (!managedElement) continue;
+				managedElement.SetManagedParent(this);
 				var nextIndex = index + 1;
 				var overflows = nextIndex >= length;
-				if (element is ILayoutInput testInput)
+				if (managedElement is ILayoutInput testInput)
 				{
 					topInput = testInput;
 					if (index == 0)
@@ -189,12 +337,12 @@ namespace UI.Layout.Elements
 						switch (direction)
 						{
 							case Axis.Horizontal:
-								testInput.LeftNeighbor = this;
-								if (testInput.TopNeighbor == this) testInput.TopNeighbor = null;
+								testInput.LeftManagedNeighbor = this;
+								if (testInput.TopManagedNeighbor == this) testInput.TopManagedNeighbor = null;
 								break;
 							case Axis.Vertical:
-								testInput.TopNeighbor = this;
-								if (testInput.LeftNeighbor == this) testInput.LeftNeighbor = null;
+								testInput.TopManagedNeighbor = this;
+								if (testInput.LeftManagedNeighbor == this) testInput.LeftManagedNeighbor = null;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();
@@ -206,12 +354,12 @@ namespace UI.Layout.Elements
 						switch (direction)
 						{
 							case Axis.Horizontal:
-								testInput.RightNeighbor = this;
-								if (testInput.BottomNeighbor == this) testInput.BottomNeighbor = null;
+								testInput.RightManagedNeighbor = this;
+								if (testInput.BottomManagedNeighbor == this) testInput.BottomManagedNeighbor = null;
 								break;
 							case Axis.Vertical:
-								testInput.BottomNeighbor = this;
-								if (testInput.RightNeighbor == this) testInput.RightNeighbor = null;
+								testInput.BottomManagedNeighbor = this;
+								if (testInput.RightManagedNeighbor == this) testInput.RightManagedNeighbor = null;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();
@@ -221,22 +369,22 @@ namespace UI.Layout.Elements
 
 				if (!overflows)
 				{
-					var nextElement = elements[index + 1];
-					if (nextElement is ILayoutInput bottomInput && topInput != null)
+					var nextManagedElement = parent.GetChild(index+1).GetComponent<LayoutManaged>();
+					if (nextManagedElement is ILayoutInput bottomInput && topInput != null)
 					{
 						switch (direction)
 						{
 							case Axis.Horizontal:
-								topInput.RightNeighbor = nextElement;
-								bottomInput.LeftNeighbor = element;
-								if (topInput.BottomNeighbor == nextElement) topInput.BottomNeighbor = null;
-								if (bottomInput.TopNeighbor == element) bottomInput.TopNeighbor = null;
+								topInput.RightManagedNeighbor = nextManagedElement;
+								bottomInput.LeftManagedNeighbor = managedElement;
+								if (topInput.BottomManagedNeighbor == nextManagedElement) topInput.BottomManagedNeighbor = null;
+								if (bottomInput.TopManagedNeighbor == managedElement) bottomInput.TopManagedNeighbor = null;
 								break;
 							case Axis.Vertical:
-								topInput.BottomNeighbor = nextElement;
-								bottomInput.TopNeighbor = element;
-								if (topInput.RightNeighbor == nextElement) topInput.RightNeighbor = null;
-								if (bottomInput.LeftNeighbor == element) bottomInput.LeftNeighbor = null;
+								topInput.BottomManagedNeighbor = nextManagedElement;
+								bottomInput.TopManagedNeighbor = managedElement;
+								if (topInput.RightManagedNeighbor == nextManagedElement) topInput.RightManagedNeighbor = null;
+								if (bottomInput.LeftManagedNeighbor == managedElement) bottomInput.LeftManagedNeighbor = null;
 								break;
 							default:
 								throw new ArgumentOutOfRangeException();

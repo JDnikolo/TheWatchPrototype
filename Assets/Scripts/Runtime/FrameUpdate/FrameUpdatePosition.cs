@@ -6,6 +6,7 @@
 		None,
 		FadeScreen,
 		InputManager,
+		ComboManager,
 		LayoutManager,
 		PauseManager,
 		JournalManager,

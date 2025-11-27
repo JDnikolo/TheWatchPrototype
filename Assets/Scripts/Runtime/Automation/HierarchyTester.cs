@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Utilities;
@@ -7,30 +8,36 @@ namespace Runtime.Automation
 {
 	public struct HierarchyTester<T> where T : MonoBehaviour
 	{
-		private List<T> m_tempList;
 		private bool m_newElements;
 
-		public bool PerformTest(MonoBehaviour instance, ref T[] behaviours)
+		public bool PerformTest(MonoBehaviour instance, ref T[] behaviours, 
+			Transform parent = null, Action<T> onRemoved = null, Action<T> onAssigned = null)
 		{
-			m_tempList = new List<T>();
+			var tempList = new List<T>();
 			m_newElements = false;
-			var parent = instance.transform;
+			if (!parent) parent = instance.transform;
 			var childCount = parent.childCount;
 			for (var i = 0; i < childCount; i++)
 			{
 				if (!parent.GetChild(i).TryGetComponent(out T monoBehaviour)) continue;
-				var index = m_tempList.Count;
-				if (behaviours == null || !behaviours.TryGetValue(index, out var oldBehavior) ||
-					oldBehavior != monoBehaviour) m_newElements = true;
-				m_tempList.Add(monoBehaviour);
+				var index = tempList.Count;
+				if (behaviours == null || !behaviours.ToIList().TryGetValue(index, out var oldBehavior)) 
+					m_newElements = true;
+				else if (oldBehavior != monoBehaviour)
+				{
+					m_newElements = true;
+					onRemoved?.Invoke(oldBehavior);
+				}
+
+				tempList.Add(monoBehaviour);
 			}
 
-			if (!m_newElements && behaviours.SafeCount() == m_tempList.SafeCount()) return false;
-			var array = new T[m_tempList.Count];
-			for (var i = m_tempList.Count - 1; i >= 0; i--)
+			if (!m_newElements && behaviours.SafeCount() == tempList.SafeCount()) return false;
+			var array = new T[tempList.Count];
+			for (var i = tempList.Count - 1; i >= 0; i--)
 			{
-				array[i] = m_tempList[i];
-				m_tempList.RemoveAt(i);
+				onAssigned?.Invoke(array[i] = tempList[i]);
+				tempList.RemoveAt(i);
 			}
 			
 			behaviours = array;

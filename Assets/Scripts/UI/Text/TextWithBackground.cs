@@ -1,4 +1,5 @@
-﻿using Managers.Persistent;
+﻿using Attributes;
+using Managers.Persistent;
 using TMPro;
 using UnityEngine;
 using Utilities;
@@ -6,13 +7,11 @@ using Utilities;
 namespace UI.Text
 {
 	[AddComponentMenu("UI/Text/Text With Background")]
-	public sealed class TextWithBackground : TextWriter, ITextMeshProvider
+	public sealed class TextWithBackground : TextWriter
 	{
-		[SerializeField] private TextMeshProUGUI textMesh;
+		[SerializeField] [DeferredEditor] private TextMeshProUGUI textMesh;
 		[SerializeField] private RectTransform background;
 		[SerializeField] private float padding = 25f;
-
-		public TextMeshProUGUI TextMesh => textMesh;
 		
 		public override void WriteText(string text)
 		{

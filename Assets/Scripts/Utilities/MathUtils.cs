@@ -23,6 +23,8 @@ namespace Utilities
 		
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Vector3 FromFlatVector(this Vector2 position) => new(position.x, 0f, position.y);
+
+		public static Vector2 ToScreenVector(this Vector3 vector) => new(vector.x, vector.y);
 		
 		public static void CorrectForDirection(this ref Vector2 finalVector, Vector2 direction, 
 			Vector2 linearVelocity, float desiredSpeed, float acceleration, float deltaTime)

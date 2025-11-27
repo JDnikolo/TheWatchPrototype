@@ -3,7 +3,7 @@
 namespace Localization.Dialogue
 {
 	[CreateAssetMenu(fileName = "Dialogue", menuName = "Localization/Dialogue/Dialogue")]
-	public class DialogueObject : LocalizationAsset
+	public class DialogueObject : ScriptableObject
 	{
 		[SerializeField] private DialogueOption[] options;
 		

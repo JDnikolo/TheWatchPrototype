@@ -8,10 +8,29 @@ namespace Utilities
 	{
 		public static int SafeCount<T>(this ICollection<T> collection) => collection?.Count ?? -1;
 
+		public static ICollection<T> ToICollection<T>(this ICollection<T> collection) => collection;
+		
+		public static bool ContainsKey<T>(this IReadOnlyCollection<T> collection, int key) =>
+			key >= 0 && key < collection.Count;
+		
 		public static bool ContainsKey<T>(this ICollection<T> collection, int key) =>
 			key >= 0 && key < collection.Count;
-
+		
+		public static IList<T> ToIList<T>(this IList<T> collection) => collection;
+		
 		public static bool TryGetValue<T>(this IList<T> collection, int key, out T value)
+		{
+			if (key < 0 || key >= collection.Count)
+			{
+				value = default;
+				return false;
+			}
+
+			value = collection[key];
+			return true;
+		}
+		
+		public static bool TryGetValue<T>(this IReadOnlyList<T> collection, int key, out T value)
 		{
 			if (key < 0 || key >= collection.Count)
 			{

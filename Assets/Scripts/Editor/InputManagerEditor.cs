@@ -4,20 +4,21 @@ using UnityEditor;
 namespace Editor
 {
 	[CustomEditor(typeof(InputManager))]
-	public class InputManagerEditor : UnityEditor.Editor
+	public class InputManagerEditor : EditorBase
 	{
 		public override bool RequiresConstantRepaint() => EditorApplication.isPlaying;
 		
-		public override void OnInspectorGUI()
+		protected override void OnInspectorGUIInternal()
 		{
-			base.OnInspectorGUI();
-			if (target is InputManager local)
-			{
-				EditorGUILayout.EnumPopup("Control Scheme", local.ControlScheme);
-				DisplayInputMap(local.PlayerMap, "Player Map");
-				DisplayInputMap(local.UIMap, "UI Map");
-				DisplayInputMap(local.PersistentGameMap, "Persistent Game Map");
-			}
+			var local = (InputManager) target;
+			if (EditorApplication.isPlaying)
+				using (new EditorGUI.DisabledScope(true))
+				{
+					EditorGUILayout.EnumPopup("Control Scheme", local.ControlScheme);
+					DisplayInputMap(local.PlayerMap, "Player Map");
+					DisplayInputMap(local.UIMap, "UI Map");
+					DisplayInputMap(local.PersistentGameMap, "Persistent Game Map");
+				}
 		}
 
 		private void DisplayInputMap(InputManager.InputMap inputMap, string name)

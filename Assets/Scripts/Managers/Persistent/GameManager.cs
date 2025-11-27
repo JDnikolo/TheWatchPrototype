@@ -130,16 +130,16 @@ namespace Managers.Persistent
 			if (action != null) m_fixedInvokeStack.Push(action);
 		}
 		
-		//Do not call from within the same update frame
 		public void AddFrameUpdate(IFrameUpdatable updatable) => m_frameUpdateCollection.Add(updatable);
-		
-		//Do not call from within the same update frame
+
 		public void RemoveFrameUpdate(IFrameUpdatable updatable) => m_frameUpdateCollection.Remove(updatable);
-		
-		//Do not call from within the same update frame
+
+		public void AddLateUpdate(ILateUpdatable updatable) => m_lateUpdateCollection.Add(updatable);
+
+		public void RemoveLateUpdate(ILateUpdatable updatable) => m_lateUpdateCollection.Remove(updatable);
+
 		public void AddFixedUpdate(IFixedUpdatable updatable) => m_fixedUpdateCollection.Add(updatable);
-		
-		//Do not call from within the same update frame
+
 		public void RemoveFixedUpdate(IFixedUpdatable updatable) => m_fixedUpdateCollection.Remove(updatable);
 
 		private void Update()

@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using Runtime.Automation;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Utilities
 {
@@ -40,107 +42,184 @@ namespace Utilities
 			}
 		}
 
+		private static void DisplayNullObject(string name)
+		{
+			if (string.IsNullOrEmpty(name)) EditorGUILayout.ObjectField(null, typeof(Component), false);
+			EditorGUILayout.ObjectField(name, null, typeof(Component), false);
+		}
+		
 		/// <summary>
 		/// Displays an object field if object, or the type name/null as label.
 		/// </summary>
-		public static void DisplayObject<T>(this T value, string name, bool displayNull = true)
+		public static void Display<T>(this T value, string name, bool displayNull = true)
 		{
 			if (value == null)
 			{
-				if (displayNull)
-				{
-					const string nullStr = "Null";
-					if (string.IsNullOrEmpty(name)) EditorGUILayout.TextField(nullStr);
-					EditorGUILayout.TextField(name, nullStr);
-				}
-
+				if (displayNull) DisplayNullObject(name);
 				return;
 			}
 
-			if (value is UnityEngine.Object obj)
+			if (value is IEditorDisplayable displayable)
+			{
+				if (string.IsNullOrEmpty(name)) displayable.DisplayInEditor();
+				else displayable.DisplayInEditor(name);
+			}
+			else if (value is Object obj)
 			{
 				var type = value.GetType();
 				if (string.IsNullOrEmpty(name)) EditorGUILayout.ObjectField(obj, type, false);
 				else EditorGUILayout.ObjectField(name, obj, type, false);
 			}
-			else if (value is IEditorDisplayable displayable) displayable.DisplayInEditor(name);
 			else
 			{
 				var type = value.GetType();
 				if (type.IsPrimitive)
 				{
-					throw new NotImplementedException();
+					if (value is bool boolVal)
+					{
+						if (string.IsNullOrEmpty(name)) EditorGUILayout.Toggle(boolVal);
+						else EditorGUILayout.Toggle(name, boolVal);
+					}
+					else if (value is int intVal)
+					{
+						if (string.IsNullOrEmpty(name)) EditorGUILayout.IntField(intVal);
+						else EditorGUILayout.IntField(name, intVal);
+					}
+					else if (value is float floatVal)
+					{
+						if (string.IsNullOrEmpty(name)) EditorGUILayout.FloatField(floatVal);
+						else EditorGUILayout.FloatField(name, floatVal);
+					}
+					else if (value is double doubleVal)
+					{
+						if (string.IsNullOrEmpty(name)) EditorGUILayout.DoubleField(doubleVal);
+						else EditorGUILayout.DoubleField(name, doubleVal);
+					}
+				}
+				else if (type.IsEnum)
+				{
+					var enumStr = value as Enum;
+					if (string.IsNullOrEmpty(name)) EditorGUILayout.EnumPopup(enumStr);
+					else EditorGUILayout.EnumPopup(name, enumStr);
 				}
 				else
 				{
 					var typeStr = type.ToString();
 					if (string.IsNullOrEmpty(name)) EditorGUILayout.TextField(typeStr);
-					EditorGUILayout.TextField(name, typeStr);
+					else EditorGUILayout.TextField(name, typeStr);
 				}
 			}
 		}
 
-		public static void DisplayObjectCollection<T>(this ICollection<T> value, string name, bool displayNull = true)
+		public static void DisplayCollection<T>(this ICollection<T> value, 
+			string name, bool displayNull = true, Func<T, bool> customFilter = null)
 		{
 			if (value == null)
 			{
-				if (displayNull)
-				{
-					const string nullStr = "Null";
-					if (string.IsNullOrEmpty(name)) EditorGUILayout.TextField(nullStr);
-					EditorGUILayout.TextField(name, nullStr);
-				}
-
+				if (displayNull) DisplayNullObject(name);
 				return;
 			}
 			
 			if (!string.IsNullOrEmpty(name)) EditorGUILayout.LabelField(name);
 			if (value.Count < 1) return;
 			EditorGUI.indentLevel += 1;
-			foreach (var element in value) element.DisplayObject(null);
+			foreach (var element in value)
+				if (customFilter == null || !customFilter.Invoke(element)) 
+					element.Display(null);
 			EditorGUI.indentLevel -= 1;
 		}
 		
-		public static void DisplayObjectDictionary<TKey, TValue>(this IDictionary<TKey, TValue> value, 
-			string name, bool displayNull = true)
+		public static void DisplayReadOnlyCollection<T>(this IReadOnlyCollection<T> value, 
+			string name, bool displayNull = true, Func<T, bool> customFilter = null)
 		{
 			if (value == null)
 			{
-				if (displayNull)
-				{
-					const string nullStr = "Null";
-					if (string.IsNullOrEmpty(name)) EditorGUILayout.TextField(nullStr);
-					EditorGUILayout.TextField(name, nullStr);
-				}
-
+				if (displayNull) DisplayNullObject(name);
 				return;
 			}
 			
 			if (!string.IsNullOrEmpty(name)) EditorGUILayout.LabelField(name);
 			if (value.Count < 1) return;
 			EditorGUI.indentLevel += 1;
-			foreach (var pair in value)
+			foreach (var element in value)
+				if (customFilter == null || !customFilter.Invoke(element)) 
+					element.Display(null);
+			EditorGUI.indentLevel -= 1;
+		}
+		
+		public static void DisplayDictionary<TKey, TValue>(this IDictionary<TKey, TValue> value, 
+			string name, bool displayNull = true, Func<TKey, TValue, bool> customFilter = null)
+		{
+			if (value == null)
+			{
+				if (displayNull) DisplayNullObject(name);
+				return;
+			}
+			
+			if (!string.IsNullOrEmpty(name)) EditorGUILayout.LabelField(name);
+			if (value.Count < 1) return;
+			EditorGUI.indentLevel += 1;
+			foreach (var (key, val) in value)
 			{
 				EditorGUILayout.BeginHorizontal();
-				pair.Key.DisplayObject(null);
-				pair.Value.DisplayObject(null);
+				if (customFilter == null || !customFilter.Invoke(key, val))
+				{
+					key.Display(null);
+					val.Display(null);
+				}
+		
+				EditorGUILayout.EndHorizontal();
+			}
+			
+			EditorGUI.indentLevel -= 1;
+		}
+		
+		public static void DisplayReadOnlyDictionary<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> value, 
+			string name, bool displayNull = true, Func<TKey, TValue, bool> customFilter = null)
+		{
+			if (value == null)
+			{
+				if (displayNull) DisplayNullObject(name);
+				return;
+			}
+			
+			if (!string.IsNullOrEmpty(name)) EditorGUILayout.LabelField(name);
+			if (value.Count < 1) return;
+			EditorGUI.indentLevel += 1;
+			foreach (var (key, val) in value)
+			{
+				EditorGUILayout.BeginHorizontal();
+				if (customFilter == null || !customFilter.Invoke(key, val))
+				{
+					key.Display(null);
+					val.Display(null);
+				}
+		
 				EditorGUILayout.EndHorizontal();
 			}
 			
 			EditorGUI.indentLevel -= 1;
 		}
 
-		public static void DisplayInEditor<T>(this T value, string name) where T : IEditorDisplayable
+		public static void DisplayIndented(this string name, Action action)
 		{
-			if (string.IsNullOrEmpty(name)) value.DisplayInEditor();
-			else
+			if (string.IsNullOrEmpty(name))
 			{
-				EditorGUILayout.LabelField(name);
-				EditorGUI.indentLevel++;
-				value.DisplayInEditor();
-				EditorGUI.indentLevel--;
+				action?.Invoke();
+				return;
 			}
+			
+			EditorGUILayout.LabelField(name);
+			EditorGUI.indentLevel++;
+			action?.Invoke();
+			EditorGUI.indentLevel--;
+		}
 
+		public static void DirtyReplace<T>(this Object target, ref T value, T newValue) where T : Object
+		{
+			if (newValue == value) return;
+			value = newValue;
+			if (target) EditorUtility.SetDirty(target);
 		}
 	}
 }

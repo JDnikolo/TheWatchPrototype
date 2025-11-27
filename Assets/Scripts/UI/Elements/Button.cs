@@ -1,114 +1,57 @@
-﻿using Interactables;
-using Managers;
+﻿using System;
+using Callbacks.Layout;
+using Interactables;
 using Managers.Persistent;
-using Runtime;
-using UI.Layout;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace UI.Elements
 {
 	[AddComponentMenu("UI/Elements/Button")]
-	public sealed class Button : ElementBase, IPointerEnterHandler, IPointerExitHandler, 
-		IPointerDownHandler, IPointerUpHandler, IPointerClickHandler, ILayoutCallback, ILayoutInputCallback, IPrewarm
+	public sealed class Button : ButtonBase, ILayoutInputCallback
 	{
-		[SerializeField] private Image image;
-		[SerializeField] private ElementColor color;
 		[SerializeField] private string primaryActionName = "Primary";
 		[SerializeField] private string secondaryActionName = "Secondary";
-
-		[SerializeField] private bool anyClick;
-		[SerializeField] private Interactable onPrimaryClick;
+		
+		[SerializeField] [HideInInspector] private bool anyClick;
+		[SerializeField] [HideInInspector] private Interactable onPrimaryClick;
 		[SerializeField] [HideInInspector] private Interactable onSecondaryClick;
 		
 		private InputAction m_primaryAction;
 		private InputAction m_secondaryAction;
-		private bool m_mouseOver;
-		private bool m_pressed;
-		private bool m_selected;
-
-		public void OnSelected()
+		
+		private void OnPrimaryClick()
 		{
-			color.ApplySelected(image);
-			m_selected = true;
+			if (onPrimaryClick) onPrimaryClick.Interact();
 		}
 
-		public void OnDeselected()
+		private void OnSecondaryClick()
 		{
-			color.ApplyEnabled(image);
-			m_selected = false;
+			if (onSecondaryClick) onSecondaryClick.Interact();
 		}
 		
 		public void OnInput(Vector2 axis, ref Direction input)
 		{
 			m_primaryAction ??= InputManager.Instance.UIMap.GetAction(primaryActionName);
 			m_secondaryAction ??= InputManager.Instance.UIMap.GetAction(secondaryActionName);
-			Interactable target = null;
-			if (m_primaryAction.WasPressedThisFrame()) target = onPrimaryClick;
-			else if (m_secondaryAction.WasPressedThisFrame()) target = onSecondaryClick;
-			if (target) target.Interact();
+			Action target = null;
+			if (m_primaryAction.WasPressedThisFrame()) target = OnPrimaryClick;
+			else if (m_secondaryAction.WasPressedThisFrame()) target = anyClick ? OnPrimaryClick : OnSecondaryClick;
+			target?.Invoke();
 		}
 
-		public void OnPointerEnter(PointerEventData eventData)
+		protected override void OnClick(int clicks)
 		{
-			m_mouseOver = true;
-			if (LayoutParent) LayoutManager.Instance.Select(LayoutParent);
-			else OnSelected();
+			Action target = OnPrimaryClick;
+			if (!anyClick && clicks != 1) target = OnSecondaryClick;
+			target.Invoke();
 		}
 
-		public void OnPointerExit(PointerEventData eventData)
+		public override void OnPrewarm()
 		{
-			m_mouseOver = false;
-			if (!LayoutParent) OnDeselected();
-		}
-
-		public void OnPointerDown(PointerEventData eventData)
-		{
-			if (!m_mouseOver) return;
-			color.ApplyPressed(image);
-			m_pressed = true;
-		}
-
-		public void OnPointerUp(PointerEventData eventData)
-		{
-			if (!m_pressed) return;
-			if (m_mouseOver || m_selected) color.ApplySelected(image);
-			else color.ApplyEnabled(image);
-		}
-
-		public void OnPointerClick(PointerEventData eventData)
-		{
-			if (!m_mouseOver) return;
-			var clicks = eventData.clickCount;
-			if (clicks == 0) return;
-			var interactable = onPrimaryClick;
-			if (!anyClick && clicks != 1) interactable = onSecondaryClick;
-			if (interactable) interactable.Interact();
-		}
-		
-		public void OnPrewarm()
-		{
+			base.OnPrewarm();
 			var layoutParent = LayoutParent;
-			if (layoutParent)
-			{
-				layoutParent.SetCallback(this);
-				layoutParent.SetControlCallback(this);
-			}
+			if (layoutParent) layoutParent.SetControlCallback(this);
 		}
-
-		private void OnEnable()
-		{
-			if (m_selected) color.ApplySelected(image);
-			else color.ApplyEnabled(image);
-		}
-
-		private void OnDisable() => color.ApplyDisabled(image);
-#if UNITY_EDITOR
-		public bool Selected => m_selected;
-		
-		private void OnValidate() => color.Validate(image, enabled);
-#endif
 	}
 }

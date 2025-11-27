@@ -10,22 +10,23 @@ using Utilities;
 namespace Editor
 {
 	[CustomEditor(typeof(GameManager))]
-	public class GameManagerEditor : UnityEditor.Editor
+	public class GameManagerEditor : EditorBase
 	{
 		public override bool RequiresConstantRepaint() => EditorApplication.isPlaying;
-		
-		public override void OnInspectorGUI()
+
+		protected override void OnInspectorGUIInternal()
 		{
-			base.OnInspectorGUI();
-			if (target is GameManager local)
-			{
-				EditorGUILayout.LabelField("Frame Update");
-				DisplayCollection<IFrameUpdatable,FrameUpdatePosition>(local.FrameUpdateCollection, FrameInverter);
-				EditorGUILayout.LabelField("Late Update");
-				DisplayCollection<ILateUpdatable,LateUpdatePosition>(local.LateUpdateCollection, LateInverter);
-				EditorGUILayout.LabelField("Fixed Update");
-				DisplayCollection<IFixedUpdatable,FixedUpdatePosition>(local.FixedUpdateCollection, FixedInverter);
-			}
+			var local = (GameManager) target;
+			if (EditorApplication.isPlaying)
+				using (new EditorGUI.DisabledScope(true))
+				{
+					EditorGUILayout.LabelField("Frame Update");
+					DisplayCollection<IFrameUpdatable,FrameUpdatePosition>(local.FrameUpdateCollection, FrameInverter);
+					EditorGUILayout.LabelField("Late Update");
+					DisplayCollection<ILateUpdatable,LateUpdatePosition>(local.LateUpdateCollection, LateInverter);
+					EditorGUILayout.LabelField("Fixed Update");
+					DisplayCollection<IFixedUpdatable,FixedUpdatePosition>(local.FixedUpdateCollection, FixedInverter);
+				}
 		}
 		
 		private FrameUpdatePosition FrameInverter(byte value) => (FrameUpdatePosition) value;
@@ -46,7 +47,7 @@ namespace Editor
 				var valueSet = pair.Value;
 				if (valueSet == null || valueSet.Count == 0) continue;
 				EditorGUI.indentLevel += 1;
-				foreach (var value in valueSet) value.DisplayObject(null);
+				foreach (var value in valueSet) value.Display(null);
 				EditorGUI.indentLevel -= 1;
 			}
 

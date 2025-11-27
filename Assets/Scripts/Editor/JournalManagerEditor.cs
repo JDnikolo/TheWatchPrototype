@@ -4,15 +4,14 @@ using UnityEditor;
 namespace Editor
 {
 	[CustomEditor(typeof(JournalManager))]
-	public class JournalManagerEditor : UnityEditor.Editor
+	public class JournalManagerEditor : EditorBase
 	{
-		public override void OnInspectorGUI()
+		protected override void OnInspectorGUIInternal()
 		{
-			base.OnInspectorGUI();
-			if (target is JournalManager local)
-			{
-				EditorGUILayout.Toggle("Can Open", local.CanOpenJournal);
-			}
+			var local = (JournalManager) target;
+			if (EditorApplication.isPlaying)
+				using (new EditorGUI.DisabledScope(true))
+					EditorGUILayout.Toggle("Can Open", local.CanOpenJournal);
 		}
 	}
 }

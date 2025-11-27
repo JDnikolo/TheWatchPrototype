@@ -53,7 +53,7 @@ namespace UI.Dialogue
 		public void DisposeDialogue()
 		{
 			questionText.HideText();
-			if (buttonSets.ContainsKey(m_buttonsInUse)) buttonSets[m_buttonsInUse].HideButtons();
+			if (buttonSets.ToICollection().ContainsKey(m_buttonsInUse)) buttonSets[m_buttonsInUse].HideButtons();
 			ResetWriter();
 		}
 

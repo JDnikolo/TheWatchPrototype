@@ -1,7 +1,9 @@
 ﻿using System;
+using Callbacks.Layout;
+using Callbacks.Slider;
 using Managers;
 using Runtime;
-using UI.Layout;
+using UI.Knob;
 using UnityEngine;
 using UnityEngine.UI;
 using Utilities;
@@ -291,10 +293,15 @@ namespace UI.Elements
 		
 		private void OnDestroy() => m_receiver = null;
 #if UNITY_EDITOR
-		private void OnValidate()
+		public ISliderReceiver Receiver => m_receiver;
+		
+		public bool Selected => m_selected;
+		
+		protected override void OnValidate()
 		{
-			color.Validate(slider, enabled);
-			knob.enabled = enabled;
+			base.OnValidate();
+			if (slider) color.Validate(slider, enabled);
+			if (knob) knob.enabled = enabled;
 		}
 #endif
 	}

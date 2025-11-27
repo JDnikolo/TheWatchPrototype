@@ -4,18 +4,19 @@ using UnityEditor;
 namespace Editor
 {
 	[CustomEditor(typeof(PhysicsManager))]
-	public class PhysicsManagerEditor : UnityEditor.Editor
+	public class PhysicsManagerEditor : EditorBase
 	{
 		public override bool RequiresConstantRepaint() => EditorApplication.isPlaying;
 		
-		public override void OnInspectorGUI()
+		protected override void OnInspectorGUIInternal()
 		{
-			base.OnInspectorGUI();
-			if (target is PhysicsManager local)
-			{
-				EditorGUILayout.Toggle("Require Physics", local.RequirePhysics);
-				EditorGUILayout.Toggle("Require Physics 2D", local.RequirePhysics2D);
-			}
+			var local = (PhysicsManager) target;
+			if (EditorApplication.isPlaying)
+				using (new EditorGUI.DisabledScope(true))
+				{
+					EditorGUILayout.Toggle("Require Physics", local.RequirePhysics);
+					EditorGUILayout.Toggle("Require Physics 2D", local.RequirePhysics2D);
+				}
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Runtime.Automation;
 using UnityEditor;
+using Utilities;
 
 namespace Managers
 {
@@ -12,10 +13,9 @@ namespace Managers
 		{
 			public bool CanOpenJournal;
 #if UNITY_EDITOR
-			void IEditorDisplayable.DisplayInEditor()
-			{
-				EditorGUILayout.Toggle("Can Open",  CanOpenJournal);
-			}
+			public void DisplayInEditor() => EditorGUILayout.Toggle("Can Open",  CanOpenJournal);
+
+			public void DisplayInEditor(string name) => name.DisplayIndented(DisplayInEditor);
 #endif
 		}
 	}

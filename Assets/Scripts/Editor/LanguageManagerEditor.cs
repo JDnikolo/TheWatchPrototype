@@ -5,16 +5,17 @@ using Utilities;
 namespace Editor
 {
 	[CustomEditor(typeof(LanguageManager))]
-	public class LanguageManagerEditor : UnityEditor.Editor
+	public class LanguageManagerEditor : EditorBase
 	{
-		public override void OnInspectorGUI()
+		protected override void OnInspectorGUIInternal()
 		{
-			base.OnInspectorGUI();
-			if (target is LanguageManager local)
-			{
-				EditorGUILayout.EnumPopup("Current Language", local.CurrentLanguage);
-				local.Localizers.DisplayObjectCollection("Active Localizers");
-			}
+			var local = (LanguageManager) target;
+			if (EditorApplication.isPlaying)
+				using (new EditorGUI.DisabledScope(true))
+				{
+					EditorGUILayout.EnumPopup("Language", local.Language);
+					local.Localizers.DisplayCollection("Active Localizers");
+				}
 		}
 	}
 }

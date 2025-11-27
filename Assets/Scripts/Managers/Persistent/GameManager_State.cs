@@ -3,6 +3,7 @@ using Runtime.FixedUpdate;
 using Runtime.FrameUpdate;
 using Runtime.LateUpdate;
 using UnityEditor;
+using Utilities;
 
 namespace Managers.Persistent
 {
@@ -17,12 +18,14 @@ namespace Managers.Persistent
 			internal LateUpdatePosition LateUpdatePosition;
 			internal FixedUpdatePosition FixedUpdatePosition;
 #if UNITY_EDITOR
-			void IEditorDisplayable.DisplayInEditor()
+			public void DisplayInEditor()
 			{
 				EditorGUILayout.EnumPopup("Frame Update Invoke", FrameUpdatePosition);
 				EditorGUILayout.EnumPopup("Late Update Invoke", LateUpdatePosition);
 				EditorGUILayout.EnumPopup("Fixed Update Invoke", FixedUpdatePosition);
 			}
+			
+			public void DisplayInEditor(string name) => name.DisplayIndented(DisplayInEditor);
 #endif
 		}
 	}

@@ -63,7 +63,7 @@ namespace UI.Dialogue
 
 		public void OnFrameUpdate()
 		{
-			var hovering = IsMouseOver(InputManager.MousePosition);
+			var hovering = IsMouseOver(InputManager.PointerPosition);
 			if (m_hovering != hovering)
 			{
 				m_hovering = hovering;

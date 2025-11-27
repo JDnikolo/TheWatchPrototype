@@ -13,6 +13,9 @@ namespace UI.Layout.Elements
 #endif
 	{
 		[SerializeField] private LayoutElement child;
+
+		private ILayoutElement m_lastElement;
+		private Direction m_lastInput;
 		
 		public override ILayoutElement Parent
 		{
@@ -21,9 +24,30 @@ namespace UI.Layout.Elements
 		}
 		
 		public ILayoutElement FirstChild => child;
+		
+		public ILayoutElement LeftNeighbor
+		{
+			get => null;
+			set => throw new InvalidOperationException();
+		}
 
-		private ILayoutElement m_lastElement;
-		private Direction m_lastInput;
+		public ILayoutElement RightNeighbor
+		{
+			get => null;
+			set => throw new InvalidOperationException();
+		}
+
+		public ILayoutElement TopNeighbor
+		{
+			get => null;
+			set => throw new InvalidOperationException();
+		}
+
+		public ILayoutElement BottomNeighbor
+		{
+			get => null;
+			set => throw new InvalidOperationException();
+		}
 		
 		public void OnHookInput(ILayoutElement oldElement, Direction input)
 		{
@@ -48,25 +72,25 @@ namespace UI.Layout.Elements
 #if UNITY_EDITOR
 		public void OnHierarchyChanged() => child.SetManagedParent(this);
 		
-		public LayoutElement LeftNeighbor
+		public LayoutElement LeftManagedNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
 		}
 
-		public LayoutElement RightNeighbor
+		public LayoutElement RightManagedNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
 		}
 
-		public LayoutElement TopNeighbor
+		public LayoutElement TopManagedNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
 		}
 
-		public LayoutElement BottomNeighbor
+		public LayoutElement BottomManagedNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();

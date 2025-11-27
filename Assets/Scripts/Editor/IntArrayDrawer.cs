@@ -5,9 +5,9 @@ using UnityEngine;
 namespace Editor
 {
 	[CustomPropertyDrawer(typeof(IntArrayAttribute))]
-	public sealed class IntArrayDrawer : PropertyDrawer
+	public sealed class IntArrayDrawer : DrawerBase
 	{
-		public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
+		protected override void OnGUIInternal(Rect position, SerializedProperty property, GUIContent label)
 		{
 			var intAttribute = (IntArrayAttribute) attribute;
 			string name;
@@ -22,7 +22,7 @@ namespace Editor
 				name = "ERROR";
 			}
 			
-			EditorGUI.PropertyField(rect, property, new GUIContent(name));
+			EditorGUI.PropertyField(position, property, new GUIContent(name));
 		}
 	}
 }

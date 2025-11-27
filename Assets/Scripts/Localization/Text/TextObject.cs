@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Localization.Text
 {
-	[CreateAssetMenu(fileName = "Text", menuName = "Localization/Text/Text")]
-	public class TextObject : LocalizationAsset
+	[CreateAssetMenu(fileName = "Text", menuName = "Localization/Text/Generic Text")]
+	public class TextObject : ScriptableObject
 	{
 		[SerializeField] [EnumArray(typeof(LanguageEnum))]
 		private string[] texts;
 
-		public string Text => texts[(int) LanguageManager.Instance.CurrentLanguage];
+		public string Text => texts[(int) LanguageManager.Instance.Language];
 	}
 }

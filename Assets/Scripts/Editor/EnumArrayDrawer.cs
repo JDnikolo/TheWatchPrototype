@@ -6,16 +6,16 @@ using UnityEngine;
 namespace Editor
 {
 	[CustomPropertyDrawer(typeof(EnumArrayAttribute))]
-	public sealed class EnumArrayDrawer : PropertyDrawer
+	public sealed class EnumArrayDrawer : DrawerBase
 	{
-		public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
+		protected override void OnGUIInternal(Rect position, SerializedProperty property, GUIContent label)
 		{
-			var enumAttribute = (EnumArrayAttribute) attribute;
+			var local = (EnumArrayAttribute) attribute;
 			string name;
 			try
 			{
 				var arrayPosition = int.Parse(property.propertyPath.Split('[', ']')[1]);
-				name = Enum.GetName(enumAttribute.EnumType, arrayPosition);
+				name = Enum.GetName(local.EnumType, arrayPosition);
 				if (name is null or "ENUM_LENGTH") name = "UNKNOWN";
 			}
 			catch
@@ -23,7 +23,7 @@ namespace Editor
 				name = "ERROR";
 			}
 			
-			EditorGUI.PropertyField(rect, property, new GUIContent(name));
+			EditorGUI.PropertyField(position, property, new GUIContent(name));
 		}
 	}
 }

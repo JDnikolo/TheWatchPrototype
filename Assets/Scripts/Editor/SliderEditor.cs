@@ -1,11 +1,12 @@
 ﻿using UI.Elements;
 using UnityEditor;
+using Utilities;
 
 namespace Editor
 {
 	[CustomEditor(typeof(Slider))]
 	[CanEditMultipleObjects]
-	public sealed class SliderEditor : UnityEditor.Editor
+	public sealed class SliderEditor : ElementBaseEditor
 	{
 		private SerializedProperty m_wholeNumbers;
 		private SerializedProperty m_lowerValue;
@@ -14,8 +15,9 @@ namespace Editor
 		private SerializedProperty m_upperValueInt;
 		private SerializedProperty m_speedMultiplier;
 		
-		private void OnEnable()
+		protected override void OnEnable()
 		{
+			base.OnEnable();
 			m_wholeNumbers = serializedObject.FindProperty("wholeNumbers");
 			m_lowerValue = serializedObject.FindProperty("lowerValue");
 			m_upperValue = serializedObject.FindProperty("upperValue");
@@ -24,8 +26,9 @@ namespace Editor
 			m_speedMultiplier = serializedObject.FindProperty("speedMultiplier");
 		}
 
-		private void OnDisable()
+		protected override void OnDisable()
 		{
+			base.OnDisable();
 			m_wholeNumbers = null;
 			m_lowerValue = null;
 			m_upperValue = null;
@@ -33,12 +36,10 @@ namespace Editor
 			m_upperValueInt = null;
 			m_speedMultiplier = null;
 		}
-		
-		private void OnDestroy() => OnDisable();
-		
-		public override void OnInspectorGUI()
+
+		protected override void DisplayBeforeHidden()
 		{
-			base.OnInspectorGUI();
+			base.DisplayBeforeHidden();
 			if (!m_wholeNumbers.boolValue)
 			{
 				EditorGUILayout.PropertyField(m_lowerValue);
@@ -51,7 +52,18 @@ namespace Editor
 				EditorGUILayout.PropertyField(m_upperValueInt);
 			}
 
-			serializedObject.ApplyModifiedProperties();
+			ApplyModifications();
+		}
+		
+		protected override void DisplayHidden()
+		{
+			base.DisplayHidden();
+			var local = (Slider) target;
+			if (EditorApplication.isPlaying)
+			{
+				EditorGUILayout.Toggle("Selected", local.Selected);
+				local.Receiver.Display("Callback Target");
+			}
 		}
 	}
 }

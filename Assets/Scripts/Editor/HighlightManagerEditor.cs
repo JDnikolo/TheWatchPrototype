@@ -5,18 +5,19 @@ using Utilities;
 namespace Editor
 {
 	[CustomEditor(typeof(HighlightManager))]
-	public class HighlightManagerEditor : UnityEditor.Editor
+	public class HighlightManagerEditor : EditorBase
 	{
 		public override bool RequiresConstantRepaint() => EditorApplication.isPlaying;
-		
-		public override void OnInspectorGUI()
+
+		protected override void OnInspectorGUIInternal()
 		{
-			base.OnInspectorGUI();
-			if (target is HighlightManager local)
-			{
-				local.RaycastTarget.DisplayObject("Raycast Target");
-				local.Rigidbodies.DisplayObjectDictionary("Monitored Targets");
-			}
+			var local = (HighlightManager) target;
+			if (EditorApplication.isPlaying)
+				using (new EditorGUI.DisabledScope(true))
+				{
+					local.RaycastTarget.Display("Raycast Target");
+					local.Rigidbodies.DisplayDictionary("Monitored Targets");
+				}
 		}
 	}
 }

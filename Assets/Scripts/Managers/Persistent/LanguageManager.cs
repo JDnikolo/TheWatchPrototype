@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Localization;
 using Runtime;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace Managers.Persistent
 		
 		protected override bool Override => false;
 		
-		public LanguageEnum CurrentLanguage { get; private set; }
+		public LanguageEnum Language { get; private set; }
 
 		public void Clear() => m_localizers.Clear();
 		
@@ -22,7 +23,9 @@ namespace Managers.Persistent
 		
 		public void SetNewLanguage(LanguageEnum language)
 		{
-			CurrentLanguage = language;
+			if (!Enum.IsDefined(typeof(LanguageEnum), language) || language == LanguageEnum.ENUM_LENGTH) 
+				language = LanguageEnum.English;
+			Language = language;
 			foreach (var localizer in m_localizers) localizer.OnLocalizationUpdate();
 		}
 

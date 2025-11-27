@@ -5,18 +5,19 @@ using Utilities;
 namespace Editor
 {
 	[CustomEditor(typeof(PauseManager))]
-	public class PauseManagerEditor : UnityEditor.Editor
+	public class PauseManagerEditor : EditorBase
 	{
 		public override bool RequiresConstantRepaint() => EditorApplication.isPlaying;
 		
-		public override void OnInspectorGUI()
+		protected override void OnInspectorGUIInternal()
 		{
-			base.OnInspectorGUI();
-			if (target is PauseManager local)
-			{
-				EditorGUILayout.Toggle("Can Pause", local.CanPause);
-				local.PauseState.DisplayInEditor("Pause State");
-			}
+			var local = (PauseManager) target;
+			if (EditorApplication.isPlaying)
+				using (new EditorGUI.DisabledScope(true))
+				{
+					EditorGUILayout.Toggle("Can Pause", local.CanPause);
+					local.PauseState.DisplayInEditor("Pause State");
+				}
 		}
 	}
 }

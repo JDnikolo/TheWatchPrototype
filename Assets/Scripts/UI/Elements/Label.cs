@@ -12,17 +12,26 @@ namespace UI.Elements
 	public sealed class Label : MonoBehaviour, IPrewarm, ILocalizationUpdatable
 	{
 		[SerializeField] private TextWriter textWriter;
-		[SerializeField] private TextObject textToDisplay;
+		[SerializeField] [HideInInspector] private TextObject textToDisplay;
+
+		private TextObject m_textToDisplay;
 		private bool m_firstDone;
-		
+
+		public void SetTextToDisplay(TextObject textToDisplay)
+		{
+			m_textToDisplay = textToDisplay;
+			OnLocalizationUpdate();
+		}
+
+		public void OnLocalizationUpdate() => textWriter.WriteText(textToDisplay.Text);
+
 		public void OnPrewarm()
 		{
+			m_textToDisplay = textToDisplay;
 			var languageManager = LanguageManager.Instance;
 			if (languageManager) languageManager.AddLocalizer(this);
 		}
 		
-		public void OnLocalizationUpdate() => textWriter.WriteText(textToDisplay.Text);
-
 		private void OnEnable()
 		{
 			if (!m_firstDone)
@@ -41,6 +50,8 @@ namespace UI.Elements
 			if (languageManager) languageManager.RemoveLocalizer(this);
 		}
 #if UNITY_EDITOR
+		public TextObject TextToDisplay => m_textToDisplay;
+		
 		private void OnValidate()
 		{
 			var text = textToDisplay;

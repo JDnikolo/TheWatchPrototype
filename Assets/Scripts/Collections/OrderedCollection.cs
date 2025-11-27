@@ -77,6 +77,7 @@ namespace Collections
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
             if (m_contained.Contains(item)) return;
+            m_toRemove.Remove(item);
             m_toAdd.Add(item);
         }
 
@@ -97,6 +98,7 @@ namespace Collections
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
             if (!m_contained.Contains(item)) return false;
+            m_toAdd.Remove(item);
             return m_toRemove.Add(item);
         }
 
@@ -120,6 +122,7 @@ namespace Collections
                 m_collections.Add(priority, collection);
             }
 
+            m_toRemove.Remove(item);
             m_contained.Add(item);
             collection.Add(item);
             return true;

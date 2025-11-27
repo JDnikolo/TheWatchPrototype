@@ -18,7 +18,7 @@ namespace Managers.Persistent
 		private InputMap m_playerMap = new(ControlMap.Player);
 		private InputMap m_uiMap = new(ControlMap.UI);
 		private InputMap m_persistentGameMap = new(ControlMap.PersistentGame);
-		private ControlScheme m_controlScheme;
+		private ControlSchemeEnum m_controlScheme;
 		private Updatable m_updatable;
 		private int m_activeControls;
 		private bool m_cursorVisible;
@@ -27,35 +27,7 @@ namespace Managers.Persistent
 
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.InputManager;
 		
-		public static Vector2 MousePosition => Mouse.current.position.ReadValue();
-		
-		public ControlScheme ControlScheme
-		{
-			get => m_controlScheme;
-			set
-			{
-				switch (m_controlScheme = value)
-				{
-					case ControlScheme.Keyboard:
-						actionAsset.bindingMask = InputBinding.MaskByGroup("Keyboard&Mouse");
-						break;
-					case ControlScheme.Gamepad:
-						actionAsset.bindingMask = InputBinding.MaskByGroup("Gamepad");
-						break;
-					case ControlScheme.Touch:
-						actionAsset.bindingMask = InputBinding.MaskByGroup("Touch");
-						break;
-					case ControlScheme.Joystick:
-						actionAsset.bindingMask = InputBinding.MaskByGroup("Joystick");
-						break;
-					case ControlScheme.XR:
-						actionAsset.bindingMask = InputBinding.MaskByGroup("XR");
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-		}
+		public ControlSchemeEnum ControlScheme => m_controlScheme;
 
 		public State PauseState
 		{
@@ -80,6 +52,36 @@ namespace Managers.Persistent
 		public InputMap UIMap => m_uiMap;
 		
 		public InputMap PersistentGameMap => m_persistentGameMap;
+
+		public static Vector2 PointerPosition => Pointer.current.position.ReadValue();
+
+		public static bool WasPointerPressedThisFrame => Pointer.current.press.wasPressedThisFrame;
+		
+		public void SetNewControlScheme(ControlSchemeEnum scheme)
+		{
+			if (!Enum.IsDefined(typeof(ControlSchemeEnum),scheme) || scheme == ControlSchemeEnum.ENUM_LENGTH) 
+				scheme = ControlSchemeEnum.Keyboard;
+			switch (m_controlScheme = scheme)
+			{
+				case ControlSchemeEnum.Keyboard:
+					actionAsset.bindingMask = InputBinding.MaskByGroup("Keyboard&Mouse");
+					break;
+				case ControlSchemeEnum.Gamepad:
+					actionAsset.bindingMask = InputBinding.MaskByGroup("Gamepad");
+					break;
+				case ControlSchemeEnum.Touch:
+					actionAsset.bindingMask = InputBinding.MaskByGroup("Touch");
+					break;
+				case ControlSchemeEnum.Joystick:
+					actionAsset.bindingMask = InputBinding.MaskByGroup("Joystick");
+					break;
+				case ControlSchemeEnum.XR:
+					actionAsset.bindingMask = InputBinding.MaskByGroup("XR");
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
 		
 		public void Stop()
 		{

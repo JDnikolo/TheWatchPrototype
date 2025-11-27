@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Localization.Speaker
 {
-    [CreateAssetMenu(fileName = "Speaker", menuName = "Localization/Speaker/Speaker")]
+    [CreateAssetMenu(fileName = "Speaker", menuName = "Localization/Speaker/Generic Speaker")]
     public class SpeakerObject : TextObject
     {
         [SerializeField] private string speaker;

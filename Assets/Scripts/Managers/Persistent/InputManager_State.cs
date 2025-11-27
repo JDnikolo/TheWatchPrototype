@@ -1,5 +1,6 @@
 ﻿using Runtime.Automation;
 using UnityEditor;
+using Utilities;
 
 namespace Managers.Persistent
 {
@@ -13,11 +14,13 @@ namespace Managers.Persistent
 			public int ActiveControls;
 			public bool CursorVisible;
 #if UNITY_EDITOR
-			void IEditorDisplayable.DisplayInEditor()
+			public void DisplayInEditor()
 			{
 				EditorGUILayout.IntField("Active Controls", ActiveControls);
 				EditorGUILayout.Toggle("Cursor Visible", CursorVisible);
 			}
+			
+			public void DisplayInEditor(string name) => name.DisplayIndented(DisplayInEditor);
 #endif
 		}
 	}

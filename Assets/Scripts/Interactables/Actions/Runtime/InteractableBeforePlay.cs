@@ -1,4 +1,5 @@
-﻿using Managers.Persistent;
+﻿using Attributes;
+using Managers.Persistent;
 using Runtime;
 using Runtime.Automation;
 using UnityEngine;
@@ -11,7 +12,16 @@ namespace Interactables.Actions.Runtime
 		, IBehaviourChecker
 #endif
 	{
-		[SerializeField] private MonoBehaviour[] behaviours;
+		[SerializeField] [DisableInInspector] private MonoBehaviour[] behaviours;
+
+		public override void Interact()
+		{
+			var gameManager = GameManager.Instance;
+			if (gameManager)
+				for (var i = 0; i < behaviours.Length; i++)
+					if (behaviours[i] is IBeforePlay beforePlay)
+						gameManager.RegisterBeforePlay(beforePlay);
+		}
 #if UNITY_EDITOR
 		private BehaviorTester m_tester;
 
@@ -22,13 +32,5 @@ namespace Interactables.Actions.Runtime
 
 		public void OnCheckBehaviourEnd() => m_tester.EndTest(this, ref behaviours);
 #endif
-		public override void Interact()
-		{
-			var gameManager = GameManager.Instance;
-			if (gameManager)
-				for (var i = 0; i < behaviours.Length; i++)
-					if (behaviours[i] is IBeforePlay beforePlay)
-						gameManager.RegisterBeforePlay(beforePlay);
-		}
 	}
 }

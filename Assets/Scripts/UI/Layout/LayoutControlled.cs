@@ -1,7 +1,8 @@
 ﻿using System;
+using Callbacks.Layout;
 using Managers;
-using UnityEditor;
 using UnityEngine;
+using Utilities;
 
 namespace UI.Layout
 {
@@ -14,6 +15,14 @@ namespace UI.Layout
 
 		private ILayoutInputCallback m_inputCallback;
 
+		public ILayoutElement LeftNeighbor { get; set; }
+
+		public ILayoutElement RightNeighbor { get; set; }
+
+		public ILayoutElement TopNeighbor { get; set; }
+
+		public ILayoutElement BottomNeighbor { get; set; }
+		
 		public void SetControlCallback(ILayoutInputCallback inputCallback) => m_inputCallback = inputCallback;
 
 		public void OnInput(Vector2 axis, Direction input)
@@ -25,16 +34,16 @@ namespace UI.Layout
 				case UIConstants.Direction_None:
 					return;
 				case Direction.Left:
-					target = leftNeighbor;
+					target = LeftNeighbor;
 					break;
 				case Direction.Right:
-					target = rightNeighbor;
+					target = RightNeighbor;
 					break;
 				case Direction.Up:
-					target = topNeighbor;
+					target = TopNeighbor;
 					break;
 				case Direction.Down:
-					target = bottomNeighbor;
+					target = BottomNeighbor;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(input), input, null);
@@ -43,51 +52,43 @@ namespace UI.Layout
 			if (target != null) LayoutManager.Instance.Select(target, input);
 		}
 
-		protected virtual void OnDestroy() => SetControlCallback(null);
+		public override void OnPrewarm()
+		{
+			base.OnPrewarm();
+			LeftNeighbor = leftNeighbor;
+			RightNeighbor = rightNeighbor;
+			TopNeighbor = topNeighbor;
+			BottomNeighbor = bottomNeighbor;
+		}
 
+		protected override void OnDestroy()
+		{
+			base.OnDestroy();
+			SetControlCallback(null);
+		}
 #if UNITY_EDITOR
-		public LayoutElement LeftNeighbor
+		public LayoutElement LeftManagedNeighbor
 		{
 			get => leftNeighbor;
-			set
-			{
-				if (leftNeighbor == value) return;
-				leftNeighbor = value;
-				EditorUtility.SetDirty(this);
-			}
+			set => this.DirtyReplace(ref leftNeighbor, value);
 		}
 
-		public LayoutElement RightNeighbor
+		public LayoutElement RightManagedNeighbor
 		{
 			get => rightNeighbor;
-			set
-			{
-				if (rightNeighbor == value) return;
-				rightNeighbor = value;
-				EditorUtility.SetDirty(this);
-			}
+			set => this.DirtyReplace(ref rightNeighbor, value);
 		}
 
-		public LayoutElement TopNeighbor
+		public LayoutElement TopManagedNeighbor
 		{
 			get => topNeighbor;
-			set
-			{
-				if (topNeighbor == value) return;
-				topNeighbor = value;
-				EditorUtility.SetDirty(this);
-			}
+			set => this.DirtyReplace(ref topNeighbor, value);
 		}
 
-		public LayoutElement BottomNeighbor
+		public LayoutElement BottomManagedNeighbor
 		{
 			get => bottomNeighbor;
-			set
-			{
-				if (bottomNeighbor == value) return;
-				bottomNeighbor = value;
-				EditorUtility.SetDirty(this);
-			}
+			set => this.DirtyReplace(ref bottomNeighbor, value);
 		}
 #endif
 	}

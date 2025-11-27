@@ -32,13 +32,15 @@ namespace Managers
 				JournalManager.Instance.PauseState = m_journalManagerState;
 			}
 #if UNITY_EDITOR
-			void IEditorDisplayable.DisplayInEditor()
+			public void DisplayInEditor()
 			{
 				m_gameManagerState.DisplayInEditor("Game Manager State");
 				m_inputManagerState.DisplayInEditor("Input Manager State");
 				m_layoutManagerState.DisplayInEditor("Layout Manager State");
 				m_journalManagerState.DisplayInEditor("Journal Manager State");
 			}
+			
+			public void DisplayInEditor(string name) => name.DisplayIndented(DisplayInEditor);
 #endif
 		}
 	}

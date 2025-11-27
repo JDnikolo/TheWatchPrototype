@@ -61,8 +61,8 @@ namespace Managers.Persistent
 							switch (output.Key)
 							{
 								case nameof(InputManager.ControlScheme):
-									if (Enum.TryParse(output.Value, out ControlScheme currentScheme))
-										InputManager.Instance.ControlScheme = currentScheme;
+									if (Enum.TryParse(output.Value, out ControlSchemeEnum schemeVal))
+										InputManager.Instance.SetNewControlScheme(schemeVal);
 									break;
 							}
 
@@ -70,9 +70,9 @@ namespace Managers.Persistent
 						case GameplaySection:
 							switch (output.Key)
 							{
-								case nameof(LanguageManager.CurrentLanguage):
-									if (Enum.TryParse(output.Value, out LanguageEnum currentLanguage))
-										LanguageManager.Instance.SetNewLanguage(currentLanguage);
+								case nameof(LanguageManager.Language):
+									if (Enum.TryParse(output.Value, out LanguageEnum languageVal))
+										LanguageManager.Instance.SetNewLanguage(languageVal);
 									break;
 							}
 
@@ -97,7 +97,7 @@ namespace Managers.Persistent
 				writer.WriteSection(ControlsSection);
 				writer.Write(nameof(InputManager.ControlScheme), InputManager.Instance.ControlScheme);
 				writer.WriteSection(GameplaySection);
-				writer.Write(nameof(LanguageManager.CurrentLanguage), LanguageManager.Instance.CurrentLanguage);
+				writer.Write(nameof(LanguageManager.Language), LanguageManager.Instance.Language);
 				writer.WriteSection(GraphicsSection);
 			}
 		}

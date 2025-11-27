@@ -1,0 +1,27 @@
+﻿using Boxing;
+using Callbacks.ComboBox;
+using Localization;
+using Managers.Persistent;
+using UnityEngine;
+
+namespace UI.ComboBox
+{
+	[AddComponentMenu("UI/Elements/ComboBox/Language ComboBox")]
+	public sealed class LanguageCombo : ComboEnumProvider<LanguageEnum>, IComboBoxReceiver
+	{
+		[SerializeField] private Elements.ComboBox comboBox;
+
+		public void OnComboBoxSelectionChanged(ComboData data)
+		{
+			if (data.UserData is IRef<LanguageEnum> reference) 
+				LanguageManager.Instance.SetNewLanguage(reference.GetValue());
+		}
+
+		public override void OnPrewarm()
+		{
+			base.OnPrewarm();
+			comboBox.SetReceiver(this);
+			comboBox.SetData(DataPoints[(int) LanguageManager.Instance.Language], false);
+		}
+	}
+}

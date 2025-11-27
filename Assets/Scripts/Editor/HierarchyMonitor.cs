@@ -22,6 +22,7 @@ namespace Editor
 
 		private static void OnHierarchyChanged()
 		{
+			if (EditorApplication.isPlaying) return;
 			var now = DateTime.Now;
 			if (now - m_lastCheckTime < TimeSpan.FromSeconds(1)) return;
 			m_lastCheckTime = now;

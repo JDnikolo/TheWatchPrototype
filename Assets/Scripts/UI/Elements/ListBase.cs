@@ -1,0 +1,19 @@
+﻿using UI.Layout.Elements;
+using UnityEngine;
+using Utilities;
+
+namespace UI.Elements
+{
+	public abstract class ListBase : MonoBehaviour
+	{
+		[SerializeField] [HideInInspector] private List layoutParent;
+
+		public List LayoutParent => layoutParent;
+#if UNITY_EDITOR
+		protected virtual void OnValidate()
+		{
+			if (TryGetComponent(out List newLayoutParent)) this.DirtyReplace(ref layoutParent, newLayoutParent);
+		}
+#endif
+	}
+}

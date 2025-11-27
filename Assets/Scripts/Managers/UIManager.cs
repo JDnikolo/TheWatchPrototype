@@ -4,6 +4,7 @@ using UI.Dialogue;
 using UI.Fade;
 using UI.Speaker;
 using UnityEngine;
+using UnityEngine.UI;
 using Utilities;
 
 namespace Managers
@@ -11,7 +12,8 @@ namespace Managers
 	[AddComponentMenu("Managers/UI Manager")]
 	public sealed class UIManager : Singleton<UIManager>
 	{
-		[SerializeField] private Canvas canvas;
+		[SerializeField] private RectTransform canvasRect;
+		[SerializeField] private GraphicRaycaster raycaster;
 		[SerializeField] private FadeScreen fadeScreen;
 		[SerializeField] private float fadeDuration = 1f;
 		
@@ -20,7 +22,9 @@ namespace Managers
 		
 		protected override bool Override => true;
 		
-		public Canvas Canvas => canvas;
+		public RectTransform CanvasRect => canvasRect;
+		
+		public GraphicRaycaster Raycaster => raycaster;
 		
 		public void OpenTextWriter(SpeakerWriterInput input)
 		{

@@ -8,7 +8,6 @@ using TMPro;
 using UI.Text;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using Utilities;
 
 namespace UI.Speaker
@@ -20,7 +19,7 @@ namespace UI.Speaker
 		[SerializeField] private TextMeshProUGUI textWriter;
 		[SerializeField] private TextWithBackground speakerWriter;
 		[SerializeField] private AudioSource speakerSource;
-		[SerializeField] private Slider slider;
+		[SerializeField] private UnityEngine.UI.Slider slider;
 
 		[Header("Control schemes")] 
 		[SerializeField] private string skipActionName = "SkipDialogue";

@@ -1,8 +1,8 @@
-﻿using Interactables;
+﻿using Callbacks.Layout;
 using Runtime;
 using Runtime.Automation;
-using UnityEditor;
 using UnityEngine;
+using Utilities;
 
 namespace UI.Layout
 {
@@ -11,30 +11,23 @@ namespace UI.Layout
 		, IHierarchyChanged
 #endif
 	{
-		[SerializeField] private LayoutElement parent;
-		[SerializeField] private Interactable onSelected;
-		[SerializeField] private Interactable onDeselected;
+		[SerializeField] [HideInInspector] private LayoutElement parent;
+		
+		private ILayoutCallback m_callback;
 		
 		public sealed override ILayoutElement Parent { get; set; }
+		
+		public void SetCallback(ILayoutCallback callback) => m_callback = callback;
 
-		public override void Select()
-		{
-			if (onSelected) onSelected.Interact();
-		}
+		public override void Select() => m_callback?.OnSelected();
 
-		public override void Deselect()
-		{
-			if (onDeselected) onDeselected.Interact();
-		}
+		public override void Deselect() => m_callback?.OnDeselected();
 
 		public virtual void OnPrewarm() => Parent = parent;
+
+		protected virtual void OnDestroy() => SetCallback(null);
 #if UNITY_EDITOR
-		public void SetParent(LayoutElement newParent)
-		{
-			if (parent == newParent) return;
-			parent = newParent;
-			EditorUtility.SetDirty(this);
-		}
+		public void SetParent(LayoutElement newParent) => this.DirtyReplace(ref parent, newParent);
 
 		protected virtual void OnValidate() => TestParent();
 
@@ -42,7 +35,7 @@ namespace UI.Layout
 
 		private void TestParent()
 		{
-			if (parent && parent is ILayoutControllingParent && !transform.IsChildOf(parent.transform)) SetParent(null);
+			if (parent && parent is ILayoutParent && !transform.IsChildOf(parent.transform)) SetParent(null);
 		}
 #endif
 	}

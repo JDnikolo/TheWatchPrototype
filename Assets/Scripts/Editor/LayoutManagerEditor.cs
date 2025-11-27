@@ -5,19 +5,20 @@ using Utilities;
 namespace Editor
 {
 	[CustomEditor(typeof(LayoutManager))]
-	public class LayoutManagerEditor : UnityEditor.Editor
+	public class LayoutManagerEditor : EditorBase
 	{
 		public override bool RequiresConstantRepaint() => EditorApplication.isPlaying;
 
-		public override void OnInspectorGUI()
+		protected override void OnInspectorGUIInternal()
 		{
-			base.OnInspectorGUI();
-			if (target is LayoutManager local)
-			{
-				local.ParentHierarchy.DisplayObjectCollection("Parent Hierarchy");
-				local.CurrentElement.DisplayObject("Current Element");
-				local.CurrentInput.DisplayObject("Current Input");
-			}
+			var local = (LayoutManager) target;
+			if (EditorApplication.isPlaying)
+				using (new EditorGUI.DisabledScope(true))
+				{
+					local.ParentHierarchy.DisplayCollection("Parent Hierarchy");
+					local.CurrentElement.Display("Current Element");
+					local.CurrentInput.Display("Current Input");
+				}
 		}
 	}
 }

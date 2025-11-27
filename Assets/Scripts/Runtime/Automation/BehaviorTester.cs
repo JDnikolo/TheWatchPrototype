@@ -16,15 +16,23 @@ namespace Runtime.Automation
 			m_newElements = false;
 		}
 
-		public void TestBehavior<T>(MonoBehaviour monoBehaviour, ref MonoBehaviour[] behaviours)
+		public bool TestBehavior<T>(MonoBehaviour monoBehaviour, ref MonoBehaviour[] behaviours)
 		{
+			var result = false;
 			if (m_tempList != null && monoBehaviour is T)
 			{
 				var index = m_tempList.Count;
-				if (behaviours == null || !behaviours.TryGetValue(index, out var oldBehavior) ||
-					oldBehavior != monoBehaviour) m_newElements = true;
+				if (behaviours == null || !behaviours.ToIList().TryGetValue(index, out var oldBehavior) ||
+					oldBehavior != monoBehaviour)
+				{
+					result = true;
+					m_newElements = true;
+				}
+				
 				m_tempList.Add(monoBehaviour);
 			}
+
+			return result;
 		}
 
 		public bool EndTest(MonoBehaviour instance, ref MonoBehaviour[] behaviours)

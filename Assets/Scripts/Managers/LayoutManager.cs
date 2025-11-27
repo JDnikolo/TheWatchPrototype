@@ -6,7 +6,6 @@ using UI;
 using UI.Layout;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using ILayoutElement = UI.Layout.ILayoutElement;
 
 namespace Managers
@@ -24,6 +23,7 @@ namespace Managers
 		private InputAction m_navigateAction;
 		private Direction m_input;
 		private Updatable m_updatable;
+		private bool m_ignoreUpdate;
 
 		protected override bool Override => true;
 
@@ -39,10 +39,12 @@ namespace Managers
 			};
 			set
 			{
+				m_ignoreUpdate = true;
 				Select(null);
+				m_ignoreUpdate = false;
 				m_parentHierarchy.AddRange(value.ParentHierarchy);
 				m_currentElement = value.CurrentElement;
-				m_currentInput = value.CurrentInput;
+				m_updatable.SetUpdating((m_currentInput = m_currentElement as ILayoutInput) != null, this);
 			}
 		}
 
@@ -124,7 +126,8 @@ namespace Managers
 
 			if (element is ILayoutHook hook) hook.OnHookInput(m_currentElement, input);
 			m_currentElement = element;
-			m_updatable.SetUpdating((m_currentInput = element as ILayoutInput) != null, this);
+			m_currentInput = element as ILayoutInput;
+			if (!m_ignoreUpdate) m_updatable.SetUpdating(m_currentInput != null, this);
 			if (element != null)
 			{
 				PushParents(element);

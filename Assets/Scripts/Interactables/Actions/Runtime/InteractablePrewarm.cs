@@ -1,4 +1,5 @@
-﻿using Managers.Persistent;
+﻿using Attributes;
+using Managers.Persistent;
 using Runtime;
 using Runtime.Automation;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Interactables.Actions.Runtime
 		, IBehaviourChecker
 #endif
 	{
-		[SerializeField] private MonoBehaviour[] behaviours;
+		[SerializeField] [DisableInInspector] private MonoBehaviour[] behaviours;
 
 		public override void Interact()
 		{

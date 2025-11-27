@@ -15,12 +15,14 @@ namespace Managers
 			public ILayoutElement CurrentElement;
 			public ILayoutInput CurrentInput;
 #if UNITY_EDITOR
-			void IEditorDisplayable.DisplayInEditor()
+			public void DisplayInEditor()
 			{
-				ParentHierarchy.DisplayObjectCollection("Parent Hierarchy");
-				CurrentElement.DisplayObject("Current Element");
-				CurrentInput.DisplayObject("Current Input");
+				ParentHierarchy.DisplayCollection("Parent Hierarchy");
+				CurrentElement.Display("Current Element");
+				CurrentInput.Display("Current Input");
 			}
+			
+			public void DisplayInEditor(string name) => name.DisplayIndented(DisplayInEditor);
 #endif
 		}
 	}

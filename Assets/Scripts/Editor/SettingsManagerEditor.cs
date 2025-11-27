@@ -4,15 +4,13 @@ using UnityEditor;
 namespace Editor
 {
 	[CustomEditor(typeof(SettingsManager))]
-	public class SettingsManagerEditor : UnityEditor.Editor
+	public class SettingsManagerEditor : EditorBase
 	{
-		public override void OnInspectorGUI()
+		protected override void OnInspectorGUIInternal()
 		{
-			base.OnInspectorGUI();
-			if (target is SettingsManager)
-			{
-				EditorGUILayout.TextField("Settings File Path", SettingsManager.FilePath);
-			}
+			if (EditorApplication.isPlaying)
+				using (new EditorGUI.DisabledScope(true))
+					EditorGUILayout.TextField("Settings File Path", SettingsManager.FilePath);
 		}
 	}
 }

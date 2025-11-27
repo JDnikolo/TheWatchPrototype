@@ -12,10 +12,10 @@ namespace Editor
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
-			if (target is CameraManager local)
-			{
-				local.Camera.DisplayObject("Current Camera");
-			}
+			var local = (CameraManager) target;
+			if (EditorApplication.isPlaying)
+				using (new EditorGUI.DisabledScope(true))
+					local.Camera.Display("Current Camera");
 		}
 	}
 }
