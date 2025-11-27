@@ -111,5 +111,14 @@ namespace Utilities
 				if (parent.GetChild(i).TryGetComponent(out TComponent component) && component is TCast cast)
 					collection.Add(cast);
 		}
+
+		public static TCast GetDeferredComponent<TCast>(this Component instance)
+		{
+			var components = instance.GetComponents(typeof(Component));
+			for (var i = 0; i < components.Length; i++)
+				if (components[i] is TCast cast)
+					return cast;
+			return default;
+		}
 	}
 }

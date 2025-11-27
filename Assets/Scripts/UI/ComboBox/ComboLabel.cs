@@ -6,7 +6,7 @@ using UnityEngine;
 namespace UI.ComboBox
 {
 	[AddComponentMenu("UI/Elements/ComboBox/ComboBox Label")]
-	public sealed class ComboLabel : MonoBehaviour
+	public sealed class ComboLabel : MonoBehaviour, IComboHook
 	{
 		[SerializeField] [SelfAssigned(typeof(RectTransform))]
 		private RectTransform rectTransform;
