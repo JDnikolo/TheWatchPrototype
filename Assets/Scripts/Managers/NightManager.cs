@@ -4,14 +4,14 @@ using Callbacks;
 using Runtime;
 using UI.Night;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Managers
 {
     [AddComponentMenu("Managers/Night Manager")]
     public sealed class NightManager : Singleton<NightManager>
     {
-        //Serialized field, should be called 'timer' not 'm_timer'
-        [SerializeField] private NightTimer m_timer;
+        [FormerlySerializedAs("m_timer")] [SerializeField] private NightTimer timer;
 
         [Category("Time")]
         [SerializeField]
@@ -25,25 +25,23 @@ namespace Managers
         [Tooltip("How much the time jump is reduced on repeated interaction with the same interactable.")]
         [Range(0.0f, 1.0f)]
         private float repeatReduction = 0.1f;
-        //Same here
-        [SerializeReference] private NightEndActions m_nightEndActions;
+        [FormerlySerializedAs("m_nightEndActions")] [SerializeReference] private NightEndActions nightEndActions;
 
-        //What will this be used for?
         private Dictionary<string, int> m_interactionLog = new Dictionary<string, int>();
 
         protected override bool Override => true;
 
         private void Start()
         {
-            m_timer.SetTargetTime(nightTime);
-            m_timer.TimerFinished += OnTimerFinished;
+            timer.SetTargetTime(nightTime);
+            timer.TimerFinished += OnTimerFinished;
         }
         
         /// <summary>
         /// Fast-Forward the night timer by <paramref name="time"/> seconds.
         /// </summary>
         /// <param name="time"></param>
-        private void ForwardTime(float time) => m_timer.FastForwardSeconds(time);
+        private void ForwardTime(float time) => timer.FastForwardSeconds(time);
 
         /// <summary>
         /// Register the player interaction with an Interactable.
@@ -65,10 +63,9 @@ namespace Managers
 
         private void OnTimerFinished()
         {
-            m_nightEndActions?.DoActions();
-            //TODO: Finish the night section
+            nightEndActions?.DoActions();
         }
 
-        public void ShowTimer() => m_timer.Show();
+        public void ShowTimer() => timer.Show();
     }
 }

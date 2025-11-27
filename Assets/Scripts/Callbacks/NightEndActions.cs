@@ -1,17 +1,18 @@
 ﻿using Interactables;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Callbacks
 {
     public class NightEndActions : MonoBehaviour
     {
-        [SerializeField] private Interactable[] m_callOnNightEnd;
+        [FormerlySerializedAs("m_callOnNightEnd")] [SerializeField] private Interactable[] callOnNightEnd;
         
         public void DoActions()
         {
-            if (m_callOnNightEnd.Length > 0)
+            if (callOnNightEnd.Length > 0)
             {
-                foreach (var interactable in m_callOnNightEnd) interactable.Interact();
+                foreach (var interactable in callOnNightEnd) interactable.Interact();
             }
         }
     }
