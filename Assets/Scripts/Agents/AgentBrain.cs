@@ -8,6 +8,8 @@ namespace Agents
 	{
 		[SerializeField] private AgentInputHandler inputHandler;
 
+		public MovementBehavior MovementBehavior => inputHandler.MovementBehavior;
+		
 		public void StartMovement(MovementBehavior behavior) => inputHandler.MovementBehavior = behavior;
 
 		public void StopMovement()

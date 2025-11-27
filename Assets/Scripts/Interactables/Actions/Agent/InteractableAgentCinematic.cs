@@ -14,8 +14,12 @@ namespace Interactables.Actions.Agent
 		public override void Interact()
 		{
 			if (!agent) return;
-			var behavior = new MovementCinematicBehavior();
-			agent.StartMovement(behavior);
+			if (agent.MovementBehavior is not MovementCinematicBehavior behavior)
+			{
+				behavior = new MovementCinematicBehavior();
+				agent.StartMovement(behavior);
+			}
+		
 			if (onCinematicAssigned) onCinematicAssigned.OnAgentCinematicAssigned(agent, behavior);
 		}
 	}
