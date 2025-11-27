@@ -1,5 +1,6 @@
 ﻿using Managers.Persistent;
 using UnityEditor;
+using UnityEngine;
 
 namespace Editor
 {
@@ -16,6 +17,8 @@ namespace Editor
 				{
 					EditorGUILayout.Toggle("Require Physics", local.RequirePhysics);
 					EditorGUILayout.Toggle("Require Physics 2D", local.RequirePhysics2D);
+					EditorGUILayout.FloatField("Frame Time Scale", Time.timeScale);
+					EditorGUILayout.FloatField("Fixed Time Scale", Time.fixedDeltaTime);
 				}
 		}
 	}

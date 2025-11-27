@@ -1,6 +1,5 @@
 ﻿using Managers;
 using UnityEditor;
-using Utilities;
 
 namespace Editor
 {
