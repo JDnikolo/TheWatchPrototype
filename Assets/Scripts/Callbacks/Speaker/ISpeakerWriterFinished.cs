@@ -1,6 +1,6 @@
 ﻿using UI.Speaker;
 
-namespace Callbacks.Text
+namespace Callbacks.Speaker
 {
 	public interface ISpeakerWriterFinished
 	{

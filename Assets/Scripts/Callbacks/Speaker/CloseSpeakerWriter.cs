@@ -5,7 +5,7 @@ using UI.Speaker;
 using UnityEngine;
 using Utilities;
 
-namespace Callbacks.Text
+namespace Callbacks.Speaker
 {
 	[AddComponentMenu("Callbacks/Text/Close Speaker Writer")]
 	public sealed class CloseSpeakerWriter : SpeakerWriterFinished

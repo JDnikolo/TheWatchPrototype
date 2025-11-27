@@ -1,7 +1,7 @@
 ﻿using UI.Speaker;
 using UnityEngine;
 
-namespace Callbacks.Text
+namespace Callbacks.Speaker
 {
 	public abstract class SpeakerWriterFinished : MonoBehaviour, ISpeakerWriterFinished
 	{

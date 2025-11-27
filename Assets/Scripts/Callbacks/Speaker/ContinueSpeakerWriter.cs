@@ -2,7 +2,7 @@
 using UI.Speaker;
 using UnityEngine;
 
-namespace Callbacks.Text
+namespace Callbacks.Speaker
 {
 	[AddComponentMenu("Callbacks/Text/Continue Speaker Writer")]
 	public sealed class ContinueSpeakerWriter : SpeakerWriterFinished

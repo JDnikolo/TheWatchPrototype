@@ -1,4 +1,4 @@
-﻿using Callbacks.Text;
+﻿using Callbacks.Speaker;
 using Localization.Speaker;
 
 namespace UI.Speaker

@@ -1,5 +1,5 @@
 ﻿using AYellowpaper.SerializedCollections;
-using Callbacks.Text;
+using Callbacks.Speaker;
 using Localization.Speaker;
 using Managers;
 using Managers.Persistent;
