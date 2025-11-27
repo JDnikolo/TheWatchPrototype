@@ -1994,24 +1994,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!1 &767243194 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
-  m_PrefabInstance: {fileID: 4920452305743967584}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &767243200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 767243194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 509aa1d77f8447569380394718a797a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  comboPanel: {fileID: 2778551166229457151}
 --- !u!1 &826788339
 GameObject:
   m_ObjectHideFlags: 0
@@ -6267,6 +6249,10 @@ PrefabInstance:
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 766835345}
+    - target: {fileID: 6933803359518827362, guid: b3e14f3346946434580de6c519c14823, type: 3}
+      propertyPath: comboPanel
+      value: 
+      objectReference: {fileID: 2778551166229457151}
     - target: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
       propertyPath: m_Name
       value: LocalManagers
@@ -6338,10 +6324,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 767243200}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3e14f3346946434580de6c519c14823, type: 3}
 --- !u!1001 &5071364539441569284
 PrefabInstance:
