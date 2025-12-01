@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interactables;
+using Managers;
 using Managers.Persistent;
 using Runtime.FixedUpdate;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace Animation
       public void OnFixedUpdate()
       {
          if (blendIdle && animationBlender) animationBlender.SetBlendValues();
-
+         
          if (m_animationTimers.Count == 0) return;
          foreach (var key in m_animationTimers.Keys.ToList())
          {
@@ -34,6 +35,13 @@ namespace Animation
             if (!(m_animationTimers[key] <= 0)) continue;
             StopAnimation(key);
          }
+      }
+
+      public void SetAnimatorEnabled(bool value)
+      {
+         Debug.Log(value);
+         if (value) animator.StartPlayback();
+         else animator.StopPlayback();
       }
 
       public void StartAnimation(int animationHash, float duration = -1.0f, Interactable callback = null)
@@ -61,12 +69,11 @@ namespace Animation
             default:
                throw new ArgumentOutOfRangeException();
          }
-
+         
          if (!(duration > 0)) return;
 
          if (!m_animationTimers.TryAdd(animationHash, duration))
          {
-
             m_animationTimers[animationHash] = duration;
          }
 
@@ -111,8 +118,8 @@ namespace Animation
          {
             var callback = m_animationFinishedCallbacks[animationHash];
             m_animationFinishedCallbacks.Remove(animationHash);
+            
             if (callOnFinish) callback.Interact();
-
          }
       }
 
@@ -162,9 +169,17 @@ namespace Animation
          }
       }
 
-      private void Awake() => GameManager.Instance.AddFixedUpdateSafe(this);
+      private void Awake() 
+      {
+         GameManager.Instance.AddFixedUpdateSafe(this);
+         //AnimatorManager.Instance?.AddAnimator(this);
+      }
 
 
-      private void OnDestroy() => GameManager.Instance.RemoveFixedUpdateSafe(this);
+      private void OnDestroy()
+      {
+         GameManager.Instance.RemoveFixedUpdateSafe(this);
+        //AnimatorManager.Instance?.RemoveAnimator(this);
+      }
    }
 }

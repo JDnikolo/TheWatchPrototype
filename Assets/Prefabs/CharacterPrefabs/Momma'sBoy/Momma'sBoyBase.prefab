@@ -69,6 +69,11 @@ PrefabInstance:
       addedObject: {fileID: 4299754238632029343}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
+--- !u!82 &558188332646943207 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 3560432151935103162, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
+  m_PrefabInstance: {fileID: 3951389125248612701}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7951632619193038686 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6381592724291718659, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
@@ -137,8 +142,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7095029356144822714}
   m_SourcePrefab: {fileID: 100100000, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
+--- !u!1 &3521844726239344165 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
+  m_PrefabInstance: {fileID: 4332870552333650804}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7095029356144822714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3521844726239344165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6f2df4964996de4890f19d1f10d9305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footstepSource: {fileID: 558188332646943207}
+  footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
+  terrainLayerName: Terrain
 --- !u!4 &4299754238632029343 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ab9faf6f59321894389e914bb1d59703, type: 3}

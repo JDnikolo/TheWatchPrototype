@@ -19,6 +19,9 @@ namespace Managers
         
         private Updatable m_updatable = new();
         
+        private List<CinematicMovementHandlerBase> m_activeCinematicHandlers = new();
+        
+        /*
         private CinemachineCamera m_cameraToMove = null;
         private Transform m_cameraMovementTarget;
         private Vector3 m_cameraInitialTransform;
@@ -27,20 +30,25 @@ namespace Managers
         private float m_timer;
         private Interactable OnDurationEnd;
         private bool m_cutBack = true;
+        */
         
         public void OnFrameUpdate()
         {
             if (!m_updatable.Updating) return;
             
-            m_timer += Time.deltaTime;
-            ResolveMovement();
+            if(m_activeCinematicHandlers.Count == 0) 
+            { 
+                m_updatable.SetUpdating(false, this);
+                return;
+            }
             
-            if (!(m_timer >= m_movementDuration)) return;
-            m_movementType = CameraMovementType.None;
-            if(OnDurationEnd) OnDurationEnd.Interact();
             
-            if (!m_cameraToMove) m_updatable.SetUpdating(false, this);
-
+            m_activeCinematicHandlers.RemoveAll(cinematicHandler =>
+            {
+                cinematicHandler.ResolveMovement();
+                var hasEnded = cinematicHandler.IncreaseTimer(Time.deltaTime);
+                return hasEnded;
+            });
         }
 
         public void CutToDollyCamera(CinemachineCamera dollyCamera, CinemachineSplineCart dollyCart, float cartProgress = 0f,
@@ -53,18 +61,18 @@ namespace Managers
             if (lookTarget)
             {
                 dollyCamera.LookAt = lookTarget;
-                m_cameraMovementTarget = lookTarget;
             }
             
             if (cutDuration < 0) return;
+
+            var newCinematic = new CutToDollyHandler(
+                dollyCamera,
+                cutDuration,
+                onCutEnd,
+                deactivateOnCutEnd
+            );
             
-            m_cameraToMove = dollyCamera;
-            m_cameraInitialTransform = dollyCamera.transform.forward;
-            m_movementType = CameraMovementType.CutToDolly;
-            m_timer = 0;
-            m_movementDuration = cutDuration;
-            OnDurationEnd = onCutEnd;
-            m_cutBack = deactivateOnCutEnd;
+            m_activeCinematicHandlers.Add(newCinematic);
             
             m_updatable.SetUpdating(true, this);
         }
@@ -79,58 +87,36 @@ namespace Managers
                 return;
             }
             
-            m_cameraToMove = camera;
-            m_cameraMovementTarget = lookTarget;
-            m_cameraInitialTransform = camera.transform.forward;
-            m_movementType = CameraMovementType.FocusToTarget;
-            m_timer = 0;
-            m_movementDuration = duration;
-            OnDurationEnd = onMovementEnd;
+            var newCinematic = new FocusToTargetHandler(
+                camera,
+                lookTarget,
+                duration,
+                onMovementEnd
+            );
             
-           m_updatable.SetUpdating(true, this);
+            m_activeCinematicHandlers.Add(newCinematic);
+            
+            m_updatable.SetUpdating(true, this);
+            
         }
 
-        private void ResolveMovement()
+        public void ShakeCameraFOV(CinemachineCamera cameraToShake, float duration, float fovReduction = 5f,
+            int reps = 10, Interactable onMovementEnd = null)
         {
-            switch (m_movementType)
-            {
-                case CameraMovementType.None:
-                    break;
-                case CameraMovementType.FocusToTarget:
-                    ContinueFocusToTarget();
-                    break;
-                case CameraMovementType.CutToDolly:
-                    ContinueCutToDolly();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            
+            var newCinematic = new ShakeCameraFOVHandler(
+                cameraToShake,
+                duration,
+                fovReduction,
+                reps,
+                onMovementEnd
+            );
+            
+            m_activeCinematicHandlers.Add(newCinematic);
+            
+            m_updatable.SetUpdating(true, this);
         }
         
-
-        private void ContinueFocusToTarget()
-        {
-            var targetRotationForward = m_cameraMovementTarget.position -
-                                        m_cameraToMove.transform.position;
-            var currentTargetRotation = Vector3.Lerp(m_cameraInitialTransform, targetRotationForward, m_timer/m_movementDuration);
-            m_cameraToMove.ForceCameraPosition(m_cameraToMove.transform.position,
-                Quaternion.LookRotation(currentTargetRotation,
-                    m_cameraToMove.transform.up));
-        }
-
-        private void ContinueCutToDolly()
-        {
-            if (m_timer >= m_movementDuration)
-            {
-                m_cameraToMove.enabled = !m_cutBack;
-            }
-        }
-
-        private enum CameraMovementType
-        {
-            None, FocusToTarget, CutToDolly,
-        }
-
         protected override void Awake()
         {
             base.Awake();
@@ -142,6 +128,127 @@ namespace Managers
         {
             GameManager.Instance.RemoveFrameUpdateSafe(this);
             base.OnDestroy();
-        } 
+        }
+
+        
+    }
+    internal enum CameraMovementType
+    {
+        None, FocusToTarget, CutToDolly, ShakeCameraFOV
+    }
+    internal abstract class CinematicMovementHandlerBase
+        {
+            
+
+            public abstract CameraMovementType MovementType { get; protected set; }
+
+            public float MovementDuration { get; protected set; }
+            public float MovementTimer { get; protected set; } = 0;
+            public float Progress => MovementTimer/MovementDuration;
+            
+            public Interactable OnDurationEnd { get; protected set; }
+
+            public bool IncreaseTimer(float deltaTime)
+            {
+                MovementTimer += deltaTime;
+                if (MovementTimer >= MovementDuration) OnDurationEnd?.Interact();
+                return MovementTimer > MovementDuration;
+            }
+
+            public abstract void ResolveMovement();
+        }
+
+    internal sealed class FocusToTargetHandler : CinematicMovementHandlerBase
+    {
+        
+
+        public CinemachineCamera CameraToMove { get; private set; }
+        public Transform CameraMovementTarget { get; private set; }
+        public Vector3 CameraInitialTransform { get; private set; }
+
+        public override CameraMovementType MovementType { get; protected set; } = CameraMovementType.FocusToTarget;
+        
+        public FocusToTargetHandler(CinemachineCamera camera, Transform lookTarget,
+            float duration, Interactable onMovementEnd)
+        {
+            CameraToMove = camera;
+            CameraMovementTarget = lookTarget;
+            CameraInitialTransform = CameraToMove.transform.forward;
+            OnDurationEnd = onMovementEnd;
+            MovementDuration = duration;
+        }
+        
+        public override void ResolveMovement()
+        {
+            var targetRotationForward = CameraMovementTarget.position -
+                                        CameraToMove.transform.position;
+            
+            var currentTargetRotation = Vector3.Lerp(CameraInitialTransform,
+                targetRotationForward, Progress);
+            CameraToMove.ForceCameraPosition(CameraToMove.transform.position,
+                Quaternion.LookRotation(currentTargetRotation, CameraToMove.transform.up));
+        }
+        
+    }
+
+    internal sealed class CutToDollyHandler : CinematicMovementHandlerBase
+    {
+        public CinemachineCamera CameraToMove { get; private set; }
+        public override CameraMovementType MovementType { get; protected set; } = CameraMovementType.CutToDolly;
+        public bool CutBack { get; private set; }
+        public override void ResolveMovement()
+        {
+            if (Progress >= 1)
+            {
+                CameraToMove.enabled = !CutBack;
+            }
+        }
+        public CutToDollyHandler(CinemachineCamera dollyCamera, 
+            float cutDuration, Interactable onCutEnd, bool deactivateOnCutEnd)
+        {
+            CameraToMove = dollyCamera;
+            MovementDuration = cutDuration;
+            OnDurationEnd = onCutEnd;
+            CutBack = deactivateOnCutEnd;
+        }
+    }
+
+    internal sealed class ShakeCameraFOVHandler : CinematicMovementHandlerBase
+    {
+        private CinemachineCamera m_cameraToMove;
+
+        private float m_initialFOV;
+        
+        private int m_shakeReps;
+
+        private float m_nextStepProgress;
+
+        private float m_progressPerStep;
+
+        private float m_targetFOV;
+
+        private float m_stepStartingFOV;
+        
+        public override CameraMovementType MovementType { get; protected set; } = CameraMovementType.ShakeCameraFOV;
+        
+        public ShakeCameraFOVHandler(CinemachineCamera camera, float duration, float diffFOV, int reps = 1, Interactable OnShakeEnd = null)
+        {
+            m_cameraToMove = camera;
+            m_initialFOV = m_stepStartingFOV = camera.Lens.FieldOfView;
+            m_targetFOV = m_initialFOV + diffFOV;
+            MovementDuration = duration;
+            OnDurationEnd = OnShakeEnd;
+            m_progressPerStep = m_nextStepProgress = 0.9f / (reps * 2);
+        }
+        public override void ResolveMovement()
+        {
+            m_cameraToMove.Lens.FieldOfView = Mathf.Lerp(m_stepStartingFOV, m_targetFOV, Progress/m_nextStepProgress);
+            if (!(Progress > m_nextStepProgress)) return;
+            
+            m_nextStepProgress += m_progressPerStep;
+            var temp = 0 + m_targetFOV;
+            m_targetFOV = m_stepStartingFOV;
+            m_stepStartingFOV = temp;
+        }
     }
 }
