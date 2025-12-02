@@ -2,6 +2,7 @@
 using Attributes;
 using UnityEditor;
 using UnityEngine;
+using Utilities;
 
 namespace Editor
 {
@@ -16,7 +17,7 @@ namespace Editor
 			{
 				var arrayPosition = int.Parse(property.propertyPath.Split('[', ']')[1]);
 				name = Enum.GetName(local.EnumType, arrayPosition);
-				if (name is null or "ENUM_LENGTH") name = "UNKNOWN";
+				if (name is null or Utils.ENUM_LENGTH) name = "UNKNOWN";
 			}
 			catch
 			{
