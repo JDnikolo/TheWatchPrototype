@@ -1,17 +1,10 @@
-﻿
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Interactables.Triggers
 {
-    [AddComponentMenu("Interactables/Triggers/Interactable Shout Trigger")]
+    [AddComponentMenu("Interactables/Triggers/On Shout Trigger")]
     public class InteractableShoutTrigger : InteractableTrigger
     {
-
-        public void OnGettingShouted()
-        {
-            OnInteract();
-        }
-        
+        public void OnGettingShouted() => OnInteract();
     }
 }

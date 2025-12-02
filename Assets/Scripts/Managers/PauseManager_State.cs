@@ -19,7 +19,7 @@ namespace Managers
 			
 			public void LoadStates(PauseManager pauseManager)
 			{
-				m_pauseState = pauseManager.m_lastPaused;
+				m_pauseState = pauseManager.m_paused;
 				m_gameManagerState = GameManager.Instance.PauseState;
 				m_inputManagerState = InputManager.Instance.PauseState;
 				m_layoutManagerState = LayoutManager.Instance.PauseState;

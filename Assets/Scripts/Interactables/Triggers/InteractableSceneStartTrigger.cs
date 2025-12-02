@@ -2,7 +2,7 @@
 
 namespace Interactables.Triggers
 {
-	[AddComponentMenu("Interactables/Triggers/Interactable Scene Start Trigger")]
+	[AddComponentMenu("Interactables/Triggers/On Scene-Start Trigger")]
 	public sealed class InteractableSceneStartTrigger : MonoBehaviour
 	{
 		[SerializeField] private Interactable interactable;

@@ -20,7 +20,7 @@ namespace Managers
 
 		private HashSet<IPauseCallback> m_pauseCallbacks = new();
 		private State m_pauseState;
-		private bool m_lastPaused;
+		private bool m_paused;
 		
 		private InputAction m_pauseAction;
 		private Updatable m_updatable;
@@ -37,11 +37,16 @@ namespace Managers
 
 		private void SetPause(bool paused)
 		{
-			if (m_lastPaused == paused) return;
-			m_lastPaused = paused;
-			foreach (var pauseCallback in m_pauseCallbacks) pauseCallback.OnPauseChanged(paused);
+			if (m_paused == paused) return;
+			m_paused = paused;
+			GameManager.Instance.InvokeOnNextLateUpdate(SwitchPause);
 		}
-		
+
+		private void SwitchPause()
+		{
+			foreach (var pauseCallback in m_pauseCallbacks) pauseCallback.OnPauseChanged(m_paused);
+		}
+
 		public void AddPausedCallback(IPauseCallback pausedCallback) => m_pauseCallbacks.Add(pausedCallback);
 
 		public void RemovePausedCallback(IPauseCallback pausedCallback) => m_pauseCallbacks.Remove(pausedCallback);

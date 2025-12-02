@@ -169,7 +169,7 @@ namespace Animation
       private void Start()
       {
          GameManager.Instance.AddFixedUpdateSafe(this);
-         PauseManager.Instance.AddPausedCallback(this);
+         PauseManager.Instance?.AddPausedCallback(this);
       }
 
 
