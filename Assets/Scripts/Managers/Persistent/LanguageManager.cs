@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Exceptions;
 using Localization;
 using Runtime;
 using UnityEngine;
@@ -16,7 +17,11 @@ namespace Managers.Persistent
 
 		public LanguageEnum Language
 		{
-			get => m_language;
+			get
+			{
+				if (m_language >=  LanguageEnum.ENUM_LENGTH) throw new LoadFirstException();
+				return m_language;
+			}
 			set
 			{
 				if (!Enum.IsDefined(typeof(LanguageEnum), value) || value == LanguageEnum.ENUM_LENGTH) 
@@ -25,7 +30,7 @@ namespace Managers.Persistent
 				foreach (var localizer in m_localizers) localizer.OnLocalizationUpdate();
 			}
 		}
-		
+
 		public void AddLocalizer(ILocalizationUpdatable localizer) => m_localizers.Add(localizer);
 		
 		public void RemoveLocalizer(ILocalizationUpdatable localizer) => m_localizers.Remove(localizer);

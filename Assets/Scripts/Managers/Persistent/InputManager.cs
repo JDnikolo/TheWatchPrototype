@@ -1,4 +1,5 @@
 ﻿using System;
+using Exceptions;
 using Input;
 using Runtime;
 using Runtime.FrameUpdate;
@@ -39,7 +40,11 @@ namespace Managers.Persistent
 
 		public ControlSchemeEnum ControlScheme
 		{
-			get => m_controlScheme;
+			get
+			{
+				if (m_controlScheme >= ControlSchemeEnum.ENUM_LENGTH) throw new LoadFirstException();
+				return m_controlScheme;
+			}
 			set
 			{
 				if (!Enum.IsDefined(typeof(ControlSchemeEnum),value) || value == ControlSchemeEnum.ENUM_LENGTH) 
