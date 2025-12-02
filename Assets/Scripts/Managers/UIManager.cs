@@ -6,25 +6,35 @@ using UI.Speaker;
 using UnityEngine;
 using UnityEngine.UI;
 using Utilities;
+using LayoutElement = UI.Layout.LayoutElement;
 
 namespace Managers
 {
 	[AddComponentMenu("Managers/UI Manager")]
 	public sealed class UIManager : Singleton<UIManager>
 	{
+		[Space]
 		[SerializeField] private RectTransform canvasRect;
 		[SerializeField] private GraphicRaycaster raycaster;
+		
+		[Space]
 		[SerializeField] private FadeScreen fadeScreen;
 		[SerializeField] private float fadeDuration = 1f;
 		
+		[Space]
 		[SerializeField] private SpeakerWriter textWriter;
 		[SerializeField] private DialogueWriter dialogueWriter;
+
+		[Space]
+		[SerializeField] private LayoutElement controlPanel;
 		
 		protected override bool Override => true;
 		
 		public RectTransform CanvasRect => canvasRect;
 		
 		public GraphicRaycaster Raycaster => raycaster;
+		
+		public LayoutElement ControlPanel => controlPanel;
 		
 		public void OpenTextWriter(SpeakerWriterInput input)
 		{

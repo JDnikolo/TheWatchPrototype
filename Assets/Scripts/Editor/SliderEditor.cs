@@ -40,6 +40,7 @@ namespace Editor
 		protected override void DisplayBeforeHidden()
 		{
 			base.DisplayBeforeHidden();
+			EditorGUILayout.PropertyField(m_wholeNumbers);
 			if (!m_wholeNumbers.boolValue)
 			{
 				EditorGUILayout.PropertyField(m_lowerValue);
@@ -62,7 +63,7 @@ namespace Editor
 			if (EditorApplication.isPlaying)
 			{
 				EditorGUILayout.Toggle("Selected", local.Selected);
-				local.Receiver.Display("Callback Target");
+				local.FloatReceiver.Display("Callback Target");
 			}
 		}
 	}

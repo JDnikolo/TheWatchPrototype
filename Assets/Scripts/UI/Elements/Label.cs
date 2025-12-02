@@ -1,17 +1,21 @@
-﻿using Localization;
+﻿using Attributes;
+using Callbacks.Prewarm;
+using Localization;
 using Localization.Text;
 using Managers.Persistent;
-using Runtime;
+using Runtime.Automation;
 using UI.Text;
-using UnityEditor;
 using UnityEngine;
+using Utilities;
 
 namespace UI.Elements
 {
 	[AddComponentMenu("UI/Elements/Label")]
 	public sealed class Label : MonoBehaviour, IPrewarm, ILocalizationUpdatable
 	{
-		[SerializeField] private TextWriter textWriter;
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))] 
+		private TextWriter textWriter;
+		
 		[SerializeField] [HideInInspector] private TextObject textToDisplay;
 
 		private TextObject m_textToDisplay;
@@ -51,20 +55,11 @@ namespace UI.Elements
 		}
 #if UNITY_EDITOR
 		public TextObject TextToDisplay => m_textToDisplay;
+
+		public void SetManagedTextToDisplay(TextObject newTextToDisplay) =>
+			this.DirtyReplaceObject(ref textToDisplay, newTextToDisplay);
 		
-		private void OnValidate()
-		{
-			var text = textToDisplay;
-			if (text)
-			{
-				var obj = gameObject;
-				if (obj.name != text.name)
-				{
-					obj.name = text.name;
-					EditorUtility.SetDirty(obj);
-				}
-			}
-		}
+		private void OnValidate() => this.UpdateNameTo(textToDisplay);
 #endif
 	}
 }

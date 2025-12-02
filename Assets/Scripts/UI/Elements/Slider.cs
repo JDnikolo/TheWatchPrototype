@@ -1,45 +1,48 @@
 ﻿using System;
 using Callbacks.Layout;
+using Callbacks.Pointer;
+using Callbacks.Prewarm;
 using Callbacks.Slider;
 using Managers;
-using Runtime;
 using UI.Knob;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utilities;
 
 namespace UI.Elements
 {
 	[AddComponentMenu("UI/Elements/Slider")]
-	public sealed class Slider : ElementBase, IKnobReceiver, ILayoutCallback, ILayoutInputCallback, IPrewarm
+	public sealed class Slider : ElementBase, IKnobReceiver, ILayoutCallback, ILayoutInputCallback, IPrewarm, 
+		IPointerEnterCallback, IPointerExitCallback, IPointerDownCallback, IPointerUpCallback
 	{
 		[SerializeField] private Image slider;
 		[SerializeField] private Knob knob;
 		[SerializeField] private Axis direction;
 		[SerializeField] private ElementColor color;
-		[SerializeField] private bool wholeNumbers;
+		[SerializeField] private PointerReceptor pointerReceptor;
+
+		[SerializeField] [HideInInspector] private bool wholeNumbers;
 		[SerializeField] [HideInInspector] private float lowerValue;
 		[SerializeField] [HideInInspector] private float upperValue = 1f;
 		[SerializeField] [HideInInspector] private int lowerValueInt;
 		[SerializeField] [HideInInspector] private int upperValueInt = 1;
 		[SerializeField] [HideInInspector] private float speedMultiplier = 1f;
 
-		private ISliderReceiver m_receiver;
+		private ISliderFloatReceiver m_floatReceiver;
+		private ISliderIntReceiver m_intReceiver;
 		private float m_position;
 		private float m_value;
 		private float m_intTimer;
 		private int m_intValue;
 		private bool m_selected;
-		
-		public bool WholeNumbers => wholeNumbers;
-		public float LowerValue => lowerValue;
-		public float UpperValue => upperValue;
-		public int LowerValueInt => lowerValueInt;
-		public int UpperValueInt => upperValueInt;
+		private bool m_mouseOver;
 		
 		private RectTransform SliderArea => slider.rectTransform;
 
-		public void SetReceiver(ISliderReceiver receiver) => m_receiver = receiver;
+		public void SetFloatReceiver(ISliderFloatReceiver floatReceiver) => m_floatReceiver = floatReceiver;
+
+		public void SetIntReceiver(ISliderIntReceiver intReceiver) => m_intReceiver = intReceiver;
 		
 		public void OnSelected()
 		{
@@ -133,7 +136,7 @@ namespace UI.Elements
 			if (m_intValue == value) return;
 			m_intValue = value;
 			m_value = CalculateFloatFromInteger();
-			UpdateFromInteger(CalculateIntegerPosition(upperBounds), true, callback);
+			ChangeInteger(CalculateIntegerPosition(upperBounds), true, callback);
 		}
 		
 		private void UpdateInteger(int change, float upperBounds, bool callback)
@@ -142,7 +145,7 @@ namespace UI.Elements
 			if (m_intValue == newIntValue) return;
 			m_intValue = newIntValue;
 			m_value = CalculateFloatFromInteger();
-			UpdateFromInteger(CalculateIntegerPosition(upperBounds), true, callback);
+			ChangeInteger(CalculateIntegerPosition(upperBounds), true, callback);
 		}
 
 		public void SetFloat(float value, bool callback) => SetFloatInternal(value, GetUpperBounds(), callback);
@@ -154,7 +157,7 @@ namespace UI.Elements
 			m_value = value;
 			m_intValue = CalculateIntegerFromFloat();
 			m_position = CalculateFloatPosition(upperBounds);
-			UpdateFromFloating(m_position, true, callback);
+			ChangeFloating(m_position, true, callback);
 		}
 		
 		private void UpdateFloat(float change, float upperBounds, bool callback)
@@ -164,33 +167,54 @@ namespace UI.Elements
 			m_value = newValue;
 			m_intValue = CalculateIntegerFromFloat();
 			m_position = CalculateFloatPosition(upperBounds);
-			UpdateFromFloating(m_position, true, callback);
+			ChangeFloating(m_position, true, callback);
+		}
+		
+		public void OnPointerEnter(PointerEventData eventData)
+		{
+			m_mouseOver = true;
+			if (!m_selected) SelectThis();
+		}
+
+		public void OnPointerExit(PointerEventData eventData) => m_mouseOver = false;
+
+		public void OnPointerDown(PointerEventData eventData)
+		{
+			if (!m_mouseOver) return;
+			OnKnobMovement(eventData.position);
+		}
+		
+		public void OnPointerUp(PointerEventData eventData)
+		{
+		}
+
+		private void SelectThis()
+		{
+			if (LayoutParent) LayoutManager.Instance.Select(LayoutParent);
+			else OnSelected();
 		}
 		
 		public void OnKnobHover(bool isMouseOver)
 		{
-			if (isMouseOver)
-			{
-				if (LayoutParent) LayoutManager.Instance.Select(LayoutParent);
-				else OnSelected();
-			}
+			if (isMouseOver) SelectThis();
 			else if (!LayoutParent) OnDeselected();
 		}
 		
-		public void OnKnobMovement(Vector2 moveDelta)
+		public void OnKnobMovement(Vector2 screenPosition)
 		{
-			var bounds = SliderArea.rect.size;
+			var area = SliderArea;
+			var bounds = area.rect.size;
 			float upperBounds;
 			float newPosition;
 			switch (direction)
 			{
 				case Axis.Horizontal:
 					upperBounds = bounds.x;
-					newPosition = m_position + moveDelta.x;
+					newPosition = screenPosition.x - area.GetLeft();
 					break;
 				case Axis.Vertical:
 					upperBounds = bounds.y;
-					newPosition = m_position + moveDelta.y;
+					newPosition = screenPosition.y - area.GetBottom();
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
@@ -207,10 +231,10 @@ namespace UI.Elements
 				if (m_intValue != newIntValue)
 				{
 					m_intValue = newIntValue;
-					UpdateFromInteger(CalculateIntegerPosition(upperBounds), updatePosition, true);
+					ChangeInteger(CalculateIntegerPosition(upperBounds), updatePosition, true);
 				}
 			}
-			else UpdateFromFloating(newPosition, updatePosition, true);
+			else ChangeFloating(newPosition, updatePosition, true);
 		}
 
 		private int CalculateIntegerFromFloat() => lowerValueInt + (int) ((upperValueInt - lowerValueInt) * m_value);
@@ -218,10 +242,10 @@ namespace UI.Elements
 		private float CalculateIntegerPosition(float upperBounds) => 
 			((m_intValue - lowerValueInt) / (float) (upperValueInt - lowerValueInt)) * upperBounds;
 
-		private void UpdateFromInteger(float newPosition, bool updatePosition, bool callback)
+		private void ChangeInteger(float newPosition, bool updatePosition, bool callback)
 		{
 			if (updatePosition) SetPosition(newPosition);
-			if (callback) m_receiver?.OnSliderChanged(m_intValue);
+			if (callback) m_intReceiver?.OnSliderChanged(m_intValue);
 		}
 
 		private float CalculateFloatFromInteger() => 
@@ -229,10 +253,10 @@ namespace UI.Elements
 
 		private float CalculateFloatPosition(float upperBounds) => m_value * upperBounds;
 		
-		private void UpdateFromFloating(float newPosition, bool updatePosition, bool callback)
+		private void ChangeFloating(float newPosition, bool updatePosition, bool callback)
 		{
 			if (updatePosition) SetPosition(newPosition);
-			if (callback) m_receiver?.OnSliderChanged(Mathf.Lerp(lowerValue, upperValue, m_value));
+			if (callback) m_floatReceiver?.OnSliderChanged(Mathf.Lerp(lowerValue, upperValue, m_value));
 		}
 		
 		private void SetPosition(float position)
@@ -287,20 +311,25 @@ namespace UI.Elements
 			if (layoutParent)
 			{
 				layoutParent.SetCallback(this);
-				layoutParent.SetControlCallback(this);
+				layoutParent.SetInputCallback(this);
 			}
 		}
 		
-		private void OnDestroy() => m_receiver = null;
+		private void OnDestroy()
+		{
+			m_floatReceiver = null;
+			m_intReceiver = null;
+		}
 #if UNITY_EDITOR
-		public ISliderReceiver Receiver => m_receiver;
+		public ISliderFloatReceiver FloatReceiver => m_floatReceiver;
+
+		public ISliderIntReceiver IntReceiver => m_intReceiver;
 		
 		public bool Selected => m_selected;
 		
-		protected override void OnValidate()
+		private void OnValidate()
 		{
-			base.OnValidate();
-			if (slider) color.Validate(slider, enabled);
+			if (slider && color) color.Validate(slider, enabled);
 			if (knob) knob.enabled = enabled;
 		}
 #endif

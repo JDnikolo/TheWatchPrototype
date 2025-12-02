@@ -17,7 +17,6 @@ namespace Editor
 				{
 					local.ParentHierarchy.DisplayCollection("Parent Hierarchy");
 					local.CurrentElement.Display("Current Element");
-					local.CurrentInput.Display("Current Input");
 				}
 		}
 	}

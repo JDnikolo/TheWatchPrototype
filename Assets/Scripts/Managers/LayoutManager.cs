@@ -17,7 +17,6 @@ namespace Managers
 
 		private List<ILayoutElement> m_parentHierarchy = new();
 		private ILayoutElement m_currentElement;
-		private ILayoutInput m_currentInput;
 
 		private Stack<ILayoutElement> m_tempStack = new();
 		private InputAction m_navigateAction;
@@ -35,7 +34,6 @@ namespace Managers
 			{
 				ParentHierarchy = m_parentHierarchy.ToArray(),
 				CurrentElement = m_currentElement,
-				CurrentInput = m_currentInput,
 			};
 			set
 			{
@@ -43,16 +41,15 @@ namespace Managers
 				Select(null);
 				m_ignoreUpdate = false;
 				m_parentHierarchy.AddRange(value.ParentHierarchy);
-				m_currentElement = value.CurrentElement;
-				m_updatable.SetUpdating((m_currentInput = m_currentElement as ILayoutInput) != null, this);
+				AssignNewElement(value.CurrentElement);
 			}
 		}
 
 		public void OnFrameUpdate()
 		{
 			m_navigateAction ??= InputManager.Instance.UIMap.GetAction(navigateActionName);
-			var currentInput = m_currentInput;
-			if (currentInput != null)
+			var currentElement = m_currentElement;
+			if (currentElement != null)
 			{
 				Direction input;
 				Vector2 axis;
@@ -67,7 +64,7 @@ namespace Managers
 
 				if (m_input != input) m_input = input;
 				else input = UIConstants.Direction_None;
-				currentInput.OnInput(axis, input);
+				currentElement.OnInput(axis, input);
 			}
 		}
 
@@ -125,9 +122,7 @@ namespace Managers
 			}
 
 			if (element is ILayoutHook hook) hook.OnHookInput(m_currentElement, input);
-			m_currentElement = element;
-			m_currentInput = element as ILayoutInput;
-			if (!m_ignoreUpdate) m_updatable.SetUpdating(m_currentInput != null, this);
+			AssignNewElement(element);
 			if (element != null)
 			{
 				PushParents(element);
@@ -153,10 +148,15 @@ namespace Managers
 		{
 			m_parentHierarchy.Clear();
 			m_currentElement = null;
-			m_currentInput = null;
 			Select(element);
 		}
-		
+
+		private void AssignNewElement(ILayoutElement element)
+		{
+			m_currentElement = element;
+			if (!m_ignoreUpdate) m_updatable.SetUpdating(m_currentElement != null, this);
+		}
+
 		private void PushParents(ILayoutElement element)
 		{
 			if (element == null) return;
@@ -180,7 +180,6 @@ namespace Managers
 #if UNITY_EDITOR
 		public List<ILayoutElement> ParentHierarchy => m_parentHierarchy;
 		public ILayoutElement CurrentElement => m_currentElement;
-		public ILayoutInput CurrentInput => m_currentInput;
 #endif
 	}
 }

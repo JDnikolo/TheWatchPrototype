@@ -22,7 +22,7 @@ namespace Runtime.Automation
 			if (m_tempList != null && monoBehaviour is T)
 			{
 				var index = m_tempList.Count;
-				if (behaviours == null || !behaviours.ToIList().TryGetValue(index, out var oldBehavior) ||
+				if (behaviours == null || !behaviours.TryGetValue(index, out var oldBehavior) ||
 					oldBehavior != monoBehaviour)
 				{
 					result = true;

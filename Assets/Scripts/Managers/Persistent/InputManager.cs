@@ -18,7 +18,7 @@ namespace Managers.Persistent
 		private InputMap m_playerMap = new(ControlMap.Player);
 		private InputMap m_uiMap = new(ControlMap.UI);
 		private InputMap m_persistentGameMap = new(ControlMap.PersistentGame);
-		private ControlSchemeEnum m_controlScheme;
+		private ControlSchemeEnum m_controlScheme = ControlSchemeEnum.ENUM_LENGTH;
 		private Updatable m_updatable;
 		private int m_activeControls;
 		private bool m_cursorVisible;
@@ -26,9 +26,44 @@ namespace Managers.Persistent
 		protected override bool Override => false;
 
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.InputManager;
-		
-		public ControlSchemeEnum ControlScheme => m_controlScheme;
 
+		public InputBinding BindingMask
+		{
+			get
+			{
+				var possibleMask = actionAsset.bindingMask;
+				if (!possibleMask.HasValue) throw new Exception("Load settings first!");
+				return possibleMask.Value;
+			}
+		}
+
+		public ControlSchemeEnum ControlScheme
+		{
+			get => m_controlScheme;
+			set
+			{
+				if (!Enum.IsDefined(typeof(ControlSchemeEnum),value) || value == ControlSchemeEnum.ENUM_LENGTH) 
+					value = ControlSchemeEnum.Keyboard;
+				switch (m_controlScheme = value)
+				{
+					case ControlSchemeEnum.Keyboard:
+						actionAsset.bindingMask = InputBinding.MaskByGroup("Keyboard&Mouse");
+						break;
+					case ControlSchemeEnum.Gamepad:
+						actionAsset.bindingMask = InputBinding.MaskByGroup("Gamepad");
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+		}
+
+		public string BindingOverridesJson
+		{
+			get => actionAsset.SaveBindingOverridesAsJson();
+			set => actionAsset.LoadBindingOverridesFromJson(value);
+		}
+		
 		public State PauseState
 		{
 			get => new()
@@ -56,28 +91,53 @@ namespace Managers.Persistent
 		public static Vector2 PointerPosition => Pointer.current.position.ReadValue();
 
 		public static bool WasPointerReleasedThisFrame => Pointer.current.press.wasReleasedThisFrame;
-		
-		public void SetNewControlScheme(ControlSchemeEnum scheme)
+
+		public InputAction GetAction(ControlEnum control)
 		{
-			if (!Enum.IsDefined(typeof(ControlSchemeEnum),scheme) || scheme == ControlSchemeEnum.ENUM_LENGTH) 
-				scheme = ControlSchemeEnum.Keyboard;
-			switch (m_controlScheme = scheme)
+			switch (control)
 			{
-				case ControlSchemeEnum.Keyboard:
-					actionAsset.bindingMask = InputBinding.MaskByGroup("Keyboard&Mouse");
-					break;
-				case ControlSchemeEnum.Gamepad:
-					actionAsset.bindingMask = InputBinding.MaskByGroup("Gamepad");
-					break;
-				case ControlSchemeEnum.Touch:
-					actionAsset.bindingMask = InputBinding.MaskByGroup("Touch");
-					break;
-				case ControlSchemeEnum.Joystick:
-					actionAsset.bindingMask = InputBinding.MaskByGroup("Joystick");
-					break;
-				case ControlSchemeEnum.XR:
-					actionAsset.bindingMask = InputBinding.MaskByGroup("XR");
-					break;
+				case ControlEnum.KeyboardMoveForward:
+				case ControlEnum.KeyboardMoveBackward:
+				case ControlEnum.KeyboardMoveLeft:
+				case ControlEnum.KeyboardMoveRight:
+					return PlayerMap.GetAction("Move");
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+		
+		public int GetBindingIndex(ControlEnum control, ref InputAction action, bool secondary = false)
+		{
+			action ??= GetAction(control);
+			var bindingIndex = action.GetBindingIndex(BindingMask);
+			if (secondary) bindingIndex += 1;
+			switch (control)
+			{
+				case ControlEnum.KeyboardMoveForward:
+					return bindingIndex;
+				case ControlEnum.KeyboardMoveBackward:
+					return bindingIndex + 2;
+				case ControlEnum.KeyboardMoveLeft:
+					return bindingIndex + 4;
+				case ControlEnum.KeyboardMoveRight:
+					return bindingIndex + 6;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+
+		public static string GetDisplayString(InputAction action, int bindingIndex) => 
+			action.bindings[bindingIndex].ToDisplayString();
+
+		public static bool HasSecondary(ControlEnum control)
+		{
+			switch (control)
+			{
+				case ControlEnum.KeyboardMoveForward:
+				case ControlEnum.KeyboardMoveBackward:
+				case ControlEnum.KeyboardMoveLeft:
+				case ControlEnum.KeyboardMoveRight:
+					return true;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -96,6 +156,7 @@ namespace Managers.Persistent
 		
 		public void ToggleCursor(bool enable)
 		{
+			if (m_cursorVisible == enable) return;
 			m_cursorVisible = enable;
 			if (enable)
 			{
@@ -108,7 +169,7 @@ namespace Managers.Persistent
 				Cursor.visible = false;
 			}
 		}
-
+		
 		private void CheckUpdate() => m_updatable.SetUpdating(m_activeControls != 0, this);
 
 		private void SetFlag(int mask, bool value)

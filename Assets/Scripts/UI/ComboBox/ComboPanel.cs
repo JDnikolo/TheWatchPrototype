@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Attributes;
 using Callbacks.ComboBox;
 using Callbacks.Layout;
+using Callbacks.Prewarm;
 using Managers;
 using Runtime;
 using Runtime.Automation;
@@ -15,7 +16,7 @@ namespace UI.ComboBox
 	[AddComponentMenu("UI/Elements/ComboBox/ComboBox Dropdown Panel")]
 	public sealed class ComboPanel : ListBase, IHierarchyChanged, ILayoutCallback, IPrewarm
 	{
-		[SerializeField] [SelfAssigned(typeof(RectTransform))]
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(RectTransform))]
 		private RectTransform rectTransform;
 		[SerializeField] private Image background;
 		[SerializeField] private ComboLabel label;

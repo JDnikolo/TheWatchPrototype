@@ -1,5 +1,6 @@
 ﻿using Attributes;
 using Localization.Text;
+using Runtime.Automation;
 using UI.Text;
 using UnityEngine;
 
@@ -8,9 +9,9 @@ namespace UI.ComboBox
 	[AddComponentMenu("UI/Elements/ComboBox/ComboBox Label")]
 	public sealed class ComboLabel : MonoBehaviour, IComboHook
 	{
-		[SerializeField] [SelfAssigned(typeof(RectTransform))]
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(RectTransform))]
 		private RectTransform rectTransform;
-		[SerializeField] [SelfAssigned(typeof(TextWriter))]
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 		
 		public void Initialize(TextObject text, Vector2 size)

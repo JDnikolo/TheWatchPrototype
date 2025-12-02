@@ -5,7 +5,6 @@ using Runtime.FrameUpdate;
 using UI.ComboBox;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using Utilities;
 
 namespace Managers
@@ -17,7 +16,6 @@ namespace Managers
 
 		private List<RaycastResult> m_results = new();
 		private LayoutManager.State m_state;
-		private InputAction m_primaryAction;
 
 		protected override bool Override => true;
 

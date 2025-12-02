@@ -1,6 +1,9 @@
-﻿using Callbacks.Layout;
+﻿using Attributes;
+using Callbacks.Dragging;
+using Callbacks.Layout;
+using Callbacks.Pointer;
+using Runtime.Automation;
 using UI.Knob;
-using UI.Layout;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,11 +11,17 @@ using UnityEngine.UI;
 namespace UI.Elements
 {
 	[AddComponentMenu("UI/Elements/Sub/Knob")]
-	public sealed class Knob : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
-		IBeginDragHandler, IDragHandler, IEndDragHandler, ILayoutCallback
+	public sealed class Knob : MonoBehaviour, IPointerEnterCallback, IPointerExitCallback,
+		IBeginDragCallback, IDragCallback, IEndDragCallback, ILayoutCallback
 	{
 		[SerializeField] private Image image;
 		[SerializeField] private ElementColor color;
+
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(DragReceptor))] 
+		private DragReceptor dragReceptor;
+		
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(PointerReceptor))] 
+		private PointerReceptor pointerReceptor;
 
 		private IKnobReceiver m_receiver;
 		private bool m_mouseOver;
@@ -20,6 +29,14 @@ namespace UI.Elements
 
 		public RectTransform RectTransform => image.rectTransform;
 
+		public void SetReceptors(bool enabled)
+		{
+			var drag = dragReceptor;
+			if (drag) drag.enabled = enabled;
+			var pointer = pointerReceptor;
+			if (pointer) pointer.enabled = enabled;
+		}
+		
 		public void SetReceiver(IKnobReceiver receiver) => m_receiver = receiver;
 
 		public void OnSelected() => color.ApplySelected(image);
@@ -49,25 +66,36 @@ namespace UI.Elements
 
 		public void OnDrag(PointerEventData eventData)
 		{
-			if (m_dragging) m_receiver?.OnKnobMovement(eventData.delta);
+			if (m_dragging) m_receiver?.OnKnobMovement(eventData.position);
 		}
 
 		public void OnEndDrag(PointerEventData eventData)
 		{
 			if (m_mouseOver) color.ApplySelected(image);
-			else
-			{
-				m_receiver?.OnKnobHover(false);
-				color.ApplyEnabled(image);
-			}
-
+			else m_receiver?.OnKnobHover(false);
+			
 			m_dragging = false;
+		}
+
+		private void Awake()
+		{
+			var drag = dragReceptor;
+			if (drag) drag.AddReceiver(this);
+			var pointer = pointerReceptor;
+			if (pointer) pointer.AddReceiver(this);
 		}
 
 		private void OnEnable() => color.ApplyEnabled(image);
 
 		private void OnDisable() => color.ApplyDisabled(image);
 
-		private void OnDestroy() => m_receiver = null;
+		private void OnDestroy()
+		{
+			m_receiver = null;
+			var drag = dragReceptor;
+			if (drag) drag.RemoveReceiver(this);
+			var pointer = pointerReceptor;
+			if (pointer) pointer.RemoveReceiver(this);
+		}
 	}
 }

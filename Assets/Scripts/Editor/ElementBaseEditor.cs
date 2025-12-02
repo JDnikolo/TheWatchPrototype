@@ -1,6 +1,5 @@
 ﻿using UI.Elements;
 using UnityEditor;
-using UnityEngine;
 
 namespace Editor
 {
@@ -8,37 +7,28 @@ namespace Editor
 	[CanEditMultipleObjects]
 	public class ElementBaseEditor : EditorBase
 	{
-		private SerializedProperty m_layoutParent;
+		protected virtual void OnEnable()
+		{
+		}
 
-		protected virtual void OnEnable() => m_layoutParent = serializedObject.FindProperty("layoutParent");
-
-		protected virtual void OnDisable() => m_layoutParent = null;
-		
-		private bool m_displayHidden;
+		protected virtual void OnDisable()
+		{
+		}
 
 		public override bool RequiresConstantRepaint() => EditorApplication.isPlaying;
 		
-		protected sealed override void OnInspectorGUIInternal()
+		protected override void OnInspectorGUIInternal()
 		{
-			var local = (ElementBase) target;
-			if (m_layoutParent.objectReferenceValue is Component component)
-				m_displayHidden = component.gameObject == local.gameObject;
 			DisplayBeforeHidden();
 			using (new EditorGUI.DisabledScope(true)) DisplayHidden();
 		}
 
 		protected virtual void DisplayBeforeHidden()
 		{
-			if (!m_displayHidden)
-			{
-				EditorGUILayout.PropertyField(m_layoutParent);
-				ApplyModifications();
-			}
 		}
 		
 		protected virtual void DisplayHidden()
 		{
-			if (m_displayHidden) EditorGUILayout.PropertyField(m_layoutParent);
 		}
 	}
 }

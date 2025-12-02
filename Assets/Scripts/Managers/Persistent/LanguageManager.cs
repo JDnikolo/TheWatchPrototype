@@ -10,24 +10,25 @@ namespace Managers.Persistent
 	public sealed class LanguageManager : Singleton<LanguageManager>
 	{
 		private HashSet<ILocalizationUpdatable> m_localizers = new();
+		private LanguageEnum m_language = LanguageEnum.ENUM_LENGTH;
 		
 		protected override bool Override => false;
-		
-		public LanguageEnum Language { get; private set; }
 
-		public void Clear() => m_localizers.Clear();
+		public LanguageEnum Language
+		{
+			get => m_language;
+			set
+			{
+				if (!Enum.IsDefined(typeof(LanguageEnum), value) || value == LanguageEnum.ENUM_LENGTH) 
+					value = LanguageEnum.English;
+				m_language = value;
+				foreach (var localizer in m_localizers) localizer.OnLocalizationUpdate();
+			}
+		}
 		
 		public void AddLocalizer(ILocalizationUpdatable localizer) => m_localizers.Add(localizer);
 		
 		public void RemoveLocalizer(ILocalizationUpdatable localizer) => m_localizers.Remove(localizer);
-		
-		public void SetNewLanguage(LanguageEnum language)
-		{
-			if (!Enum.IsDefined(typeof(LanguageEnum), language) || language == LanguageEnum.ENUM_LENGTH) 
-				language = LanguageEnum.English;
-			Language = language;
-			foreach (var localizer in m_localizers) localizer.OnLocalizationUpdate();
-		}
 
 		protected override void OnDestroy()
 		{

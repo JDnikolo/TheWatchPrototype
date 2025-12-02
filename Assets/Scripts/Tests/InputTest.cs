@@ -5,19 +5,22 @@ namespace Tests
 {
 	public sealed class InputTest : MonoBehaviour
 	{
-		[SerializeField] private InputActionAsset actionAsset;
+		[SerializeField] private InputActionReference actionReference;
+		[SerializeField] private string bindingId;
+		[SerializeField] private InputBinding.DisplayStringOptions options;
 
 		private void Start()
 		{
-			Debug.Log(actionAsset.bindingMask);
-			actionAsset.bindingMask = new InputBinding {groups = "Keyboard&Mouse"};
-			foreach (var controlScheme in actionAsset.controlSchemes) Debug.Log(controlScheme.name);
-		}
-
-		private void Update()
-		{
-			var action = actionAsset.FindActionMap("UI").FindAction("Navigate");
-			Debug.Log(action.ReadValue<Vector2>());
+			var bindings = actionReference.action.bindings;
+			var mask = actionReference.action.bindingMask;
+			if (!mask.HasValue) Debug.Log("Mask is null");
+			else Debug.Log(mask.Value.ToDisplayString(options));
+			for (var i = 0; i < bindings.Count; i++)
+			{
+				var binding = bindings[i];
+				Debug.Log(binding.ToDisplayString(options));
+				//Debug.Log(binding.);
+			}
 		}
 	}
 }

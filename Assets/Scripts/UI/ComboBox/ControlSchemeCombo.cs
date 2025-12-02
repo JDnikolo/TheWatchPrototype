@@ -11,17 +11,18 @@ namespace UI.ComboBox
 	{
 		[SerializeField] private Elements.ComboBox comboBox;
 
+		public override ComboData CurrentData => DataPoints[(int) InputManager.Instance.ControlScheme];
+		
 		public void OnComboBoxSelectionChanged(ComboData data)
 		{
 			if (data.UserData is IRef<ControlSchemeEnum> reference) 
-				InputManager.Instance.SetNewControlScheme(reference.GetValue());
+				InputManager.Instance.ControlScheme = reference.GetValue();
 		}
 
 		public override void OnPrewarm()
 		{
 			base.OnPrewarm();
 			comboBox.SetReceiver(this);
-			comboBox.SetData(DataPoints[(int) InputManager.Instance.ControlScheme], false);
 		}
 	}
 }

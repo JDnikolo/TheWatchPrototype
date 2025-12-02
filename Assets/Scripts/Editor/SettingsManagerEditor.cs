@@ -1,5 +1,6 @@
 ﻿using Managers.Persistent;
 using UnityEditor;
+using Utilities;
 
 namespace Editor
 {
@@ -8,9 +9,9 @@ namespace Editor
 	{
 		protected override void OnInspectorGUIInternal()
 		{
-			if (EditorApplication.isPlaying)
-				using (new EditorGUI.DisabledScope(true))
-					EditorGUILayout.TextField("Settings File Path", SettingsManager.FilePath);
+			if (!EditorApplication.isPlaying) return;
+			var local = (SettingsManager) target;
+			using (new EditorGUI.DisabledScope(true)) local.SavedValues.DisplayDictionary("Saved Values");
 		}
 	}
 }

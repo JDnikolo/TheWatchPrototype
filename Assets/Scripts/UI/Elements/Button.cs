@@ -51,7 +51,7 @@ namespace UI.Elements
 		{
 			base.OnPrewarm();
 			var layoutParent = LayoutParent;
-			if (layoutParent) layoutParent.SetControlCallback(this);
+			if (layoutParent) layoutParent.SetInputCallback(this);
 		}
 	}
 }

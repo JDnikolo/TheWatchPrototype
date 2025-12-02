@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using Runtime.Automation;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -51,11 +50,11 @@ namespace Utilities
 		/// <summary>
 		/// Displays an object field if object, or the type name/null as label.
 		/// </summary>
-		public static void Display<T>(this T value, string name, bool displayNull = true)
+		public static void Display<T>(this T value, string name)
 		{
 			if (value == null)
 			{
-				if (displayNull) DisplayNullObject(name);
+				DisplayNullObject(name);
 				return;
 			}
 
@@ -85,6 +84,11 @@ namespace Utilities
 						if (string.IsNullOrEmpty(name)) EditorGUILayout.IntField(intVal);
 						else EditorGUILayout.IntField(name, intVal);
 					}
+					else if (value is long longVal)
+					{
+						if (string.IsNullOrEmpty(name)) EditorGUILayout.LongField(longVal);
+						else EditorGUILayout.LongField(name, longVal);
+					}
 					else if (value is float floatVal)
 					{
 						if (string.IsNullOrEmpty(name)) EditorGUILayout.FloatField(floatVal);
@@ -95,12 +99,22 @@ namespace Utilities
 						if (string.IsNullOrEmpty(name)) EditorGUILayout.DoubleField(doubleVal);
 						else EditorGUILayout.DoubleField(name, doubleVal);
 					}
+					else if (value is char charVal)
+					{
+						var strVal = charVal.ToString();
+						if (string.IsNullOrEmpty(name)) EditorGUILayout.TextField(strVal);
+						else EditorGUILayout.TextField(name, strVal);
+					}
 				}
-				else if (type.IsEnum)
+				else if (value is Enum enumVal)
 				{
-					var enumStr = value as Enum;
-					if (string.IsNullOrEmpty(name)) EditorGUILayout.EnumPopup(enumStr);
-					else EditorGUILayout.EnumPopup(name, enumStr);
+					if (string.IsNullOrEmpty(name)) EditorGUILayout.EnumPopup(enumVal);
+					else EditorGUILayout.EnumPopup(name, enumVal);
+				}
+				else if (value is string strVal)
+				{
+					if (string.IsNullOrEmpty(name)) EditorGUILayout.TextField(strVal);
+					else EditorGUILayout.TextField(name, strVal);
 				}
 				else
 				{
@@ -215,9 +229,18 @@ namespace Utilities
 			EditorGUI.indentLevel--;
 		}
 
-		public static void DirtyReplace<T>(this Object target, ref T value, T newValue) where T : Object
+		public static void DirtyReplaceObject<T>(this Object target, ref T value, T newValue) where T : Object
 		{
 			if (newValue == value) return;
+			value = newValue;
+			if (target) EditorUtility.SetDirty(target);
+		}
+		
+		public static void DirtyReplaceGeneric<T>(this Object target, ref T value, T newValue, 
+			IEqualityComparer<T> comparer = null)
+		{
+			comparer ??= EqualityComparer<T>.Default;
+			if (comparer.Equals(value, newValue)) return;
 			value = newValue;
 			if (target) EditorUtility.SetDirty(target);
 		}

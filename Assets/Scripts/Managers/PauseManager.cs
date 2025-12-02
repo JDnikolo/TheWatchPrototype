@@ -1,4 +1,6 @@
-﻿using Managers.Persistent;
+﻿using System.Collections.Generic;
+using Callbacks.Pausing;
+using Managers.Persistent;
 using Runtime;
 using Runtime.FixedUpdate;
 using Runtime.FrameUpdate;
@@ -15,7 +17,8 @@ namespace Managers
 	{
 		[SerializeField] private LayoutElement pauseMenu;
 		[SerializeField] private string pauseActionName = "Pause";
-		
+
+		private HashSet<IPauseCallback> m_pauseCallbacks = new();
 		private State m_pauseState;
 
 		private InputAction m_pauseAction;
@@ -31,13 +34,21 @@ namespace Managers
 			set => m_updatable.SetUpdating(value, this);
 		}
 		
+		public void AddPausedCallback(IPauseCallback pausedCallback) => m_pauseCallbacks.Add(pausedCallback);
+
+		public void RemovePausedCallback(IPauseCallback pausedCallback) => m_pauseCallbacks.Remove(pausedCallback);
+		
 		public void OnFrameUpdate()
 		{
 			m_pauseAction ??= InputManager.Instance.PersistentGameMap.GetAction(pauseActionName);
 			if (CanPause && m_pauseAction.WasPressedThisFrame())
 			{
 				var pauseObject = pauseMenu.gameObject;
-				if (!pauseObject.activeInHierarchy)
+				var state = pauseObject.activeInHierarchy;
+				state = !state;
+				foreach (var pauseCallback in m_pauseCallbacks) pauseCallback.OnPauseChanged(state);
+				state = !state;
+				if (!state)
 				{
 					m_pauseState.LoadStates();
 					var gameManager = GameManager.Instance;

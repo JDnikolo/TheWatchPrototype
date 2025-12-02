@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Boxing;
+using Callbacks.Prewarm;
 using Managers;
 using Managers.Persistent;
 using Runtime;
-using UI.ComboBox;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Object = UnityEngine.Object;
@@ -57,7 +58,7 @@ namespace Utilities
 			else map.Disable();
 		}
 
-		public static bool GetParent(this Component component, out Transform parent)
+		public static bool TryGetParent(this Component component, out Transform parent)
 		{
 			parent = component.transform.parent;
 			return parent;
@@ -119,6 +120,22 @@ namespace Utilities
 				if (components[i] is TCast cast)
 					return cast;
 			return default;
+		}
+
+		public static bool TryGetComponentInChildren(this Component instance, 
+			Type componentType, bool includeInactive, out Component component)
+		{
+			component = instance.GetComponentInChildren(componentType, includeInactive);
+			return component;
+		}
+
+		public static void UpdateNameTo(this Component instance, Object target)
+		{
+			if (!target || EditorSceneManager.IsPreviewSceneObject(instance)) return;
+			var gameObject = instance.gameObject;
+			if (gameObject.name == target.name) return;
+			gameObject.name = target.name;
+			EditorUtility.SetDirty(gameObject);
 		}
 	}
 }

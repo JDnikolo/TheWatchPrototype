@@ -21,7 +21,7 @@ namespace Runtime.Automation
 			{
 				if (!parent.GetChild(i).TryGetComponent(out T monoBehaviour)) continue;
 				var index = tempList.Count;
-				if (behaviours == null || !behaviours.ToIList().TryGetValue(index, out var oldBehavior)) 
+				if (behaviours == null || !behaviours.TryGetValue(index, out var oldBehavior)) 
 					m_newElements = true;
 				else if (oldBehavior != monoBehaviour)
 				{

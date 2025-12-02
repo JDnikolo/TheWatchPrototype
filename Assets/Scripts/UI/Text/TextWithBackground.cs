@@ -9,7 +9,7 @@ namespace UI.Text
 	[AddComponentMenu("UI/Text/Text With Background")]
 	public sealed class TextWithBackground : TextWriter
 	{
-		[SerializeField] [DeferredEditor] private TextMeshProUGUI textMesh;
+		[SerializeField] [DeferredInspector] private TextMeshProUGUI textMesh;
 		[SerializeField] private RectTransform background;
 		[SerializeField] private float padding = 25f;
 		

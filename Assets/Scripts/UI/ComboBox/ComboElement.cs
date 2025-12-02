@@ -1,6 +1,7 @@
 ﻿using Attributes;
 using Callbacks.Layout;
 using Managers.Persistent;
+using Runtime.Automation;
 using UI.Elements;
 using UI.Text;
 using UnityEngine;
@@ -14,7 +15,9 @@ namespace UI.ComboBox
 	{
 		[SerializeField] [DisableInInspector] private ComboPanel comboParent;
 		[SerializeField] private string primaryActionName = "Primary";
-		[SerializeField] private TextWriter textWriter;
+
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))]
+		private TextWriter textWriter;
 		
 		private InputAction m_primaryAction;
 
@@ -41,10 +44,10 @@ namespace UI.ComboBox
 		{
 			base.OnPrewarm();
 			var layoutParent = LayoutParent;
-			if (layoutParent) layoutParent.SetControlCallback(this);
+			if (layoutParent) layoutParent.SetInputCallback(this);
 		}
 #if UNITY_EDITOR
-		public void SetParent(ComboPanel newComboParent) => this.DirtyReplace(ref comboParent, newComboParent);
+		public void SetParent(ComboPanel newComboParent) => this.DirtyReplaceObject(ref comboParent, newComboParent);
 #endif
 	}
 }

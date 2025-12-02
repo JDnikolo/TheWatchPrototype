@@ -13,13 +13,11 @@ namespace Managers
 		{
 			public ILayoutElement[] ParentHierarchy;
 			public ILayoutElement CurrentElement;
-			public ILayoutInput CurrentInput;
 #if UNITY_EDITOR
 			public void DisplayInEditor()
 			{
 				ParentHierarchy.DisplayCollection("Parent Hierarchy");
 				CurrentElement.Display("Current Element");
-				CurrentInput.Display("Current Input");
 			}
 			
 			public void DisplayInEditor(string name) => name.DisplayIndented(DisplayInEditor);

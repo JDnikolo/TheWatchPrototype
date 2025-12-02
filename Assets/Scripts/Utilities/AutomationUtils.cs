@@ -1,13 +1,14 @@
 ﻿using UI.Layout;
+using UI.Layout.Elements;
 
 #if UNITY_EDITOR
 namespace Utilities
 {
 	public static partial class Utils
 	{
-		public static void SetManagedParent(this LayoutElement element, LayoutElement parent)
+		public static void SetManagedParent(this LayoutElement target, LayoutElement parent)
 		{
-			if (element is LayoutManaged managed) managed.SetParent(parent);
+			if (target is Element element) element.SetParent(parent);
 		}
 	}
 }

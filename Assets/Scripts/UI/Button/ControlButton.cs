@@ -1,0 +1,124 @@
+﻿using Attributes;
+using Callbacks.Beforeplay;
+using Callbacks.Layout;
+using Input;
+using Localization.Text;
+using Managers;
+using Managers.Persistent;
+using Runtime.Automation;
+using UI.Elements;
+using UI.Text;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using Utilities;
+
+namespace UI.Button
+{
+	[AddComponentMenu("UI/Button/Assign Control Button")]
+	public sealed class ControlButton : ButtonBase, ILayoutInputCallback, IBeforePlay
+	{
+		[SerializeField] private string primaryActionName = "Primary";
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))] 
+		private TextWriter textWriter;
+		
+		[SerializeField] [HideInInspector] private ControlEnum target;
+		[SerializeField] [HideInInspector] private bool secondary;
+		
+		private InputActionRebindingExtensions.RebindingOperation m_rebindingOperation;	
+		private InputAction m_action;
+		private int m_bindingIndex;
+	
+		private InputAction m_primaryAction;
+		private bool m_deselectFirst;
+		private bool m_enable;
+
+		public void OnInput(Vector2 axis, ref Direction input)
+		{
+			if (m_primaryAction.WasReleasedThisFrame())
+			{
+				if (m_deselectFirst) m_deselectFirst = false;
+				else OnClick(-1);
+			}
+		}
+
+		public override void OnSelected()
+		{
+			base.OnSelected();
+			if (m_primaryAction.IsPressed()) m_deselectFirst = true;
+		}
+
+		protected override void OnClick(int clicks)
+		{
+			if (LayoutParent) LayoutManager.Instance.Select(UIManager.Instance.ControlPanel);
+			m_enable = m_action.actionMap.enabled;
+			m_action.actionMap.Disable();
+			m_rebindingOperation = m_action.PerformInteractiveRebinding(m_bindingIndex)
+				.OnComplete(OnCompleted).OnCancel(OnCancel);
+			m_rebindingOperation.Start();
+		}
+
+		private void OnCompleted(InputActionRebindingExtensions.RebindingOperation obj)
+		{
+			m_rebindingOperation.Dispose();
+			SetDisplayString();
+			if (m_enable) m_action.actionMap.Enable();
+			SettingsManager.Instance.SetString(nameof(InputManager.Instance.BindingOverridesJson),
+				InputManager.Instance.BindingOverridesJson);
+			ResetToThis();
+		}
+
+		private void OnCancel(InputActionRebindingExtensions.RebindingOperation obj)
+		{
+			m_rebindingOperation.Dispose();
+			if (m_enable) m_action.actionMap.Enable();
+			ResetToThis();
+		}
+
+		private void ResetToThis()
+		{
+			if (LayoutParent) LayoutManager.Instance.Select(LayoutParent);
+		}
+
+		private void SetDisplayString() => 
+			textWriter.WriteText(InputManager.GetDisplayString(m_action, m_bindingIndex));
+
+		public override void OnPrewarm()
+		{
+			base.OnPrewarm();
+			if (LayoutParent) LayoutParent.SetInputCallback(this);
+		}
+		
+		public void OnBeforePlay()
+		{
+			var inputManager = InputManager.Instance;
+			m_action = inputManager.GetAction(target);
+			m_primaryAction = inputManager.UIMap.GetAction(primaryActionName);
+		}
+
+		protected override void OnEnable()
+		{
+			base.OnEnable();
+			m_bindingIndex = InputManager.Instance.GetBindingIndex(target, ref m_action, secondary);
+			SetDisplayString();
+		}
+#if UNITY_EDITOR
+		[SerializeField, HideInInspector] private Label label;
+		[SerializeField, HideInInspector] private InputActionText text;
+
+		public void SetFromParent(ControlEnum newTarget, bool newSecondary)
+		{
+			this.DirtyReplaceGeneric(ref target, newTarget);
+			this.DirtyReplaceGeneric(ref secondary, newSecondary);
+		}
+		
+		protected override void OnValidate()
+		{
+			base.OnValidate();
+			if (label && text && text.Values.TryGetValue((int) target, out var value)) 
+				label.SetManagedTextToDisplay(value);
+			if (secondary && !InputManager.HasSecondary(target)) 
+				this.DirtyReplaceGeneric(ref secondary, false);
+		}
+#endif
+	}
+}

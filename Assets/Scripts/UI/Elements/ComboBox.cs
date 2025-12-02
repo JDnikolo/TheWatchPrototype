@@ -1,7 +1,9 @@
-﻿using Callbacks.ComboBox;
+﻿using Attributes;
+using Callbacks.ComboBox;
 using Callbacks.Layout;
 using Managers;
 using Managers.Persistent;
+using Runtime.Automation;
 using UI.ComboBox;
 using UI.Text;
 using UnityEngine;
@@ -15,8 +17,12 @@ namespace UI.Elements
 	{
 		[SerializeField] private string primaryActionName = "Primary";
 		[SerializeField] private string escapeActionName = "Escape";
-		[SerializeField] private TextWriter textWriter;
-		[SerializeField] private ComboDataProvider dataProvider;
+
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))]
+		private TextWriter textWriter;
+
+		[SerializeField] [AutoAssigned(AssignMode.Child, typeof(ComboDataProvider))]
+		private ComboDataProvider dataProvider;
 
 		private IComboBoxReceiver m_receiver;
 		private InputAction m_primaryAction;
@@ -50,7 +56,7 @@ namespace UI.Elements
 
 		public void OnComboBoxFinished(ComboData data)
 		{
-			if (m_currentData != data) SetData(data);
+			if (m_currentData != data) SetData(data, true);
 			ClosePanel();
 		}
 
@@ -77,7 +83,7 @@ namespace UI.Elements
 			enabled = true;
 		}
 
-		public void SetData(ComboData data, bool callback = true)
+		private void SetData(ComboData data, bool callback)
 		{
 			m_currentData = data;
 			textWriter.WriteText(data.Label.Text);
@@ -88,9 +94,19 @@ namespace UI.Elements
 		{
 			base.OnPrewarm();
 			var layoutParent = LayoutParent;
-			if (layoutParent) layoutParent.SetControlCallback(this);
+			if (layoutParent) layoutParent.SetInputCallback(this);
 		}
-		
-		private void OnDestroy() => m_receiver = null;
+
+		protected override void OnEnable()
+		{
+			base.OnEnable();
+			SetData(dataProvider.CurrentData, false);
+		}
+
+		protected override void OnDestroy()
+		{
+			base.OnDestroy();
+			m_receiver = null;
+		}
 	}
 }

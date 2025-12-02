@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 7634036036867273753}
   - component: {fileID: 7462800013654986535}
   - component: {fileID: 3349062519456144929}
+  - component: {fileID: 1179284642863283303}
+  - component: {fileID: 2166398080803152422}
   m_Layer: 5
   m_Name: Knob
   m_TagString: Untagged
@@ -104,11 +106,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 7634036036867273753}
-  color:
-    enabledColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
-    disabledColor: {r: 0.15, g: 0.15, b: 0.15, a: 1}
-    selectedColor: {r: 0.65, g: 0.65, b: 0.65, a: 1}
-    pressedColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
+  color: {fileID: 11400000, guid: 21de925369ac57e489ccdadb2ac21cb6, type: 2}
+  dragReceptor: {fileID: 1179284642863283303}
+  pointerReceptor: {fileID: 2166398080803152422}
+--- !u!114 &1179284642863283303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472857680754606740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa91cecaa7c47719226ee73af537662, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2166398080803152422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472857680754606740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a050ff59d70d48088bff8ea29e506f34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2300968615859618758
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,11 +196,8 @@ MonoBehaviour:
   slider: {fileID: 4998533169702547269}
   knob: {fileID: 3349062519456144929}
   direction: 1
-  color:
-    enabledColor: {r: 0.75, g: 0.75, b: 0.75, a: 1}
-    disabledColor: {r: 0.101960786, g: 0.101960786, b: 0.101960786, a: 1}
-    selectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    pressedColor: {r: 0, g: 0, b: 0, a: 0}
+  color: {fileID: 11400000, guid: d699714e5c110aa458a759aac76b01f3, type: 2}
+  pointerReceptor: {fileID: 9152002477747497987}
   wholeNumbers: 0
   lowerValue: 0
   upperValue: 1
@@ -194,6 +215,7 @@ GameObject:
   - component: {fileID: 3763744929833946604}
   - component: {fileID: 5868157544628578268}
   - component: {fileID: 4998533169702547269}
+  - component: {fileID: 9152002477747497987}
   m_Layer: 5
   m_Name: Strip
   m_TagString: Untagged
@@ -258,3 +280,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.2
+--- !u!114 &9152002477747497987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4887445194611364290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a050ff59d70d48088bff8ea29e506f34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

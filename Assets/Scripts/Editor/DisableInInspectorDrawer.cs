@@ -9,7 +9,11 @@ namespace Editor
 	{
 		protected override void OnGUIInternal(Rect position, SerializedProperty property, GUIContent label)
 		{
-			using (new EditorGUI.DisabledScope(true)) EditorGUI.PropertyField(position, property, label);
+			var local = (DisableInInspectorAttribute) attribute;
+			bool disable;
+			if (local.EditorOnly) disable = EditorApplication.isPlaying;
+			else disable = true;
+			using (new EditorGUI.DisabledScope(disable)) EditorGUI.PropertyField(position, property, label);
 		}
 	}
 }

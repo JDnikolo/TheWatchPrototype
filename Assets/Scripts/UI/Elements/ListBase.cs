@@ -12,7 +12,7 @@ namespace UI.Elements
 #if UNITY_EDITOR
 		protected virtual void OnValidate()
 		{
-			if (TryGetComponent(out List newLayoutParent)) this.DirtyReplace(ref layoutParent, newLayoutParent);
+			if (TryGetComponent(out List newLayoutParent)) this.DirtyReplaceObject(ref layoutParent, newLayoutParent);
 		}
 #endif
 	}

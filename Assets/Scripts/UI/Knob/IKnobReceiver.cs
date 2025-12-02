@@ -6,6 +6,6 @@ namespace UI.Knob
 	{
 		void OnKnobHover(bool hover);
 
-		void OnKnobMovement(Vector2 delta);
+		void OnKnobMovement(Vector2 screenPosition);
 	}
 }

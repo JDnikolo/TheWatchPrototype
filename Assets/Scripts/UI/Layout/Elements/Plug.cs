@@ -7,7 +7,7 @@ using Utilities;
 namespace UI.Layout.Elements
 {
 	[AddComponentMenu("UI/Layout/Plug")]
-	public sealed class Plug : LayoutElement, ILayoutParent, ILayoutHook, ILayoutInput
+	public sealed class Plug : LayoutElement, ILayoutParent, ILayoutHook
 #if UNITY_EDITOR
 		, IHierarchyChanged
 #endif
@@ -24,26 +24,26 @@ namespace UI.Layout.Elements
 		}
 		
 		public ILayoutElement FirstChild => child;
-		
-		public ILayoutElement LeftNeighbor
+
+		public override ILayoutElement LeftNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
 		}
 
-		public ILayoutElement RightNeighbor
+		public override ILayoutElement RightNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
 		}
 
-		public ILayoutElement TopNeighbor
+		public override ILayoutElement TopNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
 		}
 
-		public ILayoutElement BottomNeighbor
+		public override ILayoutElement BottomNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
@@ -55,7 +55,7 @@ namespace UI.Layout.Elements
 			m_lastInput = input.Invert();
 		}
 
-		public void OnInput(Vector2 axis, Direction input)
+		public override void OnInput(Vector2 axis, Direction input)
 		{
 			if (m_lastInput == UIConstants.Direction_None)
 			{
@@ -72,25 +72,25 @@ namespace UI.Layout.Elements
 #if UNITY_EDITOR
 		public void OnHierarchyChanged() => child.SetManagedParent(this);
 		
-		public LayoutElement LeftManagedNeighbor
+		public override LayoutElement LeftManagedNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
 		}
 
-		public LayoutElement RightManagedNeighbor
+		public override LayoutElement RightManagedNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
 		}
 
-		public LayoutElement TopManagedNeighbor
+		public override LayoutElement TopManagedNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
 		}
 
-		public LayoutElement BottomManagedNeighbor
+		public override LayoutElement BottomManagedNeighbor
 		{
 			get => null;
 			set => throw new InvalidOperationException();
