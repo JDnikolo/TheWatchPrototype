@@ -25,11 +25,11 @@ namespace Animation
       public FixedUpdatePosition FixedUpdateOrder => FixedUpdatePosition.Animation;
 
       private float m_animationSpeed;
-      
+
       public void OnFixedUpdate()
       {
          if (blendIdle && animationBlender) animationBlender.SetBlendValues();
-         
+
          if (m_animationTimers.Count == 0) return;
          foreach (var key in m_animationTimers.Keys.ToList())
          {
@@ -39,7 +39,7 @@ namespace Animation
             StopAnimation(key);
          }
       }
-      
+
 
       public void StartAnimation(int animationHash, float duration = -1.0f, Interactable callback = null)
       {
@@ -66,7 +66,7 @@ namespace Animation
             default:
                throw new ArgumentOutOfRangeException();
          }
-         
+
          if (!(duration > 0)) return;
 
          if (!m_animationTimers.TryAdd(animationHash, duration))
@@ -115,7 +115,7 @@ namespace Animation
          {
             var callback = m_animationFinishedCallbacks[animationHash];
             m_animationFinishedCallbacks.Remove(animationHash);
-            
+
             if (callOnFinish) callback.Interact();
          }
       }
@@ -169,29 +169,24 @@ namespace Animation
       private void Start()
       {
          GameManager.Instance.AddFixedUpdateSafe(this);
-         PauseManager.Instance.AddPausedCallback(this);
+         PauseManager.Instance?.AddPausedCallback(this);
       }
 
 
       private void OnDestroy()
-      { 
+      {
          GameManager.Instance.RemoveFixedUpdateSafe(this);
          PauseManager.Instance?.RemovePausedCallback(this);
-
       }
 
       public void OnPauseChanged(bool paused)
       {
-         Debug.Log($"OnPauseChanged {paused}");
          if (paused)
          {
             m_animationSpeed = animator.speed;
             animator.speed = 0;
          }
-         else
-         {
-            animator.speed = m_animationSpeed;
-         }
+         else animator.speed = m_animationSpeed;
       }
    }
 }

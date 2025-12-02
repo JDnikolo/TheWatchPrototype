@@ -519,7 +519,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.65828717, z: 0, w: 0.75276697}
-  m_LocalPosition: {x: 0, y: 0.59, z: 0}
+  m_LocalPosition: {x: 0, y: 1.51, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -790,6 +790,10 @@ PrefabInstance:
     - target: {fileID: 5066801147436599275, guid: 7b8d0a52834a6594f93bc0358401e361, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5820103382978804966, guid: 7b8d0a52834a6594f93bc0358401e361, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2235,7 +2239,7 @@ GameObject:
   - component: {fileID: 1160538805}
   - component: {fileID: 1160538804}
   m_Layer: 0
-  m_Name: SphereTarget
+  m_Name: LookTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2251,7 +2255,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.099999994, y: 0.1, z: 0.099999994}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 921262910}
@@ -3195,7 +3199,7 @@ GameObject:
   - component: {fileID: 1726097246}
   - component: {fileID: 1726097245}
   m_Layer: 0
-  m_Name: SphereTarget
+  m_Name: MoveTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4213,7 +4217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brain: {fileID: 2000791505}
-  onCinematicAssigned: {fileID: 0}
+  onCinematicAssigned: {fileID: 2000791511}
 --- !u!114 &2000791505 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4416600237124028167, guid: 7cbd8fd53af18a34e80258dce37b0926, type: 3}
@@ -4237,8 +4241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dae81344a6344989e4fc8ef768f5ce6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveTarget: {fileID: 1303103574}
-  lookTarget: {fileID: 921262910}
+  moveTarget: {fileID: 1726097244}
+  lookTarget: {fileID: 1160538803}
 --- !u!1001 &2076919900
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using Utilities;
 
 namespace Interactables.Triggers
 {
-	[AddComponentMenu("Interactables/Triggers/Interactable Toggle Trigger")]
+	[AddComponentMenu("Interactables/Triggers/Toggle Trigger")]
 	public sealed class InteractableToggleTrigger : MonoBehaviour
 	{
 		[SerializeField] private InteractableToggle[] interactables;

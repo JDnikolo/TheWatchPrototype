@@ -4,7 +4,7 @@ using Utilities;
 
 namespace Interactables.Triggers
 {
-	[AddComponentMenu("Interactables/Triggers/Interactable Single Trigger")]
+	[AddComponentMenu("Interactables/Triggers/Single Trigger")]
 	public class InteractableSingleTrigger : InteractableTrigger
 	{
 		private bool m_playerEntered;
