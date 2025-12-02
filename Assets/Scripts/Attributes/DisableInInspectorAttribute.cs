@@ -4,8 +4,8 @@ namespace Attributes
 {
 	public sealed class DisableInInspectorAttribute : PropertyAttribute
 	{
-		public bool EditorOnly;
+		public bool AllowInEditor;
 
-		public DisableInInspectorAttribute(bool editorOnly = true) => EditorOnly = editorOnly;
+		public DisableInInspectorAttribute(bool allowInEditor = false) => AllowInEditor = allowInEditor;
 	}
 }

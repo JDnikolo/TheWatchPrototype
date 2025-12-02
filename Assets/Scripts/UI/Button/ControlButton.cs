@@ -21,7 +21,7 @@ namespace UI.Button
 		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))] 
 		private TextWriter textWriter;
 		
-		[SerializeField] [HideInInspector] private ControlEnum target;
+		[SerializeField] [HideInInspector] private FullControlEnum target;
 		[SerializeField] [HideInInspector] private bool secondary;
 		
 		private InputActionRebindingExtensions.RebindingOperation m_rebindingOperation;	
@@ -80,7 +80,7 @@ namespace UI.Button
 		}
 
 		private void SetDisplayString() => 
-			textWriter.WriteText(InputManager.GetDisplayString(m_action, m_bindingIndex));
+			textWriter.WriteText(m_action.ToBindingDisplayString(m_bindingIndex));
 
 		public override void OnPrewarm()
 		{
@@ -91,7 +91,7 @@ namespace UI.Button
 		public void OnBeforePlay()
 		{
 			var inputManager = InputManager.Instance;
-			m_action = inputManager.GetAction(target);
+			m_action = inputManager.GetAction(InputManager.GetGroupedControl(target));
 			m_primaryAction = inputManager.UIMap.GetAction(primaryActionName);
 		}
 
@@ -105,7 +105,7 @@ namespace UI.Button
 		[SerializeField, HideInInspector] private Label label;
 		[SerializeField, HideInInspector] private InputActionText text;
 
-		public void SetFromParent(ControlEnum newTarget, bool newSecondary)
+		public void SetFromParent(FullControlEnum newTarget, bool newSecondary)
 		{
 			this.DirtyReplaceGeneric(ref target, newTarget);
 			this.DirtyReplaceGeneric(ref secondary, newSecondary);

@@ -6,6 +6,8 @@ namespace Editor
 	{
 		private bool m_applyModifications;
 		private bool m_markDirty;
+
+		protected virtual bool DrawDefault => true;
 		
 		protected void ApplyModifications() => m_applyModifications = true;
 		protected void MarkDirty() => m_markDirty = true;
@@ -14,7 +16,7 @@ namespace Editor
 		{
 			m_applyModifications = false;
 			m_markDirty = false;
-			DrawDefaultInspector();
+			if (DrawDefault) DrawDefaultInspector();
 			OnInspectorGUIInternal();
 			if (m_applyModifications) serializedObject.ApplyModifiedProperties();
 			if (m_markDirty) EditorUtility.SetDirty(serializedObject.targetObject);

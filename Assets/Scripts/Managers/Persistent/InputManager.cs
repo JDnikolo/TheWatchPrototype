@@ -22,8 +22,15 @@ namespace Managers.Persistent
 		private ControlSchemeEnum m_controlScheme = ControlSchemeEnum.ENUM_LENGTH;
 		private Updatable m_updatable;
 		private int m_activeControls;
-		private bool m_cursorVisible;
+		private bool m_cursorVisible = true;
 
+		private const string KeyboardAndMouse = "Keyboard&Mouse";
+		private const string Gamepad = "Gamepad";
+		
+		public static InputBinding KeyboardMask => InputBinding.MaskByGroup(KeyboardAndMouse);
+		
+		public static InputBinding GamepadMask => InputBinding.MaskByGroup(Gamepad);
+		
 		protected override bool Override => false;
 
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.InputManager;
@@ -52,10 +59,10 @@ namespace Managers.Persistent
 				switch (m_controlScheme = value)
 				{
 					case ControlSchemeEnum.Keyboard:
-						actionAsset.bindingMask = InputBinding.MaskByGroup("Keyboard&Mouse");
+						actionAsset.bindingMask = KeyboardMask;
 						break;
 					case ControlSchemeEnum.Gamepad:
-						actionAsset.bindingMask = InputBinding.MaskByGroup("Gamepad");
+						actionAsset.bindingMask = GamepadMask;
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -97,67 +104,229 @@ namespace Managers.Persistent
 
 		public static bool WasPointerReleasedThisFrame => Pointer.current.press.wasReleasedThisFrame;
 
-		public InputAction GetAction(ControlEnum control)
+		public InputAction GetAction(GroupedControlEnum control)
 		{
 			switch (control)
 			{
-				case ControlEnum.KeyboardMoveForward:
-				case ControlEnum.KeyboardMoveBackward:
-				case ControlEnum.KeyboardMoveLeft:
-				case ControlEnum.KeyboardMoveRight:
+				case GroupedControlEnum.MoveForward:
+				case GroupedControlEnum.MoveBackward:
+				case GroupedControlEnum.MoveLeft:
+				case GroupedControlEnum.MoveRight:
 					return PlayerMap.GetAction("Move");
-				case ControlEnum.KeyboardInteract:
+				case GroupedControlEnum.Interact:
 					return PlayerMap.GetAction("Interact");
-				case ControlEnum.KeyboardShout:
+				case GroupedControlEnum.Shout:
 					return PlayerMap.GetAction("Shout");
-				case ControlEnum.KeyboardJournal:
+				case GroupedControlEnum.Journal:
 					return PersistentGameMap.GetAction("Journal");
+				case GroupedControlEnum.Help:
+					return PersistentGameMap.GetAction("Help");
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 		}
 		
-		public int GetBindingIndex(ControlEnum control, ref InputAction action, bool secondary = false)
+		public int GetBindingIndex(FullControlEnum control, ref InputAction action, bool secondary = false)
 		{
-			action ??= GetAction(control);
-			var bindingIndex = action.GetBindingIndex(BindingMask);
+			action ??= GetAction(GetGroupedControl(control));
+			InputBinding bindingMask;
+			switch (GetControlScheme(control))
+			{
+				case ControlSchemeEnum.Keyboard:
+					bindingMask = KeyboardMask;
+					break;
+				case ControlSchemeEnum.Gamepad:
+					bindingMask = GamepadMask;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+			
+			return GetBindingIndex(control, action.GetBindingIndex(bindingMask), secondary);
+		}
+		
+		private int GetBindingIndex(FullControlEnum control, int bindingIndex, bool secondary)
+		{
 			if (secondary) bindingIndex += 1;
 			switch (control)
 			{
-				case ControlEnum.KeyboardMoveForward:
-				case ControlEnum.KeyboardInteract:
-				case ControlEnum.KeyboardShout:
-				case ControlEnum.KeyboardJournal:
+				case FullControlEnum.KeyboardMoveForward:
+				case FullControlEnum.KeyboardInteract:
+				case FullControlEnum.KeyboardShout:
+				case FullControlEnum.KeyboardJournal:
+				case FullControlEnum.KeyboardHelp:
 					return bindingIndex;
-				case ControlEnum.KeyboardMoveBackward:
+				case FullControlEnum.KeyboardMoveBackward:
 					return bindingIndex + 2;
-				case ControlEnum.KeyboardMoveLeft:
+				case FullControlEnum.KeyboardMoveLeft:
 					return bindingIndex + 4;
-				case ControlEnum.KeyboardMoveRight:
+				case FullControlEnum.KeyboardMoveRight:
 					return bindingIndex + 6;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 		}
 
-		public static string GetDisplayString(InputAction action, int bindingIndex) => 
-			action.bindings[bindingIndex].ToDisplayString();
+		public (int, int) GetBindingIndex(GroupedControlEnum control, ref InputAction action)
+		{
+			action ??= GetAction(control);
+			var bindingIndex = action.GetBindingIndex(BindingMask);
+			var fullControl = GetFullControl(control);
+			var hasSecondary = HasSecondary(fullControl);
+			var firstIndex = GetBindingIndex(fullControl, bindingIndex, false);
+			if (hasSecondary)
+			{
+				return (firstIndex, GetBindingIndex(fullControl, bindingIndex, true));
+			}
 
-		public static bool HasSecondary(ControlEnum control)
+			return (firstIndex, -1);
+		}
+
+		public FullControlEnum GetFullControl(GroupedControlEnum control)
+		{
+			ControlSchemeEnum controlScheme;
+			switch (BindingMask.groups)
+			{
+				case KeyboardAndMouse:
+					controlScheme = ControlSchemeEnum.Keyboard;
+					break;
+				case Gamepad:
+					controlScheme = ControlSchemeEnum.Gamepad;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			switch (control)
+			{
+				case GroupedControlEnum.MoveForward:
+					switch (controlScheme)
+					{
+						case ControlSchemeEnum.Keyboard:
+							return FullControlEnum.KeyboardMoveForward;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				case GroupedControlEnum.MoveBackward:
+					switch (controlScheme)
+					{
+						case ControlSchemeEnum.Keyboard:
+							return FullControlEnum.KeyboardMoveBackward;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				case GroupedControlEnum.MoveLeft:
+					switch (controlScheme)
+					{
+						case ControlSchemeEnum.Keyboard:
+							return FullControlEnum.KeyboardMoveLeft;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				case GroupedControlEnum.MoveRight:
+					switch (controlScheme)
+					{
+						case ControlSchemeEnum.Keyboard:
+							return FullControlEnum.KeyboardMoveRight;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				case GroupedControlEnum.Interact:
+					switch (controlScheme)
+					{
+						case ControlSchemeEnum.Keyboard:
+							return FullControlEnum.KeyboardInteract;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				case GroupedControlEnum.Shout:
+					switch (controlScheme)
+					{
+						case ControlSchemeEnum.Keyboard:
+							return FullControlEnum.KeyboardShout;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				case GroupedControlEnum.Journal:
+					switch (controlScheme)
+					{
+						case ControlSchemeEnum.Keyboard:
+							return FullControlEnum.KeyboardJournal;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				case GroupedControlEnum.Help:
+					switch (controlScheme)
+					{
+						case ControlSchemeEnum.Keyboard:
+							return FullControlEnum.KeyboardHelp;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
+				default:
+					throw new ArgumentOutOfRangeException(nameof(control), control, null);
+			}
+		}
+
+		public static GroupedControlEnum GetGroupedControl(FullControlEnum control)
 		{
 			switch (control)
 			{
-				case ControlEnum.KeyboardMoveForward:
-				case ControlEnum.KeyboardMoveBackward:
-				case ControlEnum.KeyboardMoveLeft:
-				case ControlEnum.KeyboardMoveRight:
-				case ControlEnum.KeyboardInteract:
-				case ControlEnum.KeyboardShout:
+				case FullControlEnum.KeyboardMoveForward:
+					return GroupedControlEnum.MoveForward;
+				case FullControlEnum.KeyboardMoveBackward:
+					return GroupedControlEnum.MoveBackward;
+				case FullControlEnum.KeyboardMoveLeft:
+					return GroupedControlEnum.MoveLeft;
+				case FullControlEnum.KeyboardMoveRight:
+					return GroupedControlEnum.MoveRight;
+				case FullControlEnum.KeyboardInteract:
+					return GroupedControlEnum.Interact;
+				case FullControlEnum.KeyboardShout:
+					return GroupedControlEnum.Shout;
+				case FullControlEnum.KeyboardJournal:
+					return GroupedControlEnum.Journal;
+				case FullControlEnum.KeyboardHelp:
+					return GroupedControlEnum.Help;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(control), control, null);
+			}
+		}
+
+		public static ControlSchemeEnum GetControlScheme(FullControlEnum control)
+		{
+			switch (control)
+			{
+				case FullControlEnum.KeyboardMoveForward:
+				case FullControlEnum.KeyboardMoveBackward:
+				case FullControlEnum.KeyboardMoveLeft:
+				case FullControlEnum.KeyboardMoveRight:
+				case FullControlEnum.KeyboardInteract:
+				case FullControlEnum.KeyboardShout:
+				case FullControlEnum.KeyboardJournal:
+				case FullControlEnum.KeyboardHelp:
+					return ControlSchemeEnum.Keyboard;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(control), control, null);
+			}
+		}
+		
+		public static bool HasSecondary(FullControlEnum control)
+		{
+			switch (control)
+			{
+				case FullControlEnum.KeyboardMoveForward:
+				case FullControlEnum.KeyboardMoveBackward:
+				case FullControlEnum.KeyboardMoveLeft:
+				case FullControlEnum.KeyboardMoveRight:
+				case FullControlEnum.KeyboardInteract:
+				case FullControlEnum.KeyboardShout:
 					return true;
-				case ControlEnum.KeyboardJournal:
+				case FullControlEnum.KeyboardJournal:
+				case FullControlEnum.KeyboardHelp:
 					return false;
 				default:
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(nameof(control), control, null);
 			}
 		}
 		

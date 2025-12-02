@@ -43,7 +43,7 @@ namespace UI.Button
 
 		private void OnDisable() => color.ApplyDisabled(image);
 #if UNITY_EDITOR
-		[SerializeField] private ControlEnum target;
+		[SerializeField] private FullControlEnum target;
 		[SerializeField] private Label label;
 		[SerializeField] private InputActionText text;
 		[SerializeField] private ControlButton firstButton;

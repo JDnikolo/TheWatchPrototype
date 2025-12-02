@@ -131,9 +131,15 @@ namespace Utilities
 		public static void UpdateNameTo(this Component instance, Object target)
 		{
 			if (!target || EditorSceneManager.IsPreviewSceneObject(instance)) return;
+			UpdateNameTo(instance, target.name);
+		}
+		
+		public static void UpdateNameTo(this Component instance, string name)
+		{
+			if (EditorSceneManager.IsPreviewSceneObject(instance)) return;
 			var gameObject = instance.gameObject;
-			if (gameObject.name == target.name) return;
-			gameObject.name = target.name;
+			if (gameObject.name == name) return;
+			gameObject.name = name;
 			EditorUtility.SetDirty(gameObject);
 		}
 	}

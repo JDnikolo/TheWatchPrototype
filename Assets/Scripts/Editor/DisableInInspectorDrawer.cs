@@ -11,7 +11,7 @@ namespace Editor
 		{
 			var local = (DisableInInspectorAttribute) attribute;
 			bool disable;
-			if (local.EditorOnly) disable = EditorApplication.isPlaying;
+			if (local.AllowInEditor) disable = EditorApplication.isPlaying;
 			else disable = true;
 			using (new EditorGUI.DisabledScope(disable)) EditorGUI.PropertyField(position, property, label);
 		}

@@ -1,6 +1,6 @@
 ﻿namespace Input
 {
-	public enum ControlEnum
+	public enum FullControlEnum
 	{
 		KeyboardMoveForward,
 		KeyboardMoveBackward,
@@ -9,5 +9,6 @@
 		KeyboardInteract,
 		KeyboardShout,
 		KeyboardJournal,
+		KeyboardHelp,
 	}
 }
