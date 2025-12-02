@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Callbacks.Pausing;
 using Interactables;
 using Managers;
 using Managers.Persistent;
@@ -10,7 +11,7 @@ using Utilities;
 
 namespace Animation
 {
-   public class PersonAnimationController : MonoBehaviour, IFixedUpdatable
+   public class PersonAnimationController : MonoBehaviour, IFixedUpdatable, IPauseCallback
    {
 
       [SerializeField] private Animator animator;
@@ -23,6 +24,8 @@ namespace Animation
 
       public FixedUpdatePosition FixedUpdateOrder => FixedUpdatePosition.Animation;
 
+      private float m_animationSpeed;
+      
       public void OnFixedUpdate()
       {
          if (blendIdle && animationBlender) animationBlender.SetBlendValues();
@@ -36,13 +39,7 @@ namespace Animation
             StopAnimation(key);
          }
       }
-
-      public void SetAnimatorEnabled(bool value)
-      {
-         Debug.Log(value);
-         if (value) animator.StartPlayback();
-         else animator.StopPlayback();
-      }
+      
 
       public void StartAnimation(int animationHash, float duration = -1.0f, Interactable callback = null)
       {
@@ -169,17 +166,32 @@ namespace Animation
          }
       }
 
-      private void Awake() 
+      private void Start()
       {
          GameManager.Instance.AddFixedUpdateSafe(this);
-         //AnimatorManager.Instance?.AddAnimator(this);
+         PauseManager.Instance.AddPausedCallback(this);
       }
 
 
       private void OnDestroy()
-      {
+      { 
          GameManager.Instance.RemoveFixedUpdateSafe(this);
-        //AnimatorManager.Instance?.RemoveAnimator(this);
+         PauseManager.Instance.RemovePausedCallback(this);
+
+      }
+
+      public void OnPauseChanged(bool paused)
+      {
+         Debug.Log($"OnPauseChanged {paused}");
+         if (paused)
+         {
+            m_animationSpeed = animator.speed;
+            animator.speed = 0;
+         }
+         else
+         {
+            animator.speed = m_animationSpeed;
+         }
       }
    }
 }
