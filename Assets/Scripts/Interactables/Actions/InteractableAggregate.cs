@@ -12,7 +12,17 @@ namespace Interactables.Actions
 			if (interactables == null) return;
 			var length = interactables.Length;
 			if (length == 0) return;
-			for (var i = 0; i < length; i++) interactables[i].Interact();
+			for (var i = 0; i < length; i++)
+			{
+				var interactable = interactables[i];
+				if (!interactable)
+				{
+					Debug.LogError($"Interactable at {i} was null!", this);
+					return;
+				}
+				
+				interactable.Interact();
+			}
 		}
 	}
 }

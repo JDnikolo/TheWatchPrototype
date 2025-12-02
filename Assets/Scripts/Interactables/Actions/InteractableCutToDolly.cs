@@ -1,6 +1,4 @@
 ﻿using Managers;
-using Managers.Persistent;
-using Runtime.FixedUpdate;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Serialization;

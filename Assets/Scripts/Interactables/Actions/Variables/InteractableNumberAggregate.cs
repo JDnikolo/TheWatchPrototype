@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Exceptions;
+using UnityEngine;
 using Variables;
 
 namespace Interactables.Actions.Variables
@@ -15,7 +16,17 @@ namespace Interactables.Actions.Variables
 			if (interactables == null) return;
 			var length = interactables.Length;
 			if (length == 0) return;
-			if (number >= 0 && number < length) interactables[number].Interact();
+			if (number >= 0 && number < length)
+			{
+				var interactable = interactables[number];
+				if (!interactable)
+				{
+					Debug.LogError($"Interactable at {number} was null!", this);
+					return;
+				}
+				
+				interactable.Interact();
+			}
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Callbacks.Pausing;
+﻿using Callbacks.Pausing;
 using Managers;
 using UnityEngine;
 
