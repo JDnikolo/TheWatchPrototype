@@ -45,7 +45,7 @@ namespace Managers
                 var journalObject = journalPanel.gameObject;
                 if (!journalObject.activeInHierarchy)
                 {
-                    m_journalState.LoadStates();
+                    m_journalState.LoadStates(PauseManager.Instance);
                     var gameManager = GameManager.Instance;
                     gameManager.FrameUpdateInvoke = FrameUpdatePosition.JournalManager;
                     gameManager.LateUpdateInvoke = LateUpdatePosition.None;
@@ -55,7 +55,7 @@ namespace Managers
                 }
                 else
                 {
-                    m_journalState.SaveStates();
+                    m_journalState.SaveStates(PauseManager.Instance);
                     journalObject.SetActive(false);
                 }
             }
