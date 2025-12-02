@@ -176,8 +176,7 @@ namespace Animation
       private void OnDestroy()
       { 
          GameManager.Instance.RemoveFixedUpdateSafe(this);
-         PauseManager.Instance.RemovePausedCallback(this);
-
+         PauseManager.Instance?.RemovePausedCallback(this);
       }
 
       public void OnPauseChanged(bool paused)

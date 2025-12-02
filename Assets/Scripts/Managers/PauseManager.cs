@@ -38,6 +38,8 @@ namespace Managers
 		private void SetPause(bool paused)
 		{
 			if (m_lastPaused == paused) return;
+			m_lastPaused = paused;
+			foreach (var pauseCallback in m_pauseCallbacks) pauseCallback.OnPauseChanged(paused);
 		}
 		
 		public void AddPausedCallback(IPauseCallback pausedCallback) => m_pauseCallbacks.Add(pausedCallback);
