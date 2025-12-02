@@ -3016,52 +3016,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c845dc8b1b64d6fbc1d986a9f30c521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1655732385
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1655732387}
-  - component: {fileID: 1655732386}
-  m_Layer: 0
-  m_Name: AgentController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1655732386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1655732385}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1dae81344a6344989e4fc8ef768f5ce6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveTarget: {fileID: 1726097244}
-  lookTarget: {fileID: 1160538803}
---- !u!4 &1655732387
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1655732385}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1694628474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4204,6 +4158,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5415618789017399353, guid: 7cbd8fd53af18a34e80258dce37b0926, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2000791504}
+    - targetCorrespondingSourceObject: {fileID: 5415618789017399353, guid: 7cbd8fd53af18a34e80258dce37b0926, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2000791511}
   m_SourcePrefab: {fileID: 100100000, guid: 7cbd8fd53af18a34e80258dce37b0926, type: 3}
 --- !u!4 &2000791502 stripped
 Transform:
@@ -4228,7 +4185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brain: {fileID: 2000791505}
-  onCinematicAssigned: {fileID: 1655732386}
+  onCinematicAssigned: {fileID: 0}
 --- !u!114 &2000791505 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4416600237124028167, guid: 7cbd8fd53af18a34e80258dce37b0926, type: 3}
@@ -4240,6 +4197,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af161475efc47078834e52ff0966a3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2000791511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000791503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dae81344a6344989e4fc8ef768f5ce6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveTarget: {fileID: 1303103574}
+  lookTarget: {fileID: 921262910}
 --- !u!1001 &2076919900
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5380,5 +5351,4 @@ SceneRoots:
   - {fileID: 9362043}
   - {fileID: 84957544}
   - {fileID: 1392400629}
-  - {fileID: 1655732387}
   - {fileID: 1851410789}

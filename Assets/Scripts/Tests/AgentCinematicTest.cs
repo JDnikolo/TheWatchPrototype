@@ -1,5 +1,4 @@
-﻿using System;
-using Agents;
+﻿using Agents;
 using Agents.Behaviors;
 using Callbacks.Agent;
 using Managers.Persistent;
