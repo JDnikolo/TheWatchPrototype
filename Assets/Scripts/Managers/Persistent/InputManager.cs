@@ -101,6 +101,12 @@ namespace Managers.Persistent
 				case ControlEnum.KeyboardMoveLeft:
 				case ControlEnum.KeyboardMoveRight:
 					return PlayerMap.GetAction("Move");
+				case ControlEnum.KeyboardInteract:
+					return PlayerMap.GetAction("Interact");
+				case ControlEnum.KeyboardShout:
+					return PlayerMap.GetAction("Shout");
+				case ControlEnum.KeyboardJournal:
+					return PersistentGameMap.GetAction("Journal");
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
@@ -114,6 +120,9 @@ namespace Managers.Persistent
 			switch (control)
 			{
 				case ControlEnum.KeyboardMoveForward:
+				case ControlEnum.KeyboardInteract:
+				case ControlEnum.KeyboardShout:
+				case ControlEnum.KeyboardJournal:
 					return bindingIndex;
 				case ControlEnum.KeyboardMoveBackward:
 					return bindingIndex + 2;
@@ -137,7 +146,11 @@ namespace Managers.Persistent
 				case ControlEnum.KeyboardMoveBackward:
 				case ControlEnum.KeyboardMoveLeft:
 				case ControlEnum.KeyboardMoveRight:
+				case ControlEnum.KeyboardInteract:
+				case ControlEnum.KeyboardShout:
 					return true;
+				case ControlEnum.KeyboardJournal:
+					return false;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

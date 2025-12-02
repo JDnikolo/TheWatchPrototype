@@ -20,7 +20,8 @@ namespace Managers
 
 		private HashSet<IPauseCallback> m_pauseCallbacks = new();
 		private State m_pauseState;
-
+		private bool m_lastPaused;
+		
 		private InputAction m_pauseAction;
 		private Updatable m_updatable;
 		
@@ -32,6 +33,11 @@ namespace Managers
 		{
 			get => m_updatable.Updating;
 			set => m_updatable.SetUpdating(value, this);
+		}
+
+		private void SetPause(bool paused)
+		{
+			if (m_lastPaused == paused) return;
 		}
 		
 		public void AddPausedCallback(IPauseCallback pausedCallback) => m_pauseCallbacks.Add(pausedCallback);
@@ -45,12 +51,9 @@ namespace Managers
 			{
 				var pauseObject = pauseMenu.gameObject;
 				var state = pauseObject.activeInHierarchy;
-				state = !state;
-				foreach (var pauseCallback in m_pauseCallbacks) pauseCallback.OnPauseChanged(state);
-				state = !state;
 				if (!state)
 				{
-					m_pauseState.LoadStates();
+					m_pauseState.LoadStates(this);
 					var gameManager = GameManager.Instance;
 					gameManager.FrameUpdateInvoke = FrameUpdatePosition.PauseManager;
 					gameManager.LateUpdateInvoke = LateUpdatePosition.None;
@@ -58,7 +61,7 @@ namespace Managers
 					InputManager.Instance.ForceUIInput();
 					LayoutManager.Instance.ForceSelect(pauseMenu);
 				}
-				else m_pauseState.SaveStates();
+				else m_pauseState.SaveStates(this);
 			}
 		}
 #if UNITY_EDITOR

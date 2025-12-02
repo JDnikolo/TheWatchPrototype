@@ -345,6 +345,8 @@ namespace UI.Layout.Elements
 				else
 					firstElement.LeftManagedNeighbor = firstElement.RightManagedNeighbor =
 						firstElement.TopManagedNeighbor = firstElement.BottomManagedNeighbor = null;
+				
+				firstElement.SetManagedParent(this);
 				return;
 			}
 			
@@ -398,10 +400,12 @@ namespace UI.Layout.Elements
 					throw new ArgumentOutOfRangeException();
 			}
 			
+			lastElement.SetManagedParent(this);
 			childIndex = firstIndex;
 			while (childIndex < lastIndex)
 			{
 				var element = parent.GetChild(childIndex).GetComponent<Element>();
+				element.SetManagedParent(this);
 				while (childIndex <= lastIndex)
 				{
 					childIndex += 1;
