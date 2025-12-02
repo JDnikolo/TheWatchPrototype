@@ -181,16 +181,12 @@ namespace Animation
 
       public void OnPauseChanged(bool paused)
       {
-         Debug.Log($"OnPauseChanged {paused}");
          if (paused)
          {
             m_animationSpeed = animator.speed;
             animator.speed = 0;
          }
-         else
-         {
-            animator.speed = m_animationSpeed;
-         }
+         else animator.speed = m_animationSpeed;
       }
    }
 }
