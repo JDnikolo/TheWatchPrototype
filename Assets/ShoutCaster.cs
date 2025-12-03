@@ -30,10 +30,15 @@ public class ShoutCaster : MonoBehaviour, IFrameUpdatable
 
     private InputAction m_shoutAction;
     
+    [FormerlySerializedAs("shoutInteractDistance")]
     [Header("Parameters")]
-    [SerializeField] private float shoutInteractDistance;
+    [SerializeField] private float shoutInteractDistanceOuter;
     
-    [SerializeField] private float shoutWidth;
+    [FormerlySerializedAs("shoutWidth")] [SerializeField] private float shoutWidthOuter;
+    
+    [SerializeField] private float shoutInteractDistanceInner;
+    
+    [SerializeField] private float shoutWidthInner;
     
     [SerializeField] private LayerMask interactableLayers;
     [SerializeField] private LayerMask terrainLayers;
@@ -54,29 +59,44 @@ public class ShoutCaster : MonoBehaviour, IFrameUpdatable
         PlayShoutAudio();
         PlayShoutAnimation();
         
-        Collider[] interactables = new Collider[MaxInteractables];
-
-        var center = playerCameraTransform.position +
-                     playerCameraTransform.forward * shoutInteractDistance / 2;
-        var halfExtents  = new Vector3(shoutWidth/2, shoutWidth/2, shoutInteractDistance/2);
+        Collider[] interactablesInner = new Collider[MaxInteractables];
         
-        var interactableCount = UnityEngine.Physics.OverlapBoxNonAlloc(
-            center, halfExtents, interactables, 
+        var centerInner = playerCameraTransform.position +
+                          playerCameraTransform.forward * shoutInteractDistanceInner / 2;
+        var halfExtentsInner  = new Vector3(shoutWidthInner/2, shoutWidthInner/2, shoutInteractDistanceInner/2);
+        
+        var interactableCountInner = UnityEngine.Physics.OverlapBoxNonAlloc(
+            centerInner, halfExtentsInner, interactablesInner, 
+            playerCameraTransform.rotation, m_layerMask, QueryTriggerInteraction.Ignore
+        );
+        
+        Collider[] interactablesOuter = new Collider[MaxInteractables];
+
+        var centerOuter = playerCameraTransform.position +
+                     playerCameraTransform.forward * (shoutInteractDistanceOuter / 2 + shoutInteractDistanceInner);
+        var halfExtentsOuter  = new Vector3(shoutWidthOuter/2, shoutWidthOuter/2, shoutInteractDistanceOuter/2);
+        
+        var interactableCountOuter = UnityEngine.Physics.OverlapBoxNonAlloc(
+            centerOuter, halfExtentsOuter, interactablesOuter, 
             playerCameraTransform.rotation, m_layerMask, QueryTriggerInteraction.Ignore
             );
         
-        if (interactableCount == 0) return;
+        if (interactableCountOuter == 0 && interactableCountInner == 0) return;
+
+        var interactables = new HashSet<Collider>();
+        for (var i = 0; i < interactableCountInner; i++) interactables.Add(interactablesInner[i]);
+        for (var i = 0; i < interactableCountOuter; i++) interactables.Add(interactablesOuter[i]);
         
         var unblockedInteractables = new SortedList<float, Collider>();
-        for (var i = 0; i < interactableCount; i++)
+        foreach (var interactable in interactables)
         {
             var distance = Vector3.Distance(playerCameraTransform.position, 
-                interactables[i].transform.position);
+                interactable.transform.position);
             if (!UnityEngine.Physics.Raycast(playerCameraTransform.position,
-                    interactables[i].transform.position - playerCameraTransform.position, 
+                    interactable.transform.position - playerCameraTransform.position, 
                     distance, m_terrainMask, QueryTriggerInteraction.Ignore))
             {
-                unblockedInteractables.Add(distance, interactables[i]);
+                unblockedInteractables.Add(distance, interactable);
             }
         }
         if (unblockedInteractables.Count == 0) return;
@@ -123,9 +143,13 @@ public class ShoutCaster : MonoBehaviour, IFrameUpdatable
     {
         var rotationMatrix = Matrix4x4.TRS(playerCameraTransform.position, playerCameraTransform.rotation, playerCameraTransform.lossyScale);
         Gizmos.matrix = rotationMatrix;	
-        var center = Vector3.forward * shoutInteractDistance / 2;
-        var size  = Vector3.right * shoutWidth + Vector3.up * shoutWidth
-                                               + Vector3.forward * shoutInteractDistance;
+        var center = Vector3.forward * shoutInteractDistanceInner / 2;
+        var size  = Vector3.right * shoutWidthInner + Vector3.up * shoutWidthInner
+                                               + Vector3.forward * shoutInteractDistanceInner;
+        Gizmos.DrawWireCube(center, size);
+        center = Vector3.forward * (shoutInteractDistanceOuter / 2 + shoutInteractDistanceInner);
+        size  = Vector3.right * shoutWidthOuter + Vector3.up * shoutWidthOuter
+                                                    + Vector3.forward * shoutInteractDistanceOuter;
         Gizmos.DrawWireCube(center, size);
     }
 

@@ -13,6 +13,16 @@ namespace Managers
 		
 		public GameObject PlayerObject => playerObject;
 		
+		private Rigidbody m_playerRigidbody;
+
+		public Rigidbody PlayerRigidbody
+		{
+			get { 
+			m_playerRigidbody ??= playerObject.GetComponent<Rigidbody>();
+			return m_playerRigidbody;
+			}
+		}
+		
 		public Camera PlayerCamera => playerCamera;
 	}
 }
