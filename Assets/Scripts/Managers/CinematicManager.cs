@@ -240,12 +240,14 @@ namespace Managers
         public override void ResolveMovement()
         {
             m_cameraToMove.Lens.FieldOfView = Mathf.Lerp(m_stepStartingFOV, m_targetFOV, Progress/m_nextStepProgress);
+            if (Progress > 0.9f) m_cameraToMove.Lens.FieldOfView= m_initialFOV;
             if (!(Progress > m_nextStepProgress)) return;
             
             m_nextStepProgress += m_progressPerStep;
             var temp = 0 + m_targetFOV;
             m_targetFOV = m_stepStartingFOV;
             m_stepStartingFOV = temp;
+
         }
     }
 }
