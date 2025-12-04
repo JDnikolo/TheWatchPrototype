@@ -5336,10 +5336,12 @@ MonoBehaviour:
   playerCameraTransform: {fileID: 8040656624870522769}
   shoutParticles: {fileID: 2145978082813099964}
   shoutSource: {fileID: 6043534776875329347}
-  shoutClips: {fileID: 11400000, guid: f231b092df042cf4f9378e2a5fa5ab4e, type: 2}
+  shoutAudios: {fileID: 11400000, guid: f231b092df042cf4f9378e2a5fa5ab4e, type: 2}
   shoutActionName: Shout
-  shoutInteractDistance: 9.82
-  shoutWidth: 2.99
+  shoutInteractDistanceOuter: 9.82
+  shoutWidthOuter: 2.99
+  shoutInteractDistanceInner: 0
+  shoutWidthInner: 0
   interactableLayers:
     serializedVersion: 2
     m_Bits: 8
@@ -5705,7 +5707,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footstepSource: {fileID: 3595886445979870683}
   footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
-  terrainLayerName: Terrain
+  terrainLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &8352069446398804067 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3523673287095976097, guid: 0e820d4c63a792e40aab8d5b852b1e40, type: 3}
