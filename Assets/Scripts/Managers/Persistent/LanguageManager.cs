@@ -42,6 +42,8 @@ namespace Managers.Persistent
 			m_localizers = null;
 		}
 #if UNITY_EDITOR
+		public LanguageEnum LanguageEditor => m_language;
+		
 		public HashSet<ILocalizationUpdatable> Localizers => m_localizers;
 #endif
 	}

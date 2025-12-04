@@ -13,7 +13,7 @@ namespace Editor
 			if (EditorApplication.isPlaying)
 				using (new EditorGUI.DisabledScope(true))
 				{
-					EditorGUILayout.EnumPopup("Language", local.Language);
+					EditorGUILayout.EnumPopup("Language", local.LanguageEditor);
 					local.Localizers.DisplayCollection("Active Localizers");
 				}
 		}

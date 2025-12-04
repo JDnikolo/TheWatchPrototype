@@ -14,7 +14,7 @@ namespace Editor
 			if (EditorApplication.isPlaying)
 				using (new EditorGUI.DisabledScope(true))
 				{
-					EditorGUILayout.EnumPopup("Control Scheme", local.ControlScheme);
+					EditorGUILayout.EnumPopup("Control Scheme", local.ControlSchemeEditor);
 					DisplayInputMap(local.PlayerMap, "Player Map");
 					DisplayInputMap(local.UIMap, "UI Map");
 					DisplayInputMap(local.PersistentGameMap, "Persistent Game Map");

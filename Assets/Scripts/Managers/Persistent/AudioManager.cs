@@ -64,7 +64,7 @@ namespace Managers.Persistent
 			if (m_fadeOutTimer > 0f)
 			{
 				m_fadeOutTimer -= deltaTime;
-				fadePlayer.Volume = Mathf.Clamp01(m_fadeOutTimer / fadeOutTime) * m_fadeOutVolume;
+				fadePlayer.Volume = Mathf.Clamp01(m_fadeOutTimer / m_fadeOutTime) * m_fadeOutVolume;
 				if (m_fadeOutTimer <= 0f) fadePlayer.Stop();
 				else if (m_delayedFade) return;
 			}
@@ -72,10 +72,10 @@ namespace Managers.Persistent
 			if (m_fadeInTimer > 0f)
 			{
 				m_fadeInTimer -= deltaTime;
-				fadePlayer.Volume = (-Mathf.Clamp01(m_fadeInTimer / fadeInTime) + 1f) * m_fadeInVolume;
+				musicPlayer.Volume = (-Mathf.Clamp01(m_fadeInTimer / m_fadeInTime) + 1f) * m_fadeInVolume;
 			}
 
-			if (m_fadeInTimer <= 0f && m_fadeOutTimer <= 0f) RequireUpdate = false;
+			CheckUpdate();
 		}
 		
 		public void StartMusic(AudioClip music, bool delayedFade = false, 
@@ -95,7 +95,7 @@ namespace Managers.Persistent
 			}
 			
 			if (fadePlayer.IsPlaying) SetupFadeOut(ref fadeOutTime);
-			TestUpdate();
+			CheckUpdate();
 		}
 
 		public void StopMusic(float fadeOutTime = -1f)
@@ -108,7 +108,7 @@ namespace Managers.Persistent
 				SetupFadeOut(ref fadeOutTime);
 			}
 			
-			TestUpdate();
+			CheckUpdate();
 		}
 
 		private void SetupFadeOut(ref float fadeOutTime)
@@ -126,19 +126,19 @@ namespace Managers.Persistent
 
 		private void ResetUpdate() => m_fadeInTime = m_fadeOutTime = m_fadeInTimer = m_fadeOutTimer = 0f;
 
-		private void TestUpdate() => RequireUpdate = m_fadeInTime > 0f || m_fadeOutTime > 0f;
+		private void CheckUpdate() => RequireUpdate = m_fadeInTimer > 0f || m_fadeOutTimer > 0f;
 #if UNITY_EDITOR
 		public float FadeInTime => m_fadeInTime;
 		
-		public float FadeOutTime => m_fadeOutTime;
+		public float FadeInTimer => m_fadeInTimer;
 		
 		public float FadeInVolume => m_fadeInVolume;
 		
-		public float FadeOutVolume => m_fadeOutVolume;
-		
-		public float FadeInTimer => m_fadeInTimer;
+		public float FadeOutTime => m_fadeOutTime;
 		
 		public float FadeOutTimer => m_fadeOutTimer;
+		
+		public float FadeOutVolume => m_fadeOutVolume;
 		
 		public bool DelayedFade => m_delayedFade;
 #endif

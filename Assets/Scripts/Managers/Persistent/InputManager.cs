@@ -403,5 +403,8 @@ namespace Managers.Persistent
 			m_persistentGameMap.Dispose();
 			m_persistentGameMap = null;
 		}
+#if UNITY_EDITOR
+		public ControlSchemeEnum ControlSchemeEditor => m_controlScheme;
+#endif
 	}
 }
