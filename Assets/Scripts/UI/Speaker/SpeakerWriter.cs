@@ -15,26 +15,26 @@ namespace UI.Speaker
 	[AddComponentMenu("UI/Speaker/Speaker Writer")]
 	public sealed class SpeakerWriter : MonoBehaviour, IFrameUpdatable
 	{
-		[Header("Linked behaviors")] 
-		[SerializeField] private TextMeshProUGUI textWriter;
+		[Header("Linked behaviors")] [SerializeField]
+		private TextMeshProUGUI textWriter;
+
 		[SerializeField] private TextWithBackground speakerWriter;
 		[SerializeField] private AudioSource speakerSource;
 		[SerializeField] private UnityEngine.UI.Slider slider;
 
-		[Header("Control schemes")] 
-		[SerializeField] private string skipActionName = "SkipDialogue";
+		[Header("Control schemes")] [SerializeField]
+		private string skipActionName = "SkipDialogue";
 
-		[Header("Delays")] 
-		[SerializeField] private float characterDelay;
+		[Header("Delays")] [SerializeField] private float characterDelay;
 		[SerializeField] private float periodDelay;
 		[SerializeField] private float commaDelay;
 		[SerializeField] private float spaceDelay;
 
 		private readonly StringBuilder m_stringBuilder = new();
-		
+
 		private ISpeakerWriterFinished m_onFinished;
 		private InputAction m_skipAction;
-		private ClipAggregate m_audio;
+		private AudioAggregate m_audio;
 		private string m_text;
 		private float m_timer;
 		private int m_previousPageCount;
@@ -62,7 +62,7 @@ namespace UI.Speaker
 		}
 
 		public void EnableSkip() => m_allowSkip = true;
-		
+
 		public void DisableSkip() => m_allowSkip = false;
 
 		public void DisposeText()
@@ -80,7 +80,7 @@ namespace UI.Speaker
 				m_skipAction = InputManager.Instance.UIMap.GetAction(skipActionName);
 				slider.onValueChanged.AddListener(SliderChanged);
 			}
-			
+
 			var skipDialogue = m_allowSkip && m_skipAction.WasPressedThisFrame();
 			if (m_forceFinish)
 			{
@@ -125,7 +125,7 @@ namespace UI.Speaker
 					m_startNewAudio = false;
 					StartNextSpeaker();
 				}
-				
+
 				m_timer -= Time.deltaTime;
 				if (m_timer < 0)
 				{
@@ -156,11 +156,11 @@ namespace UI.Speaker
 		{
 			if (!m_audio) return;
 			//var speakerTime = CalculateSpeakerTime();
-			var clip = m_audio.Clips.GetRandom();
-			speakerSource.clip = clip;
-			m_audio.Settings.Apply(speakerSource);
+			speakerSource.clip = m_audio.Clips.GetRandom();
+			m_audio.Settings.Apply(speakerSource, m_audio.Group);
 			speakerSource.Play();
 		}
+
 		/*
 		private float CalculateSpeakerTime()
 		{

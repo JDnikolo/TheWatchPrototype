@@ -1,8 +1,8 @@
-﻿using Input;
+﻿using System;
+using Input;
 using Managers.Persistent;
 using Runtime.FrameUpdate;
 using UnityEngine;
-using Utilities;
 
 namespace Player
 {
@@ -51,9 +51,9 @@ namespace Player
 			lookAxis = m_lookAxis.Value;
 			return true;
 		}
-		
-		private void Awake() => GameManager.Instance.AddFrameUpdateSafe(this);
 
-		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdateSafe(this);
+		private void Start() => GameManager.Instance.AddFrameUpdate(this);
+
+		private void OnDestroy() => GameManager.Instance?.RemoveFrameUpdate(this);
 	}
 }

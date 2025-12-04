@@ -81,9 +81,9 @@ namespace Agents
 			return false;
 		}
 		
-		private void Awake() => GameManager.Instance.AddFrameUpdateSafe(this);
+		private void Start() => GameManager.Instance.AddFrameUpdate(this);
 
-		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdateSafe(this);
+		private void OnDestroy() => GameManager.Instance?.RemoveFrameUpdate(this);
 #if UNITY_EDITOR
 		private void OnValidate()
 		{

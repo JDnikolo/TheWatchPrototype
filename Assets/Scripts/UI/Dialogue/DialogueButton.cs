@@ -11,25 +11,21 @@ namespace UI.Dialogue
 	[AddComponentMenu("UI/Dialogue/Dialogue Button")]
 	public class DialogueButton : MonoBehaviour, IFrameUpdatable
 	{
-		[Header("Colors")]
-		[SerializeField] private Color normalColor = Color.white;
+		[Header("Colors")] [SerializeField] private Color normalColor = Color.white;
 		[SerializeField] private Color disabledColor = Color.black;
 
-		[Header("Modifiers")]
-		[SerializeField] private Color hoverColor = Color.white;
+		[Header("Modifiers")] [SerializeField] private Color hoverColor = Color.white;
 		[SerializeField] private Color pressedColor = Color.white;
 
-		[Header("Input")] 
-		[SerializeField] private RectTransform outerCircleRect;
+		[Header("Input")] [SerializeField] private RectTransform outerCircleRect;
 		[SerializeField] private RectTransform innerCircleRect;
 		[SerializeField] private string selectActionName = "SelectDialogue";
 		[SerializeField] private int split;
 		[SerializeField] private int part;
-		
-		[Header("Fields")] 
-		[SerializeField] private Image image;
+
+		[Header("Fields")] [SerializeField] private Image image;
 		[SerializeField] private DialogueWriter parent;
-		
+
 		private InputAction m_selectAction;
 		private DialogueOption m_option;
 		private bool m_optionEnabled;
@@ -37,10 +33,10 @@ namespace UI.Dialogue
 		private bool m_selected;
 
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.GameUI;
-		
+
 		public void AssignDialogueOption(DialogueOption option)
 		{
-			GameManager.Instance.AddFrameUpdateSafe(this);
+			GameManager.Instance.AddFrameUpdate(this);
 			m_option = option;
 			m_optionEnabled = m_option && m_option.Selectable;
 			image.color = GetButtonColor();
@@ -49,7 +45,7 @@ namespace UI.Dialogue
 
 		public void ResetDialogueOption()
 		{
-			GameManager.Instance.RemoveFrameUpdateSafe(this);
+			GameManager.Instance.RemoveFrameUpdate(this);
 			m_option = null;
 			m_optionEnabled = false;
 			ResetButton();
@@ -70,7 +66,7 @@ namespace UI.Dialogue
 				if (hovering) parent.DisplayOption(m_option);
 				else parent.ResetOption(m_option);
 			}
-			
+
 			//Mouse was just pressed
 			var selectAction = m_selectAction ??= InputManager.Instance.UIMap.GetAction(selectActionName);
 			if (selectAction.WasPressedThisFrame()) m_selected = hovering;
@@ -115,7 +111,7 @@ namespace UI.Dialogue
 							if (centerToMouse.x > 0) return true;
 							break;
 					}
-					
+
 					break;
 				//Three buttons, three parts
 				case 3:
@@ -156,13 +152,13 @@ namespace UI.Dialogue
 							if (centerToMouse.x > 0 && centerToMouse.y < 0) return true;
 							break;
 					}
-					
+
 					break;
 			}
 
 			return false;
 		}
-		
+
 		private void OnEnable() => image.color = GetButtonColor();
 
 		private void OnDisable() => image.color = GetButtonColor();

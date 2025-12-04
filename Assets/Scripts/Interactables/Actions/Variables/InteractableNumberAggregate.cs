@@ -1,5 +1,4 @@
-﻿using Exceptions;
-using UnityEngine;
+﻿using UnityEngine;
 using Variables;
 
 namespace Interactables.Actions.Variables

@@ -2,7 +2,6 @@
 using Managers.Persistent;
 using TMPro;
 using UnityEngine;
-using Utilities;
 
 namespace UI.Text
 {
@@ -20,7 +19,7 @@ namespace UI.Text
 			else
 			{
 				SetVisible(true);
-				GameManager.Instance.InvokeOnNextFrameUpdateSafe(UpdateBackground);
+				GameManager.Instance.InvokeOnNextFrameUpdate(UpdateBackground);
 			}
 		}
 

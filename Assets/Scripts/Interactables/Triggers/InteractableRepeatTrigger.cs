@@ -13,7 +13,7 @@ namespace Interactables.Triggers
 		{
 			if (!other.attachedRigidbody.gameObject.IsPlayerObject() || m_playerEntered) return;
 			m_playerEntered = true;
-			GameManager.Instance.InvokeOnNextFrameUpdateSafe(OnInteract);
+			GameManager.Instance?.InvokeOnNextFrameUpdate(OnInteract);
 		}
 
 		private void OnTriggerExit(Collider other)

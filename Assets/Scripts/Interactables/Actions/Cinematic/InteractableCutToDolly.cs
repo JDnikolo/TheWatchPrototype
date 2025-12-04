@@ -3,7 +3,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Interactables.Actions
+namespace Interactables.Actions.Cinematic
 {
     public class InteractableCutToDolly : Interactable
     {

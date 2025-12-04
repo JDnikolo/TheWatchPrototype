@@ -3,7 +3,7 @@ using Managers.Persistent;
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace Interactables.Actions
+namespace Interactables.Actions.Cinematic
 {
     public class InteractableFocusCameraToTarget : Interactable
     {

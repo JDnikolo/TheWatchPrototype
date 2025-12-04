@@ -1,7 +1,6 @@
 ﻿using Managers.Persistent;
 using Runtime.FixedUpdate;
 using UnityEngine;
-using Utilities;
 
 namespace Agents
 {
@@ -21,8 +20,8 @@ namespace Agents
 			agentTransform.eulerAngles = eulerAngles;
 		}
 		
-		private void Awake() => GameManager.Instance.AddFixedUpdateSafe(this);
+		private void Start() => GameManager.Instance.AddFixedUpdate(this);
 
-		private void OnDestroy() => GameManager.Instance.RemoveFixedUpdateSafe(this);
+		private void OnDestroy() => GameManager.Instance?.RemoveFixedUpdate(this);
 	}
 }

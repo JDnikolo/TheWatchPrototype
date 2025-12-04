@@ -2,7 +2,6 @@ using Managers.Persistent;
 using Runtime.FrameUpdate;
 using Unity.Cinemachine;
 using UnityEngine;
-using Utilities;
 
 namespace Player
 {
@@ -32,8 +31,8 @@ namespace Player
 		private void SetClampedValue(ref InputAxis axis, float change) =>
 			axis.Value = axis.ClampValue(axis.Value + change);
 		
-		private void Awake() => GameManager.Instance.AddFrameUpdateSafe(this);
+		private void Start() => GameManager.Instance.AddFrameUpdate(this);
 
-		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdateSafe(this);
+		private void OnDestroy() => GameManager.Instance?.RemoveFrameUpdate(this);
 	}
 }

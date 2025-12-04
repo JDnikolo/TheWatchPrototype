@@ -5,7 +5,6 @@ using UI.Fade;
 using UI.Speaker;
 using UnityEngine;
 using UnityEngine.UI;
-using Utilities;
 using LayoutElement = UI.Layout.LayoutElement;
 
 namespace Managers
@@ -13,38 +12,34 @@ namespace Managers
 	[AddComponentMenu("Managers/UI Manager")]
 	public sealed class UIManager : Singleton<UIManager>
 	{
-		[Space]
-		[SerializeField] private RectTransform canvasRect;
+		[Space] [SerializeField] private RectTransform canvasRect;
 		[SerializeField] private GraphicRaycaster raycaster;
-		
-		[Space]
-		[SerializeField] private FadeScreen fadeScreen;
+
+		[Space] [SerializeField] private FadeScreen fadeScreen;
 		[SerializeField] private float fadeDuration = 1f;
-		
-		[Space]
-		[SerializeField] private SpeakerWriter textWriter;
+
+		[Space] [SerializeField] private SpeakerWriter textWriter;
 		[SerializeField] private DialogueWriter dialogueWriter;
 
-		[Space]
-		[SerializeField] private LayoutElement controlPanel;
-		
+		[Space] [SerializeField] private LayoutElement controlPanel;
+
 		protected override bool Override => true;
-		
+
 		public RectTransform CanvasRect => canvasRect;
-		
+
 		public GraphicRaycaster Raycaster => raycaster;
-		
+
 		public LayoutElement ControlPanel => controlPanel;
-		
+
 		public void OpenTextWriter(SpeakerWriterInput input)
 		{
 			var textObject = textWriter.gameObject;
 			if (!textObject.activeInHierarchy)
 			{
 				textObject.SetActive(true);
-				GameManager.Instance.AddFrameUpdateSafe(textWriter);
+				GameManager.Instance.AddFrameUpdate(textWriter);
 			}
-	
+
 			textWriter.WriteText(input);
 		}
 
@@ -53,10 +48,10 @@ namespace Managers
 			var textObject = textWriter.gameObject;
 			if (!textObject.activeInHierarchy) return;
 			textWriter.DisposeText();
-			GameManager.Instance.RemoveFrameUpdateSafe(textWriter);
+			GameManager.Instance.RemoveFrameUpdate(textWriter);
 			textObject.SetActive(false);
 		}
-		
+
 		public void OpenDialogueWriter(DialogueWriterInput input)
 		{
 			var dialogueObject = dialogueWriter.gameObject;

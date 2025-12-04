@@ -10,10 +10,10 @@ namespace Localization.Speaker
     {
         [SerializeField] private string speaker;
         [SerializeField] private CharacterProfileData profile;
-        [SerializeField] private ClipAggregate audio;
+        [SerializeField] private AudioAggregate audio;
         
         public CharacterProfileData Profile => profile;
         
-        public ClipAggregate Audio => audio;
+        public AudioAggregate Audio => audio;
     }
 }

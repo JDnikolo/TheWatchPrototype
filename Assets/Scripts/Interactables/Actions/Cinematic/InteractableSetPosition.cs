@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Interactables.Actions
+namespace Interactables.Actions.Cinematic
 {
     [AddComponentMenu("Interactables/Set Game Object Position")]
     public sealed class InteractableSetPosition : Interactable

@@ -11,23 +11,25 @@ namespace Managers
     [AddComponentMenu("Managers/Night Manager")]
     public sealed class NightManager : Singleton<NightManager>
     {
-        [FormerlySerializedAs("m_timer")] [SerializeField] private NightTimer timer;
+        [FormerlySerializedAs("m_timer")] [SerializeField]
+        private NightTimer timer;
 
-        [Category("Time")]
-        [SerializeField]
-        [Tooltip("The total duration of the night section in seconds.")]
+        [Category("Time")] [SerializeField] [Tooltip("The total duration of the night section in seconds.")]
         private float nightTime = 7200.0f;
 
         [SerializeField]
         [Tooltip("The amount of seconds added when a player interacts with an interactable for the first time.")]
         private float interactionTimeJump = 30 * 60;
+
         [SerializeField]
         [Tooltip("How much the time jump is reduced on repeated interaction with the same interactable.")]
         [Range(0.0f, 1.0f)]
         private float repeatReduction = 0.1f;
-        [FormerlySerializedAs("m_nightEndActions")] [SerializeReference] private NightEndActions nightEndActions;
 
-        private Dictionary<string, int> m_interactionLog = new Dictionary<string, int>();
+        [FormerlySerializedAs("m_nightEndActions")] [SerializeReference]
+        private NightEndActions nightEndActions;
+
+        private Dictionary<string, int> m_interactionLog = new();
 
         protected override bool Override => true;
 
@@ -36,7 +38,7 @@ namespace Managers
             timer.SetTargetTime(nightTime);
             timer.TimerFinished += OnTimerFinished;
         }
-        
+
         /// <summary>
         /// Fast-Forward the night timer by <paramref name="time"/> seconds.
         /// </summary>
@@ -49,11 +51,8 @@ namespace Managers
         public void RegisterInteraction(string interactionID, int timeToAdd = 0)
         {
             var reduction = 1.0f;
-            
             if (!m_interactionLog.TryAdd(interactionID, 1))
-            {
                 reduction = repeatReduction / ++m_interactionLog[interactionID];
-            }
             if (timeToAdd == 0) ForwardTime(reduction * interactionTimeJump);
             else ForwardTime(reduction * timeToAdd);
             ShowTimer();

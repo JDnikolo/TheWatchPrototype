@@ -1,5 +1,5 @@
-﻿using Audio;
-using UnityEngine;
+﻿using UnityEngine;
+using AudioClip = Audio.AudioClip;
 
 namespace Interactables.Actions.Audio
 {
@@ -7,12 +7,12 @@ namespace Interactables.Actions.Audio
 	public sealed class InteractableAudio : Interactable
 	{
 		[SerializeField] private AudioSource source;
-		[SerializeField] private ClipObject clip;
+		[SerializeField] private AudioClip clip;
 		
 		public override void Interact()
 		{
 			if (!source || !clip) return;
-			clip.Settings.Apply(source);
+			clip.Settings.Apply(source, clip.Group);
 			source.clip = clip.Clip;
 			source.Play();
 		}

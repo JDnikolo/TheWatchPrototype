@@ -1,11 +1,9 @@
-﻿using System;
-using Attributes;
+﻿using Attributes;
 using Managers.Persistent;
 using Runtime.Automation;
 using Runtime.FrameUpdate;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Utilities;
 
 namespace UI.Text
 {

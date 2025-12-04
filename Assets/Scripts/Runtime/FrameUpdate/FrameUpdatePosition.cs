@@ -4,6 +4,7 @@
 	{
 		/// <remarks>Do not use in scripts.</remarks>
 		None,
+		Audio,
 		FadeScreen,
 		InputManager,
 		ComboManager,

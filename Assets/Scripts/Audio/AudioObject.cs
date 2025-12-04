@@ -1,12 +1,15 @@
-﻿using Audio.Settings;
-using UnityEngine;
+﻿using UnityEngine;
+using AudioSettings = Audio.AudioSettings;
 
 namespace Audio
 {
 	public abstract class AudioObject : ScriptableObject
 	{
-		[SerializeField] private ClipSettings settings;
+		[SerializeField] private AudioSettings settings;
+		[SerializeField] private AudioGroup group;
 		
-		public ClipSettings Settings => settings;
+		public AudioSettings Settings => settings;
+		
+		public AudioGroup Group => group;
 	}
 }

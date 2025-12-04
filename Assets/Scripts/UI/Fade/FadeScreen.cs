@@ -1,9 +1,7 @@
 ﻿using Callbacks.Fade;
-using Managers.Persistent;
 using Runtime;
 using Runtime.FrameUpdate;
 using UnityEngine;
-using Utilities;
 using Image = UnityEngine.UI.Image;
 
 namespace UI.Fade
@@ -18,7 +16,7 @@ namespace UI.Fade
 		private float m_fadePercentage;
 		private float m_fadeDuration;
 		private bool m_fadeDirection;
-		
+
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.FadeScreen;
 
 		private void Awake()
@@ -34,7 +32,7 @@ namespace UI.Fade
 			m_fadeDuration = input.FadeDuration;
 			m_onFinished = input.OnFadeScreenFinished;
 		}
-		
+
 		private void OnDestroy()
 		{
 			m_onFinished = null;
@@ -71,7 +69,7 @@ namespace UI.Fade
 			{
 				if (m_fadePercentage == 0f) image.raycastTarget = false;
 				if (m_onFinished != null) m_onFinished.OnFadeScreenFinished(m_fadeDirection);
-				GameManager.Instance.InvokeOnNextFrameUpdateSafe(OnDestroy);
+				OnDestroy();
 			}
 		}
 	}

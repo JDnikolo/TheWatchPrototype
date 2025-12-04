@@ -44,8 +44,8 @@ namespace Agents
 			rigidBody.AddForce(finalVector.FromFlatVector(), ForceMode.Acceleration);
 		}
 		
-		private void Awake() => GameManager.Instance.AddFixedUpdateSafe(this);
+		private void Start() => GameManager.Instance.AddFixedUpdate(this);
 
-		private void OnDestroy() => GameManager.Instance.RemoveFixedUpdateSafe(this);
+		private void OnDestroy() => GameManager.Instance?.RemoveFixedUpdate(this);
 	}
 }

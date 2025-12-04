@@ -145,6 +145,8 @@ namespace Managers.Persistent
 
 		private void Update()
 		{
+			var audioManager = AudioManager.Instance;
+			if (audioManager.RequireUpdate) audioManager.OnFrameUpdate();
 			switch (m_gameState)
 			{
 				case GameState.Preload:

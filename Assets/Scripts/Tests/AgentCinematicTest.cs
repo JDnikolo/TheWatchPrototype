@@ -23,7 +23,7 @@ namespace Tests
 			m_agent = agent;
 			m_behavior = behavior;
 			m_behavior.SetSlowDownMultiplier(4f);
-			GameManager.Instance.AddFrameUpdateSafe(this);
+			GameManager.Instance.AddFrameUpdate(this);
 		}
 
 		public void OnFrameUpdate()
@@ -32,6 +32,6 @@ namespace Tests
 			m_behavior.SetRotationTarget(lookTarget.position.ToFlatVector());
 		}
 
-		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdateSafe(this);
+		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdate(this);
 	}
 }
