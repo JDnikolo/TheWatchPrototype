@@ -127,6 +127,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3109883240237111137, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3109883240237111137, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.07
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
       propertyPath: m_Name
       value: SOLDIERS
@@ -171,7 +179,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footstepSource: {fileID: 8337072181445733825}
   footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
-  terrainLayerName: Terrain
+  terrainLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &8917768918710740935 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
