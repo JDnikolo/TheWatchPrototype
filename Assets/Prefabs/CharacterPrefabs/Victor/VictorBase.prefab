@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9d1f2ccaced903747b41c640a7155646, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.524
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9d1f2ccaced903747b41c640a7155646, type: 3}
       propertyPath: m_LocalPosition.z
@@ -182,13 +182,48 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6381592724291718659, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3414578619893675266}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3654228535010868597, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2780209406311598203}
   m_SourcePrefab: {fileID: 100100000, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
+--- !u!1 &315333357215138856 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3654228535010868597, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
+  m_PrefabInstance: {fileID: 3951389125248612701}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2780209406311598203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 315333357215138856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00cc878bcc8f4bed812e587cbb01e791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  personAnimationController: {fileID: 1362926404007305471}
+  animationToStart: 5
+  duration: 1
+  onAnimationEnd: {fileID: 0}
 --- !u!82 &558188332646943207 stripped
 AudioSource:
   m_CorrespondingSourceObject: {fileID: 3560432151935103162, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
   m_PrefabInstance: {fileID: 3951389125248612701}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1362926404007305471 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2611015960795273634, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
+  m_PrefabInstance: {fileID: 3951389125248612701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18a2a9ccff59ef641a63ddfa564998bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7951632619193038686 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6381592724291718659, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}

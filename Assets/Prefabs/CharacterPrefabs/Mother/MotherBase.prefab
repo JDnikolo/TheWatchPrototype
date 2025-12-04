@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43277fda0c36e59479c6180f216bd43e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.697
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 43277fda0c36e59479c6180f216bd43e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -92,7 +92,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footstepSource: {fileID: 558188332646943207}
   footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
-  terrainLayerName: Terrain
+  terrainLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!95 &7155966300529486943 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 43277fda0c36e59479c6180f216bd43e, type: 3}

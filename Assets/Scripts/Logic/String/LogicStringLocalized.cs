@@ -6,8 +6,13 @@ namespace Logic.String
 	[CreateAssetMenu(fileName = "Localized", menuName = "Logic/String/Localized Constant")]
 	public sealed class LogicStringLocalized : LogicString
 	{
-		[SerializeField] private TextObject localizedText;
+		[SerializeField] private TextObject initialLocalizedText;
+
+		private TextObject m_localizedText;
+		private void OnEnable() => m_localizedText = initialLocalizedText;
 		
-		public override string Evaluate() => localizedText.Text;
+		public override string Evaluate() => m_localizedText.Text;
+		
+		public void SetLocalizedText(TextObject text) => m_localizedText = text;
 	}
 }

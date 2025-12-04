@@ -18,6 +18,7 @@ namespace Interactables.Actions.Animation
                 DefaultAnimations.Scared => DefaultAnimationHash.Scared,
                 DefaultAnimations.Talking => DefaultAnimationHash.Talking,
                 DefaultAnimations.Waving => DefaultAnimationHash.Waving,
+                DefaultAnimations.Angry => DefaultAnimationHash.Angry,
                 _ => 0
             };
             if (animationHash == 0) return;
