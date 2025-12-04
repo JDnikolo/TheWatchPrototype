@@ -13,7 +13,10 @@ using UnityEngine.UI;
 namespace UI.ComboBox
 {
 	[AddComponentMenu("UI/Elements/ComboBox/ComboBox Dropdown Panel")]
-	public sealed class ComboPanel : ListBase, IHierarchyChanged, ILayoutCallback, IPrewarm
+	public sealed class ComboPanel : ListBase, ILayoutCallback, IPrewarm
+#if UNITY_EDITOR
+		, IHierarchyChanged
+#endif
 	{
 		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(RectTransform))]
 		private RectTransform rectTransform;
@@ -22,66 +25,26 @@ namespace UI.ComboBox
 		[SerializeField] [HideInInspector] private ComboElement[] elements;
 		
 		private IReadOnlyList<ComboData> m_dataPoints;
-		private Elements.ComboBox m_parent;
 		private IComboBoxFinished m_onFinished;
 
-		public Elements.ComboBox Parent => m_parent;
-		
-		/*
-		Root:
+		public Elements.ComboBox Parent { get; private set; }
 
-		Top:
-		Pivot: 1y
-		Position: Center+HalfSize
-		Label: First
-
-		Bottom:
-		Pivot: 0y
-		Position: Center-HalfSize
-		Label: Last
-
-		Inside:
-
-		Left:
-		Min: 0x
-		Max: 0x
-		Pivot: 1x
-
-		Right:
-		Min: 1x
-		Max: 1x
-		Pivot: 0x
-
-		Top:
-		Min: 1y
-		Max: 1y
-		Pivot: 1y
-
-		Bottom:
-		Min: 0y
-		Max: 0y
-		Pivot: 0y
-		*/
-		
 		public void OnSelected()
 		{
 		}
 
-		public void OnDeselected()
-		{
-			if (m_onFinished != null) m_onFinished.OnComboBoxFinished();
-		}
-		
+		public void OnDeselected() => m_onFinished?.OnComboBoxFinished();
+
 		public void OpenElements(ComboPanelInput input)
 		{
-			m_parent = input.Parent;
-			m_dataPoints = m_parent.DataProvider.DataPoints;
+			Parent = input.Parent;
+			m_dataPoints = Parent.DataProvider.DataPoints;
 			m_onFinished = input.OnComboBoxFinished;
-			var parentSize = m_parent.PanelSize;
-			var parentPosition = m_parent.PanelPosition;
+			var parentSize = Parent.PanelSize;
+			var parentPosition = Parent.PanelPosition;
 			var rootPosition = parentPosition + new Vector2(0f, parentSize.y / 2f);
 			rectTransform.sizeDelta = parentSize;
-			var currentData = m_parent.CurrentData;
+			var currentData = Parent.CurrentData;
 			label.Initialize(currentData.Label, parentSize);
 			var layoutParent = LayoutParent;
 			if (layoutParent) layoutParent.Clear();
@@ -159,7 +122,7 @@ namespace UI.ComboBox
 			var layoutParent = LayoutParent;
 			if (layoutParent) layoutParent.Clear();
 			m_dataPoints = null;
-			m_parent = null;
+			Parent = null;
 			m_onFinished = null;
 		}
 

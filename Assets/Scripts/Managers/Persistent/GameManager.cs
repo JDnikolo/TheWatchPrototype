@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Audio;
 using Callbacks.Beforeplay;
 using Collections;
@@ -148,51 +149,77 @@ namespace Managers.Persistent
 
 		private void Update()
 		{
-			var audioManager = AudioManager.Instance;
-			if (audioManager.RequireUpdate) audioManager.OnFrameUpdate();
-			switch (m_gameState)
+			try
 			{
-				case GameState.Preload:
-					SettingsManager.Instance.Load();
-					AudioManager.Instance.SetSnapshot(mainSnapshot, false, 0f, 0f);
-					m_gameState = GameState.BeforePlay;
-					break;
-				case GameState.BeforePlay:
-					//This will delay it until the local manager has changed instance
-					if (m_localManager && LocalManager.Instance == m_localManager) return;
-					m_localManager = null;
-					CameraManager.Instance.SetCamera(PlayerManager.Instance.PlayerCamera);
-					while (m_beforePlay.TryPop(out var beforePlay)) beforePlay.OnBeforePlay();
-					m_gameState = GameState.Play;
-					break;
-				case GameState.Play:
-					var stack = m_frameInvokeStack.Swap();
-					while (stack.TryPop(out var action)) action.Invoke();
-					m_frameUpdateCollection.Update((byte) m_frameUpdateInvoke);
-					break;
-				case GameState.Loading:
-					SceneManager.Instance.ProcessScenes();
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
+				var audioManager = AudioManager.Instance;
+				if (audioManager.RequireUpdate) audioManager.OnFrameUpdate();
+				switch (m_gameState)
+				{
+					case GameState.Preload:
+						SettingsManager.Instance.Load();
+						AudioManager.Instance.SetSnapshot(mainSnapshot, false, 0f, 0f);
+						m_gameState = GameState.BeforePlay;
+						break;
+					case GameState.BeforePlay:
+						//This will delay it until the local manager has changed instance
+						if (m_localManager && LocalManager.Instance == m_localManager) return;
+						m_localManager = null;
+						CameraManager.Instance.SetCamera(PlayerManager.Instance.PlayerCamera);
+						while (m_beforePlay.TryPop(out var beforePlay)) beforePlay.OnBeforePlay();
+						m_gameState = GameState.Play;
+						break;
+					case GameState.Play:
+						var stack = m_frameInvokeStack.Swap();
+						while (stack.TryPop(out var action)) action.Invoke();
+						m_frameUpdateCollection.Update((byte) m_frameUpdateInvoke);
+						break;
+					case GameState.Loading:
+						SceneManager.Instance.ProcessScenes();
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			catch (Exception e)
+			{
+				CreateLog(e);
+				Application.Quit();
 			}
 		}
 
 		private void LateUpdate()
 		{
-			if (m_gameState != GameState.Play) return;
-			var stack = m_lateInvokeStack.Swap();
-			while (stack.TryPop(out var action)) action.Invoke();
-			m_lateUpdateCollection.Update((byte) m_lateUpdateInvoke);
+			try
+			{
+				if (m_gameState != GameState.Play) return;
+				var stack = m_lateInvokeStack.Swap();
+				while (stack.TryPop(out var action)) action.Invoke();
+				m_lateUpdateCollection.Update((byte) m_lateUpdateInvoke);	
+			}
+			catch (Exception e)
+			{
+				CreateLog(e);
+				Application.Quit();
+			}
 		}
 
 		private void FixedUpdate()
 		{
-			if (m_gameState != GameState.Play) return;
-			var stack = m_fixedInvokeStack.Swap();
-			while (stack.TryPop(out var action)) action.Invoke();
-			m_fixedUpdateCollection.Update((byte) m_fixedUpdateInvoke);
+			try
+			{
+				if (m_gameState != GameState.Play) return;
+				var stack = m_fixedInvokeStack.Swap();
+				while (stack.TryPop(out var action)) action.Invoke();
+				m_fixedUpdateCollection.Update((byte) m_fixedUpdateInvoke);
+			}
+			catch (Exception e)
+			{
+				CreateLog(e);
+				Application.Quit();
+			}
 		}
+
+		private void CreateLog(Exception e) => File.WriteAllText($"{Application.persistentDataPath}\\{DateTime.Now.ToLongDateString()}.crashdump",e.ToString());
 
 		protected override void OnDestroy()
 		{
