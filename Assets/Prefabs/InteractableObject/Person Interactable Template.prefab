@@ -250,6 +250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1909800020265315318}
   - component: {fileID: 1714969120157737965}
+  - component: {fileID: 5959400568467632233}
   m_Layer: 3
   m_Name: Person Interactable Template
   m_TagString: Untagged
@@ -307,6 +308,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &5959400568467632233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3087570474635227810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 294ddac9d525469aaa97da4c003ebc13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1714969120157737965}
 --- !u!1 &3279910493091692004
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,6 +455,7 @@ GameObject:
   - component: {fileID: 8055074559193904796}
   - component: {fileID: 5608573516335135679}
   - component: {fileID: 6102618236574418334}
+  - component: {fileID: 8772907937154496715}
   m_Layer: 0
   m_Name: Collision
   m_TagString: Untagged
@@ -500,6 +515,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactables:
   - {fileID: 1773620827572244054}
+  collider: {fileID: 5608573516335135679}
+--- !u!114 &8772907937154496715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3654228535010868597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f231ae0370eb4079be67bf47d6f629d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 5608573516335135679}
 --- !u!1 &7015695680160782835
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,6 +642,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2105863261409467766}
   - component: {fileID: 3560432151935103162}
+  - component: {fileID: 6885943038221448341}
   m_Layer: 3
   m_Name: Audio
   m_TagString: Untagged
@@ -731,6 +761,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6885943038221448341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7760203089546147510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 135aa21c51fc4024bab809349d6bed3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 3560432151935103162}
+  standalone: 1
+  pausable: 0
 --- !u!1 &7836502396342529914
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,11 +987,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f2df4964996de4890f19d1f10d9305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepSource: {fileID: 3560432151935103162}
+  player: {fileID: 6885943038221448341}
   footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
   terrainLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!4 &7958030222320588204 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4993092925073195673, guid: eea9088fe5973e64ca1131553d47363b, type: 3}
