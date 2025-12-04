@@ -81,6 +81,7 @@ namespace Managers.Persistent
 		public void StartMusic(AudioClip music, bool delayedFade = false, 
 			float fadeInTime = -1f, float fadeOutTime = -1f)
 		{
+			ResetUpdate();
 			m_delayedFade = delayedFade;
 			if (musicPlayer.IsPlaying) (musicPlayer, fadePlayer) = (fadePlayer, musicPlayer);
 			if (fadeInTime < 0f) fadeInTime = this.fadeInTime;
@@ -94,14 +95,20 @@ namespace Managers.Persistent
 			}
 			
 			if (fadePlayer.IsPlaying) SetupFadeOut(ref fadeOutTime);
+			TestUpdate();
 		}
 
 		public void StopMusic(float fadeOutTime = -1f)
 		{
-			if (!musicPlayer.IsPlaying) return;
-			if (fadePlayer.IsPlaying) fadePlayer.Stop();
-			(musicPlayer, fadePlayer) = (fadePlayer, musicPlayer);
-			SetupFadeOut(ref fadeOutTime);
+			ResetUpdate();
+			if (musicPlayer.IsPlaying)
+			{
+				if (fadePlayer.IsPlaying) fadePlayer.Stop();
+				(musicPlayer, fadePlayer) = (fadePlayer, musicPlayer);
+				SetupFadeOut(ref fadeOutTime);
+			}
+			
+			TestUpdate();
 		}
 
 		private void SetupFadeOut(ref float fadeOutTime)
@@ -116,5 +123,24 @@ namespace Managers.Persistent
 				m_fadeOutVolume = trueVolume;
 			}
 		}
+
+		private void ResetUpdate() => m_fadeInTime = m_fadeOutTime = m_fadeInTimer = m_fadeOutTimer = 0f;
+
+		private void TestUpdate() => RequireUpdate = m_fadeInTime > 0f || m_fadeOutTime > 0f;
+#if UNITY_EDITOR
+		public float FadeInTime => m_fadeInTime;
+		
+		public float FadeOutTime => m_fadeOutTime;
+		
+		public float FadeInVolume => m_fadeInVolume;
+		
+		public float FadeOutVolume => m_fadeOutVolume;
+		
+		public float FadeInTimer => m_fadeInTimer;
+		
+		public float FadeOutTimer => m_fadeOutTimer;
+		
+		public bool DelayedFade => m_delayedFade;
+#endif
 	}
 }
