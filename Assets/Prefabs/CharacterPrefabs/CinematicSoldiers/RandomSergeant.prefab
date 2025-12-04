@@ -74,6 +74,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5837002248231710445, guid: 74f466b88c9492f44af906e8b80d5d44, type: 3}
   m_PrefabInstance: {fileID: 5474664243459716357}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &8295087809982342481 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 4100519173067198548, guid: 74f466b88c9492f44af906e8b80d5d44, type: 3}
+  m_PrefabInstance: {fileID: 5474664243459716357}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5784576255929229940
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -137,7 +142,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 996a2d1e3b8df6c418282c6d3b2964bd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4971269375691045468}
   m_SourcePrefab: {fileID: 100100000, guid: 996a2d1e3b8df6c418282c6d3b2964bd, type: 3}
 --- !u!95 &84553393717288933 stripped
 Animator:
@@ -149,3 +157,25 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 996a2d1e3b8df6c418282c6d3b2964bd, type: 3}
   m_PrefabInstance: {fileID: 5784576255929229940}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6667465607964729125 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 996a2d1e3b8df6c418282c6d3b2964bd, type: 3}
+  m_PrefabInstance: {fileID: 5784576255929229940}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4971269375691045468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6667465607964729125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6f2df4964996de4890f19d1f10d9305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footstepSource: {fileID: 8295087809982342481}
+  footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
+  terrainLayerMask:
+    serializedVersion: 2
+    m_Bits: 0

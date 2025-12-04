@@ -51,7 +51,7 @@ PrefabInstance:
     - target: {fileID: 2611015960795273634, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
       propertyPath: animator
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4140830764259498872}
     - target: {fileID: 3087570474635227810, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
       propertyPath: m_Name
       value: Momma'sBoyBase
@@ -59,7 +59,7 @@ PrefabInstance:
     - target: {fileID: 5019957929516753804, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
       propertyPath: animator
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4140830764259498872}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7294506478311673622, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
@@ -142,6 +142,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9d1f2ccaced903747b41c640a7155646, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7095029356144822714}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9d1f2ccaced903747b41c640a7155646, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4140830764259498872}
   m_SourcePrefab: {fileID: 100100000, guid: 9d1f2ccaced903747b41c640a7155646, type: 3}
 --- !u!1 &3521844726239344165 stripped
 GameObject:
@@ -165,6 +168,27 @@ MonoBehaviour:
   terrainLayerMask:
     serializedVersion: 2
     m_Bits: 0
+--- !u!95 &4140830764259498872
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3521844726239344165}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: aa00c2db51b297d4eb8403a26aa2b5a8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &4299754238632029343 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9d1f2ccaced903747b41c640a7155646, type: 3}
