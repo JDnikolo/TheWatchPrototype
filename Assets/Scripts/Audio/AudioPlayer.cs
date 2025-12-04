@@ -1,4 +1,6 @@
 using Attributes;
+using Callbacks.Pausing;
+using Managers;
 using Runtime;
 using Runtime.Automation;
 using Runtime.FrameUpdate;
@@ -7,10 +9,12 @@ using UnityEngine;
 namespace Audio
 {
     [AddComponentMenu("Audio/Audio Player")]
-    public class AudioPlayer : MonoBehaviour, IFrameUpdatable
+    public sealed class AudioPlayer : MonoBehaviour, IFrameUpdatable, IPauseCallback
     {
         [SerializeField] [AutoAssigned(AssignMode.Self, typeof(AudioSource))]
         private AudioSource audioSource;
+
+        [SerializeField] private bool pausable;
 
         private Updatable m_updatable;
         
@@ -30,6 +34,12 @@ namespace Audio
         {
             if (audioSource.isPlaying) return;
             Stop();
+        }
+        
+        public void OnPauseChanged(bool paused)
+        {
+            if (paused) Pause();
+            else UnPause();
         }
 
         public void Play(AudioClip clip)
@@ -58,6 +68,15 @@ namespace Audio
             if (CurrentClip) audioSource.UnPause();
         }
 
-        protected virtual void OnDestroy() => m_updatable.SetUpdating(false, this);
+        private void Start()
+        {
+            if (pausable) PauseManager.Instance.AddPausedCallback(this);
+        }
+
+        private void OnDestroy()
+        {
+            m_updatable.SetUpdating(false, this);
+            if (pausable) PauseManager.Instance?.RemovePausedCallback(this);
+        }
     }
 }
