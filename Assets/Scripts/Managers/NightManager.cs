@@ -1,19 +1,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using Callbacks.Night;
+using Interactables;
 using Runtime;
 using UI.Night;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Managers
 {
     [AddComponentMenu("Managers/Night Manager")]
     public sealed class NightManager : Singleton<NightManager>
     {
-        [FormerlySerializedAs("m_timer")] [SerializeField]
-        private NightTimer timer;
-
+        [SerializeField] private NightTimer timer;
         [Category("Time")] [SerializeField] [Tooltip("The total duration of the night section in seconds.")]
         private float nightTime = 7200.0f;
 
@@ -25,9 +22,8 @@ namespace Managers
         [Tooltip("How much the time jump is reduced on repeated interaction with the same interactable.")]
         [Range(0.0f, 1.0f)]
         private float repeatReduction = 0.1f;
-
-        [FormerlySerializedAs("m_nightEndActions")] [SerializeReference]
-        private NightEndActions nightEndActions;
+        
+        [SerializeReference] private Interactable nightEndActions;
 
         private Dictionary<string, int> m_interactionLog = new();
 
@@ -60,10 +56,7 @@ namespace Managers
 
         public void ResetInteractionLog() => m_interactionLog.Clear();
 
-        private void OnTimerFinished()
-        {
-            nightEndActions?.DoActions();
-        }
+        private void OnTimerFinished() => nightEndActions.Interact();
 
         public void ShowTimer() => timer.Show();
     }

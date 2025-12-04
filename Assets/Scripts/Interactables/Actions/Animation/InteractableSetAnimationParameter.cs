@@ -60,7 +60,7 @@ namespace Interactables.Actions.Animation
                 {
                     public override void OnInspectorGUI()
                     {
-                        InteractableSetAnimationParameter self = (InteractableSetAnimationParameter)target;
+                        var self = (InteractableSetAnimationParameter)target;
                         serializedObject.Update();
                         var propertiesToExclude = new List<string>{"parameterValueFloat", "parameterValueInt", "parameterValueBool" };
                         

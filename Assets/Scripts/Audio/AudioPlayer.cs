@@ -1,26 +1,29 @@
 using Attributes;
+using Callbacks.Audio;
 using Callbacks.Pausing;
 using Managers;
 using Runtime;
 using Runtime.Automation;
 using Runtime.FrameUpdate;
 using UnityEngine;
+using Utilities;
 
 namespace Audio
 {
     [AddComponentMenu("Audio/Audio Player")]
-    public sealed class AudioPlayer : MonoBehaviour, IFrameUpdatable, IPauseCallback
+    public sealed class AudioPlayer : MonoBehaviour, IFrameUpdatable, IPauseCallback, IAudioGroupVolumeChanged
     {
         [SerializeField] [AutoAssigned(AssignMode.Self, typeof(AudioSource))]
         private AudioSource audioSource;
 
+        [SerializeField] private bool standalone = true;
         [SerializeField] private bool pausable;
 
         private Updatable m_updatable;
         
         public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.Audio;
         
-        public AudioClip CurrentClip { get; private set; }
+        public AudioObject AudioSource { get; private set; }
         
         public bool IsPlaying => audioSource.isPlaying;
         
@@ -30,6 +33,11 @@ namespace Audio
             set => audioSource.volume = value;
         }
 
+        public void OnAudioGroupVolumeChanged(AudioGroup group)
+        {
+            if (AudioSource) AudioSource.Settings.Apply(audioSource, group);
+        }
+        
         public void OnFrameUpdate()
         {
             if (audioSource.isPlaying) return;
@@ -41,31 +49,57 @@ namespace Audio
             if (paused) Pause();
             else UnPause();
         }
-
+        
         public void Play(AudioClip clip)
         {
-            CurrentClip = clip;
-            audioSource.clip = CurrentClip.Clip;
-            CurrentClip.Settings.Apply(audioSource, CurrentClip.Group);
+            if (!clip)
+            {
+                Debug.LogError("Cli was null!", this);
+                return;
+            }
+            
+            audioSource.clip = clip.Clip;
+            PostPlay(clip);
+        }
+
+        public void Play(AudioAggregate aggregate)
+        {
+            if (!aggregate)
+            {
+                Debug.LogError("Cli was null!", this);
+                return;
+            }
+            
+            audioSource.clip = aggregate.Clips.GetRandom();
+            PostPlay(aggregate);
+        }
+
+        private void PostPlay(AudioObject obj)
+        {
+            Stop();
+            AudioSource = obj;
+            if (standalone) AudioSource.Group.AddCallback(this);
+            AudioSource.Settings.Apply(audioSource, obj.Group);
             audioSource.Play();
-            if (!clip.Settings.Loop) m_updatable.SetUpdating(true, this);
+            if (!AudioSource.Settings.Loop) m_updatable.SetUpdating(true, this);
         }
 
         public void Stop()
         {
+            if (standalone && AudioSource) AudioSource.Group.RemoveCallback(this);
             audioSource.Stop();
-            CurrentClip = null;
+            AudioSource = null;
             m_updatable.SetUpdating(false, this);
         }
 
         public void Pause()
         {
-            if (CurrentClip) audioSource.Pause();
+            if (AudioSource) audioSource.Pause();
         }
 
         public void UnPause()
         {
-            if (CurrentClip) audioSource.UnPause();
+            if (AudioSource) audioSource.UnPause();
         }
 
         private void Start()

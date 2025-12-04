@@ -232,6 +232,7 @@ namespace Utilities
 		public static void DirtyReplaceObject<T>(this Object target, ref T value, T newValue) where T : Object
 		{
 			if (newValue == value) return;
+			Debug.Log($"[{target.GetType()}] Replacing {value} with {newValue}", target);
 			value = newValue;
 			if (target) EditorUtility.SetDirty(target);
 		}
@@ -241,6 +242,7 @@ namespace Utilities
 		{
 			comparer ??= EqualityComparer<T>.Default;
 			if (comparer.Equals(value, newValue)) return;
+			Debug.Log($"[{target.GetType()}] Replacing {value} with {newValue}", target);
 			value = newValue;
 			if (target) EditorUtility.SetDirty(target);
 		}

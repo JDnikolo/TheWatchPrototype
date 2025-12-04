@@ -18,6 +18,8 @@ namespace Audio
 		
 		public float Volume => volume;
 		
+		public float GetVolume(AudioGroup group) => volume * group.VolumeOverride;
+		
 		public virtual void Apply(AudioSource source, AudioGroup group)
 		{
 			if (!group)
@@ -31,8 +33,8 @@ namespace Audio
 			source.bypassReverbZones = bypassReverbZones;
 			source.loop = loop;
 			source.priority = priority;
-			source.volume = volume * group.VolumeOverride;
-			source.pitch = pitch;
+			source.volume = GetVolume(group);
+			source.pitch = pitch;;
 			source.panStereo = stereoPan;
 			source.reverbZoneMix = reverbZoneMix;
 		}

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Highlighting;
+﻿using Highlighting;
+using LookupTables;
 using Managers.Persistent;
 using Runtime;
 using Runtime.FixedUpdate;
@@ -14,7 +14,6 @@ namespace Managers
 	{
 		[SerializeField] private LayerMask highlightMask;
 		
-		private Dictionary<Rigidbody, IManagedHighlightable> m_rigidbodies = new();
 		private IManagedHighlightable m_raycastTarget;
 		private IManagedHighlightable m_previousTarget;
 		
@@ -34,15 +33,17 @@ namespace Managers
 
 		public void OnFixedUpdate()
 		{
-			var playerManager = PlayerManager.Instance;
-			if (!playerManager) return;
-			var camera = playerManager.PlayerCamera;
-			if (!camera) return;
-			var cameraTransform = camera.transform;
+			var cameraTransform = PlayerManager.Instance.PlayerCamera.transform;
 			if (UnityEngine.Physics.Raycast(cameraTransform.position, cameraTransform.forward,
-					out var hit, 3f, highlightMask.value) && m_rigidbodies.TryGetValue(
-					hit.rigidbody, out var interactable) && CheckDistances(hit.rigidbody, 
-					interactable, cameraTransform.position)) m_raycastTarget = interactable;
+				    out var hit, 3f, highlightMask.value) && RigidBodyTable.Instance.TryGetValue(
+				    hit.rigidbody, out var extender))
+			{
+				var highlightable = extender.Highlightable;
+				if (highlightable != null)
+					m_raycastTarget = CheckDistances(hit.rigidbody, highlightable, cameraTransform.position)
+						? highlightable
+						: null;
+			}
 			else m_raycastTarget = null;
 		}
 
@@ -52,11 +53,6 @@ namespace Managers
 			return lengthSqr >= highlightable.MinHighlightDistance.Squared() &&
 					lengthSqr <= highlightable.MaxHighlightDistance.Squared();
 		}
-
-		public void AddHighlightable(Rigidbody rigidbody, IManagedHighlightable highlightable) =>
-			m_rigidbodies.Add(rigidbody, highlightable);
-
-		public void RemoveHighlightable(Rigidbody rigidbody) => m_rigidbodies.Remove(rigidbody);
 
 		protected override void Awake()
 		{
@@ -72,8 +68,6 @@ namespace Managers
 		protected override void OnDestroy()
 		{
 			base.OnDestroy();
-			m_rigidbodies.Clear();
-			m_rigidbodies = null;
 			m_raycastTarget = null;
 			m_previousTarget = null;
 			var gameManager = GameManager.Instance;
@@ -84,7 +78,6 @@ namespace Managers
 			}
 		}
 #if UNITY_EDITOR
-		public Dictionary<Rigidbody, IManagedHighlightable> Rigidbodies => m_rigidbodies;
 		public IManagedHighlightable RaycastTarget => m_raycastTarget;
 #endif
 	}

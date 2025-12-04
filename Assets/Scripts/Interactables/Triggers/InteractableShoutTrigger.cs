@@ -1,10 +1,18 @@
-﻿using UnityEngine;
+﻿using Attributes;
+using LookupTables;
+using Runtime.Automation;
+using UnityEngine;
 
 namespace Interactables.Triggers
 {
     [AddComponentMenu("Interactables/Triggers/On Shout Trigger")]
-    public class InteractableShoutTrigger : InteractableTrigger
+    public sealed class InteractableShoutTrigger : InteractableTrigger
     {
+        [SerializeField] [AutoAssigned(AssignMode.Self, typeof(Collider))]
+        private new Collider collider;
+
+        private void Start() => ColliderTable.Instance.Add(collider, this);
+
         public void OnGettingShouted() => OnInteract();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Audio;
+using Callbacks.Audio;
 using Runtime;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -8,22 +9,41 @@ using AudioClip = Audio.AudioClip;
 namespace Managers.Persistent
 {
 	[AddComponentMenu("Managers/Persistent/Audio Manager")]
-	public sealed class AudioManager : Singleton<AudioManager>
+	public sealed partial class AudioManager : Singleton<AudioManager>, IAudioGroupVolumeChanged
 	{
 		[SerializeField] private AudioMixer mixer;
 		[SerializeField] private AudioPlayer musicPlayer;
 		[SerializeField] private AudioPlayer fadePlayer;
 		[SerializeField] private float fadeInTime = 1f;
 		[SerializeField] private float fadeOutTime = 1f;
+
+		private float m_musicFadeInTime;
+		private float m_musicFadeInTimer;
+		private float m_musicFadeInVolume;
+		private float m_musicFadeOutTime;
+		private float m_musicFadeOutTimer;
+		private float m_musicFadeOutVolume;
+		private bool m_musicDelayedFade;
+
+		private AudioSnapshot m_currentSnapshot;
+		private AudioSnapshot m_fadeSnapshot;
+		private float m_snapshotFadeInTime;
+		private float m_snapshotFadeInTimer;
+		private float m_snapshotFadeOutTime;
+		private float m_snapshotFadeOutTimer;
+		private SnapshotFadeMode m_snapshotFadeMode;
+
+		private float m_pauseFadeInTime;
+		private float m_pauseFadeOutTime;
+		private bool m_pauseDelayedFade;
 		
-		private float m_fadeInTime;
-		private float m_fadeInTimer;
-		private float m_fadeInVolume;
-		private float m_fadeOutTime;
-		private float m_fadeOutTimer;
-		private float m_fadeOutVolume;
-		private bool m_delayedFade;
-		
+		public enum SnapshotFadeMode : byte
+		{
+			None,
+			FadeMixed,
+			FadeDelayed,
+		}
+
 		protected override bool Override => false;
 
 		public bool RequireUpdate { get; private set; }
@@ -33,114 +53,253 @@ namespace Managers.Persistent
 			get => mixer.GetFloatSafe(nameof(AmbianceVolume)).AudioToPercentage();
 			set => mixer.SetFloat(nameof(AmbianceVolume), value.PercentageToAudio());
 		}
-		
+
 		public float EffectsVolume
 		{
 			get => mixer.GetFloatSafe(nameof(EffectsVolume)).AudioToPercentage();
 			set => mixer.SetFloat(nameof(EffectsVolume), value.PercentageToAudio());
 		}
-		
+
 		public float MasterVolume
 		{
 			get => mixer.GetFloatSafe(nameof(MasterVolume)).AudioToPercentage();
 			set => mixer.SetFloat(nameof(MasterVolume), value.PercentageToAudio());
 		}
-		
+
 		public float MusicVolume
 		{
 			get => mixer.GetFloatSafe(nameof(MusicVolume)).AudioToPercentage();
 			set => mixer.SetFloat(nameof(MusicVolume), value.PercentageToAudio());
 		}
-		
+
 		public float SpeakerVolume
 		{
 			get => mixer.GetFloatSafe(nameof(SpeakerVolume)).AudioToPercentage();
 			set => mixer.SetFloat(nameof(SpeakerVolume), value.PercentageToAudio());
 		}
 
+		public State PauseState
+		{
+			get => new()
+			{
+				CurrentSnapshot = m_currentSnapshot,
+				FadeInTime = m_pauseFadeInTime,
+				FadeOutTime = m_pauseFadeOutTime,
+				DelayedFade = m_pauseDelayedFade
+			};
+			set => SetSnapshot(value.CurrentSnapshot, value.DelayedFade, value.FadeInTime, value.FadeOutTime);
+		}
+
+		public void OnAudioGroupVolumeChanged(AudioGroup group)
+		{
+			AudioObject source;
+			if ((source = musicPlayer.AudioSource) && source.Group == group)
+			{
+				m_musicFadeInVolume = source.Settings.GetVolume(group);
+				if (musicPlayer.IsPlaying && m_musicFadeInTimer <= 0f) musicPlayer.Volume = m_musicFadeInVolume;
+			}
+			else if ((source = fadePlayer.AudioSource) && source.Group == group)
+			{
+				m_musicFadeOutVolume = source.Settings.GetVolume(group);
+				if (fadePlayer.IsPlaying && m_musicFadeInTimer > 0f)
+					fadePlayer.Volume = m_musicFadeInVolume * Utils.ZeroToOne(m_musicFadeOutTimer, m_musicFadeOutTime);
+			}
+		}
+		
+		public void PreparePause(bool delayedFade = false, float fadeInTime = -1f, float fadeOutTime = -1f)
+		{
+			m_pauseFadeInTime = fadeInTime;
+			m_pauseFadeOutTime = fadeOutTime;
+			m_pauseDelayedFade = delayedFade;
+		}
+
 		public void OnFrameUpdate()
 		{
 			var deltaTime = Time.deltaTime;
-			if (m_fadeOutTimer > 0f)
-			{
-				m_fadeOutTimer -= deltaTime;
-				fadePlayer.Volume = Mathf.Clamp01(m_fadeOutTimer / m_fadeOutTime) * m_fadeOutVolume;
-				if (m_fadeOutTimer <= 0f) fadePlayer.Stop();
-				else if (m_delayedFade) return;
-			}
-			
-			if (m_fadeInTimer > 0f)
-			{
-				m_fadeInTimer -= deltaTime;
-				musicPlayer.Volume = (-Mathf.Clamp01(m_fadeInTimer / m_fadeInTime) + 1f) * m_fadeInVolume;
-			}
-
+			FadeMusic(ref deltaTime);
+			FadeSnapshot(ref deltaTime);
 			CheckUpdate();
 		}
+
+		private void FadeMusic(ref float deltaTime)
+		{
+			if (m_musicFadeOutTimer > 0f)
+			{
+				m_musicFadeOutTimer -= deltaTime;
+				if (m_musicFadeOutTimer <= 0f) StopPlayer(fadePlayer);
+				else
+				{
+					fadePlayer.Volume = Utils.ZeroToOne(m_musicFadeOutTimer, m_musicFadeOutTime) * m_musicFadeOutVolume;
+					if (m_musicDelayedFade) return;
+				}
+			}
+
+			if (m_musicFadeInTimer > 0f)
+			{
+				m_musicFadeInTimer -= deltaTime;
+				musicPlayer.Volume = Utils.OneToZero(m_musicFadeInTimer, m_musicFadeInTime) * m_musicFadeInVolume;
+			}
+		}
+
+		private void FadeSnapshot(ref float deltaTime)
+		{
+			if (m_snapshotFadeMode == SnapshotFadeMode.FadeDelayed && m_snapshotFadeOutTimer > 0f)
+			{
+				m_snapshotFadeOutTimer -= deltaTime;
+				if (m_snapshotFadeOutTimer > 0f)
+				{
+					m_fadeSnapshot.ApplyTo(null, Utils.ZeroToOne(m_snapshotFadeOutTimer, m_snapshotFadeOutTime));
+					return;
+				}
+				
+				m_fadeSnapshot = null;
+				m_snapshotFadeMode = SnapshotFadeMode.FadeMixed;
+			}
+
+			if (m_snapshotFadeMode == SnapshotFadeMode.FadeMixed)
+			{
+				if (m_snapshotFadeInTimer > 0f)
+				{
+					m_snapshotFadeInTimer -= deltaTime;
+					m_currentSnapshot.ApplyFrom(m_fadeSnapshot,
+						Utils.OneToZero(m_snapshotFadeInTimer, m_snapshotFadeInTime));
+				}
+
+				if (m_snapshotFadeInTimer <= 0f)
+				{
+					m_fadeSnapshot = null;
+					m_snapshotFadeMode = SnapshotFadeMode.None;
+				}
+			}
+		}
 		
-		public void StartMusic(AudioClip music, bool delayedFade = false, 
+		public void StartMusic(AudioClip music, bool delayedFade = false,
 			float fadeInTime = -1f, float fadeOutTime = -1f)
 		{
-			ResetUpdate();
-			m_delayedFade = delayedFade;
-			if (musicPlayer.IsPlaying) (musicPlayer, fadePlayer) = (fadePlayer, musicPlayer);
 			if (fadeInTime < 0f) fadeInTime = this.fadeInTime;
-			m_fadeInTime = fadeInTime;
-			musicPlayer.Play(music);
-			if (m_fadeInTime != 0f)
+			if (fadeOutTime < 0f) fadeOutTime = this.fadeOutTime;
+			m_musicFadeInTime = m_musicFadeInTimer = m_musicFadeOutTime = m_musicFadeOutTimer = 0f;
+			m_musicDelayedFade = delayedFade;
+			m_musicFadeInVolume = music.Settings.GetVolume(music.Group);
+			if (musicPlayer.IsPlaying) (musicPlayer, fadePlayer) = (fadePlayer, musicPlayer);
+			SetupMusicFadeIn(ref fadeInTime);
+			StartPlayer(musicPlayer, music);
+			if (fadePlayer.IsPlaying) SetupMusicFadeOut(ref fadeOutTime);
+			CheckUpdate();
+		}
+
+		private void SetupMusicFadeIn(ref float fadeInTime)
+		{
+			m_musicFadeInTime = fadeInTime;
+			if (m_musicFadeInTime == 0f) musicPlayer.Volume = m_musicFadeInVolume;
+			else
 			{
-				m_fadeInTimer = m_fadeInTime;
-				m_fadeInVolume = music.Settings.Volume;
+				m_musicFadeInTimer = m_musicFadeInTime;
 				musicPlayer.Volume = 0f;
 			}
-			
-			if (fadePlayer.IsPlaying) SetupFadeOut(ref fadeOutTime);
-			CheckUpdate();
 		}
 
 		public void StopMusic(float fadeOutTime = -1f)
 		{
-			ResetUpdate();
+			if (fadeOutTime < 0f) fadeOutTime = this.fadeOutTime;
 			if (musicPlayer.IsPlaying)
 			{
-				if (fadePlayer.IsPlaying) fadePlayer.Stop();
+				if (fadePlayer.IsPlaying) StopPlayer(fadePlayer);
 				(musicPlayer, fadePlayer) = (fadePlayer, musicPlayer);
-				SetupFadeOut(ref fadeOutTime);
+				SetupMusicFadeOut(ref fadeOutTime);
 			}
-			
+
 			CheckUpdate();
 		}
 
-		private void SetupFadeOut(ref float fadeOutTime)
+		private void SetupMusicFadeOut(ref float fadeOutTime)
 		{
-			if (fadeOutTime < 0f) fadeOutTime = this.fadeOutTime;
-			m_fadeOutTime = fadeOutTime;
-			if (m_fadeOutTime == 0f) fadePlayer.Stop();
+			var elapsedPercentage = m_musicFadeOutTimer <= 0f
+				? 1f
+				: Utils.ZeroToOne(m_musicFadeOutTimer, m_musicFadeOutTime);
+			m_musicFadeOutTime = fadeOutTime;
+			if (m_musicFadeOutTime == 0f) StopPlayer(fadePlayer);
 			else
 			{
-				var trueVolume = fadePlayer.CurrentClip.Settings.Volume;
-				m_fadeOutTimer = m_fadeOutTime * (fadePlayer.Volume / trueVolume);
-				m_fadeOutVolume = trueVolume;
+				m_musicFadeOutTimer = m_musicFadeOutTime * elapsedPercentage;
+				var source = fadePlayer.AudioSource;
+				m_musicFadeOutVolume = source.Settings.GetVolume(source.Group) * elapsedPercentage;
 			}
 		}
 
-		private void ResetUpdate() => m_fadeInTime = m_fadeOutTime = m_fadeInTimer = m_fadeOutTimer = 0f;
+		public void SetSnapshot(AudioSnapshot snapshot, bool delayedFade = false,
+			float fadeInTime = -1f, float fadeOutTime = -1f)
+		{
+			Debug.Log($"SetSnapshot: {snapshot} {delayedFade} {fadeInTime} {fadeOutTime}");
+			m_snapshotFadeInTimer = m_snapshotFadeOutTimer = 0f;
+			m_snapshotFadeMode = SnapshotFadeMode.None;
+			if (fadeInTime < 0f) fadeInTime = this.fadeInTime;
+			if (fadeOutTime < 0f) fadeOutTime = this.fadeOutTime;
+			if (!m_currentSnapshot) m_fadeSnapshot = null;
+			else (m_currentSnapshot, m_fadeSnapshot) = (m_fadeSnapshot, m_currentSnapshot);
 
-		private void CheckUpdate() => RequireUpdate = m_fadeInTimer > 0f || m_fadeOutTimer > 0f;
+			if (!m_fadeSnapshot) delayedFade = false;
+			else if (fadeOutTime <= 0f)
+			{
+				m_fadeSnapshot.ApplyTo(null, 1f);
+				m_fadeSnapshot = null;
+			}
+			else m_snapshotFadeOutTime = m_snapshotFadeOutTimer = fadeOutTime;
+
+			m_currentSnapshot = snapshot;
+			if (fadeInTime <= 0f)
+			{
+				m_currentSnapshot.ApplyFrom(m_fadeSnapshot, 1f);
+				if (!m_fadeSnapshot) return;
+			}
+			else m_snapshotFadeInTime = m_snapshotFadeInTimer = fadeInTime;
+
+			m_snapshotFadeMode = !delayedFade ? SnapshotFadeMode.FadeMixed : SnapshotFadeMode.FadeDelayed;
+			CheckUpdate();
+		}
+
+		private void CheckUpdate() => RequireUpdate = m_musicFadeInTimer > 0f || m_musicFadeOutTimer > 0f ||
+		                                              m_snapshotFadeMode != SnapshotFadeMode.None;
+
+		private void StartPlayer(AudioPlayer player, AudioClip clip)
+		{
+			clip.Group.AddCallback(this);
+			player.Play(clip);
+		}
+		
+		private void StopPlayer(AudioPlayer player)
+		{
+			if (player.AudioSource) player.AudioSource.Group.RemoveCallback(this);
+			player.Stop();
+		}
 #if UNITY_EDITOR
-		public float FadeInTime => m_fadeInTime;
+		public float MusicFadeInTime => m_musicFadeInTime;
+
+		public float MusicFadeInTimer => m_musicFadeInTimer;
+
+		public float MusicFadeInVolume => m_musicFadeInVolume;
+
+		public float MusicFadeOutTime => m_musicFadeOutTime;
+
+		public float MusicFadeOutTimer => m_musicFadeOutTimer;
+
+		public float MusicFadeOutVolume => m_musicFadeOutVolume;
+
+		public bool MusicDelayedFade => m_musicDelayedFade;
+
+		public AudioSnapshot CurrentSnapshot => m_currentSnapshot;
+
+		public AudioSnapshot FadeSnapshotEditor => m_fadeSnapshot;
+
+		public float SnapshotFadeInTime => m_snapshotFadeInTime;
 		
-		public float FadeInTimer => m_fadeInTimer;
+		public float SnapshotFadeInTimer => m_snapshotFadeInTimer;
 		
-		public float FadeInVolume => m_fadeInVolume;
+		public float SnapshotFadeOutTime => m_snapshotFadeOutTime;
 		
-		public float FadeOutTime => m_fadeOutTime;
+		public float SnapshotFadeOutTimer => m_snapshotFadeOutTimer;
 		
-		public float FadeOutTimer => m_fadeOutTimer;
-		
-		public float FadeOutVolume => m_fadeOutVolume;
-		
-		public bool DelayedFade => m_delayedFade;
+		public SnapshotFadeMode SnapshotFadeModeEditor => m_snapshotFadeMode;
 #endif
 	}
 }

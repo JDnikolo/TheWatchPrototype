@@ -14,10 +14,7 @@ namespace Editor
 			var local = (HighlightManager) target;
 			if (EditorApplication.isPlaying)
 				using (new EditorGUI.DisabledScope(true))
-				{
 					local.RaycastTarget.Display("Raycast Target");
-					local.Rigidbodies.DisplayDictionary("Monitored Targets");
-				}
 		}
 	}
 }

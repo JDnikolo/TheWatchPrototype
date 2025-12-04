@@ -12,6 +12,7 @@ namespace Managers
 #endif
 		{
 			private bool m_pauseState;
+			private AudioManager.State m_audioManagerState;
 			private GameManager.State m_gameManagerState;
 			private InputManager.State m_inputManagerState;
 			private LayoutManager.State m_layoutManagerState;
@@ -20,6 +21,7 @@ namespace Managers
 			public void LoadStates(PauseManager pauseManager)
 			{
 				m_pauseState = pauseManager.m_paused;
+				m_audioManagerState = AudioManager.Instance.PauseState;
 				m_gameManagerState = GameManager.Instance.PauseState;
 				m_inputManagerState = InputManager.Instance.PauseState;
 				m_layoutManagerState = LayoutManager.Instance.PauseState;
@@ -29,6 +31,7 @@ namespace Managers
 
 			public void SaveStates(PauseManager pauseManager)
 			{
+				AudioManager.Instance.PauseState = m_audioManagerState;
 				GameManager.Instance.PauseState = m_gameManagerState;
 				InputManager.Instance.PauseState = m_inputManagerState;
 				LayoutManager.Instance.PauseState = m_layoutManagerState;

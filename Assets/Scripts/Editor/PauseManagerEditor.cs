@@ -10,13 +10,18 @@ namespace Editor
 		
 		protected override void OnInspectorGUIInternal()
 		{
+			if (!EditorApplication.isPlaying)
+			{
+				ApplyModifications();
+				return;
+			}
+			
 			var local = (PauseManager) target;
-			if (EditorApplication.isPlaying)
-				using (new EditorGUI.DisabledScope(true))
-				{
-					EditorGUILayout.Toggle("Can Pause", local.CanPause);
-					local.PauseState.DisplayInEditor("Pause State");
-				}
+			using (new EditorGUI.DisabledScope(true))
+			{
+				EditorGUILayout.Toggle("Can Pause", local.CanPause);
+				local.PauseState.DisplayInEditor("Pause State");
+			}
 		}
 	}
 }

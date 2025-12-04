@@ -52,5 +52,15 @@ namespace Utilities
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Vector2 Invert(this Vector2 vector) => new(-vector.x, -vector.y);
+
+		/// <summary>
+		/// Gets percentage from partial to whole.
+		/// </summary>
+		public static float ZeroToOne(float partial, float whole) => Mathf.Clamp01(partial / whole);
+
+		/// <summary>
+		/// Gets percentage from partial to whole, inverted.
+		/// </summary>
+		public static float OneToZero(float partial, float whole) => -Mathf.Clamp01(partial / whole) + 1f;
 	}
 }

@@ -32,6 +32,6 @@ namespace Tests
 			m_behavior.SetRotationTarget(lookTarget.position.ToFlatVector());
 		}
 
-		private void OnDestroy() => GameManager.Instance.RemoveFrameUpdate(this);
+		private void OnDestroy() => GameManager.Instance?.RemoveFrameUpdate(this);
 	}
 }

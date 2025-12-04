@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using AudioSettings = Audio.AudioSettings;
 
 namespace Audio
 {

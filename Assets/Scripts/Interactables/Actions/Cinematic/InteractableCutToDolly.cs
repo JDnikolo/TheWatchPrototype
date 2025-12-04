@@ -1,7 +1,6 @@
 ﻿using Managers;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Interactables.Actions.Cinematic
 {
@@ -11,15 +10,13 @@ namespace Interactables.Actions.Cinematic
         [SerializeReference] private CinemachineSplineCart dollyCart;
         [Header("Optional")] 
         
-        [SerializeField] private float cartProgress = 0;
-        [SerializeField] private Transform lookTarget = null;
+        [SerializeField] private float cartProgress;
+        [SerializeField] private Transform lookTarget;
         [SerializeField] private float movementDuration = 1.0f;
-        [FormerlySerializedAs("onMovementEnd")] [SerializeField] private Interactable OnDurationEnd = null;
+        [SerializeField] private Interactable onDurationEnd;
         [SerializeField] private bool deactivateOnDurationEnd = true;
 
-        public override void Interact()
-        {
-            CinematicManager.Instance.CutToDollyCamera(dollyCamera, dollyCart, cartProgress, lookTarget, movementDuration, OnDurationEnd, deactivateOnDurationEnd);
-        }
+        public override void Interact() => CinematicManager.Instance.CutToDollyCamera(dollyCamera, dollyCart, 
+            cartProgress, lookTarget, movementDuration, onDurationEnd, deactivateOnDurationEnd);
     }
 }

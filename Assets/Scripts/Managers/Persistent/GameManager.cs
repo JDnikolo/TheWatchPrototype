@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Audio;
 using Callbacks.Beforeplay;
 using Collections;
 using Runtime;
@@ -13,6 +14,8 @@ namespace Managers.Persistent
 	[AddComponentMenu("Managers/Persistent/Game Manager")]
 	public sealed partial class GameManager : Singleton<GameManager>
 	{
+		[SerializeField] private AudioSnapshot mainSnapshot;
+		
 		private FrameUpdateCollection m_frameUpdateCollection = new();
 		private SwapStack<Action> m_frameInvokeStack = new(new Stack<Action>(), new Stack<Action>());
 		private FrameUpdatePosition m_frameUpdateInvoke;
@@ -151,6 +154,7 @@ namespace Managers.Persistent
 			{
 				case GameState.Preload:
 					SettingsManager.Instance.Load();
+					AudioManager.Instance.SetSnapshot(mainSnapshot, false, 0f, 0f);
 					m_gameState = GameState.BeforePlay;
 					break;
 				case GameState.BeforePlay:

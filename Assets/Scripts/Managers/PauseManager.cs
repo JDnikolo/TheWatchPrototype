@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Audio;
 using Callbacks.Pausing;
 using Managers.Persistent;
 using Runtime;
@@ -17,7 +18,8 @@ namespace Managers
 	{
 		[SerializeField] private LayoutElement pauseMenu;
 		[SerializeField] private string pauseActionName = "Pause";
-
+		[SerializeField] private AudioSnapshot pauseSnapshot;
+		
 		private HashSet<IPauseCallback> m_pauseCallbacks = new();
 		private State m_pauseState;
 		private bool m_paused;
@@ -60,7 +62,10 @@ namespace Managers
 				var state = pauseObject.activeInHierarchy;
 				if (!state)
 				{
+					var audioManager = AudioManager.Instance;
+					audioManager.PreparePause(false, 0.2f);
 					m_pauseState.LoadStates(this);
+					audioManager.SetSnapshot(pauseSnapshot, false, 0.2f);
 					var gameManager = GameManager.Instance;
 					gameManager.FrameUpdateInvoke = FrameUpdatePosition.PauseManager;
 					gameManager.LateUpdateInvoke = LateUpdatePosition.None;

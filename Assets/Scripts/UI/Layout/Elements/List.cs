@@ -293,12 +293,6 @@ namespace UI.Layout.Elements
 			SetElementParents();
 		}
 
-		public override void OnHierarchyChanged()
-		{
-			base.OnHierarchyChanged();
-			SetElementParents();
-		}
-
 		private void SetElementParents()
 		{
 			var parent = transform;

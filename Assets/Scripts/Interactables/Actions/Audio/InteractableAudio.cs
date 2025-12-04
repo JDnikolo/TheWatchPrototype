@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using Attributes;
+using Audio;
+using Runtime.Automation;
+using UnityEngine;
 using AudioClip = Audio.AudioClip;
 
 namespace Interactables.Actions.Audio
@@ -6,15 +9,20 @@ namespace Interactables.Actions.Audio
 	[AddComponentMenu("Interactables/Audio/Play Audio")]
 	public sealed class InteractableAudio : Interactable
 	{
-		[SerializeField] private AudioSource source;
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(AudioPlayer))]
+		private AudioPlayer player;
+		
 		[SerializeField] private AudioClip clip;
 		
 		public override void Interact()
 		{
-			if (!source || !clip) return;
-			clip.Settings.Apply(source, clip.Group);
-			source.clip = clip.Clip;
-			source.Play();
+			if (!clip)
+			{
+				Debug.LogError("Audio clip is null!", this);
+				return;
+			}
+			
+			player.Play(clip);
 		}
 	}
 }

@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f166bdf30002a7e4d9736ee719641d40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_boxCollider: {fileID: 2640919835647439331}
-  m_audioSource: {fileID: 6820803473144388853}
-  ambientClips: {fileID: 11400000, guid: f00f1f173323ed748828fee594c2c647, type: 2}
+  boxCollider: {fileID: 2640919835647439331}
+  player: {fileID: 406341757914910596}
+  ambientAudios: {fileID: 0}
 --- !u!65 &2640919835647439331
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -80,6 +80,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5857528466685493176}
   - component: {fileID: 6820803473144388853}
+  - component: {fileID: 406341757914910596}
   m_Layer: 0
   m_Name: AudioSource
   m_TagString: Untagged
@@ -198,3 +199,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &406341757914910596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043966627405853669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 135aa21c51fc4024bab809349d6bed3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 6820803473144388853}
+  standalone: 1
+  pausable: 0

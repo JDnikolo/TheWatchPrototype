@@ -109,16 +109,70 @@ namespace UI.Layout.Elements
 			set => this.DirtyReplaceObject(ref bottomNeighbor, value);
 		}
 
+		public LayoutElement GetParent() => parent;
+		
 		public void SetParent(LayoutElement newParent) => this.DirtyReplaceObject(ref parent, newParent);
 
-		protected virtual void OnValidate() => TestParent();
-
-		public virtual void OnHierarchyChanged() => TestParent();
-
-		private void TestParent()
+		protected virtual void OnValidate()
 		{
 			if (parent && parent is ILayoutParent && !transform.IsChildOf(parent.transform)) SetParent(null);
+			TestNeighbor(Direction.Left);
+			TestNeighbor(Direction.Right);
+			TestNeighbor(Direction.Up);
+			TestNeighbor(Direction.Down);
 		}
+
+		private void TestNeighbor(Direction direction)
+		{
+			var neighbor = GetManagedNeighbor(this, direction);
+			if (!neighbor) return;
+			var managedParent = neighbor.GetManagedParent();
+			direction = direction.Invert();
+			var inverseNeighbor = GetManagedNeighbor(neighbor, direction);
+			if (managedParent && inverseNeighbor == managedParent || managedParent is ILayoutControllingParent controllingParent 
+			    && controllingParent.BlockedDirections.IsDirectionBlocked(direction)) return;
+			if (inverseNeighbor != this) SetManagedNeighbor(neighbor, this, direction);
+		}
+
+		private static LayoutElement GetManagedNeighbor(LayoutElement element, Direction direction)
+		{
+			switch (direction)
+			{
+				case Direction.Left:
+					return element.LeftManagedNeighbor;
+				case Direction.Right:
+					return element.RightManagedNeighbor;
+				case Direction.Up:
+					return element.TopManagedNeighbor;
+				case Direction.Down:
+					return element.BottomManagedNeighbor;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+			}
+		}
+
+		private static void SetManagedNeighbor(LayoutElement element, LayoutElement neighbor, Direction direction)
+		{
+			switch (direction)
+			{
+				case Direction.Left:
+					element.LeftManagedNeighbor = neighbor;
+					break;
+				case Direction.Right:
+					element.RightManagedNeighbor = neighbor;
+					break;
+				case Direction.Up:
+					element.TopManagedNeighbor = neighbor;
+					break;
+				case Direction.Down:
+					element.BottomManagedNeighbor = neighbor;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+			}
+		}
+
+		public void OnHierarchyChanged() => OnValidate();
 #endif
 	}
 }

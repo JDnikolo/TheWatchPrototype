@@ -1,5 +1,5 @@
 ﻿using System;
-using Managers;
+using LookupTables;
 using UnityEngine;
 
 namespace Highlighting
@@ -11,8 +11,6 @@ namespace Highlighting
 		[SerializeField] protected new Collider collider;
 		[SerializeField] private float minHighlightDistance;
 		[SerializeField] private float maxHighlightDistance = 3f;
-		
-		private Rigidbody m_rigidbody;
 
 		public float MinHighlightDistance => minHighlightDistance;
 
@@ -21,16 +19,7 @@ namespace Highlighting
 		private void Start()
 		{
 			if (!collider) throw new Exception("Collider required for highlighting.");
-			m_rigidbody = collider.attachedRigidbody;
-			var highlightManager = HighlightManager.Instance;
-			if (highlightManager) highlightManager.AddHighlightable(m_rigidbody, this);
-		}
-		
-		private void OnDestroy()
-		{
-			if (!m_rigidbody) return;
-			var highlightManager = HighlightManager.Instance;
-			if (highlightManager) highlightManager.RemoveHighlightable(m_rigidbody);
+			RigidBodyTable.Instance.Add(collider.attachedRigidbody, this);
 		}
 
 		protected override void HighlightInternal(bool enabled)

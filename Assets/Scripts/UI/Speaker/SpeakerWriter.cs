@@ -1,8 +1,10 @@
 using System.Text;
+using Attributes;
 using Audio;
 using Callbacks.Speaker;
 using Managers;
 using Managers.Persistent;
+using Runtime.Automation;
 using Runtime.FrameUpdate;
 using TMPro;
 using UI.Text;
@@ -19,7 +21,10 @@ namespace UI.Speaker
 		private TextMeshProUGUI textWriter;
 
 		[SerializeField] private TextWithBackground speakerWriter;
-		[SerializeField] private AudioSource speakerSource;
+
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(AudioPlayer))]
+		private AudioPlayer speakerPlayer;
+		
 		[SerializeField] private UnityEngine.UI.Slider slider;
 
 		[Header("Control schemes")] [SerializeField]
@@ -41,6 +46,7 @@ namespace UI.Speaker
 		private int m_seek;
 		private bool m_write;
 		private bool m_allowSkip;
+		private bool m_firstSkip;
 		private bool m_forceFinish;
 		private bool m_startNewAudio;
 
@@ -51,6 +57,8 @@ namespace UI.Speaker
 			FullReset();
 			m_write = true;
 			m_allowSkip = false;
+			m_firstSkip = false;
+			m_forceFinish = false;
 			m_onFinished = input.OnTextWriterFinished;
 			var profile = input.TextToDisplay.Profile;
 			if (profile) speakerWriter.WriteText(profile.CharacterName);
@@ -81,7 +89,8 @@ namespace UI.Speaker
 				slider.onValueChanged.AddListener(SliderChanged);
 			}
 
-			var skipDialogue = m_allowSkip && m_skipAction.WasPressedThisFrame();
+			if (!m_firstSkip && !m_skipAction.IsPressed()) m_firstSkip = true;
+			var skipDialogue = m_skipAction.WasPressedThisFrame() && m_allowSkip && m_firstSkip;
 			if (m_forceFinish)
 			{
 				m_forceFinish = false;
@@ -92,7 +101,7 @@ namespace UI.Speaker
 			{
 				if (skipDialogue)
 				{
-					speakerSource.Stop();
+					speakerPlayer.Stop();
 					if (m_onFinished != null)
 					{
 						var onFinished = m_onFinished;
@@ -116,11 +125,11 @@ namespace UI.Speaker
 				m_write = false;
 				changed = true;
 				m_stringBuilder.Append(m_text.Substring(m_seek));
-				speakerSource.Stop();
+				speakerPlayer.Stop();
 			}
 			else if (m_write)
 			{
-				if (m_startNewAudio && !speakerSource.isPlaying)
+				if (m_startNewAudio && !speakerPlayer.IsPlaying)
 				{
 					m_startNewAudio = false;
 					StartNextSpeaker();
@@ -144,9 +153,9 @@ namespace UI.Speaker
 
 			if (changed)
 			{
-				if (!skipDialogue && !m_startNewAudio && !speakerSource.isPlaying) StartNextSpeaker();
+				if (!skipDialogue && !m_startNewAudio && !speakerPlayer.IsPlaying) StartNextSpeaker();
 				textWriter.SetText(m_stringBuilder);
-				CheckPages();
+				GameManager.Instance.InvokeOnNextFrameUpdate(CheckPages);
 			}
 
 			if (!m_write) ResetInternals();
@@ -156,9 +165,7 @@ namespace UI.Speaker
 		{
 			if (!m_audio) return;
 			//var speakerTime = CalculateSpeakerTime();
-			speakerSource.clip = m_audio.Clips.GetRandom();
-			m_audio.Settings.Apply(speakerSource, m_audio.Group);
-			speakerSource.Play();
+			speakerPlayer.Play(m_audio);
 		}
 
 		/*
@@ -207,6 +214,7 @@ namespace UI.Speaker
 
 		private void SetSlider(int pageCount)
 		{
+			Debug.Log($"SetSlider {pageCount}");
 			if (pageCount < 2) slider.gameObject.SetActive(false);
 			else
 			{

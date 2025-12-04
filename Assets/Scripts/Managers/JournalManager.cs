@@ -1,4 +1,5 @@
-﻿using Localization.Speaker;
+﻿using Audio;
+using Localization.Speaker;
 using Managers.Persistent;
 using Runtime;
 using Runtime.FixedUpdate;
@@ -16,6 +17,7 @@ namespace Managers
     {
         [SerializeField] private JournalPanel journalPanel;
         [SerializeField] private string journalActionName = "Journal";
+        [SerializeField] private AudioSnapshot journalSnapshot;
         
         private PauseManager.State m_journalState;
         private InputAction m_journalAction;
@@ -45,7 +47,10 @@ namespace Managers
                 var journalObject = journalPanel.gameObject;
                 if (!journalObject.activeInHierarchy)
                 {
+                    var audioManager = AudioManager.Instance;
+                    audioManager.PreparePause(false, 0.2f);
                     m_journalState.LoadStates(PauseManager.Instance);
+                    audioManager.SetSnapshot(journalSnapshot, false, 0.2f);
                     var gameManager = GameManager.Instance;
                     gameManager.FrameUpdateInvoke = FrameUpdatePosition.JournalManager;
                     gameManager.LateUpdateInvoke = LateUpdatePosition.None;

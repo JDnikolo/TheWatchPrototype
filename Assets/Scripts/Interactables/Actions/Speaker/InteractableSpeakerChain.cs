@@ -30,7 +30,7 @@ namespace Interactables.Actions.Speaker
 		{
 			m_chainIndex += 1;
 			if (onIndexedTextFinished.TryGetValue(m_chainIndex, out var interactable)) interactable.Interact();
-			textWriter.WriteText(new SpeakerWriterInput(textChain.TextAssets[m_chainIndex],
+			UIManager.Instance.OpenTextWriter(new SpeakerWriterInput(textChain.TextAssets[m_chainIndex],
 				m_chainIndex < textChain.TextAssets.Length - 1 ? this : textWriterFinished));
 		}
 	}

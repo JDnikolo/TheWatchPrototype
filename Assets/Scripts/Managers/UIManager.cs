@@ -1,4 +1,5 @@
-﻿using Managers.Persistent;
+﻿using Audio;
+using Managers.Persistent;
 using Runtime;
 using UI.Dialogue;
 using UI.Fade;
@@ -23,6 +24,11 @@ namespace Managers
 
 		[Space] [SerializeField] private LayoutElement controlPanel;
 
+		[SerializeField] private AudioSnapshot speakerSnapshot;
+		
+		private AudioManager.State m_state;
+		private bool m_stateSet;
+		
 		protected override bool Override => true;
 
 		public RectTransform CanvasRect => canvasRect;
@@ -31,6 +37,13 @@ namespace Managers
 
 		public LayoutElement ControlPanel => controlPanel;
 
+		public void ReturnSpeaker()
+		{
+			if (!m_stateSet) return;
+			m_stateSet = false;
+			AudioManager.Instance.PauseState = m_state;
+		}
+
 		public void OpenTextWriter(SpeakerWriterInput input)
 		{
 			var textObject = textWriter.gameObject;
@@ -38,6 +51,15 @@ namespace Managers
 			{
 				textObject.SetActive(true);
 				GameManager.Instance.AddFrameUpdate(textWriter);
+			}
+
+			if (input.TextToDisplay.Audio && !m_stateSet)
+			{
+				m_stateSet = true;
+				var audioManager = AudioManager.Instance;
+				audioManager.PreparePause();
+				m_state = audioManager.PauseState;
+				audioManager.SetSnapshot(speakerSnapshot);
 			}
 
 			textWriter.WriteText(input);

@@ -38,6 +38,7 @@ namespace Utilities
 			inputManager.PlayerMap.Enabled = true;
 			inputManager.UIMap.Enabled = false;
 			inputManager.ToggleCursor(false);
+			UIManager.Instance.ReturnSpeaker();
 		}
 
 		/// <summary>

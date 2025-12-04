@@ -16,17 +16,22 @@ namespace Editor
 
 		protected override void OnInspectorGUIInternal()
 		{
+			if (!EditorApplication.isPlaying)
+			{
+				ApplyModifications();
+				return;
+			}
+		
 			var local = (GameManager) target;
-			if (EditorApplication.isPlaying)
-				using (new EditorGUI.DisabledScope(true))
-				{
-					EditorGUILayout.LabelField("Frame Update");
-					DisplayCollection<IFrameUpdatable,FrameUpdatePosition>(local.FrameUpdateCollection, FrameInverter);
-					EditorGUILayout.LabelField("Late Update");
-					DisplayCollection<ILateUpdatable,LateUpdatePosition>(local.LateUpdateCollection, LateInverter);
-					EditorGUILayout.LabelField("Fixed Update");
-					DisplayCollection<IFixedUpdatable,FixedUpdatePosition>(local.FixedUpdateCollection, FixedInverter);
-				}
+			using (new EditorGUI.DisabledScope(true))
+			{
+				EditorGUILayout.LabelField("Frame Update");
+				DisplayCollection(local.FrameUpdateCollection, FrameInverter);
+				EditorGUILayout.LabelField("Late Update");
+				DisplayCollection(local.LateUpdateCollection, LateInverter);
+				EditorGUILayout.LabelField("Fixed Update");
+				DisplayCollection(local.FixedUpdateCollection, FixedInverter);
+			}
 		}
 		
 		private FrameUpdatePosition FrameInverter(byte value) => (FrameUpdatePosition) value;
