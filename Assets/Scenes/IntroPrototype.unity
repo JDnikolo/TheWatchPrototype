@@ -3732,7 +3732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f2df4964996de4890f19d1f10d9305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepSource: {fileID: 1442616209}
+  player: {fileID: 0}
   footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
   terrainLayerMask:
     serializedVersion: 2
@@ -6723,7 +6723,7 @@ MonoBehaviour:
   cartProgress: 0
   lookTarget: {fileID: 263915557}
   movementDuration: 0.5
-  OnDurationEnd: {fileID: 464287204}
+  onDurationEnd: {fileID: 0}
   deactivateOnDurationEnd: 0
 --- !u!114 &464287204
 MonoBehaviour:
@@ -6888,11 +6888,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18a69f0efe80af64d8d0b99ebb769ec8, type: 3}
---- !u!82 &475397008 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 8337072181445733825, guid: 7cc1e5027bc6ddc4c838d8c03f75b7c1, type: 3}
-  m_PrefabInstance: {fileID: 1347935615}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &477481467
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14066,7 +14061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f2df4964996de4890f19d1f10d9305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepSource: {fileID: 475397008}
+  player: {fileID: 0}
   footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
   terrainLayerMask:
     serializedVersion: 2
@@ -18382,11 +18377,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 890471893374071227, guid: 69b7dbbe1e29cde41b9eaee7dfb56778, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[0].Rotation.value.x
-      value: 0.000000030222512
+      value: 0.000000030222523
       objectReference: {fileID: 0}
     - target: {fileID: 890471893374071227, guid: 69b7dbbe1e29cde41b9eaee7dfb56778, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[0].Rotation.value.z
-      value: 0.000000051363596
+      value: 0.000000051363614
       objectReference: {fileID: 0}
     - target: {fileID: 890471893374071227, guid: 69b7dbbe1e29cde41b9eaee7dfb56778, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[4].Rotation.value.w
@@ -20814,7 +20809,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5042987219777982844, guid: cd585d528b6a3ba44a7d5281af34297c, type: 3}
       propertyPath: sceneName
-      value: NightPrototype
+      value: Night Actual
       objectReference: {fileID: 0}
     - target: {fileID: 8783412951891876495, guid: cd585d528b6a3ba44a7d5281af34297c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21599,11 +21594,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18a2a9ccff59ef641a63ddfa564998bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!82 &1442616209 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 8295087809982342481, guid: 1d1f3bbf966f024478dbade135e72185, type: 3}
-  m_PrefabInstance: {fileID: 2110754092}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1445044131 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 10a6a92f2c2869743b72cdda32466609, type: 3}
@@ -21934,7 +21924,7 @@ MonoBehaviour:
   cartProgress: 0
   lookTarget: {fileID: 588673441}
   movementDuration: 0.5
-  OnDurationEnd: {fileID: 1459899061}
+  onDurationEnd: {fileID: 0}
   deactivateOnDurationEnd: 0
 --- !u!114 &1459899061
 MonoBehaviour:
@@ -27427,7 +27417,7 @@ MonoBehaviour:
   cartProgress: 0
   lookTarget: {fileID: 1262028207}
   movementDuration: 0.5
-  OnDurationEnd: {fileID: 1900421544}
+  onDurationEnd: {fileID: 0}
   deactivateOnDurationEnd: 1
 --- !u!114 &1900421543
 MonoBehaviour:
@@ -27975,7 +27965,7 @@ MonoBehaviour:
   cartProgress: 0
   lookTarget: {fileID: 584455386}
   movementDuration: 1
-  OnDurationEnd: {fileID: 1931177420}
+  onDurationEnd: {fileID: 0}
   deactivateOnDurationEnd: 0
 --- !u!114 &1931177420
 MonoBehaviour:
@@ -29316,7 +29306,7 @@ MonoBehaviour:
   cartProgress: 0
   lookTarget: {fileID: 791346523}
   movementDuration: -1
-  OnDurationEnd: {fileID: 2038681922}
+  onDurationEnd: {fileID: 0}
   deactivateOnDurationEnd: 1
 --- !u!114 &2038681922
 MonoBehaviour:
@@ -31051,6 +31041,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   journalPanel: {fileID: 1099829095}
   journalActionName: Journal
+  journalSnapshot: {fileID: 0}
 --- !u!114 &2086943648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31080,6 +31071,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 0}
   pauseActionName: Pause
+  pauseSnapshot: {fileID: 0}
 --- !u!114 &2086943654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31106,6 +31098,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 0}
   pauseActionName: Pause
+  pauseSnapshot: {fileID: 0}
 --- !u!1 &2087268790
 GameObject:
   m_ObjectHideFlags: 0

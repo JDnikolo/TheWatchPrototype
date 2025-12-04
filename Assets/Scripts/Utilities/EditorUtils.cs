@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Runtime.Automation;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -245,6 +246,20 @@ namespace Utilities
 			Debug.Log($"[{target.GetType()}] Replacing {value} with {newValue}", target);
 			value = newValue;
 			if (target) EditorUtility.SetDirty(target);
+		}
+		public static void UpdateNameTo(this Component instance, Object target)
+		{
+			if (!target || EditorSceneManager.IsPreviewSceneObject(instance)) return;
+			UpdateNameTo(instance, target.name);
+		}
+		
+		public static void UpdateNameTo(this Component instance, string name)
+		{
+			if (EditorSceneManager.IsPreviewSceneObject(instance)) return;
+			var gameObject = instance.gameObject;
+			if (gameObject.name == name) return;
+			gameObject.name = name;
+			EditorUtility.SetDirty(gameObject);
 		}
 	}
 }
