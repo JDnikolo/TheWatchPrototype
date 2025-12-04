@@ -213,9 +213,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5606b472a00f99f4390b55be2ca5ed78, type: 3}
+--- !u!108 &5709354826443440785 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 6347502787084332930, guid: 5606b472a00f99f4390b55be2ca5ed78, type: 3}
+  m_PrefabInstance: {fileID: 1670113978453617939}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8524285130318492189 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7016951237021228814, guid: 5606b472a00f99f4390b55be2ca5ed78, type: 3}
+  m_PrefabInstance: {fileID: 1670113978453617939}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &9069532925076623865 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7705689697246428394, guid: 5606b472a00f99f4390b55be2ca5ed78, type: 3}
   m_PrefabInstance: {fileID: 1670113978453617939}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7266515424223789883
@@ -423,8 +433,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda1fe4e2243c9d40ba56b6479809520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particles: {fileID: 0}
-  lightComponent: {fileID: 0}
+  particles: {fileID: 9069532925076623865}
+  lightComponent: {fileID: 5709354826443440785}
   sphere: {fileID: 5373740647519509046}
 --- !u!4 &3800713252577849623 stripped
 Transform:
@@ -514,6 +524,10 @@ PrefabInstance:
     - target: {fileID: 3503170318202096803, guid: 5a313f6730802d84db05679ae1cfb9c3, type: 3}
       propertyPath: m_Name
       value: Torch
+      objectReference: {fileID: 0}
+    - target: {fileID: 3503170318202096803, guid: 5a313f6730802d84db05679ae1cfb9c3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8454657745525037234, guid: 5a313f6730802d84db05679ae1cfb9c3, type: 3}
       propertyPath: m_Layer
