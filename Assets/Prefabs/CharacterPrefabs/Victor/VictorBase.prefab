@@ -8,18 +8,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7951632619193038686}
     m_Modifications:
-    - target: {fileID: 2617373267993278806, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: -2588933649015344934, guid: 5741183d571e6404099aac8887edb0fe, type: 3}
-    - target: {fileID: 5866666021909216657, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: aa00c2db51b297d4eb8403a26aa2b5a8, type: 2}
-    - target: {fileID: 5866666021909216657, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9d1f2ccaced903747b41c640a7155646, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -56,6 +44,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SOLDIERS 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2617373267993278806, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: -2588933649015344934, guid: 5741183d571e6404099aac8887edb0fe, type: 3}
+    - target: {fileID: 5866666021909216657, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: aa00c2db51b297d4eb8403a26aa2b5a8, type: 2}
+    - target: {fileID: 5866666021909216657, guid: ab9faf6f59321894389e914bb1d59703, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f2df4964996de4890f19d1f10d9305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepSource: {fileID: 558188332646943207}
+  player: {fileID: 0}
   footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
   terrainLayerMask:
     serializedVersion: 2
@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 75394102273310391}
+    - target: {fileID: 6154537777405265085, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
+      propertyPath: m_Name
+      value: Victor-CameraFocusPoint
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7294506478311673622, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
@@ -208,11 +212,6 @@ MonoBehaviour:
   animationToStart: 5
   duration: 1
   onAnimationEnd: {fileID: 0}
---- !u!82 &558188332646943207 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 3560432151935103162, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}
-  m_PrefabInstance: {fileID: 3951389125248612701}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1362926404007305471 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2611015960795273634, guid: 7d47b8d2f1aab6b48ae6721de2417da4, type: 3}

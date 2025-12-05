@@ -42,10 +42,14 @@ namespace Managers
             dollyCamera.enabled = true;
             dollyCart.enabled = true;
             dollyCamera.Follow = dollyCart.transform;
-            dollyCart.SplinePosition = cartProgress;
+            dollyCart.SplinePosition = cartProgress > 0? cartProgress:dollyCart.SplinePosition;
             if (lookTarget)
             {
                 dollyCamera.LookAt = lookTarget;
+            }
+            else
+            {
+                dollyCamera.LookAt = null;
             }
 
             if (cutDuration < 0) return;
