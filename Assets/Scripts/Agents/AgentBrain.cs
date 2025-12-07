@@ -14,7 +14,11 @@ namespace Agents
 
 		public void StopMovement()
 		{
-			var stopBehavior = new MovementStopBehavior();
+			if (MovementBehavior is not MovementStopBehavior stopBehavior)
+			{
+				stopBehavior = new MovementStopBehavior();
+			}
+			
 			stopBehavior.Stop(inputHandler.MovementBehavior, inputHandler.Position);
 			inputHandler.MovementBehavior = stopBehavior;
 		}

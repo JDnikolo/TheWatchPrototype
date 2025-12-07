@@ -1,4 +1,5 @@
-﻿using Logic.Boolean;
+﻿using Attributes;
+using Logic.Boolean;
 using UnityEngine;
 
 namespace Interactables.Actions.Logic
@@ -6,9 +7,14 @@ namespace Interactables.Actions.Logic
     [AddComponentMenu("Interactables/Logic/Logic Gate If Else")]
     public sealed class InteractableIfElse : Interactable
     {
-        [SerializeField] private LogicBoolean logicGate;
-        [SerializeField] private Interactable interactableIfTrue;
-        [SerializeField] private Interactable interactableElse;
+        [CanBeNullInPath("DialogueBuildingBlocks"), SerializeField]
+        private LogicBoolean logicGate;
+
+        [CanBeNullInPath("DialogueBuildingBlocks"), SerializeField]
+        private Interactable interactableIfTrue;
+
+        [CanBeNullInPath("DialogueBuildingBlocks"), SerializeField]
+        private Interactable interactableElse;
 
         public override void Interact()
         {

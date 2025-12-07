@@ -1,12 +1,10 @@
-﻿using System;
-using Callbacks.Agent;
+﻿using Callbacks.Agent;
 using Managers;
 using UnityEngine;
 using Utilities;
 
 namespace Agents.Behaviors
 {
-	[Serializable]
 	public sealed class MovementStopBehavior : MovementBehavior, IMovementBehaviorUpdate
 	{
 		private MovementBehavior m_previousBehavior;

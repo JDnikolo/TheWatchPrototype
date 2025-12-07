@@ -1,25 +1,23 @@
-﻿using Agents;
-using Agents.Behaviors;
+﻿using Agents.Behaviors;
 using Callbacks.Agent;
 using UnityEngine;
 
 namespace Interactables.Actions.Agent
 {
 	[AddComponentMenu("Interactables/Make Agent Cinematic")]
-	public sealed class InteractableAgentCinematic : Interactable
+	public sealed class InteractableAgentCinematic : InteractableAgent
 	{
-		[SerializeField] private AgentBrain agent;
 		[SerializeField] private AgentCinematicAssigned onCinematicAssigned;
 		
 		public override void Interact()
 		{
-			if (agent.MovementBehavior is not MovementCinematicBehavior behavior)
+			if (Agent.MovementBehavior is not MovementCinematicBehavior behavior)
 			{
 				behavior = new MovementCinematicBehavior();
-				agent.StartMovement(behavior);
+				Agent.StartMovement(behavior);
 			}
 		
-			onCinematicAssigned.OnAgentCinematicAssigned(agent, behavior);
+			onCinematicAssigned.OnAgentCinematicAssigned(Agent, behavior);
 		}
 	}
 }

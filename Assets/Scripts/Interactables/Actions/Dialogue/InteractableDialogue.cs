@@ -13,10 +13,14 @@ namespace Interactables.Actions.Dialogue
 	[AddComponentMenu("Interactables/Dialogue/Display Dialogue")]
 	public sealed class InteractableDialogue : Interactable
 	{
-		[SerializeField] private DialogueObject dialogueObject;
-		[SerializeField] private SpeakerObject questionToDisplay;
-		[CanBeNull] [SerializeField] private DialogueWriterFinished dialogueWriterFinished;
-		
+		[CanBeNullInPath("DialogueBuildingBlocks"), SerializeField]
+		private DialogueObject dialogueObject;
+
+		[CanBeNullInPath("DialogueBuildingBlocks"), SerializeField]
+		private SpeakerObject questionToDisplay;
+
+		[CanBeNull, SerializeField] private DialogueWriterFinished dialogueWriterFinished;
+
 		public override void Interact()
 		{
 			InputManager.Instance.ForceUIInput();

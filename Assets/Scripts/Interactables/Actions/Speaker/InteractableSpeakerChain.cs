@@ -13,7 +13,9 @@ namespace Interactables.Actions.Speaker
 	[AddComponentMenu("Interactables/Speaker/Display Speaker-Chain")]
 	public sealed class InteractableSpeakerChain : Interactable, ISpeakerWriterFinished
 	{
-		[SerializeField] private SpeakerChain textChain;
+		[CanBeNullInPath("DialogueBuildingBlocks"), SerializeField]
+		private SpeakerChain textChain;
+
 		[CanBeNull, SerializeField] private SerializedDictionary<int, Interactable> onIndexedTextFinished;
 		[CanBeNull, SerializeField] private SpeakerWriterFinished textWriterFinished;
 

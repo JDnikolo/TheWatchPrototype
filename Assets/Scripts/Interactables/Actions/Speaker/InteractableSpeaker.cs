@@ -12,7 +12,9 @@ namespace Interactables.Actions.Speaker
 	[AddComponentMenu("Interactables/Speaker/Display Speaker")]
 	public sealed class InteractableSpeaker : Interactable
 	{
-		[SerializeField] private SpeakerObject textObject;
+		[CanBeNullInPath("DialogueBuildingBlocks"), SerializeField]
+		private SpeakerObject textObject;
+		
 		[CanBeNull, SerializeField] private SpeakerWriterFinished textWriterFinished;
 		
 		public override void Interact()

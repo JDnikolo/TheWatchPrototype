@@ -1,4 +1,5 @@
-﻿using Logic.Boolean;
+﻿using Attributes;
+using Logic.Boolean;
 using UnityEngine;
 
 namespace Interactables.Actions.Logic
@@ -6,8 +7,11 @@ namespace Interactables.Actions.Logic
 	[AddComponentMenu("Interactables/Logic/Evaluate Logic Gate")]
 	public sealed class InteractableLogic : Interactable
 	{
-		[SerializeField] private Interactable interactable;
-		[SerializeField] private LogicBoolean logicGate;
+		[CanBeNullInPath("DialogueBuildingBlocks"), SerializeField]
+		private LogicBoolean logicGate;
+
+		[CanBeNullInPath("DialogueBuildingBlocks"), SerializeField]
+		private Interactable interactable;
 
 		public override void Interact()
 		{

@@ -10,18 +10,7 @@ namespace Interactables.Actions
 		
 		public override void Interact()
 		{
-			var length = interactables.Length;
-			for (var i = 0; i < length; i++)
-			{
-				var interactable = interactables[i];
-				if (!interactable)
-				{
-					Debug.LogError($"Interactable at {i} was null!", this);
-					return;
-				}
-				
-				interactable.Interact();
-			}
+			for (var i = 0; i < interactables.Length; i++) interactables[i].Interact();
 		}
 	}
 }

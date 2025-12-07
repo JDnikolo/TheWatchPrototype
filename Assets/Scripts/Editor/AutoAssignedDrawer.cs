@@ -1,6 +1,5 @@
 ﻿using System;
 using Attributes;
-using Runtime.Automation;
 using UnityEditor;
 using UnityEngine;
 
@@ -50,13 +49,15 @@ namespace Editor
 				else makeHidden = false;
 			}
 			else
-				makeHidden = property.objectReferenceValue is Component referenceComponent &&
-							((local.AssignMode & AssignMode.Self) == 0 ||
-							referenceComponent.gameObject == targetComponent.gameObject) &&
-							((local.AssignMode & AssignMode.Parent) == 0 ||
-							referenceComponent.transform == targetComponent.transform.parent) &&
-							((local.AssignMode & AssignMode.Child) == 0 ||
-							referenceComponent.transform.parent == targetComponent.transform);
+			{
+				makeHidden = property.objectReferenceValue is Component referenceComponent && (
+					((local.AssignMode & AssignMode.Self) == 0 ||
+					referenceComponent.gameObject == targetComponent.gameObject) ||
+					((local.AssignMode & AssignMode.Parent) == 0 ||
+					referenceComponent.transform == targetComponent.transform.parent) ||
+					((local.AssignMode & AssignMode.Child) == 0 ||
+					referenceComponent.transform.parent == targetComponent.transform));
+			}
 
 			using (new EditorGUI.DisabledScope(makeHidden)) EditorGUI.PropertyField(position, property, label, true);
 		}

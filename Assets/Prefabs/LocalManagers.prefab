@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6933803359518827362}
   - component: {fileID: 4794791055776580641}
   - component: {fileID: 7896174263879191769}
-  - component: {fileID: 5395375590209879662}
   - component: {fileID: 8823022347120269047}
   m_Layer: 0
   m_Name: LocalManagers
@@ -61,6 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b97d7b644e475984df8599bded7b9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  localCamera: {fileID: 0}
 --- !u!114 &7896174263879191769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,20 +74,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navigateActionName: Navigate
---- !u!114 &5395375590209879662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7221714938813842005}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa0592fbfd354f1398da3ba848d16669, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerObject: {fileID: 0}
-  playerCamera: {fileID: 0}
 --- !u!114 &8823022347120269047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,3 +92,5 @@ MonoBehaviour:
   fadeDuration: 1
   textWriter: {fileID: 0}
   dialogueWriter: {fileID: 0}
+  controlPanel: {fileID: 0}
+  speakerSnapshot: {fileID: 0}
