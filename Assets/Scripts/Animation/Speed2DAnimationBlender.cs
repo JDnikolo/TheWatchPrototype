@@ -11,21 +11,20 @@ namespace Animation
         [SerializeField] private string idleForwardParameterName = "SpeedForward";
         [SerializeField] private string idleRightParameterName = "SpeedRight";
         
-        private int m_blendForward, m_blendRight;
-        //TODO Check what this is used for
-        private float m_maxSpeed;
-        
+        private int m_blendForward;
+        private int m_blendRight;
+
         public override void SetBlendValues()
         {
-            var forwardSpeed = Vector3.Dot(rootRigidbody.velocity.normalized, lookDirectionTransform.forward.normalized);
-            var rightSpeed = Vector3.Dot(rootRigidbody.velocity.normalized, lookDirectionTransform.right.normalized);
+            var velocity = rootRigidbody.velocity / rootRigidbody.maxLinearVelocity;
+            var forwardSpeed = Vector3.Dot(velocity, lookDirectionTransform.forward);
+            var rightSpeed = Vector3.Dot(velocity, lookDirectionTransform.right);
             Animator.SetFloat(m_blendForward, forwardSpeed);
             Animator.SetFloat(m_blendRight, rightSpeed);
         }
         
         private void Awake()
         {
-            m_maxSpeed = rootRigidbody.maxLinearVelocity;
             m_blendForward = Animator.StringToHash(idleForwardParameterName);
             m_blendRight = Animator.StringToHash(idleRightParameterName);
         }

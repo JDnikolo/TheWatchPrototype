@@ -8,7 +8,7 @@ namespace Interactables.Triggers
 	{
 		[SerializeField] private Interactable interactable;
 		//TODO Replace this with a single interactable
-		[Obsolete, CanBeNull, SerializeField] private Interactable[] interactables;
+		[Obsolete, SerializeField] private Interactable[] interactables;
 
 		protected void OnInteract() => interactable.Interact();
 	}
