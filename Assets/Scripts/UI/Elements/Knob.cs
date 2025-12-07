@@ -16,10 +16,10 @@ namespace UI.Elements
 		[SerializeField] private Image image;
 		[SerializeField] private ElementColor color;
 
-		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(DragReceptor))] 
+		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(DragReceptor))] 
 		private DragReceptor dragReceptor;
 		
-		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(PointerReceptor))] 
+		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(PointerReceptor))] 
 		private PointerReceptor pointerReceptor;
 
 		private IKnobReceiver m_receiver;

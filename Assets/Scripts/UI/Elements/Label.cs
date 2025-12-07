@@ -12,7 +12,7 @@ namespace UI.Elements
 	[AddComponentMenu("UI/Elements/Label")]
 	public sealed class Label : BaseBehaviour, IPrewarm, ILocalizationUpdatable
 	{
-		[SerializeField, AutoAssigned(AssignMode.Self, typeof(TextWriter))] 
+		[SerializeField, AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(TextWriter))] 
 		private TextWriter textWriter;
 
 		[CanBeNullInPrefab, SerializeField, HideInInspector]

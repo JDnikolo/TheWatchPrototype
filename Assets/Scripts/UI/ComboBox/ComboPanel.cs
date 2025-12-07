@@ -18,7 +18,7 @@ namespace UI.ComboBox
 		, IHierarchyChanged
 #endif
 	{
-		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(RectTransform))]
+		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(RectTransform))]
 		private RectTransform rectTransform;
 		[SerializeField] private Image background;
 		[SerializeField] private ComboLabel label;
