@@ -64,19 +64,25 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 7833308575256309752, guid: 74f466b88c9492f44af906e8b80d5d44, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 5837002248231710445, guid: 74f466b88c9492f44af906e8b80d5d44, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 3754044929295556316, guid: 74f466b88c9492f44af906e8b80d5d44, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6326510782463821215}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74f466b88c9492f44af906e8b80d5d44, type: 3}
---- !u!4 &1943541291546778600 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5837002248231710445, guid: 74f466b88c9492f44af906e8b80d5d44, type: 3}
+--- !u!114 &2159732145936949630 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6197237784527410299, guid: 74f466b88c9492f44af906e8b80d5d44, type: 3}
   m_PrefabInstance: {fileID: 5474664243459716357}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &8295087809982342481 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 4100519173067198548, guid: 74f466b88c9492f44af906e8b80d5d44, type: 3}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 135aa21c51fc4024bab809349d6bed3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &9214613218351541209 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3754044929295556316, guid: 74f466b88c9492f44af906e8b80d5d44, type: 3}
   m_PrefabInstance: {fileID: 5474664243459716357}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5784576255929229940
@@ -85,7 +91,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1943541291546778600}
+    m_TransformParent: {fileID: 9214613218351541209}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 996a2d1e3b8df6c418282c6d3b2964bd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -105,15 +111,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 996a2d1e3b8df6c418282c6d3b2964bd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 996a2d1e3b8df6c418282c6d3b2964bd, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 996a2d1e3b8df6c418282c6d3b2964bd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 996a2d1e3b8df6c418282c6d3b2964bd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -174,8 +180,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6f2df4964996de4890f19d1f10d9305, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepSource: {fileID: 8295087809982342481}
+  player: {fileID: 2159732145936949630}
   footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
   terrainLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64

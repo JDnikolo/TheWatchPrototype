@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightable: {fileID: 8547015183772758332}
-  collider: {fileID: 8993206756301328005}
+  rigidbody: {fileID: 4172231424195844605}
   minHighlightDistance: 0
   maxHighlightDistance: 10
 --- !u!114 &8547015183772758332
@@ -403,8 +403,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc28a32e9e234abd893c1e840d1b9b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactable: {fileID: 0}
   interactables:
   - {fileID: 1453417726182000971}
+  collider: {fileID: 0}
 --- !u!1 &4956440861307932950
 GameObject:
   m_ObjectHideFlags: 0
