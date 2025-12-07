@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
+using NUnit.Framework.Internal;
 using Object = UnityEngine.Object;
 
 namespace Debugging
@@ -22,6 +23,8 @@ namespace Debugging
 		public override bool Equals(object obj) => obj is DebugObject other && Equals(other);
 
 		public override int GetHashCode() => (DebugString != null ? DebugString.GetHashCode() : 0);
+
+		public override string ToString() => $"{Instance} {TestInstance} {DebugString}";
 	}
 }
 #endif

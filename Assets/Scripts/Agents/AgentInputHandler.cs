@@ -1,4 +1,5 @@
-﻿using Agents.Behaviors;
+﻿using System;
+using Agents.Behaviors;
 using Attributes;
 using Callbacks.Agent;
 using Character;
@@ -87,6 +88,18 @@ namespace Agents
 
 		private void OnDestroy() => GameManager.Instance?.RemoveFrameUpdate(this);
 #if UNITY_EDITOR
+		private void OnDrawGizmosSelected()
+		{
+			if (MovementBehavior == null) return;
+			Gizmos.color = Color.red;
+			DrawPosition(MovementBehavior.MoveTarget);
+			Gizmos.color = Color.yellow;
+			DrawPosition(MovementBehavior.RotationTarget);
+		}
+
+		private void DrawPosition(Vector2 flatPosition) => 
+			Gizmos.DrawWireSphere(new Vector3(flatPosition.x, transform.position.y, flatPosition.y), 1f);
+
 		private void OnValidate()
 		{
 			var rigidBody = rigidbody;

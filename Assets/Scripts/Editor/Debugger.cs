@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using Debugging;
 using UnityEditor;
 using UnityEngine;
@@ -18,35 +17,19 @@ namespace Editor
 		public static void DebugSceneBehaviours()
 		{
 			Debug.Log("Debug Scene Behaviours Begin");
-			var globalObjects = new HashSet<DebugObject>();
+			var globalObjects = new List<DebugObject>();
 			var rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
 			for (var i = 0; i < rootObjects.Length; i++)
 				IterateTransform(rootObjects[i].transform, globalObjects, new List<Behaviour>(), string.Empty);
 			RunDebug(globalObjects);
 			Debug.Log("Debug Scene Behaviours End");
 		}
-
-		private static void IterateTransform(Transform transform, HashSet<DebugObject> globalObjects,
-			List<Behaviour> localBehaviours, string path)
-		{
-			path = $"{path}{transform.gameObject.name}";
-			transform.GetComponents(localBehaviours);
-			for (var i = localBehaviours.Count - 1; i >= 0; i--)
-			{
-				var localBehaviour = localBehaviours[i];
-				globalObjects.Add(new DebugObject(localBehaviour, 
-					transform.gameObject, $"{path}/{localBehaviour.GetType()}"));
-			}
-			var childCount = transform.childCount;
-			for (var i = 0; i < childCount; i++)
-				IterateTransform(transform.GetChild(i), globalObjects, localBehaviours, $"{path}/");
-		}
-
+		
 		[MenuItem("Debugging/Debug Prefab Behaviours")]
 		public static void DebugPrefabBehaviours()
 		{
 			Debug.Log("Debug Prefab Behaviours Begin");
-			var globalObjects = new HashSet<DebugObject>();
+			var globalObjects = new List<DebugObject>();
 			var dataPath = Application.dataPath;
 			var prefix = dataPath.Substring(0, dataPath.Length - 6);
 			IterateDirectory(new DirectoryInfo($"{dataPath}/Prefabs"),
@@ -59,7 +42,7 @@ namespace Editor
 		public static void DebugScriptableObjects()
 		{
 			Debug.Log("Debug Scriptable Objects Begin");
-			var globalObjects = new HashSet<DebugObject>();
+			var globalObjects = new List<DebugObject>();
 			var dataPath = Application.dataPath;
 			var prefix = dataPath.Substring(0, dataPath.Length - 6);
 			IterateDirectory(new DirectoryInfo(dataPath), globalObjects, null, prefix);
@@ -67,7 +50,7 @@ namespace Editor
 			Debug.Log("Debug Scriptable Objects End");
 		}
 
-		private static void IterateDirectory(DirectoryInfo directoryInfo, HashSet<DebugObject> globalObjects,
+		private static void IterateDirectory(DirectoryInfo directoryInfo, List<DebugObject> globalObjects,
 			List<Behaviour> localBehaviours, string prefix)
 		{
 			var files = directoryInfo.GetFiles();
@@ -78,7 +61,7 @@ namespace Editor
 				IterateDirectory(directories[i], globalObjects, localBehaviours, prefix);
 		}
 
-		private static void IterateFile(FileInfo fileInfo, HashSet<DebugObject> globalObjects,
+		private static void IterateFile(FileInfo fileInfo, List<DebugObject> globalObjects,
 			List<Behaviour> localBehaviours, string prefix)
 		{
 			var path = fileInfo.FullName;
@@ -100,13 +83,34 @@ namespace Editor
 			}
 		}
 
-		private static void RunDebug(HashSet<DebugObject> globalObjects)
+		private static void IterateTransform(Transform transform, List<DebugObject> globalObjects,
+			List<Behaviour> localBehaviours, string path)
 		{
-			Parallel.ForEach(globalObjects, IterateObject);
-			GC.Collect();
+			path = $"{path}{transform.gameObject.name}";
+			transform.GetComponents(localBehaviours);
+			for (var i = localBehaviours.Count - 1; i >= 0; i--)
+			{
+				var localBehaviour = localBehaviours[i];
+				globalObjects.Add(new DebugObject(localBehaviour, 
+					transform.gameObject, $"{path}/{localBehaviour.GetType()}"));
+			}
+			
+			var childCount = transform.childCount;
+			for (var i = 0; i < childCount; i++)
+				IterateTransform(transform.GetChild(i), globalObjects, localBehaviours, $"{path}/");
 		}
 
-		private static void IterateObject(DebugObject obj) =>
-			new OperationData(obj.TestInstance, true).TestAny(obj.DebugString, obj.Instance);
+		
+		private static void RunDebug(List<DebugObject> globalObjects)
+		{
+			for (var i = globalObjects.Count - 1; i >= 0; i--)
+			{
+				var obj = globalObjects[i];
+				new OperationData(obj.TestInstance, true).TestAny(obj.DebugString, obj.Instance);
+				globalObjects.RemoveAt(i);
+			}
+			
+			GC.Collect();
+		}
 	}
 }

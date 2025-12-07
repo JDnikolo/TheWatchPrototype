@@ -26,10 +26,13 @@ namespace Editor
 			using (new EditorGUI.DisabledScope(true))
 			{
 				EditorGUILayout.LabelField("Frame Update");
+				EditorGUILayout.EnumPopup("Invocation Level", local.FrameUpdateInvoke);
 				DisplayCollection(local.FrameUpdateCollection, FrameInverter);
 				EditorGUILayout.LabelField("Late Update");
+				EditorGUILayout.EnumPopup("Invocation Level", local.LateUpdateInvoke);
 				DisplayCollection(local.LateUpdateCollection, LateInverter);
 				EditorGUILayout.LabelField("Fixed Update");
+				EditorGUILayout.EnumPopup("Invocation Level", local.FixedUpdateInvoke);
 				DisplayCollection(local.FixedUpdateCollection, FixedInverter);
 			}
 		}

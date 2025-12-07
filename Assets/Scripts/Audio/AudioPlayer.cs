@@ -51,24 +51,12 @@ namespace Audio
         
         public void Play(AudioClip clip)
         {
-            if (!clip)
-            {
-                Debug.LogError("Cli was null!", this);
-                return;
-            }
-            
             audioSource.clip = clip.Clip;
             PostPlay(clip);
         }
 
         public void Play(AudioAggregate aggregate)
         {
-            if (!aggregate)
-            {
-                Debug.LogError("Cli was null!", this);
-                return;
-            }
-            
             audioSource.clip = aggregate.Clips.GetRandom();
             PostPlay(aggregate);
         }

@@ -213,7 +213,6 @@ namespace UI.Speaker
 
 		private void SetSlider(int pageCount)
 		{
-			Debug.Log($"SetSlider {pageCount}");
 			if (pageCount < 2) slider.gameObject.SetActive(false);
 			else
 			{

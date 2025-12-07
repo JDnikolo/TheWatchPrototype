@@ -39,22 +39,12 @@ namespace Utilities
 					else if (attribute is CustomDebug customDebug) debugMethod = customDebug.MethodName;
 				}
 
-				if (isSerialized && !TestField(operationData, path, new FieldData(
-						obsolete, allowNull, targetCount, debugMethod), type, value, field)) return false;
-			}
-
-			return true;
-		}
-
-		private static bool TestField(this OperationData operationData, string path,
-			FieldData fieldData, Type type, object value, FieldInfo fieldInfo)
-		{
-			if (!TestObject(operationData, path, fieldData, value)) return false;
-			var fieldType = fieldInfo.FieldType;
-			var typeData = fieldType.GetTypeData(false);
-			if (typeData != TypeData.NotTestable)
-			{
-				path = $"{path}.{fieldInfo.Name}";
+				if (!isSerialized) continue;
+				var fieldData = new FieldData(obsolete, allowNull, targetCount, debugMethod);
+				var fieldType = field.FieldType;
+				var typeData = fieldType.GetTypeData(false);
+				if (typeData == TypeData.NotTestable) continue;
+				path = $"{path}.{field.Name}";
 				if (!string.IsNullOrEmpty(fieldData.CustomDebug))
 				{
 					var method = type.GetMethod(fieldData.CustomDebug,
@@ -64,20 +54,20 @@ namespace Utilities
 					if (method != null)
 						return (bool) method.Invoke(value, new object[] {operationData, path, fieldData});
 				}
-				
-				return operationData.TestType(path, fieldData, typeData, fieldType, fieldInfo.GetValue(value));
+	
+				if (!operationData.TestType(path, fieldData, typeData, fieldType, field.GetValue(value))) return false;
 			}
-			
+
 			return true;
 		}
-
+		
 		private static bool TestType(this OperationData operationData, string path,
 			FieldData fieldData, TypeData typeData, Type type, object value)
 		{
 			switch (typeData)
 			{
 				case TypeData.UnityObject:
-					return operationData.TestObject(path, fieldData, value);
+					return operationData.TestUnityObject(path, fieldData, value as Object);
 				case TypeData.Array:
 					return operationData.TestArray(path, fieldData, type.GetElementType(), value);
 				case TypeData.List:
@@ -96,6 +86,25 @@ namespace Utilities
 		public static bool TestObject(this OperationData operationData, string path, FieldData fieldData, object value)
 		{
 			if (value == null)
+			{
+				if (fieldData.AllowNull) return true;
+				operationData.LogMessage(path, NULL_STRING);
+				return false;
+			}
+
+			if (fieldData.Obsolete)
+			{
+				operationData.LogMessage(path, "Obsolete");
+				return false;
+			}
+
+			return true;
+		}
+
+		public static bool TestUnityObject(this OperationData operationData, string path, 
+			FieldData fieldData, Object value)
+		{
+			if (!value)
 			{
 				if (fieldData.AllowNull) return true;
 				operationData.LogMessage(path, NULL_STRING);

@@ -62,19 +62,34 @@ namespace Managers.Persistent
 		public FrameUpdatePosition FrameUpdateInvoke
 		{
 			get => m_frameUpdateInvoke;
-			set => m_frameUpdateInvoke = value;
+			set
+			{
+				if (m_frameUpdateInvoke == value) return;
+				m_frameUpdateInvoke = value;
+				Debug.Log($"Frame update set: {value}");
+			}
 		}
 
 		public FixedUpdatePosition FixedUpdateInvoke
 		{
 			get => m_fixedUpdateInvoke;
-			set => m_fixedUpdateInvoke = value;
+			set
+			{
+				if (m_fixedUpdateInvoke == value) return;
+				m_fixedUpdateInvoke = value;
+				Debug.Log($"Fixed update set: {value}");
+			}
 		}
 
 		public LateUpdatePosition LateUpdateInvoke
 		{
 			get => m_lateUpdateInvoke;
-			set => m_lateUpdateInvoke = value;
+			set
+			{
+				if (m_lateUpdateInvoke == value) return;
+				m_lateUpdateInvoke = value;
+				Debug.Log($"Late update set: {value}");
+			}
 		}
 
 		public State PauseState
@@ -182,8 +197,12 @@ namespace Managers.Persistent
 			}
 			catch (Exception e)
 			{
+#if UNITY_EDITOR
+				throw;
+#else
 				CreateLog(e);
 				Application.Quit();
+#endif
 			}
 		}
 
@@ -198,8 +217,12 @@ namespace Managers.Persistent
 			}
 			catch (Exception e)
 			{
+#if UNITY_EDITOR
+				throw;
+#else
 				CreateLog(e);
 				Application.Quit();
+#endif
 			}
 		}
 
@@ -214,8 +237,12 @@ namespace Managers.Persistent
 			}
 			catch (Exception e)
 			{
+#if UNITY_EDITOR
+				throw;
+#else
 				CreateLog(e);
 				Application.Quit();
+#endif
 			}
 		}
 

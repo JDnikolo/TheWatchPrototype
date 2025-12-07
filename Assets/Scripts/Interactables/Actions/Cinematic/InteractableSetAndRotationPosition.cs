@@ -9,7 +9,7 @@ namespace Interactables.Actions.Cinematic
     {
         [CanBeNullInPrefab, SerializeField] private Transform target;
         [CanBeNullInPrefab, SerializeField] private Transform targetPosition;
-        [Obsolete, SerializeField] private GameObject objectToMove;
+        [Obsolete, SerializeField, DisableInInspector] private GameObject objectToMove;
 
         public override void Interact() => 
             target.SetPositionAndRotation(targetPosition.position, targetPosition.rotation);

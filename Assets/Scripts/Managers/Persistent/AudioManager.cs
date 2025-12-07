@@ -230,7 +230,6 @@ namespace Managers.Persistent
 		public void SetSnapshot(AudioSnapshot snapshot, bool delayedFade = false,
 			float fadeInTime = -1f, float fadeOutTime = -1f)
 		{
-			Debug.Log($"SetSnapshot: {snapshot} {delayedFade} {fadeInTime} {fadeOutTime}");
 			m_snapshotFadeInTimer = m_snapshotFadeOutTimer = 0f;
 			m_snapshotFadeMode = SnapshotFadeMode.None;
 			if (fadeInTime < 0f) fadeInTime = this.fadeInTime;
