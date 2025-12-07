@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 313451274357575658}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.924, y: -0.202, z: -2.347}
+  m_LocalRotation: {x: 0, y: 0.45546722, z: 0, w: 0.8902526}
+  m_LocalPosition: {x: 2.393, y: -0.202, z: -1.862}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2764705167494538100}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 54.19, z: 0}
 --- !u!1 &448842656717431299
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,8 +273,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactable: {fileID: 6506921806609869633}
-  interactables:
-  - {fileID: 6506921806609869633}
 --- !u!1 &3506668527472957265
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,7 +284,6 @@ GameObject:
   - component: {fileID: 2437749142486481496}
   - component: {fileID: 622603578155440957}
   - component: {fileID: 5978913185706689632}
-  - component: {fileID: 8589288144062790567}
   m_Layer: 0
   m_Name: FadeIn
   m_TagString: Untagged
@@ -343,20 +340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeDirection: 0
   fadeDuration: 1
-  onFadeScreenFinished: {fileID: 8589288144062790567}
---- !u!114 &8589288144062790567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3506668527472957265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bca7b16690c46108830035af6315b63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactable: {fileID: 0}
+  onFadeScreenFinished: {fileID: 0}
 --- !u!1 &4302642504020408786
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +352,6 @@ GameObject:
   - component: {fileID: 9209455218371237407}
   - component: {fileID: 4191484399952979684}
   - component: {fileID: 4609739440910118423}
-  - component: {fileID: 8782252818710258550}
   m_Layer: 0
   m_Name: FadeIn
   m_TagString: Untagged
@@ -425,20 +408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeDirection: 0
   fadeDuration: 1
-  onFadeScreenFinished: {fileID: 8782252818710258550}
---- !u!114 &8782252818710258550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4302642504020408786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bca7b16690c46108830035af6315b63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactable: {fileID: 0}
+  onFadeScreenFinished: {fileID: 0}
 --- !u!1 &4794840403037657447
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,13 +543,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8450858938677730631}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.308, y: -0.733, z: -2.942}
+  m_LocalRotation: {x: 0, y: 0.8738146, z: 0, w: 0.48625925}
+  m_LocalPosition: {x: 3.94, y: -0.733, z: -1.68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7056962515628169010}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 121.81, z: 0}
 --- !u!1 &9115838620029330312
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,5 +621,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactable: {fileID: 8162406266439245138}
-  interactables:
-  - {fileID: 8162406266439245138}

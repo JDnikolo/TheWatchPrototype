@@ -738,10 +738,10 @@ MonoBehaviour:
   speakerPlayer: {fileID: -6267225433559991074}
   slider: {fileID: 199741164770470234}
   skipActionName: SkipDialogue
-  characterDelay: 0.05
-  periodDelay: 0.2
-  commaDelay: 0.1
-  spaceDelay: 0.1
+  characterDelay: 0.01
+  periodDelay: 0.05
+  commaDelay: 0.025
+  spaceDelay: 0.01
 --- !u!82 &1386779951859432330
 AudioSource:
   m_ObjectHideFlags: 0
@@ -851,6 +851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1386779951859432330}
+  standalone: 1
   pausable: 1
 --- !u!1001 &2787954119213380185
 PrefabInstance:

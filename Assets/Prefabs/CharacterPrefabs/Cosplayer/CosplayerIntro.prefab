@@ -61,54 +61,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactable: {fileID: 0}
   enablePlayerInput: 1
---- !u!1 &934016549915721036
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 867653718840871944}
-  - component: {fileID: 7898931084459824794}
-  m_Layer: 3
-  m_Name: ExitScene
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &867653718840871944
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 934016549915721036}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2763085179128683791}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7898931084459824794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 934016549915721036}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d36c366a0f774ba794f7cb95da31bee2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  brain: {fileID: 8323882806214690631}
-  pointToPointBehavior:
-    navigationPath: {fileID: 0}
-    switchDistance: 0.2
 --- !u!1 &2269373806066284837
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,39 +107,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionID: TalkToCosplayer
   timeToAdd: 60
---- !u!1 &4707887054789230003
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2763085179128683791}
-  m_Layer: 3
-  m_Name: Paths
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2763085179128683791
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4707887054789230003}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 9101665074546053642}
-  - {fileID: 867653718840871944}
-  m_Father: {fileID: 3855688700969099090}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4714147068090206489
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,54 +199,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   variable: {fileID: 11400000, guid: 21d4e16f875ed0f499290e1256fc13a6, type: 2}
   targetValue: 1
---- !u!1 &6130669540342271683
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9101665074546053642}
-  - component: {fileID: 5880489840475775036}
-  m_Layer: 3
-  m_Name: Wander
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9101665074546053642
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6130669540342271683}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2763085179128683791}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5880489840475775036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6130669540342271683}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d36c366a0f774ba794f7cb95da31bee2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  brain: {fileID: 8323882806214690631}
-  pointToPointBehavior:
-    navigationPath: {fileID: 0}
-    switchDistance: 0.2
 --- !u!1 &6199774727839243792
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac95c70be30a4e4fa2beccb89ea74c92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviorToSet: {fileID: 5880489840475775036}
+  behaviorToSet: {fileID: 0}
   setEnabled: 0
 --- !u!1 &8095596907467383629
 GameObject:
@@ -567,7 +438,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 278342306057342677}
-  - component: {fileID: 6639647882981502863}
+  - component: {fileID: 4583205535145703991}
   m_Layer: 3
   m_Name: Start Cosplayer Exit Scene
   m_TagString: Untagged
@@ -590,7 +461,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6139266951196826948}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6639647882981502863
+--- !u!114 &4583205535145703991
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -599,11 +470,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8434668336634575794}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac95c70be30a4e4fa2beccb89ea74c92, type: 3}
+  m_Script: {fileID: 11500000, guid: 99aadedc5bd04d65ad8a1a24517bb563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviorToSet: {fileID: 7898931084459824794}
-  setEnabled: 1
+  agent: {fileID: 8323882806214690631}
+  pointToPointBehavior:
+    navigationPath: {fileID: 0}
+    switchDistance: 0.2
 --- !u!1 &8484104211020313445
 GameObject:
   m_ObjectHideFlags: 0
@@ -953,6 +826,10 @@ PrefabInstance:
       propertyPath: interactables.Array.data[2]
       value: 
       objectReference: {fileID: 4604777486002294743}
+    - target: {fileID: 6308106521979986094, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
+      propertyPath: m_Name
+      value: CosplayerAgentBrain
+      objectReference: {fileID: 0}
     - target: {fileID: 7972000506385066772, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
       propertyPath: interactables.Array.size
       value: 2
@@ -968,9 +845,6 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3194986755174060715, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
-      insertIndex: 5
-      addedObject: {fileID: 2763085179128683791}
     - targetCorrespondingSourceObject: {fileID: 4033684642668525739, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1256619869371420704}
@@ -1010,11 +884,6 @@ Transform:
 --- !u!4 &3327721664095909202 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4033684642668525739, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
-  m_PrefabInstance: {fileID: 1861385187682307577}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3855688700969099090 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3194986755174060715, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
   m_PrefabInstance: {fileID: 1861385187682307577}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &6450064582710522855 stripped
@@ -1061,7 +930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac95c70be30a4e4fa2beccb89ea74c92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviorToSet: {fileID: 5880489840475775036}
+  behaviorToSet: {fileID: 0}
   setEnabled: 0
 --- !u!114 &8323882806214690631 stripped
 MonoBehaviour:
@@ -2128,7 +1997,7 @@ PrefabInstance:
     - target: {fileID: 7901772033134685573, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       propertyPath: interactables.Array.data[3]
       value: 
-      objectReference: {fileID: 6639647882981502863}
+      objectReference: {fileID: 4583205535145703991}
     - target: {fileID: 7901772033134685573, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       propertyPath: interactables.Array.data[4]
       value: 

@@ -10,7 +10,7 @@ namespace Cinematics
 
 		public override void ResolveMovement()
 		{
-			if (Progress >= 1) CameraToMove.enabled = !CutBack;
+			if (Progress >= 0.99) CameraToMove.enabled = !CutBack;
 		}
 
 		public CutToDollyHandler(CinemachineCamera dollyCamera,
