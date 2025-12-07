@@ -1,5 +1,4 @@
 ﻿using System;
-using Attributes;
 using UnityEngine;
 
 namespace Interactables.Triggers
