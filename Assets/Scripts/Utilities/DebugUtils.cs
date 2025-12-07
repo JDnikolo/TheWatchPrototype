@@ -84,16 +84,16 @@ namespace Utilities
 
 		public static bool TestObject(this OperationData operationData, string path, FieldData fieldData, object value)
 		{
+			if (fieldData.Obsolete)
+			{
+				operationData.LogMessage(path, "Obsolete");
+				return false;
+			}
+			
 			if (value == null)
 			{
 				if (fieldData.AllowNull) return true;
 				operationData.LogMessage(path, NULL_STRING);
-				return false;
-			}
-
-			if (fieldData.Obsolete)
-			{
-				operationData.LogMessage(path, "Obsolete");
 				return false;
 			}
 
@@ -103,16 +103,16 @@ namespace Utilities
 		public static bool TestUnityObject(this OperationData operationData, string path,
 			FieldData fieldData, Object value)
 		{
+			if (fieldData.Obsolete)
+			{
+				operationData.LogMessage(path, "Obsolete");
+				return false;
+			}
+			
 			if (!value)
 			{
 				if (fieldData.AllowNull) return true;
 				operationData.LogMessage(path, NULL_STRING);
-				return false;
-			}
-
-			if (fieldData.Obsolete)
-			{
-				operationData.LogMessage(path, "Obsolete");
 				return false;
 			}
 
