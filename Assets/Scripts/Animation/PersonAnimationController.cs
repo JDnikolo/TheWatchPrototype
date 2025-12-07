@@ -134,7 +134,7 @@ namespace Animation
       private void Start()
       {
          GameManager.Instance.AddFixedUpdate(this);
-         PauseManager.Instance.AddPausedCallback(this);
+         PauseManager.Instance?.AddPausedCallback(this);
       }
 
       private void OnDestroy()

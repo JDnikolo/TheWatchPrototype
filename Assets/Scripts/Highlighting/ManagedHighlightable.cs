@@ -15,7 +15,7 @@ namespace Highlighting
 
 		public float MaxHighlightDistance  => maxHighlightDistance;
 
-		private void Start() => RigidBodyTable.Instance.Add(rigidbody, this);
+		private void Start() => RigidBodyTable.Instance?.Add(rigidbody, this);
 
 		protected override void HighlightInternal(bool enabled)
 		{

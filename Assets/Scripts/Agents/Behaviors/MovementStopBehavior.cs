@@ -23,10 +23,11 @@ namespace Agents.Behaviors
 			if (playerManager) m_rotationTarget = playerManager.PlayerObject.transform.position.ToFlatVector();
 		}
 		
-		public void Stop(MovementBehavior previousBehavior, Vector2 position)
+		public void Stop(MovementBehavior previousBehavior, Vector2 movePosition, Vector2 velocity)
 		{
 			m_previousBehavior = previousBehavior;
-			m_moveTarget = position;
+			m_moveTarget = movePosition;
+			m_rotationTarget = movePosition + velocity.normalized;
 		}
 
 		public MovementBehavior Restart()

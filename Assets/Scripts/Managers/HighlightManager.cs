@@ -35,14 +35,18 @@ namespace Managers
 		{
 			var cameraTransform = PlayerManager.Instance.PlayerCamera.transform;
 			if (UnityEngine.Physics.Raycast(cameraTransform.position, cameraTransform.forward,
-					out var hit, 3f, highlightMask.value) && RigidBodyTable.Instance.TryGetValue(
-					hit.rigidbody, out var extender))
+					out var hit, 3f, highlightMask.value))
 			{
-				var highlightable = extender.Highlightable;
-				if (highlightable != null)
-					m_raycastTarget = CheckDistances(hit.rigidbody, highlightable, cameraTransform.position)
-						? highlightable
-						: null;
+				var rigidBodyTable = RigidBodyTable.Instance;
+				if (rigidBodyTable && rigidBodyTable.TryGetValue(hit.rigidbody, out var extender))
+				{
+					var highlightable = extender.Highlightable;
+					if (highlightable != null)
+						m_raycastTarget = CheckDistances(hit.rigidbody, highlightable, cameraTransform.position)
+							? highlightable
+							: null;
+				}
+				else m_raycastTarget = null;
 			}
 			else m_raycastTarget = null;
 		}

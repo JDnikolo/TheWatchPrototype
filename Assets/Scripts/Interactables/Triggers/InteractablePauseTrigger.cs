@@ -17,7 +17,7 @@ namespace Interactables.Triggers
 			else onUnpaused?.Interact();
 		}
 
-		private void Start() => PauseManager.Instance.AddPausedCallback(this);
+		private void Start() => PauseManager.Instance?.AddPausedCallback(this);
 
 		private void OnDestroy() => PauseManager.Instance?.RemovePausedCallback(this);
 	}

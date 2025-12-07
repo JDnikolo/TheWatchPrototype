@@ -112,5 +112,20 @@ namespace Editor
 			
 			GC.Collect();
 		}
+		
+		[MenuItem("Debugging/Debug Test")]
+		public static void DebugTest()
+		{
+			Debug.Log("Debug Test Begin");
+			var globalObjects = new List<DebugObject>();
+			var gameObject = GameObject.FindGameObjectWithTag("Respawn");
+			if (gameObject)
+			{
+				IterateTransform(gameObject.transform, globalObjects, new List<Behaviour>(), string.Empty);
+				RunDebug(globalObjects);
+			}
+
+			Debug.Log("Debug Test End");
+		}
 	}
 }

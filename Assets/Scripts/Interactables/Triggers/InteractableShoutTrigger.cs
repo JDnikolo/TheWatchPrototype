@@ -10,7 +10,7 @@ namespace Interactables.Triggers
         [SerializeField] [AutoAssigned(AssignMode.Self, typeof(Collider))]
         private new Collider collider;
 
-        private void Start() => ColliderTable.Instance.Add(collider, this);
+        private void Start() => ColliderTable.Instance?.Add(collider, this);
 
         public void OnGettingShouted() => OnInteract();
     }

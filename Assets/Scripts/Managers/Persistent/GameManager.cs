@@ -62,34 +62,19 @@ namespace Managers.Persistent
 		public FrameUpdatePosition FrameUpdateInvoke
 		{
 			get => m_frameUpdateInvoke;
-			set
-			{
-				if (m_frameUpdateInvoke == value) return;
-				m_frameUpdateInvoke = value;
-				Debug.Log($"Frame update set: {value}");
-			}
+			set => m_frameUpdateInvoke = value;
 		}
 
 		public FixedUpdatePosition FixedUpdateInvoke
 		{
 			get => m_fixedUpdateInvoke;
-			set
-			{
-				if (m_fixedUpdateInvoke == value) return;
-				m_fixedUpdateInvoke = value;
-				Debug.Log($"Fixed update set: {value}");
-			}
+			set => m_fixedUpdateInvoke = value;
 		}
 
 		public LateUpdatePosition LateUpdateInvoke
 		{
 			get => m_lateUpdateInvoke;
-			set
-			{
-				if (m_lateUpdateInvoke == value) return;
-				m_lateUpdateInvoke = value;
-				Debug.Log($"Late update set: {value}");
-			}
+			set => m_lateUpdateInvoke = value;
 		}
 
 		public State PauseState
@@ -164,86 +149,89 @@ namespace Managers.Persistent
 
 		private void Update()
 		{
+#if !UNITY_EDITOR
 			try
 			{
-				var audioManager = AudioManager.Instance;
-				if (audioManager.RequireUpdate) audioManager.OnFrameUpdate();
-				switch (m_gameState)
-				{
-					case GameState.Preload:
-						SettingsManager.Instance.Load();
-						AudioManager.Instance.SetSnapshot(mainSnapshot, false, 0f, 0f);
-						m_gameState = GameState.BeforePlay;
-						break;
-					case GameState.BeforePlay:
-						//This will delay it until the local manager has changed instance
-						if (m_localManager && LocalManager.Instance == m_localManager) return;
-						m_localManager = null;
-						CameraManager.Instance.SetCamera(LocalManager.Instance.LocalCamera);
-						while (m_beforePlay.TryPop(out var beforePlay)) beforePlay.OnBeforePlay();
-						m_gameState = GameState.Play;
-						break;
-					case GameState.Play:
-						var stack = m_frameInvokeStack.Swap();
-						while (stack.TryPop(out var action)) action.Invoke();
-						m_frameUpdateCollection.Update((byte) m_frameUpdateInvoke);
-						break;
-					case GameState.Loading:
-						SceneManager.Instance.ProcessScenes();
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
+#endif
+			var audioManager = AudioManager.Instance;
+			if (audioManager.RequireUpdate) audioManager.OnFrameUpdate();
+			switch (m_gameState)
+			{
+				case GameState.Preload:
+					SettingsManager.Instance.Load();
+					AudioManager.Instance.SetSnapshot(mainSnapshot, false, 0f, 0f);
+					m_gameState = GameState.BeforePlay;
+					break;
+				case GameState.BeforePlay:
+					//This will delay it until the local manager has changed instance
+					if (m_localManager && LocalManager.Instance == m_localManager) return;
+					m_localManager = null;
+					CameraManager.Instance.SetCamera(LocalManager.Instance.LocalCamera);
+					while (m_beforePlay.TryPop(out var beforePlay)) beforePlay.OnBeforePlay();
+					m_gameState = GameState.Play;
+					break;
+				case GameState.Play:
+					var stack = m_frameInvokeStack.Swap();
+					while (stack.TryPop(out var action)) action.Invoke();
+					m_frameUpdateCollection.Update((byte) m_frameUpdateInvoke);
+					break;
+				case GameState.Loading:
+					SceneManager.Instance.ProcessScenes();
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+#if !UNITY_EDITOR
 			}
 			catch (Exception e)
 			{
-#if UNITY_EDITOR
 				throw;
-#else
 				CreateLog(e);
 				Application.Quit();
-#endif
 			}
+#endif
 		}
 
 		private void LateUpdate()
 		{
+#if !UNITY_EDITOR
 			try
 			{
-				if (m_gameState != GameState.Play) return;
-				var stack = m_lateInvokeStack.Swap();
-				while (stack.TryPop(out var action)) action.Invoke();
-				m_lateUpdateCollection.Update((byte) m_lateUpdateInvoke);	
+#endif
+			if (m_gameState != GameState.Play) return;
+			var stack = m_lateInvokeStack.Swap();
+			while (stack.TryPop(out var action)) action.Invoke();
+			m_lateUpdateCollection.Update((byte) m_lateUpdateInvoke);
+#if !UNITY_EDITOR
 			}
 			catch (Exception e)
 			{
-#if UNITY_EDITOR
 				throw;
-#else
 				CreateLog(e);
 				Application.Quit();
-#endif
 			}
+#endif
 		}
 
 		private void FixedUpdate()
 		{
+#if !UNITY_EDITOR
 			try
 			{
-				if (m_gameState != GameState.Play) return;
-				var stack = m_fixedInvokeStack.Swap();
-				while (stack.TryPop(out var action)) action.Invoke();
-				m_fixedUpdateCollection.Update((byte) m_fixedUpdateInvoke);
+#endif
+			if (m_gameState != GameState.Play) return;
+			var stack = m_fixedInvokeStack.Swap();
+			while (stack.TryPop(out var action)) action.Invoke();
+			m_fixedUpdateCollection.Update((byte) m_fixedUpdateInvoke);
+#if !UNITY_EDITOR
 			}
 			catch (Exception e)
 			{
-#if UNITY_EDITOR
 				throw;
-#else
 				CreateLog(e);
 				Application.Quit();
-#endif
 			}
+#endif
 		}
 
 		private void CreateLog(Exception e) => File.WriteAllText($"{Application.persistentDataPath}\\{DateTime.Now.ToLongDateString()}.crashdump",e.ToString());

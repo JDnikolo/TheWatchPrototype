@@ -52,44 +52,83 @@ PrefabInstance:
       propertyPath: m_Name
       value: Random Woman
       objectReference: {fileID: 0}
+    - target: {fileID: 8143554020465954016, guid: 19d0927546e47c64691acf85c38aca23, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 6d026cb9b86386a41858a3af0cf4c6d3, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2684846663124218569, guid: 19d0927546e47c64691acf85c38aca23, type: 3}
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8161020051550708890, guid: 19d0927546e47c64691acf85c38aca23, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2702414548601028783}
+      addedObject: {fileID: 499394704070909816}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19d0927546e47c64691acf85c38aca23, type: 3}
---- !u!1 &791855283982529378 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2684846663124218569, guid: 19d0927546e47c64691acf85c38aca23, type: 3}
+--- !u!4 &6845055271222846769 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8161020051550708890, guid: 19d0927546e47c64691acf85c38aca23, type: 3}
   m_PrefabInstance: {fileID: 3440541207508418987}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2702414548601028783
-MonoBehaviour:
+--- !u!1001 &8566399328993241117
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6845055271222846769}
+    m_Modifications:
+    - target: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8882244944025267679, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+      propertyPath: m_Name
+      value: MedievalEurope_Peasants_Female_Adult_A
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2805723667704524063, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+--- !u!4 &499394704070909816 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8074886082179823461, guid: 12babd208b9692d449204fdf365358ab, type: 3}
+  m_PrefabInstance: {fileID: 8566399328993241117}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791855283982529378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6f2df4964996de4890f19d1f10d9305, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 8084112282526774590}
-  footstepSoundsDict: {fileID: 11400000, guid: 1589723b1be83ca4f88cd71f9d025477, type: 2}
-  terrainLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
---- !u!114 &8084112282526774590 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6885943038221448341, guid: 19d0927546e47c64691acf85c38aca23, type: 3}
-  m_PrefabInstance: {fileID: 3440541207508418987}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 135aa21c51fc4024bab809349d6bed3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

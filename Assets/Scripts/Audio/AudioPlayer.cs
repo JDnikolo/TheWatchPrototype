@@ -91,7 +91,7 @@ namespace Audio
 
         private void Start()
         {
-            if (pausable) PauseManager.Instance.AddPausedCallback(this);
+            if (pausable) PauseManager.Instance?.AddPausedCallback(this);
         }
 
         private void OnDestroy()

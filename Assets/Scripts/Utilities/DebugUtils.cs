@@ -1,7 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using Attributes;
 using AYellowpaper.SerializedCollections;
@@ -15,7 +14,7 @@ namespace Utilities
 	public static partial class Utils
 	{
 		public static bool IsAssetPath(this string path) => path.StartsWith("Assets");
-		
+
 		public static bool TestAny(this OperationData operationData, string path, object value)
 		{
 			if (value == null) throw new InvalidOperationException();
@@ -34,11 +33,11 @@ namespace Utilities
 					if (attribute is SerializeField) isSerialized = true;
 					else if (attribute is ObsoleteAttribute) obsolete = true;
 					else if (attribute is CanBeNull) allowNull = true;
-					else if (attribute is CanBeNullInPath pathTester) allowNull = pathTester.AllowNull(path); 
+					else if (attribute is CanBeNullInPath pathTester) allowNull = pathTester.AllowNull(path);
 					else if (attribute is MinCount minCount) targetCount = minCount.Target;
 					else if (attribute is CustomDebug customDebug) debugMethod = customDebug.MethodName;
 				}
-
+				
 				if (!isSerialized) continue;
 				var fieldData = new FieldData(obsolete, allowNull, targetCount, debugMethod);
 				var fieldType = field.FieldType;
@@ -48,19 +47,19 @@ namespace Utilities
 				if (!string.IsNullOrEmpty(fieldData.CustomDebug))
 				{
 					var method = type.GetMethod(fieldData.CustomDebug,
-						BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly, 
-						null, CallingConventions.HasThis, 
+						BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly,
+						null, CallingConventions.HasThis,
 						new[] {typeof(OperationData), typeof(string), typeof(FieldData)}, null);
 					if (method != null)
 						return (bool) method.Invoke(value, new object[] {operationData, path, fieldData});
 				}
-	
+
 				if (!operationData.TestType(path, fieldData, typeData, fieldType, field.GetValue(value))) return false;
 			}
 
 			return true;
 		}
-		
+
 		private static bool TestType(this OperationData operationData, string path,
 			FieldData fieldData, TypeData typeData, Type type, object value)
 		{
@@ -101,7 +100,7 @@ namespace Utilities
 			return true;
 		}
 
-		public static bool TestUnityObject(this OperationData operationData, string path, 
+		public static bool TestUnityObject(this OperationData operationData, string path,
 			FieldData fieldData, Object value)
 		{
 			if (!value)
@@ -128,7 +127,7 @@ namespace Utilities
 			typeData ??= elementType.GetTypeData(native);
 			return operationData.TestType(path, fieldData, typeData.Value, elementType, element);
 		}
-		
+
 		public static bool TestCollectionCount<T>(this OperationData operationData, string path,
 			FieldData fieldData, ICollection<T> collection)
 		{
@@ -140,7 +139,7 @@ namespace Utilities
 
 			return true;
 		}
-		
+
 		public static bool TestIListElements<T>(this OperationData operationData, string path,
 			FieldData fieldData, IList<T> list)
 		{
@@ -151,38 +150,36 @@ namespace Utilities
 			{
 				var localPath = $"{path}[{i}]";
 				var element = list[i];
-				if (operationData.TestElement(localPath, fieldData, element, native, elementType, typeData))
+				if (!operationData.TestElement(localPath, fieldData, element, native, elementType, typeData))
 					return false;
 			}
 
 			return true;
 		}
-		
+
 		public static bool TestArray(this OperationData operationData, string path,
 			FieldData fieldData, Type elementType, object value)
 		{
-			if (elementType.GetTypeData(false) != TypeData.NotTestable)
+			if (elementType.GetTypeData(true) != TypeData.NotTestable)
 			{
 				var arrayMethods = operationData.ArrayMethods;
 				var save = arrayMethods != null;
 				if (!save || !arrayMethods.TryGetValue(elementType, out var method))
 				{
-					method = typeof(Debugger).GetMethod(nameof(TestArrayGeneric),
-						BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
-					if (method != null)
-					{
-						method = method.MakeGenericMethod(elementType);
-						if (save) arrayMethods.Add(elementType, method);
-					}
+					method = GetGenericMethod(nameof(TestArrayGeneric));
+					if (method == null)
+						throw new InvalidOperationException($"Unable to make array method for {elementType}");
+					method = method.MakeGenericMethod(elementType);
+					if (save) arrayMethods.Add(elementType, method);
 				}
 
-				if (method != null) return (bool) method.Invoke(null, new[] {operationData, path, fieldData, value});
+				return (bool) method.Invoke(null, new[] {operationData, path, fieldData, value});
 			}
 
 			return true;
 		}
 
-		public static bool TestArrayGeneric<T>(this OperationData operationData, string path, 
+		public static bool TestArrayGeneric<T>(this OperationData operationData, string path,
 			FieldData fieldData, T[] array) =>
 			operationData.TestObject(path, fieldData, array) &&
 			operationData.TestCollectionCount(path, fieldData, array) &&
@@ -197,16 +194,14 @@ namespace Utilities
 				var save = listMethods != null;
 				if (!save || !listMethods.TryGetValue(elementType, out var method))
 				{
-					method = typeof(Debugger).GetMethod(nameof(TestListGeneric),
-						BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
-					if (method != null)
-					{
-						method = method.MakeGenericMethod(elementType);
-						if (save) listMethods.Add(elementType, method);
-					}
+					method = GetGenericMethod(nameof(TestListGeneric));
+					if (method == null)
+						throw new InvalidOperationException($"Unable to make list method for {elementType}");
+					method = method.MakeGenericMethod(elementType);
+					if (save) listMethods.Add(elementType, method);
 				}
 
-				if (method != null) return (bool) method.Invoke(null, new[] {operationData, path, fieldData, value});
+				return (bool) method.Invoke(null, new[] {operationData, path, fieldData, value});
 			}
 
 			return true;
@@ -230,13 +225,12 @@ namespace Utilities
 				var save = dictionaryMethods != null;
 				if (!save || !dictionaryMethods.TryGetValue(dictionaryType, out var method))
 				{
-					method = typeof(Debugger).GetMethod(nameof(TestDictionaryGeneric),
-						BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
-					if (method != null)
-					{
-						method = method.MakeGenericMethod(keyType, valueType);
-						if (save) dictionaryMethods.Add(dictionaryType, method);
-					}
+					method = GetGenericMethod(nameof(TestDictionaryGeneric));
+					if (method == null)
+						throw new InvalidOperationException(
+							$"Unable to make dictionary method for <{keyType}, {valueType}>");
+					method = method.MakeGenericMethod(keyType, valueType);
+					if (save) dictionaryMethods.Add(dictionaryType, method);
 				}
 
 				if (method != null) return (bool) method.Invoke(null, new[] {operationData, path, fieldData, value});
@@ -277,10 +271,10 @@ namespace Utilities
 			return true;
 		}
 
-		public static bool TestSerialized(this OperationData operationData, string path, 
-			FieldData fieldData, object value) => operationData.TestObject(path, 
+		public static bool TestSerialized(this OperationData operationData, string path,
+			FieldData fieldData, object value) => operationData.TestObject(path,
 			fieldData, value) && operationData.TestAny(path, value);
-		
+
 		public static TypeData GetTypeData(this Type type, bool native)
 		{
 			if (!type.IsPrimitive && type != typeof(string))
@@ -300,7 +294,9 @@ namespace Utilities
 			return TypeData.NotTestable;
 		}
 
-		public static void LogMessage(this OperationData data, string path, string message) => 
+		private static MethodInfo GetGenericMethod(string name) => typeof(Utils).GetMethod(name);
+
+		private static void LogMessage(this OperationData data, string path, string message) =>
 			Debug.LogWarning($"{path}: {message}", data.Instance);
 	}
 }
