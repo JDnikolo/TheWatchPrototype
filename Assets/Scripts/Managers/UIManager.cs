@@ -67,7 +67,7 @@ namespace Managers
 				var audioManager = AudioManager.Instance;
 				audioManager.PreparePause();
 				m_state = audioManager.PauseState;
-				audioManager.SetSnapshot(speakerSnapshot);
+				audioManager.SetSnapshot(speakerSnapshot, false, 0.1f, 0.5f);
 			}
 
 			textWriter.WriteText(input);

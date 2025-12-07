@@ -2620,6 +2620,17 @@ Transform:
   - {fileID: 1186193326}
   m_Father: {fileID: 249998185}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &329326019 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5820103382978804966, guid: 7b8d0a52834a6594f93bc0358401e361, type: 3}
+  m_PrefabInstance: {fileID: 128531142}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &332802355
 GameObject:
   m_ObjectHideFlags: 0
@@ -5934,6 +5945,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3746818026754729382, guid: 7b8d0a52834a6594f93bc0358401e361, type: 3}
   m_PrefabInstance: {fileID: 128531142}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &1024752003 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 6679844963340768712, guid: 7b8d0a52834a6594f93bc0358401e361, type: 3}
+  m_PrefabInstance: {fileID: 128531142}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1037085209
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6589,11 +6605,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 890471893374071227, guid: 69b7dbbe1e29cde41b9eaee7dfb56778, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[0].Rotation.value.x
-      value: 0.000000030226982
+      value: 0.000000030230694
       objectReference: {fileID: 0}
     - target: {fileID: 890471893374071227, guid: 69b7dbbe1e29cde41b9eaee7dfb56778, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[0].Rotation.value.z
-      value: 0.00000005137119
+      value: 0.0000000513775
       objectReference: {fileID: 0}
     - target: {fileID: 890471893374071227, guid: 69b7dbbe1e29cde41b9eaee7dfb56778, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[4].Rotation.value.w
@@ -10664,26 +10680,29 @@ PrefabInstance:
       addedObject: {fileID: 1790082931}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 2086943649}
+      insertIndex: -1
+      addedObject: {fileID: 2086943654}
     - targetCorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
-      insertIndex: 4
+      insertIndex: -1
       addedObject: {fileID: 2086943648}
     - targetCorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2086943643}
     - targetCorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2086943654}
+      addedObject: {fileID: 2086943662}
+    - targetCorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2086943649}
+    - targetCorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2086943666}
     - targetCorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2086943661}
     - targetCorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2086943660}
-    - targetCorrespondingSourceObject: {fileID: 7221714938813842005, guid: b3e14f3346946434580de6c519c14823, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2086943662}
   m_SourcePrefab: {fileID: 100100000, guid: b3e14f3346946434580de6c519c14823, type: 3}
 --- !u!1 &2086943640 stripped
 GameObject:
@@ -10793,6 +10812,21 @@ MonoBehaviour:
   interactionTimeJump: 1800
   repeatReduction: 0.1
   nightEndActions: {fileID: 1790082932}
+--- !u!114 &2086943666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086943640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa0592fbfd354f1398da3ba848d16669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerObject: {fileID: 1024752001}
+  playerRigidbody: {fileID: 1024752003}
+  playerCamera: {fileID: 329326019}
 --- !u!114 &2087843367 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6815510876680027971, guid: 0f6d06408a3a46442ad216b5cdbd18b8, type: 3}

@@ -7,7 +7,7 @@ namespace Interactables.Triggers
     [AddComponentMenu("Interactables/Triggers/On Shout Trigger")]
     public sealed class InteractableShoutTrigger : InteractableTrigger
     {
-        [SerializeField] [AutoAssigned(AssignMode.Self, typeof(Collider))]
+        [SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(Collider))]
         private new Collider collider;
 
         private void Start() => ColliderTable.Instance?.Add(collider, this);

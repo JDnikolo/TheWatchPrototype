@@ -17,10 +17,10 @@ namespace UI.Elements
 		[SerializeField] private string primaryActionName = "Primary";
 		[SerializeField] private string escapeActionName = "Escape";
 
-		[SerializeField, AutoAssigned(AssignMode.Self, typeof(TextWriter))]
+		[SerializeField, AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(TextWriter))]
 		private TextWriter textWriter;
 
-		[CanBeNullInPrefab, SerializeField, AutoAssigned(AssignMode.Parent, typeof(ComboDataProvider))]
+		[CanBeNullInPrefab, SerializeField, AutoAssigned(AssignMode.Parent | AssignMode.Forced, typeof(ComboDataProvider))]
 		private ComboDataProvider dataProvider;
 
 		private IComboBoxReceiver m_receiver;
