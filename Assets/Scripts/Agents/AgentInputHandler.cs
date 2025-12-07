@@ -1,4 +1,5 @@
 ﻿using Agents.Behaviors;
+using Attributes;
 using Callbacks.Agent;
 using Character;
 using Managers.Persistent;
@@ -11,9 +12,9 @@ namespace Agents
 	[AddComponentMenu("Agents/Agent Input Handler")]
 	public sealed class AgentInputHandler : BaseBehaviour, IFrameUpdatable
 	{
-		[SerializeField] private new Rigidbody rigidbody;
-		[SerializeField] private CharacterVelocityData movementData;
-		[SerializeField] private CharacterVelocityData rotationData;
+		[CanBeNullInPrefab, SerializeField] private new Rigidbody rigidbody;
+		[CanBeNullInPrefab, SerializeField] private CharacterVelocityData movementData;
+		[CanBeNullInPrefab, SerializeField] private CharacterVelocityData rotationData;
 
 		public MovementBehavior MovementBehavior
 		{
