@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1594410862495860853}
-  - component: {fileID: 3529899975476985425}
-  - component: {fileID: 1685873521475486269}
+  - component: {fileID: 2906833508747064764}
   m_Layer: 3
   m_Name: StartPointToPoint
   m_TagString: Untagged
@@ -33,23 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1889801394058753901}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3529899975476985425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 967319281565421834}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d36c366a0f774ba794f7cb95da31bee2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  brain: {fileID: 2187772051203272344}
-  pointToPointBehavior:
-    navigationPath: {fileID: 0}
-    switchDistance: 0.3
---- !u!114 &1685873521475486269
+--- !u!114 &2906833508747064764
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,11 +41,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 967319281565421834}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac95c70be30a4e4fa2beccb89ea74c92, type: 3}
+  m_Script: {fileID: 11500000, guid: 99aadedc5bd04d65ad8a1a24517bb563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviorToSet: {fileID: 3529899975476985425}
-  setEnabled: 1
+  agent: {fileID: 2187772051203272344}
+  pointToPointBehavior:
+    navigationPath: {fileID: 0}
+    switchDistance: 0.3
 --- !u!1001 &5428177358790360469
 PrefabInstance:
   m_ObjectHideFlags: 0

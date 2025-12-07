@@ -1,6 +1,7 @@
 using Managers;
 using Managers.Persistent;
 using Runtime.FrameUpdate;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Player
@@ -9,6 +10,7 @@ namespace Player
 	public sealed class PlayerRotationHandler : BaseBehaviour, IFrameUpdatable
 	{
 		[SerializeField] private PlayerInputHandler inputHandler;
+		[SerializeField] private CinemachinePanTilt panTilt;
 
 		[Header("Rotation")]
 		// ReSharper disable once MissingLinebreak
@@ -24,29 +26,17 @@ namespace Player
 		{
 			if (!inputHandler.TryGetLookAxis(out var lookAxis)) return;
 			lookAxis *= Time.deltaTime;
-			m_yawDegrees += lookAxis.x * cameraSensitivityX;
-			while (m_yawDegrees > 360f) m_yawDegrees -= 360f;
-			while (m_yawDegrees < 0f) m_yawDegrees += 360f;
-			m_pitchDegrees -= lookAxis.y * cameraSensitivityY;
-			if (m_pitchDegrees > 90f) m_pitchDegrees = 90f;
-			else if (m_pitchDegrees < -90f) m_pitchDegrees = -90f;
-			var playerManager = PlayerManager.Instance;
-			var cameraTransform = playerManager.PlayerCamera.transform;
-			var eulerAngles = cameraTransform.eulerAngles;
-			eulerAngles.x = m_pitchDegrees;
-			eulerAngles.y = m_yawDegrees;
-			cameraTransform.localEulerAngles = eulerAngles;
-			var playerTransform = playerManager.PlayerObject.transform;
-			eulerAngles = playerTransform.eulerAngles;
-			eulerAngles.y = m_yawDegrees;
-			playerTransform.localEulerAngles = eulerAngles;
+			SetClampedValue(ref panTilt.PanAxis, lookAxis.x * cameraSensitivityX);
+			SetClampedValue(ref panTilt.TiltAxis, -lookAxis.y * cameraSensitivityY);
+			var eulerAngles = transform.eulerAngles;
+			eulerAngles.y = panTilt.PanAxis.Value;
+			transform.eulerAngles = eulerAngles;
 		}
 		
-		private void Start()
-		{
-			GameManager.Instance.AddFrameUpdate(this);
-			m_yawDegrees = PlayerManager.Instance.PlayerCamera.transform.eulerAngles.y;
-		}
+		private void SetClampedValue(ref InputAxis axis, float change) => 
+			axis.Value = axis.ClampValue(axis.Value + change);
+		
+		private void Start() => GameManager.Instance.AddFrameUpdate(this);
 
 		private void OnDestroy() => GameManager.Instance?.RemoveFrameUpdate(this);
 	}

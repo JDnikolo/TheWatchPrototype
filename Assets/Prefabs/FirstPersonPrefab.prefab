@@ -4977,9 +4977,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6622739113750064501 stripped
+--- !u!4 &8040656624870522769 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9120816270673917013, guid: 4a54a3343cfd93f49ba456836cfc7511, type: 3}
+  m_PrefabInstance: {fileID: 1226527810925054916}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8207171091079267062 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5399027230631995057, guid: 4a54a3343cfd93f49ba456836cfc7511, type: 3}
+  m_CorrespondingSourceObject: {fileID: 6980643280466856242, guid: 4a54a3343cfd93f49ba456836cfc7511, type: 3}
   m_PrefabInstance: {fileID: 1226527810925054916}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -4987,12 +4992,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62d54399b04b4fa48a73e121d4937dd4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachinePanTilt
---- !u!4 &8040656624870522769 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9120816270673917013, guid: 4a54a3343cfd93f49ba456836cfc7511, type: 3}
-  m_PrefabInstance: {fileID: 1226527810925054916}
-  m_PrefabAsset: {fileID: 0}
+  m_EditorClassIdentifier: 
 --- !u!1001 &4831826691013542082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5058,9 +5058,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2145978082813099964}
     - target: {fileID: 5000607942218046469, guid: 0e820d4c63a792e40aab8d5b852b1e40, type: 3}
-      propertyPath: cinemachinePanTilt
+      propertyPath: panTilt
       value: 
-      objectReference: {fileID: 6622739113750064501}
+      objectReference: {fileID: 8207171091079267062}
     - target: {fileID: 8138365040519800164, guid: 0e820d4c63a792e40aab8d5b852b1e40, type: 3}
       propertyPath: m_Name
       value: FirstPersonPlayer
