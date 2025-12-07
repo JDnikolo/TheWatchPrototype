@@ -1,4 +1,6 @@
-﻿using Runtime;
+﻿using Attributes;
+using Runtime;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Managers
@@ -6,23 +8,16 @@ namespace Managers
 	[AddComponentMenu("Managers/Player Manager")]
 	public sealed class PlayerManager : Singleton<PlayerManager>
 	{
-		[SerializeField] private GameObject playerObject;
-		[SerializeField] private Camera playerCamera;		
-		
-		protected override bool Override => true;
-		
-		public GameObject PlayerObject => playerObject;
-		
-		private Rigidbody m_playerRigidbody;
+		[CanBeNullInPrefab, SerializeField] private GameObject playerObject;
+		[CanBeNullInPrefab, SerializeField] private Rigidbody playerRigidbody;
+		[CanBeNullInPrefab, SerializeField] private CinemachineCamera playerCamera;
 
-		public Rigidbody PlayerRigidbody
-		{
-			get { 
-			m_playerRigidbody ??= playerObject.GetComponent<Rigidbody>();
-			return m_playerRigidbody;
-			}
-		}
-		
-		public Camera PlayerCamera => playerCamera;
+		protected override bool Override => true;
+
+		public GameObject PlayerObject => playerObject;
+
+		public Rigidbody PlayerRigidbody => playerRigidbody;
+
+		public CinemachineCamera PlayerCamera => playerCamera;
 	}
 }

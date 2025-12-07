@@ -1,9 +1,12 @@
 ﻿using System;
+using Attributes;
 using Callbacks.Layout;
+using Debugging;
 using Interactables;
 using Managers.Persistent;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utilities;
 
 namespace UI.Elements
 {
@@ -12,24 +15,22 @@ namespace UI.Elements
 	{
 		[SerializeField] private string primaryActionName = "Primary";
 		[SerializeField] private string secondaryActionName = "Secondary";
+
+		[SerializeField, HideInInspector] private bool anyClick;
 		
-		[SerializeField] [HideInInspector] private bool anyClick;
-		[SerializeField] [HideInInspector] private Interactable onPrimaryClick;
-		[SerializeField] [HideInInspector] private Interactable onSecondaryClick;
+		[CanBeNullInPrefab, SerializeField, HideInInspector]
+		private Interactable onPrimaryClick;
 		
+		[CustomDebug(nameof(DebugSecondary)), SerializeField, HideInInspector] 
+		private Interactable onSecondaryClick;
+
 		private InputAction m_primaryAction;
 		private InputAction m_secondaryAction;
-		
-		private void OnPrimaryClick()
-		{
-			if (onPrimaryClick) onPrimaryClick.Interact();
-		}
 
-		private void OnSecondaryClick()
-		{
-			if (onSecondaryClick) onSecondaryClick.Interact();
-		}
-		
+		private void OnPrimaryClick() => onPrimaryClick.Interact();
+
+		private void OnSecondaryClick() => onSecondaryClick.Interact();
+
 		public void OnInput(Vector2 axis, ref Direction input)
 		{
 			m_primaryAction ??= InputManager.Instance.UIMap.GetAction(primaryActionName);
@@ -53,5 +54,9 @@ namespace UI.Elements
 			var layoutParent = LayoutParent;
 			if (layoutParent) layoutParent.SetInputCallback(this);
 		}
+#if UNITY_EDITOR
+		private bool DebugSecondary(OperationData operationData, string path, FieldData fieldData) => 
+			anyClick || path.IsAssetPath() || operationData.TestObject(path, fieldData, onSecondaryClick);
+#endif
 	}
 }

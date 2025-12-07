@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace UI.Night
 {
     [AddComponentMenu("UI/Night/Night Timer")]
-    public class NightTimer : MonoBehaviour, IFrameUpdatable
+    public class NightTimer : BaseBehaviour, IFrameUpdatable
     {
         /// <summary>
         /// Event invoked when the timer's target time is set.

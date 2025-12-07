@@ -1,4 +1,5 @@
-﻿using Interactables;
+﻿using Attributes;
+using Interactables;
 using Managers;
 using Managers.Persistent;
 using UI.Dialogue;
@@ -10,7 +11,7 @@ namespace Callbacks.Dialogue
 	[AddComponentMenu("Callbacks/Dialogue/Close Dialogue Writer")]
 	public sealed class CloseDialogueWriter : DialogueWriterFinishedSelector
 	{
-		[SerializeField] private Interactable interactable;
+		[CanBeNull, SerializeField] private Interactable interactable;
 		[SerializeField] private bool enablePlayerInput;
 		
 		public override void OnDialogueWriterFinsished(DialogueWriter dialogueWriter)

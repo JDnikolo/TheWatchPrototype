@@ -6,18 +6,18 @@ using UnityEngine;
 
 namespace Editor
 {
-	[CustomPropertyDrawer(typeof(AutoAssignedAttribute))]
+	[CustomPropertyDrawer(typeof(AutoAssigned))]
 	public class AutoAssignedDrawer : DrawerBase
 	{
 		protected override void OnGUIInternal(Rect position, SerializedProperty property, GUIContent label)
 		{
 			if (property.propertyType != SerializedPropertyType.ObjectReference)
-				throw new NotSupportedException("[" + nameof(AutoAssignedAttribute) +
+				throw new NotSupportedException("[" + nameof(AutoAssigned) +
 												"] only supports UnityEngine.Object fields.");
 			if (property.serializedObject.targetObject is not Component targetComponent) 
-				throw new Exception("[" + nameof(AutoAssignedAttribute) +
+				throw new Exception("[" + nameof(AutoAssigned) +
 									"] only supports UnityEngine.Component parents.");
-			var local = (AutoAssignedAttribute) attribute;
+			var local = (AutoAssigned) attribute;
 			bool makeHidden;
 			if (!property.objectReferenceValue)
 			{

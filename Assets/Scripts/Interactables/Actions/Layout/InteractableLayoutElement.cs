@@ -9,10 +9,6 @@ namespace Interactables.Actions.Layout
 	{
 		[SerializeField] private LayoutElement target;
 		
-		public override void Interact()
-		{
-			var layoutManager = LayoutManager.Instance;
-			if (layoutManager) layoutManager.Select(target);
-		}
+		public override void Interact() => LayoutManager.Instance.Select(target);
 	}
 }

@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace Runtime
+﻿namespace Runtime
 {
-	public sealed class DoNotDestroyOnLoad : MonoBehaviour
+	public sealed class DoNotDestroyOnLoad : BaseBehaviour
 	{
 		private static DoNotDestroyOnLoad m_instance;
 	

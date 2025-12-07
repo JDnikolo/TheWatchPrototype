@@ -1,24 +1,26 @@
 ﻿using Animation;
+using Attributes;
 using UnityEngine;
 
 namespace Interactables.Actions.Animation
 {
     [AddComponentMenu("Interactables/Animation/Start Default Animation")]
-    public class InteractableStartDefaultAnimation : Interactable
+    public sealed class InteractableStartDefaultAnimation : Interactable
     {
-        [SerializeReference] private PersonAnimationController personAnimationController;
-        [SerializeField] private DefaultAnimations animationToStart;
+        [SerializeField] private PersonAnimationController personAnimationController;
+        [SerializeField] private DefaultAnimationsEnum animationToStart;
         [SerializeField] private float duration = -1.0f;
-        [SerializeField] private Interactable onAnimationEnd = null;
+        [CanBeNull, SerializeField] private Interactable onAnimationEnd;
+        
         public override void Interact()
         {
             var animationHash = animationToStart switch
             {
-                DefaultAnimations.Salute => DefaultAnimationHash.Salute,
-                DefaultAnimations.Scared => DefaultAnimationHash.Scared,
-                DefaultAnimations.Talking => DefaultAnimationHash.Talking,
-                DefaultAnimations.Waving => DefaultAnimationHash.Waving,
-                DefaultAnimations.Angry => DefaultAnimationHash.Angry,
+                DefaultAnimationsEnum.Salute => DefaultAnimationHash.Salute,
+                DefaultAnimationsEnum.Scared => DefaultAnimationHash.Scared,
+                DefaultAnimationsEnum.Talking => DefaultAnimationHash.Talking,
+                DefaultAnimationsEnum.Waving => DefaultAnimationHash.Waving,
+                DefaultAnimationsEnum.Angry => DefaultAnimationHash.Angry,
                 _ => 0
             };
             if (animationHash == 0) return;

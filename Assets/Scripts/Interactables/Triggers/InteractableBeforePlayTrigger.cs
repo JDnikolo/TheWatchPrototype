@@ -4,13 +4,8 @@ using UnityEngine;
 namespace Interactables.Triggers
 {
 	[AddComponentMenu("Interactables/Triggers/On Before-Play Trigger")]
-	public sealed class InteractableBeforePlayTrigger : MonoBehaviour, IBeforePlay
+	public sealed class InteractableBeforePlayTrigger : InteractableTrigger, IBeforePlay
 	{
-		[SerializeField] private Interactable interactable;
-		
-		public void OnBeforePlay()
-		{
-			if (interactable) interactable.Interact();
-		}
+		public void OnBeforePlay() => OnInteract();
 	}
 }

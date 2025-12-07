@@ -11,14 +11,16 @@ using UnityEngine.InputSystem;
 
 namespace Audio.Special
 {
-    public sealed class ShoutCaster : MonoBehaviour, IFrameUpdatable
+    public sealed class ShoutCaster : BaseBehaviour, IFrameUpdatable
     {
         [SerializeField] private ParticleSystem shoutParticles;
         [SerializeField] private AudioPlayer shoutPlayer;
         [SerializeField] private AudioAggregate shoutAudios;
         [SerializeField] private string shoutActionName;
 
-        [Header("Parameters")] [SerializeField] private float shoutInteractDistanceOuter;
+        [Header("Parameters")] 
+        // ReSharper disable once MissingLinebreak
+        [SerializeField] private float shoutInteractDistanceOuter;
         [SerializeField] private float shoutWidthOuter;
         [SerializeField] private float shoutInteractDistanceInner;
         [SerializeField] private float shoutWidthInner;
@@ -31,7 +33,7 @@ namespace Audio.Special
         private Collider[] m_interactablesInner = new Collider[MaxInteractables];
         private Collider[] m_interactablesOuter = new Collider[MaxInteractables];
         private InputAction m_shoutAction;
-        
+
         public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.Player;
 
         public void OnFrameUpdate()
@@ -57,8 +59,8 @@ namespace Audio.Special
 
                 if (outerLength != 0 || innerLength != 0)
                 {
-                   TestColliderArray(ref m_interactablesInner, ref innerLength);
-                   TestColliderArray(ref m_interactablesOuter, ref outerLength);
+                    TestColliderArray(ref m_interactablesInner, ref innerLength);
+                    TestColliderArray(ref m_interactablesOuter, ref outerLength);
                     if (m_unblockedInteractables.Count != 0) m_unblockedInteractables.First().Value.OnGettingShouted();
                     m_unblockedInteractables.Clear();
                     m_singleInteractables.Clear();
@@ -76,7 +78,7 @@ namespace Audio.Special
                 var interactable = extender.ShoutTrigger;
                 if (!interactable) continue;
                 var distance = Vector3.Distance(cameraTransform.position, interactable.transform.position);
-                if (UnityEngine.Physics.Raycast(cameraTransform.position, 
+                if (UnityEngine.Physics.Raycast(cameraTransform.position,
                         interactable.transform.position - cameraTransform.position,
                         distance, terrainLayers, QueryTriggerInteraction.Ignore)) continue;
                 if (m_singleInteractables.Add(interactable)) m_unblockedInteractables.Add(distance, interactable);
@@ -97,23 +99,5 @@ namespace Audio.Special
         private void Start() => GameManager.Instance.AddFrameUpdate(this);
 
         private void OnDestroy() => GameManager.Instance?.RemoveFrameUpdate(this);
-#if UNITY_EDITOR
-        private void OnDrawGizmos()
-        {
-            var cameraTransform = PlayerManager.Instance?.PlayerCamera?.transform;
-            if (!cameraTransform) return;
-            var rotationMatrix = Matrix4x4.TRS(cameraTransform.position, cameraTransform.rotation,
-                cameraTransform.lossyScale);
-            Gizmos.matrix = rotationMatrix;
-            var center = Vector3.forward * shoutInteractDistanceInner / 2;
-            var size = Vector3.right * shoutWidthInner + Vector3.up * shoutWidthInner
-                                                       + Vector3.forward * shoutInteractDistanceInner;
-            Gizmos.DrawWireCube(center, size);
-            center = Vector3.forward * (shoutInteractDistanceOuter / 2 + shoutInteractDistanceInner);
-            size = Vector3.right * shoutWidthOuter + Vector3.up * shoutWidthOuter
-                                                   + Vector3.forward * shoutInteractDistanceOuter;
-            Gizmos.DrawWireCube(center, size);
-        }
-#endif
     }
 }

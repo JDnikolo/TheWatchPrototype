@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Runtime
 {
-	public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+	public abstract class Singleton<T> : BaseBehaviour where T : MonoBehaviour
 	{
 		private static T m_instance;
 

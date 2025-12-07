@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Editor
 {
-	[CustomPropertyDrawer(typeof(DisableInInspectorAttribute))]
+	[CustomPropertyDrawer(typeof(DisableInInspector))]
 	public sealed class DisableInInspectorDrawer : DrawerBase
 	{
 		protected override void OnGUIInternal(Rect position, SerializedProperty property, GUIContent label)
 		{
-			var local = (DisableInInspectorAttribute) attribute;
+			var local = (DisableInInspector) attribute;
 			bool disable;
 			if (local.AllowInEditor) disable = EditorApplication.isPlaying;
 			else disable = true;

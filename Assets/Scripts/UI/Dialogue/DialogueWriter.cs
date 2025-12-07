@@ -11,7 +11,7 @@ using Utilities;
 namespace UI.Dialogue
 {
 	[AddComponentMenu("UI/Dialogue/Dialogue Writer")]
-	public partial class DialogueWriter : MonoBehaviour
+	public partial class DialogueWriter : BaseBehaviour
 	{
 		[SerializeField] private DialogueButtons[] buttonSets;
 		[SerializeField] private DialogueText choiceText;

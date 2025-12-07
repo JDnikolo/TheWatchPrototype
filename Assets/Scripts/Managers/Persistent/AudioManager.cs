@@ -36,7 +36,7 @@ namespace Managers.Persistent
 		private float m_pauseFadeInTime;
 		private float m_pauseFadeOutTime;
 		private bool m_pauseDelayedFade;
-		
+
 		public enum SnapshotFadeMode : byte
 		{
 			None,
@@ -105,7 +105,7 @@ namespace Managers.Persistent
 					fadePlayer.Volume = m_musicFadeInVolume * Utils.ZeroToOne(m_musicFadeOutTimer, m_musicFadeOutTime);
 			}
 		}
-		
+
 		public void PreparePause(bool delayedFade = false, float fadeInTime = -1f, float fadeOutTime = -1f)
 		{
 			m_pauseFadeInTime = fadeInTime;
@@ -151,7 +151,7 @@ namespace Managers.Persistent
 					m_fadeSnapshot.ApplyTo(null, Utils.ZeroToOne(m_snapshotFadeOutTimer, m_snapshotFadeOutTime));
 					return;
 				}
-				
+
 				m_fadeSnapshot = null;
 				m_snapshotFadeMode = SnapshotFadeMode.FadeMixed;
 			}
@@ -172,7 +172,7 @@ namespace Managers.Persistent
 				}
 			}
 		}
-		
+
 		public void StartMusic(AudioClip music, bool delayedFade = false,
 			float fadeInTime = -1f, float fadeOutTime = -1f)
 		{
@@ -259,14 +259,14 @@ namespace Managers.Persistent
 		}
 
 		private void CheckUpdate() => RequireUpdate = m_musicFadeInTimer > 0f || m_musicFadeOutTimer > 0f ||
-		                                              m_snapshotFadeMode != SnapshotFadeMode.None;
+													m_snapshotFadeMode != SnapshotFadeMode.None;
 
 		private void StartPlayer(AudioPlayer player, AudioClip clip)
 		{
 			clip.Group.AddCallback(this);
 			player.Play(clip);
 		}
-		
+
 		private void StopPlayer(AudioPlayer player)
 		{
 			if (player.AudioSource) player.AudioSource.Group.RemoveCallback(this);
@@ -292,13 +292,13 @@ namespace Managers.Persistent
 		public AudioSnapshot FadeSnapshotEditor => m_fadeSnapshot;
 
 		public float SnapshotFadeInTime => m_snapshotFadeInTime;
-		
+
 		public float SnapshotFadeInTimer => m_snapshotFadeInTimer;
-		
+
 		public float SnapshotFadeOutTime => m_snapshotFadeOutTime;
-		
+
 		public float SnapshotFadeOutTimer => m_snapshotFadeOutTimer;
-		
+
 		public SnapshotFadeMode SnapshotFadeModeEditor => m_snapshotFadeMode;
 #endif
 	}

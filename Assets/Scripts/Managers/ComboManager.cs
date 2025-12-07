@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Attributes;
 using Managers.Persistent;
 using Runtime;
 using Runtime.FrameUpdate;
@@ -12,7 +13,7 @@ namespace Managers
 	[AddComponentMenu("Managers/ComboBox Manager")]
 	public sealed class ComboManager : Singleton<ComboManager>, IFrameUpdatable
 	{
-		[SerializeField] private ComboPanel comboPanel;
+		[CanBeNullInPrefab, SerializeField] private ComboPanel comboPanel;
 
 		private List<RaycastResult> m_results = new();
 		private LayoutManager.State m_state;

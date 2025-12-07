@@ -9,7 +9,7 @@ using Utilities;
 namespace UI.Dialogue
 {
 	[AddComponentMenu("UI/Dialogue/Dialogue Button")]
-	public class DialogueButton : MonoBehaviour, IFrameUpdatable
+	public class DialogueButton : BaseBehaviour, IFrameUpdatable
 	{
 		[Header("Colors")] [SerializeField] private Color normalColor = Color.white;
 		[SerializeField] private Color disabledColor = Color.black;

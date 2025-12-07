@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Attributes;
 using Audio;
 using Callbacks.Pausing;
 using Managers.Persistent;
@@ -16,7 +17,7 @@ namespace Managers
 	[AddComponentMenu("Managers/Pause Manager")]
 	public sealed partial class PauseManager : Singleton<PauseManager>, IFrameUpdatable
 	{
-		[SerializeField] private LayoutElement pauseMenu;
+		[CanBeNullInPrefab, SerializeField] private LayoutElement pauseMenu;
 		[SerializeField] private string pauseActionName = "Pause";
 		[SerializeField] private AudioSnapshot pauseSnapshot;
 		

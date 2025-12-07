@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using Managers.Persistent;
+using Runtime.FixedUpdate;
+using UnityEngine;
 
 namespace Physics
 {
 	[AddComponentMenu("Physics/Simple Body")]
-	public sealed class SimpleBody : MonoBehaviour
+	public sealed class SimpleBody : BaseBehaviour, IFixedUpdatable
 	{
 		//Velocity
 		private Vector3 m_linearVelocity;
@@ -17,7 +19,9 @@ namespace Physics
 		public Vector3 LinearVelocity => m_linearVelocity;
 		public Vector3 AngularVelocity => m_angularVelocity;
 
-		private void FixedUpdate()
+		public FixedUpdatePosition FixedUpdateOrder => default;
+
+		public void OnFixedUpdate()
 		{
 			var localTransform = transform;
 			var position = localTransform.position;
@@ -31,5 +35,11 @@ namespace Physics
 			m_lastPosition = position;
 			m_lastRotation = rotation;
 		}
+
+		private void OnEnable() => GameManager.Instance.AddFixedUpdate(this);
+
+		private void OnDisable() => GameManager.Instance.RemoveFixedUpdate(this);
+
+		private void OnDestroy() => OnDisable();
 	}
 }

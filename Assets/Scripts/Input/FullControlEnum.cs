@@ -10,5 +10,7 @@
 		KeyboardShout,
 		KeyboardJournal,
 		KeyboardHelp,
+		// ReSharper disable once InconsistentNaming
+		ENUM_LENGTH
 	}
 }

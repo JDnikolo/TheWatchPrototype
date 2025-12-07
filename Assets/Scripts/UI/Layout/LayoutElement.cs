@@ -2,7 +2,7 @@
 
 namespace UI.Layout
 {
-	public abstract class LayoutElement : MonoBehaviour, ILayoutElement
+	public abstract class LayoutElement : BaseBehaviour, ILayoutElement
 	{
 		public abstract ILayoutElement Parent { get; set; }
 

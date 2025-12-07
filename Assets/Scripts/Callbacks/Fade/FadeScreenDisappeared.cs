@@ -1,16 +1,10 @@
-﻿using Interactables;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Callbacks.Fade
 {
 	[AddComponentMenu("Callbacks/Fade/Fade Screen Disappeared")]
-	public sealed class FadeScreenDisappeared : FadeScreenFinished
+	public sealed class FadeScreenDisappeared : FadeScreenInteractable
 	{
-		[SerializeField] private Interactable interactable;
-		
-		public override void OnFadeScreenFinished(bool fadeDirection)
-		{
-			if (!fadeDirection && interactable) interactable.Interact();
-		}
+		protected override bool AllowInteraction(bool fadeDirection) => !fadeDirection;
 	}
 }

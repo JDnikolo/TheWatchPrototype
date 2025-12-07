@@ -1,15 +1,19 @@
-﻿using Managers;
+﻿using Attributes;
+using Managers;
 using Managers.Persistent;
 using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Interactables.Actions.Cinematic
 {
-    public class InteractableFocusCameraToTarget : Interactable
+    public sealed class InteractableFocusCameraToTarget : Interactable
     {
-        [SerializeField] private Transform lookTarget = null;
+        [CanBeNullInPrefab, SerializeField] private Transform lookTarget;
         [SerializeField] private float movementDuration = 1.0f;
-        [SerializeField] private Interactable onMovementEnd = null;
+        
+        [Header("Optional")] 
+        // ReSharper disable once MissingLinebreak
+        [CanBeNull, SerializeField] private Interactable onMovementEnd;
 
         public override void Interact()
         {

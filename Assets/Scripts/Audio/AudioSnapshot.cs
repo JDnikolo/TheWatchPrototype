@@ -3,7 +3,7 @@
 namespace Audio
 {
 	[CreateAssetMenu(fileName = "Snapshot", menuName = "Audio/Snapshot")]
-	public sealed class AudioSnapshot : ScriptableObject
+	public sealed class AudioSnapshot : BaseObject
 	{
 		[SerializeField] [HideInInspector] private AudioGroups groups;
 

@@ -1,4 +1,5 @@
-﻿using AYellowpaper.SerializedCollections;
+﻿using Attributes;
+using AYellowpaper.SerializedCollections;
 using Callbacks.Speaker;
 using Localization.Speaker;
 using Managers;
@@ -13,8 +14,8 @@ namespace Interactables.Actions.Speaker
 	public sealed class InteractableSpeakerChain : Interactable, ISpeakerWriterFinished
 	{
 		[SerializeField] private SpeakerChain textChain;
-		[SerializeField] private SerializedDictionary<int, Interactable> onIndexedTextFinished;
-		[SerializeField] private SpeakerWriterFinished textWriterFinished;
+		[CanBeNull, SerializeField] private SerializedDictionary<int, Interactable> onIndexedTextFinished;
+		[CanBeNull, SerializeField] private SpeakerWriterFinished textWriterFinished;
 
 		private int m_chainIndex;
 

@@ -10,5 +10,7 @@
 		Shout,
 		Journal,
 		Help,
+		// ReSharper disable once InconsistentNaming
+		ENUM_LENGTH
 	}
 }

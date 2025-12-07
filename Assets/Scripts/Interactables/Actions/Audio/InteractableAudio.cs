@@ -1,6 +1,5 @@
 ﻿using Attributes;
 using Audio;
-using Runtime.Automation;
 using UnityEngine;
 using AudioClip = Audio.AudioClip;
 
@@ -14,15 +13,6 @@ namespace Interactables.Actions.Audio
 		
 		[SerializeField] private AudioClip clip;
 		
-		public override void Interact()
-		{
-			if (!clip)
-			{
-				Debug.LogError("Audio clip is null!", this);
-				return;
-			}
-			
-			player.Play(clip);
-		}
+		public override void Interact() => player.Play(clip);
 	}
 }

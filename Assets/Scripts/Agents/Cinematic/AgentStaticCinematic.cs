@@ -8,8 +8,8 @@ namespace Agents.Cinematic
 	[AddComponentMenu("Agents/Cinematic/Static Cinematic")]
 	public sealed class AgentStaticCinematic : AgentCinematicAssigned
 	{
-		[SerializeField] private Transform lookAtTarget;
 		[SerializeField] private Transform moveTarget;
+		[SerializeField] private Transform lookAtTarget;
 		[SerializeField] private float slowDownMultiplier;
 		
 		public override void OnAgentCinematicAssigned(AgentBrain agent, MovementCinematicBehavior behavior)

@@ -7,7 +7,7 @@ namespace Localization.Text
 	[CreateAssetMenu(fileName = "InputActionText", menuName = "Localization/Text/Input Action Enum Text")]
 	public sealed class InputActionText : EnumText
 	{
-		[SerializeField] [EnumArray(typeof(FullControlEnum))]
+		[MinCount((int) FullControlEnum.ENUM_LENGTH)] [SerializeField] [EnumArray(typeof(FullControlEnum))]
 		private TextObject[] values;
 
 		public override TextObject[] Values => values;

@@ -3,7 +3,6 @@ using Callbacks.Audio;
 using Callbacks.Pausing;
 using Managers;
 using Runtime;
-using Runtime.Automation;
 using Runtime.FrameUpdate;
 using UnityEngine;
 using Utilities;
@@ -11,7 +10,7 @@ using Utilities;
 namespace Audio
 {
     [AddComponentMenu("Audio/Audio Player")]
-    public sealed class AudioPlayer : MonoBehaviour, IFrameUpdatable, IPauseCallback, IAudioGroupVolumeChanged
+    public sealed class AudioPlayer : BaseBehaviour, IFrameUpdatable, IPauseCallback, IAudioGroupVolumeChanged
     {
         [SerializeField] [AutoAssigned(AssignMode.Self, typeof(AudioSource))]
         private AudioSource audioSource;

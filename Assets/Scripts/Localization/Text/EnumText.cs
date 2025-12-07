@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace Localization.Text
+﻿namespace Localization.Text
 {
-	public abstract class EnumText : ScriptableObject
+	public abstract class EnumText : BaseObject
 	{
 		public abstract TextObject[] Values { get; }
 	}

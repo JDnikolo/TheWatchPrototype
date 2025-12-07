@@ -3,14 +3,13 @@ using Callbacks.Beforeplay;
 using Input;
 using Localization.Text;
 using Managers.Persistent;
-using Runtime.Automation;
 using UnityEngine;
 using Utilities;
 
 namespace UI.Text
 {
 	[AddComponentMenu("UI/Text/Control Info Text")]
-	public sealed class ControlText : MonoBehaviour, IBeforePlay
+	public sealed class ControlText : BaseBehaviour, IBeforePlay
 	{
 		[SerializeField] private GroupedControlEnum target;
 		[SerializeField] private GroupedControlText text;

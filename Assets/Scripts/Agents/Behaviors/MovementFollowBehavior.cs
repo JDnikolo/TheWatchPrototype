@@ -1,4 +1,6 @@
 ﻿using System;
+using Attributes;
+using Callbacks.Agent;
 using UnityEngine;
 using Utilities;
 
@@ -7,7 +9,7 @@ namespace Agents.Behaviors
 	[Serializable]
 	public sealed class MovementFollowBehavior : MovementBehavior, IMovementBehaviorUpdate
 	{
-		[SerializeField] private Transform target;
+		[CanBeNullInPrefab, SerializeField] private Transform target;
 
 		private Vector2 m_targetPosition;
 		

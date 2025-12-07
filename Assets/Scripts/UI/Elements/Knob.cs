@@ -2,7 +2,6 @@
 using Callbacks.Dragging;
 using Callbacks.Layout;
 using Callbacks.Pointer;
-using Runtime.Automation;
 using UI.Knob;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,7 +10,7 @@ using UnityEngine.UI;
 namespace UI.Elements
 {
 	[AddComponentMenu("UI/Elements/Sub/Knob")]
-	public sealed class Knob : MonoBehaviour, IPointerEnterCallback, IPointerExitCallback,
+	public sealed class Knob : BaseBehaviour, IPointerEnterCallback, IPointerExitCallback,
 		IBeginDragCallback, IDragCallback, IEndDragCallback, ILayoutCallback
 	{
 		[SerializeField] private Image image;

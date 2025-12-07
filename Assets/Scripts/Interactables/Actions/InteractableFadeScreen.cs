@@ -1,4 +1,5 @@
-﻿using Callbacks.Fade;
+﻿using Attributes;
+using Callbacks.Fade;
 using Managers;
 using UI.Fade;
 using UnityEngine;
@@ -10,8 +11,8 @@ namespace Interactables.Actions
 	{
 		[SerializeField] private bool fadeDirection;
 		[SerializeField] private float fadeDuration = -1f;
-		[SerializeField] private FadeScreenFinished onFadeScreenFinished;
-		
+		[CanBeNull, SerializeField] private FadeScreenFinished onFadeScreenFinished;
+
 		public override void Interact()
 		{
 			var uiManager = UIManager.Instance;

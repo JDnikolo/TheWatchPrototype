@@ -13,16 +13,16 @@ namespace Managers
 	public sealed class HighlightManager : Singleton<HighlightManager>, IFrameUpdatable, IFixedUpdatable
 	{
 		[SerializeField] private LayerMask highlightMask;
-		
+
 		private IManagedHighlightable m_raycastTarget;
 		private IManagedHighlightable m_previousTarget;
-		
+
 		protected override bool Override => true;
 
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.HighlightManager;
 
 		public FixedUpdatePosition FixedUpdateOrder => FixedUpdatePosition.HighlightManager;
-		
+
 		public void OnFrameUpdate()
 		{
 			if (m_previousTarget == m_raycastTarget) return;
@@ -35,8 +35,8 @@ namespace Managers
 		{
 			var cameraTransform = PlayerManager.Instance.PlayerCamera.transform;
 			if (UnityEngine.Physics.Raycast(cameraTransform.position, cameraTransform.forward,
-				    out var hit, 3f, highlightMask.value) && RigidBodyTable.Instance.TryGetValue(
-				    hit.rigidbody, out var extender))
+					out var hit, 3f, highlightMask.value) && RigidBodyTable.Instance.TryGetValue(
+					hit.rigidbody, out var extender))
 			{
 				var highlightable = extender.Highlightable;
 				if (highlightable != null)

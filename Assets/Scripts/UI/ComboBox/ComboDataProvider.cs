@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using Callbacks.Prewarm;
-using UnityEngine;
 
 namespace UI.ComboBox
 {
-	public abstract class ComboDataProvider : MonoBehaviour, IComboDataProvider, IPrewarm
+	public abstract class ComboDataProvider : BaseBehaviour, IComboDataProvider, IPrewarm
 	{
 		private ComboData[] m_dataPoints;
 

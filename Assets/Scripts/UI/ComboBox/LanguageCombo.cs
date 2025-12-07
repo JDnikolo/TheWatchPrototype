@@ -3,7 +3,6 @@ using Boxing;
 using Callbacks.ComboBox;
 using Localization;
 using Managers.Persistent;
-using Runtime.Automation;
 using UnityEngine;
 
 namespace UI.ComboBox

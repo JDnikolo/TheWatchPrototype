@@ -2,7 +2,7 @@
 
 namespace Variables
 {
-	public abstract class VariableObject<T> : ScriptableObject
+	public abstract class VariableObject<T> : BaseObject
 	{
 		[SerializeField] private T startingValue;
 

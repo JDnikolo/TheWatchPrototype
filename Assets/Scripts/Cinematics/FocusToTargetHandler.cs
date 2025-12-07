@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Cinematics
 {
-	internal sealed class FocusToTargetHandler : CinematicMovementHandlerBase
+	public sealed class FocusToTargetHandler : CinematicMovementHandlerBase
 	{
 		public CinemachineCamera CameraToMove { get; }
 		public Transform CameraMovementTarget { get; }

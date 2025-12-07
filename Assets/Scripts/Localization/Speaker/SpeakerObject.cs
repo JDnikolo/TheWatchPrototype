@@ -1,3 +1,4 @@
+using Attributes;
 using Audio;
 using Character;
 using Localization.Text;
@@ -6,11 +7,10 @@ using UnityEngine;
 namespace Localization.Speaker
 {
     [CreateAssetMenu(fileName = "Speaker", menuName = "Localization/Speaker/Generic Speaker")]
-    public class SpeakerObject : TextObject
+    public sealed class SpeakerObject : TextObject
     {
-        [SerializeField] private string speaker;
-        [SerializeField] private CharacterProfileData profile;
-        [SerializeField] private AudioAggregate audio;
+        [CanBeNull, SerializeField] private CharacterProfileData profile;
+        [CanBeNull, SerializeField] private AudioAggregate audio;
         
         public CharacterProfileData Profile => profile;
         

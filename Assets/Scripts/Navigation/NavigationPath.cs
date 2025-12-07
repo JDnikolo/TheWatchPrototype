@@ -1,11 +1,15 @@
-﻿using UnityEngine;
+﻿using Attributes;
+using Debugging;
+using UnityEngine;
+using Utilities;
 
 namespace Navigation
 {
 	[AddComponentMenu("Navigation/Navigation Path")]
-	public sealed class NavigationPath : MonoBehaviour
+	public sealed class NavigationPath : BaseBehaviour
 	{
-		[SerializeField] private Transform[] waypoints;
+		// ReSharper disable once MissingLinebreak
+		[CustomDebug(nameof(DebugWaypoints)), SerializeField] private Transform[] waypoints;
 		[SerializeField] private bool circular;
 
 		public Transform this[int index] => waypoints[index];
@@ -16,6 +20,12 @@ namespace Navigation
 			else if (circular) i = 0;
 			else i = waypoints.Length - 1;
 			return waypoints[i];
+		}
+#if UNITY_EDITOR
+		private bool DebugWaypoints(OperationData operationData, string path, FieldData fieldData)
+		{
+			fieldData.MinCount = circular ? 2 : 1;
+			return operationData.TestArrayGeneric(path, fieldData, waypoints);
 		}
 
 		private void OnDrawGizmosSelected()
@@ -39,5 +49,6 @@ namespace Navigation
 				Gizmos.DrawLine(waypoints[length - 1].position, waypoints[0].position);
 			}
 		}
+#endif
 	}
 }

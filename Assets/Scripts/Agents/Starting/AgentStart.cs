@@ -2,7 +2,7 @@
 
 namespace Agents.Starting
 {
-	public abstract class AgentStart : MonoBehaviour
+	public abstract class AgentStart : BaseBehaviour
 	{
 		[SerializeField] private AgentBrain brain;
 		

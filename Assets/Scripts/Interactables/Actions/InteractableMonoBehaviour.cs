@@ -8,9 +8,6 @@ namespace Interactables.Actions
 		[SerializeField] private MonoBehaviour target;
 		[SerializeField] private bool enable;
 		
-		public override void Interact()
-		{
-			if (target) target.enabled = enable;
-		}
+		public override void Interact() => target.enabled = enable;
 	}
 }

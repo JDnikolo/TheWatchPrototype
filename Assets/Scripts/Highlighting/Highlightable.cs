@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace Highlighting
+﻿namespace Highlighting
 {
-	public abstract class Highlightable : MonoBehaviour, IHighlightable
+	public abstract class Highlightable : BaseBehaviour, IHighlightable
 	{
 		private bool m_highlighted;
 

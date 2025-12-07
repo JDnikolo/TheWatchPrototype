@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Attributes;
 using Callbacks.Pausing;
 using Interactables;
 using Managers;
@@ -11,18 +12,17 @@ using UnityEngine;
 namespace Animation
 {
    [AddComponentMenu("Animation/Person Animation Controller")]
-   public sealed class PersonAnimationController : MonoBehaviour, IFixedUpdatable, IPauseCallback
+   public sealed class PersonAnimationController : BaseBehaviour, IFixedUpdatable, IPauseCallback
    {
       [SerializeField] private Animator animator;
       [SerializeField] private bool blendIdle = true;
-      [SerializeField] private AnimationBlender animationBlender;
+      [CanBeNull, SerializeField] private AnimationBlender animationBlender;
 
       private Dictionary<int, Interactable> m_animationFinishedCallbacks = new();
       private Dictionary<int, float> m_animationTimers = new();
       private float m_animationSpeed;
       
       public FixedUpdatePosition FixedUpdateOrder => FixedUpdatePosition.Animation;
-
 
       public void OnFixedUpdate()
       {
@@ -63,8 +63,7 @@ namespace Animation
 
          if (!(duration > 0)) return;
          if (!m_animationTimers.TryAdd(animationHash, duration)) m_animationTimers[animationHash] = duration;
-         if (callback is null) return;
-         if (!m_animationFinishedCallbacks.TryAdd(animationHash, callback))
+         if (callback && !m_animationFinishedCallbacks.TryAdd(animationHash, callback)) 
             m_animationFinishedCallbacks[animationHash] = callback;
       }
 
@@ -111,7 +110,7 @@ namespace Animation
          animator.SetFloat(parameterHash, value);
          if (!(duration > 0)) return;
          if (!m_animationTimers.TryAdd(parameterHash, duration)) m_animationTimers[parameterHash] = duration;
-         if (!m_animationFinishedCallbacks.TryAdd(parameterHash, callback))
+         if (callback && !m_animationFinishedCallbacks.TryAdd(parameterHash, callback)) 
             m_animationFinishedCallbacks[parameterHash] = callback;
       }
 
@@ -128,7 +127,7 @@ namespace Animation
          animator.SetInteger(parameterHash, value);
          if (!(duration > 0)) return;
          if (!m_animationTimers.TryAdd(parameterHash, duration)) m_animationTimers[parameterHash] = duration;
-         if (!m_animationFinishedCallbacks.TryAdd(parameterHash, callback))
+         if (callback && !m_animationFinishedCallbacks.TryAdd(parameterHash, callback)) 
             m_animationFinishedCallbacks[parameterHash] = callback;
       }
 
@@ -137,7 +136,6 @@ namespace Animation
          GameManager.Instance.AddFixedUpdate(this);
          PauseManager.Instance.AddPausedCallback(this);
       }
-
 
       private void OnDestroy()
       {

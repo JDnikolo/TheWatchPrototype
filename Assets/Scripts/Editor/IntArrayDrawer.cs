@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Editor
 {
-	[CustomPropertyDrawer(typeof(IntArrayAttribute))]
+	[CustomPropertyDrawer(typeof(IntArray))]
 	public sealed class IntArrayDrawer : DrawerBase
 	{
 		protected override void OnGUIInternal(Rect position, SerializedProperty property, GUIContent label)
 		{
-			var intAttribute = (IntArrayAttribute) attribute;
+			var intAttribute = (IntArray) attribute;
 			string name;
 			try
 			{

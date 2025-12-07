@@ -3,7 +3,7 @@ using Unity.Cinemachine;
 
 namespace Cinematics
 {
-	internal sealed class CutToDollyHandler : CinematicMovementHandlerBase
+	public sealed class CutToDollyHandler : CinematicMovementHandlerBase
 	{
 		public CinemachineCamera CameraToMove { get; }
 		public bool CutBack { get; }

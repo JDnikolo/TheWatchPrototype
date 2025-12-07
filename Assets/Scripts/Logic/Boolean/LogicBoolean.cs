@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace Logic.Boolean
+﻿namespace Logic.Boolean
 {
-	public abstract class LogicBoolean : ScriptableObject
+	public abstract class LogicBoolean : BaseObject
 	{
 		public abstract bool Evaluate();
 	}

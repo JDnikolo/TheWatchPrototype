@@ -64,8 +64,8 @@ namespace UI.Button
 				return;
 			}
 			
-			if (firstButton) firstButton.SetFromParent(target, false);
-			if (secondButton) secondButton.SetFromParent(target, true);
+			if (firstButton) firstButton.SetFromParent(this, target, false);
+			if (secondButton) secondButton.SetFromParent(this, target, true);
 		}
 #endif
 	}

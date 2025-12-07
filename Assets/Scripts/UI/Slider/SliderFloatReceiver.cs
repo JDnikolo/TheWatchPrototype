@@ -1,12 +1,11 @@
 ﻿using Attributes;
 using Callbacks.Prewarm;
 using Callbacks.Slider;
-using Runtime.Automation;
 using UnityEngine;
 
 namespace UI.Slider
 {
-	public abstract class SliderFloatReceiver : MonoBehaviour, ISliderFloatReceiver, IPrewarm
+	public abstract class SliderFloatReceiver : BaseBehaviour, ISliderFloatReceiver, IPrewarm
 	{
 		[SerializeField] [AutoAssigned(AssignMode.Child, typeof(Elements.Slider))]
 		private Elements.Slider slider;

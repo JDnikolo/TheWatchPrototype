@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 namespace UI.Journal
 {
     [AddComponentMenu("UI/Journal/Journal Panel")]
-    public sealed class JournalPanel : MonoBehaviour
+    public sealed class JournalPanel : BaseBehaviour
     {
         [SerializeField] private ScrollRect scrollRect;
         [SerializeField] private JournalEntry journalEntryPrefab;

@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using Attributes;
+using UnityEngine;
 
 namespace Highlighting
 {
 	[AddComponentMenu("Highlighting/Aggregate Highlightable")]
 	public sealed class HighlightableAggregate : Highlightable
 	{
-		[SerializeField] private Highlightable[] highlightables;
+		[MinCount(2)] [SerializeField] private Highlightable[] highlightables;
 		
 		protected override void HighlightInternal(bool enabled)
 		{

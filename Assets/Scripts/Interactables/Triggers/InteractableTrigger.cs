@@ -1,14 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using Attributes;
+using UnityEngine;
 
 namespace Interactables.Triggers
 {
-	public abstract class InteractableTrigger : MonoBehaviour
+	public abstract class InteractableTrigger : BaseBehaviour
 	{
-		[SerializeField] private Interactable[] interactables;
+		[SerializeField] private Interactable interactable;
+		//TODO Replace this with a single interactable
+		[Obsolete, CanBeNull, SerializeField] private Interactable[] interactables;
 
-		protected void OnInteract()
-		{
-			for (var i = 0; i < interactables.Length; i++) interactables[i].Interact();
-		}
+		protected void OnInteract() => interactable.Interact();
 	}
 }

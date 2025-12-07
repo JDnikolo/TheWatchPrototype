@@ -1,16 +1,15 @@
 using Character;
+using Managers;
 using Managers.Persistent;
 using Runtime.FixedUpdate;
-using Unity.Cinemachine;
 using UnityEngine;
 using Utilities;
 
 namespace Player
 {
     [AddComponentMenu("Player/Player Movement Handler")]
-    public sealed class PlayerMovementHandler : MonoBehaviour, IFixedUpdatable
+    public sealed class PlayerMovementHandler : BaseBehaviour, IFixedUpdatable
     {
-        [SerializeField] private CinemachineCamera cinemachineCamera;
         [SerializeField] private PlayerInputHandler inputHandler;
         [SerializeField] private CharacterVelocityData velocityData;
 
@@ -24,7 +23,7 @@ namespace Player
             var linearVelocity = rigidBody.velocity.ToFlatVector();
             var maxVelocity = velocityData.MaxVelocity;
             var acceleration = velocityData.Acceleration;
-            var cameraTransform = cinemachineCamera.transform;
+            var cameraTransform = PlayerManager.Instance.PlayerCamera.transform;
             if (inputHandler.TryGetMoveAxis(out var moveAxis) && moveAxis != Vector2.zero)
             {
                 finalVector.CorrectForDirection(cameraTransform.forward.ToFlatVector().normalized, 

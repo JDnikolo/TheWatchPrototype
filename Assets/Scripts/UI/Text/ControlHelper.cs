@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 namespace UI.Text
 {
 	[AddComponentMenu("UI/Text/Control Info Helper")]
-	public sealed class ControlHelper : MonoBehaviour, IFrameUpdatable
+	public sealed class ControlHelper : BaseBehaviour, IFrameUpdatable
 #if UNITY_EDITOR
 		, IBehaviourChecker
 #endif

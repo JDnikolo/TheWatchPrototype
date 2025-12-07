@@ -164,7 +164,7 @@ namespace Managers.Persistent
 						//This will delay it until the local manager has changed instance
 						if (m_localManager && LocalManager.Instance == m_localManager) return;
 						m_localManager = null;
-						CameraManager.Instance.SetCamera(PlayerManager.Instance.PlayerCamera);
+						CameraManager.Instance.SetCamera(LocalManager.Instance.LocalCamera);
 						while (m_beforePlay.TryPop(out var beforePlay)) beforePlay.OnBeforePlay();
 						m_gameState = GameState.Play;
 						break;
@@ -242,7 +242,9 @@ namespace Managers.Persistent
 		}
 #if UNITY_EDITOR
 		public OrderedCollection<IFrameUpdatable> FrameUpdateCollection => m_frameUpdateCollection;
+		
 		public OrderedCollection<ILateUpdatable> LateUpdateCollection => m_lateUpdateCollection;
+		
 		public OrderedCollection<IFixedUpdatable> FixedUpdateCollection => m_fixedUpdateCollection;
 #endif
 	}

@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
+using Attributes;
 using Callbacks.Audio;
 using UnityEngine;
 
 namespace Audio
 {
 	[CreateAssetMenu(fileName = "Group", menuName = "Audio/Group")]
-	public sealed class AudioGroup : ScriptableObject, IAudioGroupVolumeChanged
+	public sealed class AudioGroup : BaseObject, IAudioGroupVolumeChanged
 	{
-		[SerializeField] private AudioGroup parent;
+		// ReSharper disable once MissingLinebreak
+		[CanBeNull, SerializeField, DisableInInspector(true)] private AudioGroup parent;
 			
 		private readonly HashSet<IAudioGroupVolumeChanged> m_volumeChanged = new();
 		private float m_volumeOverride;

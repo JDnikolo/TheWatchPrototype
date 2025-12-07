@@ -2,7 +2,7 @@
 
 namespace Audio
 {
-	public abstract class AudioObject : ScriptableObject
+	public abstract class AudioObject : BaseObject
 	{
 		[SerializeField] private AudioSettings settings;
 		[SerializeField] private AudioGroup group;

@@ -1,5 +1,6 @@
 ﻿using Managers.Persistent;
 using UnityEditor;
+using Utilities;
 
 namespace Editor
 {
@@ -23,7 +24,7 @@ namespace Editor
 
 		private void DisplayInputMap(InputManager.InputMap inputMap, string name)
 		{
-			if (inputMap == null) EditorGUILayout.TextField(name, "Null");
+			if (inputMap == null) EditorGUILayout.TextField(name, Utils.NULL_STRING);
 			else EditorGUILayout.Toggle(name, inputMap.EditorEnabled);
 		}
 	}

@@ -62,7 +62,7 @@ namespace Collections
                 goto Evaluate;
             }
 
-            void IEnumerator.Reset() => throw new NotImplementedException();
+            void IEnumerator.Reset() => throw new InvalidOperationException();
             
             public void Dispose()
             {
@@ -91,8 +91,8 @@ namespace Collections
         }
         
         public bool Contains(T item) => m_contained.Contains(item);
-        
-        public void CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
+
+        public void CopyTo(T[] array, int arrayIndex) => throw new InvalidOperationException();
 
         public bool Remove(T item)
         {

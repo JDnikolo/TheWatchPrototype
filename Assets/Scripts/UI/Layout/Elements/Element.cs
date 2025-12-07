@@ -1,4 +1,5 @@
 ﻿using System;
+using Attributes;
 using Callbacks.Layout;
 using Callbacks.Prewarm;
 using Managers;
@@ -14,11 +15,20 @@ namespace UI.Layout.Elements
 		, IHierarchyChanged
 #endif
 	{
-		[SerializeField] [HideInInspector] private LayoutElement parent;
-		[SerializeField] [HideInInspector] private LayoutElement leftNeighbor;
-		[SerializeField] [HideInInspector] private LayoutElement rightNeighbor;
-		[SerializeField] [HideInInspector] private LayoutElement topNeighbor;
-		[SerializeField] [HideInInspector] private LayoutElement bottomNeighbor;
+		[CanBeNull, SerializeField, HideInInspector]
+		private LayoutElement parent;
+
+		[CanBeNull, SerializeField, HideInInspector]
+		private LayoutElement leftNeighbor;
+
+		[CanBeNull, SerializeField, HideInInspector]
+		private LayoutElement rightNeighbor;
+
+		[CanBeNull, SerializeField, HideInInspector]
+		private LayoutElement topNeighbor;
+
+		[CanBeNull, SerializeField, HideInInspector]
+		private LayoutElement bottomNeighbor;
 
 		private ILayoutCallback m_callback;
 		private ILayoutInputCallback m_inputCallback;
@@ -34,7 +44,7 @@ namespace UI.Layout.Elements
 		public sealed override ILayoutElement BottomNeighbor { get; set; }
 
 		public void SetCallback(ILayoutCallback callback) => m_callback = callback;
-		
+
 		public void SetInputCallback(ILayoutInputCallback callback) => m_inputCallback = callback;
 
 		public sealed override void Select() => m_callback?.OnSelected();
@@ -66,7 +76,7 @@ namespace UI.Layout.Elements
 			}
 
 			if (target != null) LayoutManager.Instance.Select(target, input);
-			else if (Parent is ILayoutControllingParent controllingParent) 
+			else if (Parent is ILayoutControllingParent controllingParent)
 				controllingParent.OnMissedInput(axis, input);
 		}
 
@@ -110,7 +120,7 @@ namespace UI.Layout.Elements
 		}
 
 		public LayoutElement GetParent() => parent;
-		
+
 		public void SetParent(LayoutElement newParent) => this.DirtyReplaceObject(ref parent, newParent);
 
 		protected virtual void OnValidate()
@@ -129,8 +139,9 @@ namespace UI.Layout.Elements
 			var managedParent = neighbor.GetManagedParent();
 			direction = direction.Invert();
 			var inverseNeighbor = GetManagedNeighbor(neighbor, direction);
-			if (managedParent && inverseNeighbor == managedParent || managedParent is ILayoutControllingParent controllingParent 
-			    && controllingParent.BlockedDirections.IsDirectionBlocked(direction)) return;
+			if (managedParent && inverseNeighbor == managedParent ||
+				managedParent is ILayoutControllingParent controllingParent &&
+				controllingParent.BlockedDirections.IsDirectionBlocked(direction)) return;
 			if (inverseNeighbor != this) SetManagedNeighbor(neighbor, this, direction);
 		}
 

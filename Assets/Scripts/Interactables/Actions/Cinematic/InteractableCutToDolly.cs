@@ -1,19 +1,21 @@
-﻿using Managers;
+﻿using Attributes;
+using Managers;
 using Unity.Cinemachine;
 using UnityEngine;
 
 namespace Interactables.Actions.Cinematic
 {
-    public class InteractableCutToDolly : Interactable
+    public sealed class InteractableCutToDolly : Interactable
     {
-        [SerializeReference] private CinemachineCamera dollyCamera;
-        [SerializeReference] private CinemachineSplineCart dollyCart;
-        [Header("Optional")] 
+        [CanBeNullInPrefab, SerializeField] private CinemachineCamera dollyCamera;
+        [CanBeNullInPrefab, SerializeField] private CinemachineSplineCart dollyCart;
         
+        [Header("Optional")] 
+        // ReSharper disable once MissingLinebreak
         [SerializeField] private float cartProgress;
-        [SerializeField] private Transform lookTarget;
+        [CanBeNull, SerializeField] private Transform lookTarget;
         [SerializeField] private float movementDuration = 1.0f;
-        [SerializeField] private Interactable onDurationEnd;
+        [CanBeNull, SerializeField] private Interactable onDurationEnd;
         [SerializeField] private bool deactivateOnDurationEnd = true;
 
         public override void Interact() => CinematicManager.Instance.CutToDollyCamera(dollyCamera, dollyCart, 

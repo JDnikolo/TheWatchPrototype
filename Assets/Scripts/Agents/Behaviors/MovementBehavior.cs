@@ -10,7 +10,7 @@ namespace Agents.Behaviors
 		public abstract Vector2 MoveTarget { get; }
 		
 		/// <summary>
-		/// The flat position for rotation.
+		/// The flat position for look-rotation.
 		/// </summary>
 		public abstract Vector2 RotationTarget { get; }
 		

@@ -3,7 +3,7 @@
 namespace UI.Loading
 {
 	[AddComponentMenu("UI/Loading/Loading Bar")]
-	public sealed class LoadingBar : MonoBehaviour
+	public sealed class LoadingBar : BaseBehaviour
 	{
 		[SerializeField] private RectTransform loadingRect;
 		[SerializeField] private RectTransform fullRect;

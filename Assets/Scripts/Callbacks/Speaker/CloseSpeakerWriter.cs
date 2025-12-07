@@ -1,4 +1,5 @@
-﻿using Interactables;
+﻿using Attributes;
+using Interactables;
 using Managers;
 using Managers.Persistent;
 using UI.Speaker;
@@ -10,7 +11,7 @@ namespace Callbacks.Speaker
 	[AddComponentMenu("Callbacks/Text/Close Speaker Writer")]
 	public sealed class CloseSpeakerWriter : SpeakerWriterFinished
 	{
-		[SerializeField] private Interactable interactable;
+		[CanBeNull, SerializeField] private Interactable interactable;
 		[SerializeField] private bool enablePlayerInput;
 		
 		public override void OnTextWriterFinished(SpeakerWriter textWriter)

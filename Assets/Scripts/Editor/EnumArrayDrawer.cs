@@ -6,12 +6,12 @@ using Utilities;
 
 namespace Editor
 {
-	[CustomPropertyDrawer(typeof(EnumArrayAttribute))]
+	[CustomPropertyDrawer(typeof(EnumArray))]
 	public sealed class EnumArrayDrawer : DrawerBase
 	{
 		protected override void OnGUIInternal(Rect position, SerializedProperty property, GUIContent label)
 		{
-			var local = (EnumArrayAttribute) attribute;
+			var local = (EnumArray) attribute;
 			string name;
 			try
 			{

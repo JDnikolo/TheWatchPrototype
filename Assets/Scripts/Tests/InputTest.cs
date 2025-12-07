@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace Tests
 {
-	public sealed class InputTest : MonoBehaviour
+	public sealed class InputTest : BaseBehaviour
 	{
 		[SerializeField] private InputActionReference actionReference;
 		[SerializeField] private string bindingId;

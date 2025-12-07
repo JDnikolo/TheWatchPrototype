@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using Attributes;
 using Interactables;
 using Runtime;
 using UI.Night;
@@ -10,7 +11,7 @@ namespace Managers
     [AddComponentMenu("Managers/Night Manager")]
     public sealed class NightManager : Singleton<NightManager>
     {
-        [SerializeField] private NightTimer timer;
+        [CanBeNullInPrefab, SerializeField] private NightTimer timer;
         [Category("Time")] [SerializeField] [Tooltip("The total duration of the night section in seconds.")]
         private float nightTime = 7200.0f;
 
@@ -23,8 +24,7 @@ namespace Managers
         [Range(0.0f, 1.0f)]
         private float repeatReduction = 0.1f;
         
-        [SerializeReference] private Interactable nightEndActions;
-
+        [CanBeNullInPrefab, SerializeField] private Interactable nightEndActions;
         private Dictionary<string, int> m_interactionLog = new();
 
         protected override bool Override => true;

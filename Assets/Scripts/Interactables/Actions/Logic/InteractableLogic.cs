@@ -11,7 +11,7 @@ namespace Interactables.Actions.Logic
 
 		public override void Interact()
 		{
-			if (logicGate.Evaluate() && interactable) interactable.Interact();
+			if (logicGate.Evaluate()) interactable.Interact();
 		}
 	}
 }

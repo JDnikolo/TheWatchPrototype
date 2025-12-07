@@ -1,11 +1,10 @@
 using Attributes;
-using Runtime.Automation;
 using UnityEngine;
 
 namespace LookupTables
 {
     [AddComponentMenu("Lookup Tables/Rigid Body Destructor")]
-    public sealed class RigidBodyDestructor : MonoBehaviour
+    public sealed class RigidBodyDestructor : BaseBehaviour
     {
         [SerializeField] [AutoAssigned(AssignMode.Self, typeof(Rigidbody))] 
         private Rigidbody target;

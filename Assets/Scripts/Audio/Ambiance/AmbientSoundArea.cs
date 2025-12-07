@@ -1,13 +1,13 @@
 using Attributes;
 using Managers;
 using Managers.Persistent;
-using Runtime.Automation;
 using Runtime.FixedUpdate;
 using UnityEngine;
 
 namespace Audio.Ambiance
 {
-    public sealed class AmbientSoundArea : MonoBehaviour, IFixedUpdatable
+    [AddComponentMenu("Audio/Ambiance/Sound Area")]
+    public sealed class AmbientSoundArea : BaseBehaviour, IFixedUpdatable
     {
         [SerializeField] [AutoAssigned(AssignMode.Self, typeof(Collider))]
         private Collider boxCollider;

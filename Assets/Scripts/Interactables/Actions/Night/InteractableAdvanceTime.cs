@@ -7,7 +7,7 @@ namespace Interactables.Actions.Night
     public sealed class InteractableAdvanceTime : Interactable
     {
         [SerializeField] private string interactionID = "";
-        [SerializeField] private int timeToAdd = 0;
+        [SerializeField] private int timeToAdd;
         
         public override void Interact() => NightManager.Instance.RegisterInteraction(interactionID, timeToAdd);
     }

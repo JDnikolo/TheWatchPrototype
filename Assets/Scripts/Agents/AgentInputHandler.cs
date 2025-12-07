@@ -1,4 +1,5 @@
 ﻿using Agents.Behaviors;
+using Callbacks.Agent;
 using Character;
 using Managers.Persistent;
 using Runtime.FrameUpdate;
@@ -8,7 +9,7 @@ using Utilities;
 namespace Agents
 {
 	[AddComponentMenu("Agents/Agent Input Handler")]
-	public sealed class AgentInputHandler : MonoBehaviour, IFrameUpdatable
+	public sealed class AgentInputHandler : BaseBehaviour, IFrameUpdatable
 	{
 		[SerializeField] private new Rigidbody rigidbody;
 		[SerializeField] private CharacterVelocityData movementData;

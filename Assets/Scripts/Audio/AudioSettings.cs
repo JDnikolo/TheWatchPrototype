@@ -2,7 +2,7 @@
 
 namespace Audio
 {
-	public abstract class AudioSettings : ScriptableObject
+	public abstract class AudioSettings : BaseObject
 	{
 		[SerializeField] private bool bypassEffects;
 		[SerializeField] private bool bypassListenerEffects;
@@ -22,12 +22,6 @@ namespace Audio
 		
 		public virtual void Apply(AudioSource source, AudioGroup group)
 		{
-			if (!group)
-			{
-				Debug.LogError("Audio group is null!", this);
-				return;
-			}
-			
 			source.bypassEffects = bypassEffects;
 			source.bypassListenerEffects = bypassListenerEffects;
 			source.bypassReverbZones = bypassReverbZones;

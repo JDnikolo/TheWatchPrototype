@@ -129,7 +129,6 @@ GameObject:
   - component: {fileID: 9120816270673917013}
   - component: {fileID: 4737973430359652130}
   - component: {fileID: 293841167054065591}
-  - component: {fileID: 5399027230631995057}
   - component: {fileID: 6420081311022372096}
   - component: {fileID: 8901108874504745145}
   - component: {fileID: 7477600352077035723}
@@ -218,40 +217,6 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   FollowOffset: {x: 0, y: 0.29, z: 0}
---- !u!114 &5399027230631995057
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7015050091101414354}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62d54399b04b4fa48a73e121d4937dd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachinePanTilt
-  ReferenceFrame: 0
-  RecenterTarget: 0
-  PanAxis:
-    Value: 0
-    Center: 0
-    Range: {x: 0, y: 360}
-    Wrap: 1
-    Recentering:
-      Enabled: 0
-      Wait: 1
-      Time: 2
-    Restrictions: 0
-  TiltAxis:
-    Value: 0
-    Center: 0
-    Range: {x: -85, y: 85}
-    Wrap: 0
-    Recentering:
-      Enabled: 0
-      Wait: 1
-      Time: 2
-    Restrictions: 0
 --- !u!114 &6420081311022372096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,7 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd50aa6ea244c609b16fa597b1ef283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 4737973430359652130}
+  target: {fileID: 293841167054065591}
   enable: 0
 --- !u!114 &7477600352077035723
 MonoBehaviour:
@@ -292,5 +257,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd50aa6ea244c609b16fa597b1ef283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 4737973430359652130}
+  target: {fileID: 293841167054065591}
   enable: 1

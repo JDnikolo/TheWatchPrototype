@@ -5,11 +5,11 @@ using UnityEngine.UI;
 namespace UI.Journal
 {
     [AddComponentMenu("UI/Journal/Journal Entry")]
-    public sealed class JournalEntry : MonoBehaviour
+    public sealed class JournalEntry : BaseBehaviour
     {
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI quoteText;
-        [SerializeReference] private ContentSizeFitter contentSizeFitter;
+        [SerializeField] private ContentSizeFitter contentSizeFitter;
         
         public void SetNameText(string speakerName)
         {

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Character
 {
 	[CreateAssetMenu(fileName = "Profile", menuName = "Character/Character Profile Data")]
-	public sealed class CharacterProfileData : ScriptableObject
+	public sealed class CharacterProfileData : BaseObject
 	{
 		[SerializeField] private LogicString characterName;
 		

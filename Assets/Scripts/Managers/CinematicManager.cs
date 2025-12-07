@@ -35,34 +35,18 @@ namespace Managers
         }
 
         public void CutToDollyCamera(CinemachineCamera dollyCamera, CinemachineSplineCart dollyCart,
-            float cartProgress = 0f,
-            Transform lookTarget = null, float cutDuration = -1f, Interactable onCutEnd = null,
-            bool deactivateOnCutEnd = true)
+            float cartProgress = 0f, Transform lookTarget = null, float cutDuration = -1f, 
+            Interactable onCutEnd = null, bool deactivateOnCutEnd = true)
         {
             dollyCamera.enabled = true;
             dollyCart.enabled = true;
             dollyCamera.Follow = dollyCart.transform;
             dollyCart.SplinePosition = cartProgress > 0? cartProgress:dollyCart.SplinePosition;
-            if (lookTarget)
-            {
-                dollyCamera.LookAt = lookTarget;
-            }
-            else
-            {
-                dollyCamera.LookAt = null;
-            }
-
+            if (lookTarget) dollyCamera.LookAt = lookTarget;
+            else dollyCamera.LookAt = null;
             if (cutDuration < 0) return;
-
-            var newCinematic = new CutToDollyHandler(
-                dollyCamera,
-                cutDuration,
-                onCutEnd,
-                deactivateOnCutEnd
-            );
-
+            var newCinematic = new CutToDollyHandler(dollyCamera, cutDuration, onCutEnd, deactivateOnCutEnd);
             m_activeCinematicHandlers.Add(newCinematic);
-
             m_updatable.SetUpdating(true, this);
         }
 
@@ -77,15 +61,8 @@ namespace Managers
                 return;
             }
 
-            var newCinematic = new FocusToTargetHandler(
-                camera,
-                lookTarget,
-                duration,
-                onMovementEnd
-            );
-
+            var newCinematic = new FocusToTargetHandler(camera, lookTarget, duration, onMovementEnd);
             m_activeCinematicHandlers.Add(newCinematic);
-
             m_updatable.SetUpdating(true, this);
 
         }

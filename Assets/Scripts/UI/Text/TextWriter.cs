@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace UI.Text
+﻿namespace UI.Text
 {
-	public abstract class TextWriter : MonoBehaviour, ITextWriter
+	public abstract class TextWriter : BaseBehaviour, ITextWriter
 	{
 		public abstract void WriteText(string text);
 	}

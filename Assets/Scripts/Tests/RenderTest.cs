@@ -4,7 +4,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace Tests
 {
-	public sealed class RenderTest : MonoBehaviour
+	public sealed class RenderTest : BaseBehaviour
 	{
 		[SerializeField] private RenderQualityEnum renderQuality;
 		[SerializeField] private UniversalRenderPipelineAsset target;

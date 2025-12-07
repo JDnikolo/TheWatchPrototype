@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Callbacks.Dialogue;
+using UnityEngine;
 
 namespace Localization.Dialogue
 {
-	public abstract class DialogueOptionCondition : ScriptableObject, IDialogueCondition
+	public abstract class DialogueOptionCondition : BaseObject, IDialogueCondition
 	{
 		[SerializeField] private bool showIfDisabled;
 		

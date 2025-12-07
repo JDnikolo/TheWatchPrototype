@@ -12,15 +12,7 @@ namespace Interactables.Actions.Audio
         [SerializeField] private float fadeOutTime = -1f;
         [SerializeField] private bool delayedFade;
         
-        public override void Interact()
-        {
-            if (!target)
-            {
-                Debug.LogError("Audio snapshot is null!", this);
-                return;
-            }
-            
+        public override void Interact() => 
             AudioManager.Instance.SetSnapshot(target, delayedFade, fadeInTime, fadeOutTime);
-        }
     }
 }

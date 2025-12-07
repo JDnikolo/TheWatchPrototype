@@ -47,7 +47,7 @@ namespace Utilities
 			if (string.IsNullOrEmpty(name)) EditorGUILayout.ObjectField(null, typeof(Component), false);
 			EditorGUILayout.ObjectField(name, null, typeof(Component), false);
 		}
-		
+
 		/// <summary>
 		/// Displays an object field if object, or the type name/null as label.
 		/// </summary>
@@ -126,7 +126,7 @@ namespace Utilities
 			}
 		}
 
-		public static void DisplayCollection<T>(this ICollection<T> value, 
+		public static void DisplayCollection<T>(this ICollection<T> value,
 			string name, bool displayNull = true, Func<T, bool> customFilter = null)
 		{
 			if (value == null)
@@ -134,17 +134,17 @@ namespace Utilities
 				if (displayNull) DisplayNullObject(name);
 				return;
 			}
-			
+
 			if (!string.IsNullOrEmpty(name)) EditorGUILayout.LabelField(name);
 			if (value.Count < 1) return;
 			EditorGUI.indentLevel += 1;
 			foreach (var element in value)
-				if (customFilter == null || !customFilter.Invoke(element)) 
+				if (customFilter == null || !customFilter.Invoke(element))
 					element.Display(null);
 			EditorGUI.indentLevel -= 1;
 		}
-		
-		public static void DisplayReadOnlyCollection<T>(this IReadOnlyCollection<T> value, 
+
+		public static void DisplayReadOnlyCollection<T>(this IReadOnlyCollection<T> value,
 			string name, bool displayNull = true, Func<T, bool> customFilter = null)
 		{
 			if (value == null)
@@ -152,17 +152,17 @@ namespace Utilities
 				if (displayNull) DisplayNullObject(name);
 				return;
 			}
-			
+
 			if (!string.IsNullOrEmpty(name)) EditorGUILayout.LabelField(name);
 			if (value.Count < 1) return;
 			EditorGUI.indentLevel += 1;
 			foreach (var element in value)
-				if (customFilter == null || !customFilter.Invoke(element)) 
+				if (customFilter == null || !customFilter.Invoke(element))
 					element.Display(null);
 			EditorGUI.indentLevel -= 1;
 		}
-		
-		public static void DisplayDictionary<TKey, TValue>(this IDictionary<TKey, TValue> value, 
+
+		public static void DisplayDictionary<TKey, TValue>(this IDictionary<TKey, TValue> value,
 			string name, bool displayNull = true, Func<TKey, TValue, bool> customFilter = null)
 		{
 			if (value == null)
@@ -170,7 +170,7 @@ namespace Utilities
 				if (displayNull) DisplayNullObject(name);
 				return;
 			}
-			
+
 			if (!string.IsNullOrEmpty(name)) EditorGUILayout.LabelField(name);
 			if (value.Count < 1) return;
 			EditorGUI.indentLevel += 1;
@@ -182,14 +182,14 @@ namespace Utilities
 					key.Display(null);
 					val.Display(null);
 				}
-		
+
 				EditorGUILayout.EndHorizontal();
 			}
-			
+
 			EditorGUI.indentLevel -= 1;
 		}
-		
-		public static void DisplayReadOnlyDictionary<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> value, 
+
+		public static void DisplayReadOnlyDictionary<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> value,
 			string name, bool displayNull = true, Func<TKey, TValue, bool> customFilter = null)
 		{
 			if (value == null)
@@ -197,7 +197,7 @@ namespace Utilities
 				if (displayNull) DisplayNullObject(name);
 				return;
 			}
-			
+
 			if (!string.IsNullOrEmpty(name)) EditorGUILayout.LabelField(name);
 			if (value.Count < 1) return;
 			EditorGUI.indentLevel += 1;
@@ -209,10 +209,10 @@ namespace Utilities
 					key.Display(null);
 					val.Display(null);
 				}
-		
+
 				EditorGUILayout.EndHorizontal();
 			}
-			
+
 			EditorGUI.indentLevel -= 1;
 		}
 
@@ -223,7 +223,7 @@ namespace Utilities
 				action?.Invoke();
 				return;
 			}
-			
+
 			EditorGUILayout.LabelField(name);
 			EditorGUI.indentLevel++;
 			action?.Invoke();
@@ -233,13 +233,25 @@ namespace Utilities
 		public static void DirtyReplaceObject<T>(this Object target, ref T value, T newValue) where T : Object
 		{
 			if (newValue == value) return;
-			Debug.Log($"[{target.GetType()}] Replacing {value} with {newValue}", target);
+			Debug.Log($"[{target.GetType()}] Replacing {value.ToStringReference()} with {newValue.ToStringReference()}",
+				target);
 			value = newValue;
 			if (target) EditorUtility.SetDirty(target);
 		}
-		
-		public static void DirtyReplaceGeneric<T>(this Object target, ref T value, T newValue, 
-			IEqualityComparer<T> comparer = null)
+
+		public static void DirtyReplaceReference<T>(this Object target, ref T value, T newValue,
+			IEqualityComparer<T> comparer = null) where T : class
+		{
+			comparer ??= EqualityComparer<T>.Default;
+			if (comparer.Equals(value, newValue)) return;
+			Debug.Log($"[{target.GetType()}] Replacing {value.ToStringReference()} with {newValue.ToStringReference()}",
+				target);
+			value = newValue;
+			if (target) EditorUtility.SetDirty(target);
+		}
+
+		public static void DirtyReplaceValue<T>(this Object target, ref T value, T newValue,
+			IEqualityComparer<T> comparer = null) where T : struct
 		{
 			comparer ??= EqualityComparer<T>.Default;
 			if (comparer.Equals(value, newValue)) return;
@@ -247,12 +259,24 @@ namespace Utilities
 			value = newValue;
 			if (target) EditorUtility.SetDirty(target);
 		}
+
+		public static void DirtyReplaceNullable<T>(this Object target, ref T? value, T? newValue,
+			IEqualityComparer<T?> comparer = null) where T : struct
+		{
+			comparer ??= EqualityComparer<T?>.Default;
+			if (comparer.Equals(value, newValue)) return;
+			Debug.Log($"[{target.GetType()}] Replacing {value.ToStringNullable()} with {newValue.ToStringNullable()}",
+				target);
+			value = newValue;
+			if (target) EditorUtility.SetDirty(target);
+		}
+
 		public static void UpdateNameTo(this Component instance, Object target)
 		{
 			if (!target || EditorSceneManager.IsPreviewSceneObject(instance)) return;
 			UpdateNameTo(instance, target.name);
 		}
-		
+
 		public static void UpdateNameTo(this Component instance, string name)
 		{
 			if (EditorSceneManager.IsPreviewSceneObject(instance)) return;

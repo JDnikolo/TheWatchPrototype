@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 namespace UI.Speaker
 {
 	[AddComponentMenu("UI/Speaker/Speaker Knob")]
-	public sealed class SpeakerKnob : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+	public sealed class SpeakerKnob : BaseBehaviour, IPointerEnterHandler, IPointerExitHandler
 	{
 		[SerializeField] private SpeakerWriter writer;
 		

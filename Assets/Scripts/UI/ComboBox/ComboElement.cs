@@ -1,7 +1,6 @@
 ﻿using Attributes;
 using Callbacks.Layout;
 using Managers.Persistent;
-using Runtime.Automation;
 using UI.Elements;
 using UI.Text;
 using UnityEngine;
@@ -13,7 +12,7 @@ namespace UI.ComboBox
 	[AddComponentMenu("UI/Elements/ComboBox/ComboBox Element")]
 	public sealed class ComboElement : ButtonBase, ILayoutInputCallback, IComboHook
 	{
-		[SerializeField] [DisableInInspector] private ComboPanel comboParent;
+		[CanBeNullInPrefab, SerializeField] [DisableInInspector] private ComboPanel comboParent;
 		[SerializeField] private string primaryActionName = "Primary";
 
 		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))]

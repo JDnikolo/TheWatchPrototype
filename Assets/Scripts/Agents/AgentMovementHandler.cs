@@ -6,7 +6,7 @@ using Utilities;
 namespace Agents
 {
 	[AddComponentMenu("Agents/Agent Movement Handler")]
-	public sealed class AgentMovementHandler : MonoBehaviour, IFixedUpdatable
+	public sealed class AgentMovementHandler : BaseBehaviour, IFixedUpdatable
 	{
 		[SerializeField] private AgentInputHandler inputHandler;
 

@@ -3,7 +3,7 @@ using Variables;
 
 namespace Interactables.Actions.Variables
 {
-    [AddComponentMenu("Interactables/Variables/Increase Number Variable")]
+    [AddComponentMenu("Interactables/Variables/Change Number Variable")]
     public sealed class InteractableNumberAdd : Interactable
     {
         [SerializeField] private NumberVariable variable;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Exceptions;
 using Runtime.Automation;
 using UnityEditor;
 using UnityEngine;
@@ -257,7 +258,7 @@ namespace UI.Layout.Elements
 		public Mode ListMode
 		{
 			get => mode;
-			set => this.DirtyReplaceGeneric(ref mode, value);
+			set => this.DirtyReplaceValue(ref mode, value);
 		}
 
 		public LinkedList<ILayoutElement> Elements => m_elements;

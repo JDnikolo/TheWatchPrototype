@@ -5,7 +5,7 @@ namespace Interactables.Actions.Animation
     [AddComponentMenu("Interactables/Animation/Set Root Motion")]
     public class InteractableSetRootMotion : Interactable
     {
-        [SerializeReference] private Animator targetAnimator;
+        [SerializeField] private Animator targetAnimator;
         [SerializeField] private bool rootMotionEnabled = true;
         [SerializeField] private bool resetPosition = true;
         

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 namespace UI
 {
 	[AddComponentMenu("UI/Drag Receptor")]
-	public sealed class DragReceptor : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+	public sealed class DragReceptor : BaseBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 	{
 		private readonly HashSet<IBeginDragCallback> m_beginDragCallbacks = new();
 		private readonly HashSet<IEndDragCallback> m_endDragCallbacks = new();

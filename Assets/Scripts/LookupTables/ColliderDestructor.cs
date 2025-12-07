@@ -1,11 +1,10 @@
 using Attributes;
-using Runtime.Automation;
 using UnityEngine;
 
 namespace LookupTables
 {
     [AddComponentMenu("Lookup Tables/Collider Destructor")]
-    public sealed class ColliderDestructor : MonoBehaviour
+    public sealed class ColliderDestructor : BaseBehaviour
     {
         [SerializeField] [AutoAssigned(AssignMode.Self, typeof(Collider))] 
         private Collider target;

@@ -7,7 +7,7 @@ using Image = UnityEngine.UI.Image;
 namespace UI.Fade
 {
 	[AddComponentMenu("UI/Fade/Fade Screen")]
-	public sealed class FadeScreen : MonoBehaviour, IFrameUpdatable
+	public sealed class FadeScreen : BaseBehaviour, IFrameUpdatable
 	{
 		[SerializeField] private Image image;
 

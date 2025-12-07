@@ -1,5 +1,7 @@
 using Interactables.Triggers;
 using Runtime.Automation;
+using UnityEditor;
+using Utilities;
 
 namespace LookupTables
 {
@@ -12,13 +14,10 @@ namespace LookupTables
 #if UNITY_EDITOR
         public void DisplayInEditor()
         {
-            throw new System.NotImplementedException();
+            EditorGUILayout.ObjectField(ShoutTrigger, typeof(InteractableShoutTrigger), false);
         }
 
-        public void DisplayInEditor(string name)
-        {
-            throw new System.NotImplementedException();
-        }
+        public void DisplayInEditor(string name) => name.DisplayIndented(DisplayInEditor);
 #endif
     }
 }

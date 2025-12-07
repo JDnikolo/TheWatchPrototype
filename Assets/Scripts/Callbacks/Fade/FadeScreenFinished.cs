@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace Callbacks.Fade
+﻿namespace Callbacks.Fade
 {
-	public abstract class FadeScreenFinished : MonoBehaviour, IFadeScreenFinished
+	public abstract class FadeScreenFinished : BaseBehaviour, IFadeScreenFinished
 	{
 		public abstract void OnFadeScreenFinished(bool fadeDirection);
 	}

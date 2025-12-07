@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Agents
 {
 	[AddComponentMenu("Agents/Agent Rotation Handler")]
-	public sealed class AgentRotationHandler : MonoBehaviour, IFixedUpdatable
+	public sealed class AgentRotationHandler : BaseBehaviour, IFixedUpdatable
 	{
 		[SerializeField] private AgentInputHandler inputHandler;
 

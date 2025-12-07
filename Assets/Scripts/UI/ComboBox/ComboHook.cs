@@ -3,7 +3,7 @@
 namespace UI.ComboBox
 {
 	[AddComponentMenu("UI/Elements/ComboBox/ComboBox Click Interceptor")]
-	public sealed class ComboHook : MonoBehaviour, IComboHook
+	public sealed class ComboHook : BaseBehaviour, IComboHook
 	{
 	}
 }

@@ -3,7 +3,6 @@ using Callbacks.ComboBox;
 using Callbacks.Layout;
 using Managers;
 using Managers.Persistent;
-using Runtime.Automation;
 using UI.ComboBox;
 using UI.Text;
 using UnityEngine;
@@ -18,10 +17,10 @@ namespace UI.Elements
 		[SerializeField] private string primaryActionName = "Primary";
 		[SerializeField] private string escapeActionName = "Escape";
 
-		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))]
+		[SerializeField, AutoAssigned(AssignMode.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 
-		[SerializeField] [AutoAssigned(AssignMode.Child, typeof(ComboDataProvider))]
+		[CanBeNullInPrefab, SerializeField, AutoAssigned(AssignMode.Parent, typeof(ComboDataProvider))]
 		private ComboDataProvider dataProvider;
 
 		private IComboBoxReceiver m_receiver;

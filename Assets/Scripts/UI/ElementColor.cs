@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace UI
 {
 	[CreateAssetMenu(fileName = "Color", menuName = "UI/Element Color")]
-	public sealed class ElementColor : ScriptableObject
+	public sealed class ElementColor : BaseObject
 	{
 		[SerializeField] private Color enabledColor;
 		[SerializeField] private Color disabledColor;

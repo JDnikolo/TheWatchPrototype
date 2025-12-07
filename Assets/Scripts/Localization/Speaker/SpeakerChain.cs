@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using Attributes;
+using UnityEngine;
 
 namespace Localization.Speaker
 {
 	[CreateAssetMenu(fileName = "SpeakerChain", menuName = "Localization/Speaker/Speaker Chain")]
-	public class SpeakerChain : ScriptableObject
+	public sealed class SpeakerChain : BaseObject
 	{
-		[SerializeField] private SpeakerObject[] textAssets;
+		[MinCount(2)] [SerializeField] private SpeakerObject[] textAssets;
 		
 		public SpeakerObject[] TextAssets => textAssets;
 	}

@@ -1,6 +1,5 @@
 ﻿using Attributes;
 using LookupTables;
-using Runtime.Automation;
 using UnityEngine;
 
 namespace Interactables.Triggers

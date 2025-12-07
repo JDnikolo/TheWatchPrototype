@@ -3,7 +3,7 @@ using UnityEngine.Splines;
 
 namespace Tests
 {
-	public sealed class SplineTest : MonoBehaviour
+	public sealed class SplineTest : BaseBehaviour
 	{
 		[SerializeField] private SplineContainer splineContainer;
 		[SerializeField] private Transform target;

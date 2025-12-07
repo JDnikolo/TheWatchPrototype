@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace Logic.String
+﻿namespace Logic.String
 {
-	public abstract class LogicString : ScriptableObject
+	public abstract class LogicString : BaseObject
 	{
 		public abstract string Evaluate();
 	}

@@ -5,10 +5,11 @@ using UnityEngine;
 namespace Highlighting
 {
 	[AddComponentMenu("Highlighting/Managed Highlightable")]
-	public class ManagedHighlightable : Highlightable, IManagedHighlightable
+	public sealed class ManagedHighlightable : Highlightable, IManagedHighlightable
 	{
 		[SerializeField] private Highlightable highlightable;
-		[SerializeField] protected new Collider collider;
+		//TODO Replace this with a rigidbody
+		[SerializeField] private new Collider collider;
 		[SerializeField] private float minHighlightDistance;
 		[SerializeField] private float maxHighlightDistance = 3f;
 

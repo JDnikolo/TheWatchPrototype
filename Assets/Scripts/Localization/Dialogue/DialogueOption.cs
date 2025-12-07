@@ -1,13 +1,14 @@
-﻿using Localization.Speaker;
+﻿using Attributes;
+using Localization.Speaker;
 using UnityEngine;
 
 namespace Localization.Dialogue
 {
 	[CreateAssetMenu(fileName = "DialogueOption", menuName = "Localization/Dialogue/Dialogue option")]
-	public class DialogueOption : ScriptableObject
+	public sealed class DialogueOption : BaseObject
 	{
 		[SerializeField] private SpeakerObject textToDisplay;
-		[SerializeField] private DialogueOptionCondition condition;
+		[CanBeNull] [SerializeField] private DialogueOptionCondition condition;
 		
 		public SpeakerObject TextToDisplay => textToDisplay;
 

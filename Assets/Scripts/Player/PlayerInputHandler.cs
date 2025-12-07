@@ -1,5 +1,4 @@
-﻿using System;
-using Input;
+﻿using Input;
 using Managers.Persistent;
 using Runtime.FrameUpdate;
 using UnityEngine;
@@ -7,7 +6,7 @@ using UnityEngine;
 namespace Player
 {
 	[AddComponentMenu("Player/Player Input Handler")]
-	public sealed class PlayerInputHandler : MonoBehaviour, IFrameUpdatable
+	public sealed class PlayerInputHandler : BaseBehaviour, IFrameUpdatable
 	{
 		[SerializeField] private new Rigidbody rigidbody;
 		[SerializeField] private string moveAxisName = "Move";

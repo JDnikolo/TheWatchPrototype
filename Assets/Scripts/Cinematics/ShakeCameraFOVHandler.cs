@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Cinematics
 {
-	internal sealed class ShakeCameraFOVHandler : CinematicMovementHandlerBase
+	public sealed class ShakeCameraFOVHandler : CinematicMovementHandlerBase
 	{
 		private CinemachineCamera m_cameraToMove;
 		private float m_initialFOV;

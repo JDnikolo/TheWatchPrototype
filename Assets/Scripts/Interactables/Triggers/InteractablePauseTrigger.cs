@@ -1,15 +1,16 @@
-﻿using Callbacks.Pausing;
+﻿using Attributes;
+using Callbacks.Pausing;
 using Managers;
 using UnityEngine;
 
 namespace Interactables.Triggers
 {
 	[AddComponentMenu("Interactables/Triggers/On Pause-Changed Trigger")]
-	public sealed class InteractablePauseTrigger : MonoBehaviour, IPauseCallback
+	public sealed class InteractablePauseTrigger : BaseBehaviour, IPauseCallback
 	{
-		[SerializeField] private Interactable onPaused;
-		[SerializeField] private Interactable onUnpaused;
-		
+		[CanBeNull] [SerializeField] private Interactable onPaused;
+		[CanBeNull] [SerializeField] private Interactable onUnpaused;
+
 		public void OnPauseChanged(bool paused)
 		{
 			if (paused) onPaused?.Interact();

@@ -1,4 +1,6 @@
 ﻿using System;
+using Attributes;
+using Callbacks.Agent;
 using Navigation;
 using UnityEngine;
 using Utilities;
@@ -9,7 +11,7 @@ namespace Agents.Behaviors
 	public sealed class MovementPointToPointBehavior : MovementBehavior, 
 		IMovementBehaviorUpdate, IMovementBehaviorSelected
 	{
-		[SerializeField] private NavigationPath navigationPath;
+		[CanBeNullInPrefab, SerializeField] private NavigationPath navigationPath;
 		[SerializeField] private float switchDistance;
 
 		private Vector2 m_target;

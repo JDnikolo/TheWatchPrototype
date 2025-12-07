@@ -1,9 +1,8 @@
 ﻿using Attributes;
+using Callbacks.Localization;
 using Callbacks.Prewarm;
-using Localization;
 using Localization.Text;
 using Managers.Persistent;
-using Runtime.Automation;
 using UI.Text;
 using UnityEngine;
 using Utilities;
@@ -11,12 +10,13 @@ using Utilities;
 namespace UI.Elements
 {
 	[AddComponentMenu("UI/Elements/Label")]
-	public sealed class Label : MonoBehaviour, IPrewarm, ILocalizationUpdatable
+	public sealed class Label : BaseBehaviour, IPrewarm, ILocalizationUpdatable
 	{
-		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))] 
+		[SerializeField, AutoAssigned(AssignMode.Self, typeof(TextWriter))] 
 		private TextWriter textWriter;
-		
-		[SerializeField] [HideInInspector] private TextObject textToDisplay;
+
+		[CanBeNullInPrefab, SerializeField, HideInInspector]
+		private TextObject textToDisplay;
 
 		private TextObject m_textToDisplay;
 		private bool m_firstDone;

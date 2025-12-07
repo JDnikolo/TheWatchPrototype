@@ -4,13 +4,14 @@ using UnityEngine;
 
 namespace Highlighting
 {
-    public class HighlightableAnimation : Highlightable
+    [AddComponentMenu("Highlighting/Animation Highlightable")]
+    public sealed class HighlightableAnimation : Highlightable
     {
-        [SerializeField] private PersonAnimationController animationController = null;
+        [SerializeField] private PersonAnimationController animationController;
         [SerializeField] private string animationName = "Salute";
         [SerializeField] private float animationDuration = -1.0f;
-        [SerializeField] private Interactable onAnimationEnd = null;
-        [SerializeField] private bool oneShot = false;
+        [SerializeField] private Interactable onAnimationEnd;
+        [SerializeField] private bool oneShot;
         
         protected override void HighlightInternal(bool enable)
         {

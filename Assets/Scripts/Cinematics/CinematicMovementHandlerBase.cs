@@ -2,7 +2,7 @@
 
 namespace Cinematics
 {
-	internal abstract class CinematicMovementHandlerBase
+	public abstract class CinematicMovementHandlerBase
 	{
 		public float MovementDuration { get; protected set; }
 		

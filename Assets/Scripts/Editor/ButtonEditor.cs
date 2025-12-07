@@ -30,6 +30,7 @@ namespace Editor
 		protected override void DisplayBeforeHidden()
 		{
 			base.DisplayBeforeHidden();
+			EditorGUILayout.PropertyField(m_anyClick);
 			EditorGUILayout.PropertyField(m_onPrimaryClick);
 			if (!m_anyClick.boolValue) EditorGUILayout.PropertyField(m_onSecondaryClick);
 			else if (m_onSecondaryClick.objectReferenceValue) m_onSecondaryClick.objectReferenceValue = null;

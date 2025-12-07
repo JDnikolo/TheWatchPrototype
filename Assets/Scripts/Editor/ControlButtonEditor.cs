@@ -7,6 +7,7 @@ namespace Editor
 	[CustomEditor(typeof(ControlButton))]
 	public sealed class ControlButtonEditor : ButtonBaseEditor
 	{
+		private SerializedProperty m_parent;
 		private SerializedProperty m_label;
 		private SerializedProperty m_text;
 		private SerializedProperty m_target;
@@ -15,6 +16,7 @@ namespace Editor
 		protected override void OnEnable()
 		{
 			base.OnEnable();
+			m_parent = serializedObject.FindProperty("parent");
 			m_label = serializedObject.FindProperty("label");
 			m_text = serializedObject.FindProperty("text");
 			m_target = serializedObject.FindProperty("target");
@@ -24,6 +26,7 @@ namespace Editor
 		protected override void OnDisable()
 		{
 			base.OnDisable();
+			m_parent = null;
 			m_label = null;
 			m_text = null;
 			m_target = null;
@@ -60,7 +63,11 @@ namespace Editor
 		protected override void DisplayHidden()
 		{
 			base.DisplayHidden();
-			if (m_hidden) DisplayFields();
+			if (m_hidden)
+			{
+				EditorGUILayout.PropertyField(m_parent);
+				DisplayFields();
+			}
 		}
 
 		private void DisplayFields()

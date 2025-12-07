@@ -1,4 +1,5 @@
-﻿using Audio;
+﻿using Attributes;
+using Audio;
 using Localization.Speaker;
 using Managers.Persistent;
 using Runtime;
@@ -15,7 +16,7 @@ namespace Managers
     [AddComponentMenu("Managers/Journal Manager")]
     public sealed partial class JournalManager : Singleton<JournalManager>, IFrameUpdatable
     {
-        [SerializeField] private JournalPanel journalPanel;
+        [CanBeNullInPrefab, SerializeField] private JournalPanel journalPanel;
         [SerializeField] private string journalActionName = "Journal";
         [SerializeField] private AudioSnapshot journalSnapshot;
         

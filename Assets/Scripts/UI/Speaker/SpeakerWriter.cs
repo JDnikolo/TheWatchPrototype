@@ -4,7 +4,6 @@ using Audio;
 using Callbacks.Speaker;
 using Managers;
 using Managers.Persistent;
-using Runtime.Automation;
 using Runtime.FrameUpdate;
 using TMPro;
 using UI.Text;
@@ -15,7 +14,7 @@ using Utilities;
 namespace UI.Speaker
 {
 	[AddComponentMenu("UI/Speaker/Speaker Writer")]
-	public sealed class SpeakerWriter : MonoBehaviour, IFrameUpdatable
+	public sealed class SpeakerWriter : BaseBehaviour, IFrameUpdatable
 	{
 		[Header("Linked behaviors")] [SerializeField]
 		private TextMeshProUGUI textWriter;

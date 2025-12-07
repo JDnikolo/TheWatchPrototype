@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Attributes;
+using UnityEngine;
 using Variables;
 
 namespace Logic.Boolean
@@ -6,7 +7,7 @@ namespace Logic.Boolean
 	public abstract class LogicBooleanIf<T> : LogicBoolean
 	{
 		[SerializeField] private VariableObject<T> variable;
-		[SerializeField] private T targetValue;
+		[CanBeNull] [SerializeField] private T targetValue;
 
 		public sealed override bool Evaluate() => Equals(variable.Value, targetValue);
 

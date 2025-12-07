@@ -1,4 +1,5 @@
-﻿using Audio;
+﻿using Attributes;
+using Audio;
 using Managers.Persistent;
 using Runtime;
 using UI.Dialogue;
@@ -13,18 +14,25 @@ namespace Managers
 	[AddComponentMenu("Managers/UI Manager")]
 	public sealed class UIManager : Singleton<UIManager>
 	{
-		[Space] [SerializeField] private RectTransform canvasRect;
-		[SerializeField] private GraphicRaycaster raycaster;
+		[Header("Canvas")] 
+		// ReSharper disable once MissingLinebreak
+		[CanBeNullInPrefab, SerializeField] private RectTransform canvasRect;
+		[CanBeNullInPrefab, SerializeField] private GraphicRaycaster raycaster;
 
-		[Space] [SerializeField] private FadeScreen fadeScreen;
-		[SerializeField] private float fadeDuration = 1f;
+		[Header("Fade")] 
+		// ReSharper disable once MissingLinebreak
+		[CanBeNullInPrefab, SerializeField] private FadeScreen fadeScreen;
+		[CanBeNullInPrefab, SerializeField] private float fadeDuration = 1f;
 
-		[Space] [SerializeField] private SpeakerWriter textWriter;
-		[SerializeField] private DialogueWriter dialogueWriter;
+		[Header("Game UI")] 
+		// ReSharper disable once MissingLinebreak
+		[CanBeNull, SerializeField] private SpeakerWriter textWriter;
+		[CanBeNull, SerializeField] private DialogueWriter dialogueWriter;
 
-		[Space] [SerializeField] private LayoutElement controlPanel;
-
-		[SerializeField] private AudioSnapshot speakerSnapshot;
+		[Header("Misc")] 
+		// ReSharper disable once MissingLinebreak
+		[CanBeNull, SerializeField] private LayoutElement controlPanel;
+		[CanBeNull, SerializeField] private AudioSnapshot speakerSnapshot;
 		
 		private AudioManager.State m_state;
 		private bool m_stateSet;

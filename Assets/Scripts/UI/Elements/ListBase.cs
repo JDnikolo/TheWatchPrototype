@@ -4,7 +4,7 @@ using Utilities;
 
 namespace UI.Elements
 {
-	public abstract class ListBase : MonoBehaviour
+	public abstract class ListBase : BaseBehaviour
 	{
 		[SerializeField] [HideInInspector] private List layoutParent;
 

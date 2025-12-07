@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 namespace UI
 {
 	[AddComponentMenu("UI/Pointer Receptor")]
-	public sealed class PointerReceptor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
+	public sealed class PointerReceptor : BaseBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 		IPointerDownHandler, IPointerUpHandler, IPointerClickHandler
 	{
 		private HashSet<IPointerEnterCallback> m_enterCallback = new();

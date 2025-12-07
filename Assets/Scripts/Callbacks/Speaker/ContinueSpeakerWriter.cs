@@ -9,9 +9,6 @@ namespace Callbacks.Speaker
 	{
 		[SerializeField] private Interactable interactable;
 		
-		public override void OnTextWriterFinished(SpeakerWriter textWriter)
-		{
-			if (interactable) interactable.Interact();
-		}
+		public override void OnTextWriterFinished(SpeakerWriter textWriter) => interactable.Interact();
 	}
 }

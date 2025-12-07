@@ -25,10 +25,10 @@ namespace Highlighting
 						m_colliderGrower = new CapsuleGrower(capsuleCollider);
 						break;
 					default:
-						throw new NotImplementedException($"{collider.GetType()} has no grower implementation.");
+						throw new InvalidCastException($"{collider.GetType()} has no grower implementation.");
 				}
 			}
-			
+
 			else if (enabled) m_colliderGrower.GrowCollider(colliderGrowFactor);
 			else m_colliderGrower.ShrinkCollider();
 		}
