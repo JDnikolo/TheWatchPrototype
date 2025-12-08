@@ -16,9 +16,10 @@ namespace Animation
 
         public override void SetBlendValues()
         {
-            var velocity = rootRigidbody.velocity / rootRigidbody.maxLinearVelocity;
-            var forwardSpeed = Vector3.Dot(velocity, lookDirectionTransform.forward);
-            var rightSpeed = Vector3.Dot(velocity, lookDirectionTransform.right);
+            var velocity = rootRigidbody.velocity;
+            var factor  = velocity.magnitude/rootRigidbody.maxLinearVelocity;
+            var forwardSpeed = Vector3.Dot(velocity, lookDirectionTransform.forward) * factor;
+            var rightSpeed = Vector3.Dot(velocity, lookDirectionTransform.right) * factor;
             Animator.SetFloat(m_blendForward, forwardSpeed);
             Animator.SetFloat(m_blendRight, rightSpeed);
         }
