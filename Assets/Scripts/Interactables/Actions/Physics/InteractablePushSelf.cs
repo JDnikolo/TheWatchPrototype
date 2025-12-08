@@ -7,7 +7,7 @@ namespace Interactables.Actions.Physics
     public class InteractablePushSelfFromPlayer : Interactable
     {
         [SerializeField] private float force = 5;
-        [SerializeField][AutoAssigned(AssignMode.Parent, typeof(Rigidbody))] private Rigidbody selfRigidbody;
+        [SerializeField][AutoAssigned(AssignMode.Parent | AssignMode.Self, typeof(Rigidbody))] private Rigidbody selfRigidbody;
         
         public override void Interact()
         {

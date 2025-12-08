@@ -7,6 +7,7 @@
 		Scared,
 		Talking,
 		Waving,
-		Angry
+		Angry,
+		Crouched,
 	}
 }

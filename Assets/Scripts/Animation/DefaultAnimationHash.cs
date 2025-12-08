@@ -9,5 +9,6 @@ namespace Animation
         public static readonly int Talking = Animator.StringToHash("Talking");
         public static readonly int Waving = Animator.StringToHash("Waving");
         public static readonly int Angry = Animator.StringToHash("Angry");
+        public static readonly int Crouched = Animator.StringToHash("Crouched");
     }
 }

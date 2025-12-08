@@ -21,6 +21,7 @@ namespace Interactables.Actions.Animation
                 DefaultAnimationsEnum.Talking => DefaultAnimationHash.Talking,
                 DefaultAnimationsEnum.Waving => DefaultAnimationHash.Waving,
                 DefaultAnimationsEnum.Angry => DefaultAnimationHash.Angry,
+                DefaultAnimationsEnum.Crouched => DefaultAnimationHash.Crouched,
                 _ => 0
             };
             if (animationHash == 0) return;
