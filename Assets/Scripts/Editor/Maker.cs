@@ -34,7 +34,8 @@ namespace Editor
 				gameObject.AddComponent<Rigidbody>();
 				gameObject.AddComponent<RigidBodyDestructor>();
 			}
-			
+
+			rigidBody.isKinematic = true;
 			var shoutReceiver = gameObject.AddComponent<InteractableShoutTrigger>();
 			shoutReceiver.SetCollider(collider);
 			var onShoutPush = gameObject.AddComponent<InteractablePushSelfFromPlayer>();
