@@ -2,7 +2,6 @@
 using Exceptions;
 using Input;
 using Runtime;
-using Runtime.FrameUpdate;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,8 +31,6 @@ namespace Managers.Persistent
 		public static InputBinding GamepadMask => InputBinding.MaskByGroup(Gamepad);
 		
 		protected override bool Override => false;
-
-		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.InputManager;
 
 		public InputBinding BindingMask
 		{
@@ -341,12 +338,11 @@ namespace Managers.Persistent
 			m_activeControls = 0;
 		}
 
-		public void OnFrameUpdate() => InputSystem.Update();
-		
 		public void ToggleCursor(bool enable)
 		{
 			if (m_cursorVisible == enable) return;
 			m_cursorVisible = enable;
+			m_updatable.SetUpdating(!m_cursorVisible);
 			if (enable)
 			{
 				Cursor.lockState = CursorLockMode.None;
