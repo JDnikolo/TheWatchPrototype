@@ -8,25 +8,23 @@ namespace Interactables.Actions.Animation
         [SerializeField] private Light lightComponent;
         [SerializeField] private MeshRenderer sphere;
 
-        private bool m_smoke = true;
+        private float m_intensity;
+        private bool m_toggled = true;
 
         public override void Interact()
         {
-            switch (m_smoke)
+            if (m_toggled)
             {
-                case true when lightComponent.intensity > 0:
-                    particles.Stop();
-                    lightComponent.intensity = 0;
-                    sphere.enabled = false;
-                    m_smoke = !m_smoke;
-                    break;
-                case false when lightComponent.intensity <= 0:
-                    particles.Play();
-                    lightComponent.intensity = 2;
-                    sphere.enabled = true;
-                    m_smoke = !m_smoke;
-                    break;
+                particles.Stop();
+                m_toggled = sphere.enabled = lightComponent.enabled = false;
+            }
+            else
+            {
+                particles.Play();
+                m_toggled = sphere.enabled = lightComponent.enabled = true;   
             }
         }
+
+        private void Start() => m_toggled = sphere.enabled;
     }
 }

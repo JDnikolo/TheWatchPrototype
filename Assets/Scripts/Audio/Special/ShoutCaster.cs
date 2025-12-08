@@ -33,14 +33,22 @@ namespace Audio.Special
         private Collider[] m_interactablesInner = new Collider[MaxInteractables];
         private Collider[] m_interactablesOuter = new Collider[MaxInteractables];
         private InputAction m_shoutAction;
+        private float m_shoutTimer;
 
         public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.Player;
 
         public void OnFrameUpdate()
         {
-            m_shoutAction ??= InputManager.Instance.PlayerMap.GetAction(shoutActionName);
-            if (m_shoutAction.WasPressedThisFrame() && !shoutPlayer.IsPlaying)
+            if (m_shoutTimer > 0f)
             {
+                m_shoutTimer -= Time.deltaTime;
+                return;
+            }
+            
+            m_shoutAction ??= InputManager.Instance.PlayerMap.GetAction(shoutActionName);
+            if (m_shoutAction.WasPressedThisFrame())
+            {
+                m_shoutTimer = 2f;
                 PlayShoutAudio();
                 PlayShoutAnimation();
                 var cameraTransform = PlayerManager.Instance.PlayerCamera.transform;
