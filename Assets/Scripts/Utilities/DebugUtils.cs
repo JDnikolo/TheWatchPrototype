@@ -18,9 +18,18 @@ namespace Utilities
 		public static bool TestAny(this OperationData operationData, string path, object value)
 		{
 			if (value == null) throw new InvalidOperationException();
+			var fields = new List<FieldInfo>();
 			var type = value.GetType();
-			var fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
-			for (var i = 0; i < fields.Length; i++)
+			fields.AddRange(GetFields(type));
+			var baseType = type.BaseType;
+			while (baseType != null && baseType != typeof(object) && 
+					baseType != typeof(BaseBehaviour) && baseType != typeof(BaseObject))
+			{
+				fields.AddRange(GetFields(baseType));
+				baseType = baseType.BaseType;
+			}
+
+			for (var i = 0; i < fields.Count; i++)
 			{
 				var field = fields[i];
 				var isSerialized = false;
@@ -54,11 +63,15 @@ namespace Utilities
 						return (bool) method.Invoke(value, new object[] {operationData, path, fieldData});
 				}
 
-				if (!operationData.TestType(path, fieldData, typeData, fieldType, field.GetValue(value))) return false;
+				//if (!operationData.TestType(path, fieldData, typeData, fieldType, field.GetValue(value))) return false;
+				operationData.TestType(path, fieldData, typeData, fieldType, field.GetValue(value));
 			}
 
 			return true;
 		}
+
+		private static FieldInfo[] GetFields(Type type) =>
+			type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
 
 		private static bool TestType(this OperationData operationData, string path,
 			FieldData fieldData, TypeData typeData, Type type, object value)
