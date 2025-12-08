@@ -1,5 +1,4 @@
-﻿using System;
-using Attributes;
+﻿using Attributes;
 using UnityEngine;
 
 namespace Interactables.Actions.Cinematic
@@ -9,7 +8,6 @@ namespace Interactables.Actions.Cinematic
     {
         [CanBeNullInPrefab, SerializeField] private Transform target;
         [CanBeNullInPrefab, SerializeField] private Transform targetPosition;
-        [Obsolete, SerializeField, DisableInInspector] private GameObject objectToMove;
 
         public override void Interact() => 
             target.SetPositionAndRotation(targetPosition.position, targetPosition.rotation);

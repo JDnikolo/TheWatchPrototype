@@ -7,6 +7,12 @@ namespace Interactables.Actions.Input
 	[AddComponentMenu("Interactables/Input/Enable Player Input")]
 	public sealed class InteractablePlayerInput : Interactable
 	{
-		public override void Interact() => InputManager.Instance.ForcePlayerInput();
+		[SerializeField] private bool disable;
+		
+		public override void Interact()
+		{
+			if (disable) InputManager.Instance.PlayerMap.Enabled = false;
+			InputManager.Instance.ForcePlayerInput();
+		}
 	}
 }

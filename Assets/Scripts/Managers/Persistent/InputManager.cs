@@ -16,9 +16,9 @@ namespace Managers.Persistent
 		[SerializeField] private string uiMapName = "UI";
 		[SerializeField] private string persistentGameName = "PersistentGame";
 		
-		private InputMap m_playerMap = new(ControlMap.Player);
-		private InputMap m_uiMap = new(ControlMap.UI);
-		private InputMap m_persistentGameMap = new(ControlMap.PersistentGame);
+		private InputMap m_playerMap = new(ControlMapEnum.Player);
+		private InputMap m_uiMap = new(ControlMapEnum.UI);
+		private InputMap m_persistentGameMap = new(ControlMapEnum.PersistentGame);
 		private ControlSchemeEnum m_controlScheme = ControlSchemeEnum.ENUM_LENGTH;
 		private Updatable m_updatable;
 		private int m_activeControls;
@@ -372,15 +372,15 @@ namespace Managers.Persistent
 			else map.ForceDisable();
 		}
 		
-		private InputActionMap GetMapByControl(ControlMap map)
+		private InputActionMap GetMapByControl(ControlMapEnum map)
 		{
 			switch (map)
 			{
-				case ControlMap.Player:
+				case ControlMapEnum.Player:
 					return actionAsset.FindActionMap(playerMapName);
-				case ControlMap.UI:
+				case ControlMapEnum.UI:
 					return actionAsset.FindActionMap(uiMapName);
-				case ControlMap.PersistentGame:
+				case ControlMapEnum.PersistentGame:
 					return actionAsset.FindActionMap(persistentGameName);
 				default:
 					throw new ArgumentOutOfRangeException(nameof(map), map, null);
