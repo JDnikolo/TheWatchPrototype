@@ -17,13 +17,22 @@ namespace Managers
 
 		private List<RaycastResult> m_results = new();
 		private LayoutManager.State m_state;
-
+		private ComboPanelInput? m_input;
+		
 		protected override bool Override => true;
 
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.ComboManager;
 
 		public void OnFrameUpdate()
 		{
+			if (m_input.HasValue)
+			{
+				if (InputManager.IsPointerPressed) return;
+				OpenComboPanelInternal(m_input.Value);
+				m_input = null;
+				return;
+			}
+			
 			if (!comboPanel.gameObject.activeSelf || !InputManager.WasPointerReleasedThisFrame) return;
 			var uiManager = UIManager.Instance;
 			uiManager.Raycaster.Raycast(
@@ -34,7 +43,14 @@ namespace Managers
 			m_results.Clear();
 		}
 		
-		public void OpenComboPanel(ComboPanelInput input)
+		public void OpenComboPanel(ComboPanelInput input, bool fromClick)
+		{
+			GameManager.Instance.AddFrameUpdate(this);
+			if (fromClick) m_input = input;
+			else OpenComboPanelInternal(input);
+		}
+
+		private void OpenComboPanelInternal(ComboPanelInput input)
 		{
 			comboPanel.OpenElements(input);
 			var layoutParent = comboPanel.LayoutParent;
@@ -44,8 +60,6 @@ namespace Managers
 				m_state = layoutManager.PauseState;
 				layoutManager.ForceSelect(layoutParent);
 			}
-			
-			GameManager.Instance.AddFrameUpdate(this);
 		}
 		
 		public void CloseComboPanel()

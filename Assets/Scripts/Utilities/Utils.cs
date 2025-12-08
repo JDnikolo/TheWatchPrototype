@@ -127,6 +127,10 @@ namespace Utilities
 			return component;
 		}
 
-		
+		public static IEnumerable<Transform> GetChildren(this Transform transform)
+		{
+			var childCount = transform.childCount;
+			for (var i = 0; i < childCount; i++) yield return transform.GetChild(i);
+		}
 	}
 }

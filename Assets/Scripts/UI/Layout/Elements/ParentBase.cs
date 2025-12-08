@@ -26,7 +26,8 @@ namespace UI.Layout.Elements
 		
 		protected virtual void OnValidate()
 		{
-			if (parent && parent is ILayoutParent && !transform.IsChildOf(parent.transform)) ManagedParent = null;
+			if (parent && (parent == this || parent is ILayoutParent && !transform.IsChildOf(parent.transform))) 
+				ManagedParent = null;
 		}
 		
 		public virtual void OnHierarchyChanged() => OnValidate();

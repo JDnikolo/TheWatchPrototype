@@ -44,20 +44,20 @@ namespace Utilities
 			}
 		}
 #if UNITY_EDITOR
-		public static bool IsDirectionBlocked(this LayoutBlockedDirections blockedDirections, Direction direction)
+		public static bool IsDirectionBlocked(this DirectionFlags blockedDirections, Direction direction)
 		{
 			switch (direction)
 			{
 				case UIConstants.Direction_None:
 					return false;
 				case Direction.Left:
-					return (blockedDirections & LayoutBlockedDirections.Left) != 0;
+					return (blockedDirections & DirectionFlags.Left) != 0;
 				case Direction.Right:
-					return (blockedDirections & LayoutBlockedDirections.Right) != 0;
+					return (blockedDirections & DirectionFlags.Right) != 0;
 				case Direction.Up:
-					return (blockedDirections & LayoutBlockedDirections.Up) != 0;
+					return (blockedDirections & DirectionFlags.Up) != 0;
 				case Direction.Down:
-					return (blockedDirections & LayoutBlockedDirections.Down) != 0;
+					return (blockedDirections & DirectionFlags.Down) != 0;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
 			}

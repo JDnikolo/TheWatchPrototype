@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Callbacks.Layout;
+using UnityEngine;
 
 namespace UI.Layout
 {
@@ -19,7 +20,6 @@ namespace UI.Layout
 		void Deselect();
 		
 		void OnInput(Vector2 axis, Direction input);
-		
 #if UNITY_EDITOR
 		LayoutElement LeftManagedNeighbor { get; set; }
 		

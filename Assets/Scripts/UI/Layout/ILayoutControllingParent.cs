@@ -11,7 +11,7 @@ namespace UI.Layout
 		void OnSelectingNewHierarchy(ILayoutElement newElement, ILayoutElement oldElement);
 		
 #if UNITY_EDITOR
-		LayoutBlockedDirections BlockedDirections { get; }
+		DirectionFlags BlockedDirections { get; }
 #endif
 	}
 }

@@ -19,7 +19,7 @@ namespace UI.Button
 	{
 		[SerializeField] private string primaryActionName = "Primary";
 
-		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))]
+		[SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 
 		[SerializeField] [HideInInspector] private FullControlEnum target;
@@ -42,9 +42,9 @@ namespace UI.Button
 			}
 		}
 
-		public override void OnSelected()
+		protected override void Select()
 		{
-			base.OnSelected();
+			base.Select();
 			if (m_primaryAction.IsPressed()) m_deselectFirst = true;
 		}
 
@@ -127,7 +127,7 @@ namespace UI.Button
 			base.OnValidate();
 			if (parent && parent.transform != transform.parent) SetFromParent(null, default, false);
 			if (label && text && text.Values.TryGetValue((int) target, out var value))
-				label.SetManagedTextToDisplay(value);
+				label.ManagedTextToDisplay = value;
 			if (secondary && !InputManager.HasSecondary(target))
 				this.DirtyReplaceValue(ref secondary, false);
 		}

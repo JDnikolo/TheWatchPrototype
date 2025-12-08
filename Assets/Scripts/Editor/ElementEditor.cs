@@ -1,4 +1,5 @@
-﻿using UI.Layout;
+﻿using UI;
+using UI.Layout;
 using UI.Layout.Elements;
 using UnityEditor;
 
@@ -31,12 +32,12 @@ namespace Editor
 			m_bottomNeighbor = null;
 		}
 		
-		private LayoutBlockedDirections m_blockedDirections;
+		private DirectionFlags m_blockedDirections;
 
-		protected virtual LayoutBlockedDirections GetBlockedDirections() =>
+		protected virtual DirectionFlags GetBlockedDirections() =>
 			m_parent.objectReferenceValue is ILayoutControllingParent controllingParent
 				? controllingParent.BlockedDirections
-				: LayoutBlockedDirections.None;
+				: DirectionFlags.None;
 
 		protected override void DisplayBeforeHidden()
 		{
@@ -44,13 +45,13 @@ namespace Editor
 			m_blockedDirections = GetBlockedDirections();
 			if (!EditorApplication.isPlaying)
 			{
-				if ((m_blockedDirections & LayoutBlockedDirections.Left) == 0) 
+				if ((m_blockedDirections & DirectionFlags.Left) == 0) 
 					EditorGUILayout.PropertyField(m_leftNeighbor);
-				if ((m_blockedDirections & LayoutBlockedDirections.Right) == 0) 
+				if ((m_blockedDirections & DirectionFlags.Right) == 0) 
 					EditorGUILayout.PropertyField(m_rightNeighbor);
-				if ((m_blockedDirections & LayoutBlockedDirections.Up) == 0) 
+				if ((m_blockedDirections & DirectionFlags.Up) == 0) 
 					EditorGUILayout.PropertyField(m_topNeighbor);
-				if ((m_blockedDirections & LayoutBlockedDirections.Down) == 0) 
+				if ((m_blockedDirections & DirectionFlags.Down) == 0) 
 					EditorGUILayout.PropertyField(m_bottomNeighbor);
 				ApplyModifications();
 			}
@@ -59,13 +60,13 @@ namespace Editor
 		protected override void DisplayHiddenEditor()
 		{
 			base.DisplayHiddenEditor();
-			if ((m_blockedDirections & LayoutBlockedDirections.Left) != 0)
+			if ((m_blockedDirections & DirectionFlags.Left) != 0)
 				EditorGUILayout.PropertyField(m_leftNeighbor);
-			if ((m_blockedDirections & LayoutBlockedDirections.Right) != 0)
+			if ((m_blockedDirections & DirectionFlags.Right) != 0)
 				EditorGUILayout.PropertyField(m_rightNeighbor);
-			if ((m_blockedDirections & LayoutBlockedDirections.Up) != 0)
+			if ((m_blockedDirections & DirectionFlags.Up) != 0)
 				EditorGUILayout.PropertyField(m_topNeighbor);
-			if ((m_blockedDirections & LayoutBlockedDirections.Down) != 0)
+			if ((m_blockedDirections & DirectionFlags.Down) != 0)
 				EditorGUILayout.PropertyField(m_bottomNeighbor);
 		}
 	}

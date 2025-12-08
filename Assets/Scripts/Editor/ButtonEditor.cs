@@ -5,7 +5,7 @@ namespace Editor
 {
 	[CustomEditor(typeof(Button))]
 	[CanEditMultipleObjects]
-	public sealed class ButtonEditor : ButtonBaseEditor
+	public sealed class ButtonEditor : ParentEditor
 	{
 		private SerializedProperty m_anyClick;
 		private SerializedProperty m_onPrimaryClick;

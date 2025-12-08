@@ -12,7 +12,7 @@ namespace UI.Elements
 	[AddComponentMenu("UI/Elements/Label")]
 	public sealed class Label : BaseBehaviour, IPrewarm, ILocalizationUpdatable
 	{
-		[SerializeField, AutoAssigned(AssignMode.Self, typeof(TextWriter))] 
+		[SerializeField, AutoAssigned(AssignModeFlags.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 
 		[CanBeNullInPrefab, SerializeField, HideInInspector]
@@ -35,7 +35,7 @@ namespace UI.Elements
 			var languageManager = LanguageManager.Instance;
 			if (languageManager) languageManager.AddLocalizer(this);
 		}
-		
+
 		private void OnEnable()
 		{
 			if (!m_firstDone)
@@ -56,8 +56,13 @@ namespace UI.Elements
 #if UNITY_EDITOR
 		public TextObject TextToDisplay => m_textToDisplay;
 
-		public void SetManagedTextToDisplay(TextObject newTextToDisplay) =>
-			this.DirtyReplaceObject(ref textToDisplay, newTextToDisplay);
+		public TextObject ManagedTextToDisplay
+		{
+			get => textToDisplay;
+			set => this.DirtyReplaceObject(ref textToDisplay, value);
+		}
+
+		public TextWriter TextWriter => textWriter;
 		
 		private void OnValidate() => this.UpdateNameTo(textToDisplay);
 #endif

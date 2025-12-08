@@ -6,7 +6,7 @@ namespace LookupTables
     [AddComponentMenu("Lookup Tables/Rigid Body Destructor")]
     public sealed class RigidBodyDestructor : BaseBehaviour
     {
-        [SerializeField] [AutoAssigned(AssignMode.Self, typeof(Rigidbody))] 
+        [SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(Rigidbody))] 
         private Rigidbody target;
         
         private void OnDestroy() => RigidBodyTable.Instance?.Remove(target);

@@ -7,7 +7,7 @@ namespace UI.Slider
 {
 	public abstract class SliderFloatReceiver : BaseBehaviour, ISliderFloatReceiver, IPrewarm
 	{
-		[SerializeField] [AutoAssigned(AssignMode.Child, typeof(Elements.Slider))]
+		[SerializeField] [AutoAssigned(AssignModeFlags.Child, typeof(Elements.Slider))]
 		private Elements.Slider slider;
 		
 		protected Elements.Slider Slider => slider;

@@ -13,7 +13,7 @@ namespace Audio
     [AddComponentMenu("Audio/Audio Player")]
     public sealed class AudioPlayer : BaseBehaviour, IFrameUpdatable, IPauseCallback, IAudioGroupVolumeChanged
     {
-        [SerializeField] [AutoAssigned(AssignMode.Self, typeof(AudioSource))]
+        [SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(AudioSource))]
         private AudioSource audioSource;
 
         [SerializeField] private bool standalone = true;
@@ -113,6 +113,7 @@ namespace Audio
         {
             m_updatable.SetUpdating(false, this);
             if (pausable) PauseManager.Instance?.RemovePausedCallback(this);
+            if (standalone && AudioSource) AudioSource.Group.RemoveCallback(this);
         }
     }
 }

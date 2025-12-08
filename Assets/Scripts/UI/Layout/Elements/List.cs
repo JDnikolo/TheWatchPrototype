@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Callbacks.Layout;
 using Exceptions;
+using Managers;
 using Runtime.Automation;
-using UnityEditor;
 using UnityEngine;
 using Utilities;
 using Node = System.Collections.Generic.LinkedListNode<UI.Layout.ILayoutElement>;
@@ -10,7 +11,7 @@ using Node = System.Collections.Generic.LinkedListNode<UI.Layout.ILayoutElement>
 namespace UI.Layout.Elements
 {
 	[AddComponentMenu("UI/Layout/List")]
-	public sealed class List : Element, ILayoutControllingParent
+	public sealed class List : Element, ILayoutControllingParent, ILayoutExplicit, ILayoutExplicitCallbackImplementer
 	{
 		public enum Mode : byte
 		{
@@ -25,9 +26,18 @@ namespace UI.Layout.Elements
 		[SerializeField] private bool autoReset;
 
 		private readonly LinkedList<ILayoutElement> m_elements = new();
+		private ILayoutExplicitCallback m_explicitCallback;
 		private Node m_selectedNode;
 
+		public bool IsExplicit => mode == Mode.Selectable;
+		
 		public ILayoutElement FirstChild => mode == Mode.Selectable ? null : m_selectedNode?.Value;
+
+		public void SetExplicitCallback(ILayoutExplicitCallback callback) => m_explicitCallback = callback;
+
+		public void SelectExplicit() => m_explicitCallback?.OnSelectedExplicit();
+
+		public void DeselectExplicit() => m_explicitCallback?.OnDeselectedExplicit();
 
 		public void OnMissedInput(Vector2 axis, Direction input) => OnInput(axis, input);
 
@@ -68,7 +78,7 @@ namespace UI.Layout.Elements
 
 		public void OnSelectingNewHierarchy(ILayoutElement newElement, ILayoutElement oldElement)
 		{
-			if (!autoReset) m_selectedNode = null;
+			if (autoReset) m_selectedNode = null;
 			else m_selectedNode = FindForward(oldElement);
 			if (m_selectedNode == null) SetFirstNode();
 		}
@@ -90,6 +100,51 @@ namespace UI.Layout.Elements
 			}
 
 			if (m_elements.Count == 1) SetFirstNode();
+		}
+
+		public override void OnInput(Vector2 axis, Direction input)
+		{
+			if (mode == Mode.Selectable && m_selectedNode != null)
+				switch (input)
+				{
+					case Direction.Left:
+						if (direction == Axis.Horizontal && m_selectedNode == m_elements.Last)
+						{
+							LayoutManager.Instance.Select(m_selectedNode.Value);
+							return;
+						}
+					
+						break;
+					case Direction.Right:
+						if (direction == Axis.Horizontal && m_selectedNode == m_elements.First)
+						{
+							LayoutManager.Instance.Select(m_selectedNode.Value);
+							return;
+						}
+					
+						break;
+					case Direction.Up:
+						if (direction == Axis.Vertical && m_selectedNode == m_elements.Last)
+						{
+							LayoutManager.Instance.Select(m_selectedNode.Value);
+							return;
+						}
+					
+						break;
+					case Direction.Down:
+						if (direction == Axis.Vertical && m_selectedNode == m_elements.First)
+						{
+							LayoutManager.Instance.Select(m_selectedNode.Value);
+							return;
+						}
+					
+						break;
+					default:
+						return;
+				}
+			
+			
+			base.OnInput(axis, input);
 		}
 
 		public void AddLast(ILayoutElement element)
@@ -253,7 +308,6 @@ namespace UI.Layout.Elements
 			this.CollectChildren<LayoutElement, ILayoutElement>(m_elements);
 			SetFirstNode();
 		}
-
 #if UNITY_EDITOR
 		public Mode ListMode
 		{
@@ -265,18 +319,18 @@ namespace UI.Layout.Elements
 		
 		public Node SelectedNode => m_selectedNode;
 
-		public LayoutBlockedDirections BlockedDirections
+		public DirectionFlags BlockedDirections
 		{
 			get
 			{
 				switch (direction)
 				{
 					case Axis.Horizontal:
-						return LayoutBlockedDirections.Left | LayoutBlockedDirections.Right;
+						return DirectionFlags.Left | DirectionFlags.Right;
 					case Axis.Vertical:
-						return LayoutBlockedDirections.Up | LayoutBlockedDirections.Down;
+						return DirectionFlags.Up | DirectionFlags.Down;
 					default:
-						throw new ArgumentOutOfRangeException();
+						return DirectionFlags.None;
 				}
 			}
 		}

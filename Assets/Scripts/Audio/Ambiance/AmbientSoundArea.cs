@@ -9,10 +9,10 @@ namespace Audio.Ambiance
     [AddComponentMenu("Audio/Ambiance/Sound Area")]
     public sealed class AmbientSoundArea : BaseBehaviour, IFixedUpdatable
     {
-        [SerializeField] [AutoAssigned(AssignMode.Self, typeof(Collider))]
+        [SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(Collider))]
         private Collider boxCollider;
 
-        [SerializeField] [AutoAssigned(AssignMode.Child, typeof(AudioPlayer))]
+        [SerializeField] [AutoAssigned(AssignModeFlags.Child, typeof(AudioPlayer))]
         private AudioPlayer player;
 
         [SerializeField] private AudioAggregate ambientAudios;

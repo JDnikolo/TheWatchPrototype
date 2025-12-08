@@ -1,9 +1,9 @@
 ﻿using System;
-#if UNITY_EDITOR
-namespace UI.Layout
+
+namespace UI
 {
 	[Flags]
-	public enum LayoutBlockedDirections : byte
+	public enum DirectionFlags : byte
 	{
 		Left = 1 << 0,
 		Right = 1 << 1,
@@ -14,4 +14,3 @@ namespace UI.Layout
 		All = Left | Right | Up | Down,
 	}
 }
-#endif

@@ -10,7 +10,7 @@ namespace UI.ComboBox
 	[AddComponentMenu("UI/Elements/ComboBox/Language ComboBox")]
 	public sealed class LanguageCombo : ComboEnumProvider<LanguageEnum>, IComboBoxReceiver
 	{
-		[SerializeField] [AutoAssigned(AssignMode.Child, typeof(Elements.ComboBox))]
+		[SerializeField] [AutoAssigned(AssignModeFlags.Child, typeof(Elements.ComboBox))]
 		private Elements.ComboBox comboBox;
 
 		public override ComboData CurrentData => DataPoints[(int) LanguageManager.Instance.Language];

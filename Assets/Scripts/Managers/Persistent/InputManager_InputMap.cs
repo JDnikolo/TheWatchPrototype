@@ -10,7 +10,7 @@ namespace Managers.Persistent
 		public sealed class InputMap : IDisposable
 		{
 			private InputActionMap m_map;
-			private ControlMapEnum m_controlMap;
+			private ControlMapFlags m_controlMap;
 			private int m_bitFlag;
 
 			public InputActionMap Map => m_map ??= Instance.GetMapByControl(m_controlMap);
@@ -28,7 +28,7 @@ namespace Managers.Persistent
 				}
 			}
 		
-			public InputMap(ControlMapEnum controlMap)
+			public InputMap(ControlMapFlags controlMap)
 			{
 				m_controlMap = controlMap;
 				var bit = (int) controlMap;

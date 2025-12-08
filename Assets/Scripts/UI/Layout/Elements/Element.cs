@@ -41,7 +41,7 @@ namespace UI.Layout.Elements
 
 		public sealed override void Deselect() => m_callback?.OnDeselected();
 
-		public sealed override void OnInput(Vector2 axis, Direction input)
+		public override void OnInput(Vector2 axis, Direction input)
 		{
 			if (m_inputCallback != null) m_inputCallback.OnInput(axis, ref input);
 			ILayoutElement target;
@@ -62,7 +62,7 @@ namespace UI.Layout.Elements
 					target = BottomNeighbor;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(input), input, null);
+					return;
 			}
 
 			if (target != null) LayoutManager.Instance.Select(target, input);
@@ -122,16 +122,18 @@ namespace UI.Layout.Elements
 		{
 			var neighbor = GetManagedNeighbor(this, direction);
 			if (!neighbor) return;
+			if (neighbor is ILayoutControllingParent controllingParent &&
+				controllingParent.BlockedDirections.IsDirectionBlocked(direction)) return;
 			var managedParent = neighbor.GetManagedParent();
 			direction = direction.Invert();
 			var inverseNeighbor = GetManagedNeighbor(neighbor, direction);
-			if (managedParent && inverseNeighbor == managedParent ||
-				managedParent is ILayoutControllingParent controllingParent &&
-				controllingParent.BlockedDirections.IsDirectionBlocked(direction)) return;
+			if (managedParent && inverseNeighbor == managedParent) return;
+			controllingParent = managedParent as ILayoutControllingParent;
+			if (controllingParent != null && controllingParent.BlockedDirections.IsDirectionBlocked(direction)) return;
 			if (inverseNeighbor != this) SetManagedNeighbor(neighbor, this, direction);
 		}
 
-		private static LayoutElement GetManagedNeighbor(LayoutElement element, Direction direction)
+		protected static LayoutElement GetManagedNeighbor(LayoutElement element, Direction direction)
 		{
 			switch (direction)
 			{

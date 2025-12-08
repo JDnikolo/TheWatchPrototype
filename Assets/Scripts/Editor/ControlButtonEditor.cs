@@ -5,7 +5,7 @@ using Utilities;
 namespace Editor
 {
 	[CustomEditor(typeof(ControlButton))]
-	public sealed class ControlButtonEditor : ButtonBaseEditor
+	public sealed class ControlButtonEditor : ParentEditor
 	{
 		private SerializedProperty m_parent;
 		private SerializedProperty m_label;

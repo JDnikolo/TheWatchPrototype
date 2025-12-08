@@ -43,10 +43,21 @@ namespace UI.Layout.Elements
 
 		public override void Deselect() => gameObject.SetActive(false);
 #if UNITY_EDITOR
+		
 		public override void OnHierarchyChanged()
 		{
 			base.OnHierarchyChanged();
 			child.SetManagedParent(this);
+		}
+
+		protected override void OnValidate()
+		{
+			base.OnValidate();
+			foreach (var child in transform.GetChildren())
+			{
+				var element = child.GetComponent<ParentBase>();
+				if (element) element.ManagedParent = this;
+			}
 		}
 
 		public override LayoutElement LeftManagedNeighbor

@@ -3,7 +3,7 @@
 namespace Input
 {
 	[Flags]
-	public enum ControlMapEnum
+	public enum ControlMapFlags
 	{
 		Player = 1 << 0,
 		UI = 1 << 1,

@@ -17,10 +17,10 @@ namespace UI.Elements
 		[SerializeField] private string primaryActionName = "Primary";
 		[SerializeField] private string escapeActionName = "Escape";
 
-		[SerializeField, AutoAssigned(AssignMode.Self, typeof(TextWriter))]
+		[SerializeField, AutoAssigned(AssignModeFlags.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 
-		[CanBeNullInPrefab, SerializeField, AutoAssigned(AssignMode.Parent, typeof(ComboDataProvider))]
+		[CanBeNullInPrefab, SerializeField, AutoAssigned(AssignModeFlags.Parent, typeof(ComboDataProvider))]
 		private ComboDataProvider dataProvider;
 
 		private IComboBoxReceiver m_receiver;
@@ -43,7 +43,7 @@ namespace UI.Elements
 		{
 			m_primaryAction ??= InputManager.Instance.UIMap.GetAction(primaryActionName);
 			m_escapeAction ??= InputManager.Instance.UIMap.GetAction(escapeActionName);
-			if (m_primaryAction.WasPressedThisFrame()) OpenPanel();
+			if (m_primaryAction.WasPressedThisFrame()) OpenPanel(false);
 			else if (m_escapeAction.WasPressedThisFrame()) ClosePanel();
 		}
 
@@ -59,14 +59,14 @@ namespace UI.Elements
 			ClosePanel();
 		}
 
-		protected override void OnClick(int clicks) => OpenPanel();
+		protected override void OnClick(int clicks) => OpenPanel(clicks >= 0);
 
-		private void OpenPanel()
+		private void OpenPanel(bool fromClick)
 		{
 			if (m_opened) return;
 			m_opened = true;
 			enabled = false;
-			ComboManager.Instance.OpenComboPanel(new ComboPanelInput(this, this));
+			ComboManager.Instance.OpenComboPanel(new ComboPanelInput(this, this), fromClick);
 		}
 
 		private void ClosePanel()

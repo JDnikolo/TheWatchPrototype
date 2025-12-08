@@ -1,26 +1,20 @@
 ﻿using System;
 using Callbacks.Layout;
 using Callbacks.Pointer;
-using Callbacks.Prewarm;
 using Callbacks.Slider;
 using Managers;
 using UI.Knob;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Utilities;
 
 namespace UI.Elements
 {
 	[AddComponentMenu("UI/Elements/Slider")]
-	public sealed class Slider : ElementBase, IKnobReceiver, ILayoutCallback, ILayoutInputCallback, IPrewarm, 
-		IPointerEnterCallback, IPointerExitCallback, IPointerDownCallback, IPointerUpCallback
+	public sealed class Slider : Parent, IKnobReceiver, ILayoutInputCallback, IPointerDownCallback, IPointerUpCallback
 	{
-		[SerializeField] private Image slider;
 		[SerializeField] private Knob knob;
 		[SerializeField] private Axis direction;
-		[SerializeField] private ElementColor color;
-		[SerializeField] private PointerReceptor pointerReceptor;
 
 		[SerializeField] [HideInInspector] private bool wholeNumbers;
 		[SerializeField] [HideInInspector] private float lowerValue;
@@ -35,36 +29,29 @@ namespace UI.Elements
 		private float m_value;
 		private float m_intTimer;
 		private int m_intValue;
-		private bool m_selected;
 		private bool m_mouseOver;
 		
-		private RectTransform SliderArea => slider.rectTransform;
+		private RectTransform SliderArea => Image.rectTransform;
 
 		public void SetFloatReceiver(ISliderFloatReceiver floatReceiver) => m_floatReceiver = floatReceiver;
 
 		public void SetIntReceiver(ISliderIntReceiver intReceiver) => m_intReceiver = intReceiver;
-		
-		public void OnSelected()
+
+		protected override void Select()
 		{
+			base.Select();
 			knob.OnSelected();
-			color.ApplySelected(slider);
-			m_selected = true;
 		}
 
-		public void OnDeselected()
+		protected override void Deselect()
 		{
+			base.Deselect();
 			knob.OnDeselected();
-			color.ApplyEnabled(slider);
-			m_selected = false;
 		}
 
 		public void OnInput(Vector2 axis, ref Direction input)
 		{
-			var wholeInput = false;
-			bool isValueAtExtremes;
-			if (wholeNumbers) isValueAtExtremes = m_intValue == lowerValueInt || m_intValue == upperValueInt;
-			else isValueAtExtremes = m_value is 0f or 1f;
-			
+			if (input.ToAxis() == direction) input = UIConstants.Direction_None;
 			var bounds = SliderArea.rect.size;
 			float inputAxis;
 			float upperBounds;
@@ -82,28 +69,14 @@ namespace UI.Elements
 					throw new ArgumentOutOfRangeException();
 			}
 
-			if (input.ToAxis() == direction && !isValueAtExtremes)
+			if (inputAxis == 0f) m_intTimer = 0f;
+			else if (wholeNumbers)
 			{
-				input = UIConstants.Direction_None;
-				wholeInput = true;
-			}
-
-			if (inputAxis == 0f) return;
-			if (wholeNumbers)
-			{
-				if (wholeInput)
+				m_intTimer += Time.deltaTime * Math.Abs(inputAxis);
+				if (m_intTimer > 1f)
 				{
-					m_intTimer = 0f;
+					m_intTimer -= 1f;
 					UpdateInteger(Math.Sign(inputAxis), upperBounds, true);
-				}
-				else
-				{
-					m_intTimer += Time.deltaTime * Math.Abs(inputAxis);
-					if (m_intTimer > 1f)
-					{
-						m_intTimer -= 1f;
-						UpdateInteger(Math.Sign(inputAxis), upperBounds, true);
-					}
 				}
 			}
 			else UpdateFloat(inputAxis * Time.deltaTime * speedMultiplier, upperBounds, true);
@@ -170,13 +143,18 @@ namespace UI.Elements
 			ChangeFloating(m_position, true, callback);
 		}
 		
-		public void OnPointerEnter(PointerEventData eventData)
+		public override void OnPointerEnter(PointerEventData eventData)
 		{
 			m_mouseOver = true;
-			if (!m_selected) SelectThis();
+			base.OnPointerEnter(eventData);
+			if (!Selected) SelectThis();
 		}
 
-		public void OnPointerExit(PointerEventData eventData) => m_mouseOver = false;
+		public override void OnPointerExit(PointerEventData eventData)
+		{
+			m_mouseOver = false;
+			base.OnPointerExit(eventData);
+		}
 
 		public void OnPointerDown(PointerEventData eventData)
 		{
@@ -281,42 +259,31 @@ namespace UI.Elements
 
 			return value / upper;
 		}
-
-		private void OnEnable()
+		
+		protected override void OnEnable()
 		{
-			if (m_selected)
-			{
-				color.ApplySelected(slider);
-				knob.OnSelected();
-			}
-			else
-			{
-				color.ApplyEnabled(slider);
-				knob.OnDeselected();
-			}
-			
+			base.OnEnable();
+			if (Selected) knob.OnSelected();
+			else knob.OnDeselected();
 			knob.enabled = true;
 		}
 
-		private void OnDisable()
+		protected override void OnDisable()
 		{
-			color.ApplyDisabled(slider);
+			base.OnDisable();
 			knob.enabled = false;
 		}
 
-		public void OnPrewarm()
+		public override void OnPrewarm()
 		{
+			base.OnPrewarm();
 			knob.SetReceiver(this);
-			var layoutParent = LayoutParent;
-			if (layoutParent)
-			{
-				layoutParent.SetCallback(this);
-				layoutParent.SetInputCallback(this);
-			}
+			if (LayoutParent) LayoutParent.SetInputCallback(this);
 		}
 		
-		private void OnDestroy()
+		protected override void OnDestroy()
 		{
+			base.OnDestroy();
 			m_floatReceiver = null;
 			m_intReceiver = null;
 		}
@@ -325,11 +292,9 @@ namespace UI.Elements
 
 		public ISliderIntReceiver IntReceiver => m_intReceiver;
 		
-		public bool Selected => m_selected;
-		
-		private void OnValidate()
+		protected override void OnValidate()
 		{
-			if (slider && color) color.Validate(slider, enabled);
+			base.OnValidate();
 			if (knob) knob.enabled = enabled;
 		}
 #endif

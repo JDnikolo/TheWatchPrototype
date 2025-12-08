@@ -1,6 +1,8 @@
 ﻿using System;
 using Callbacks.Slider;
+using Localization.Text;
 using Managers.Persistent;
+using UI.Elements;
 using UnityEngine;
 
 namespace UI.Slider

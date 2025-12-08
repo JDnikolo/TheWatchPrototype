@@ -15,7 +15,7 @@ namespace UI.ComboBox
 		[CanBeNullInPrefab, SerializeField] [DisableInInspector] private ComboPanel comboParent;
 		[SerializeField] private string primaryActionName = "Primary";
 
-		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))]
+		[SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 		
 		private InputAction m_primaryAction;

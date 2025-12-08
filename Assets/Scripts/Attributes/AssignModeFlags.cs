@@ -3,7 +3,7 @@
 namespace Attributes
 {
 	[Flags]
-	public enum AssignMode : byte
+	public enum AssignModeFlags : byte
 	{
 		Self = 1 << 0,
 		Parent = 1 << 1,

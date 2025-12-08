@@ -54,7 +54,7 @@ namespace UI.Button
 			if (image && color) color.Validate(image, enabled);
 			if (label && text && text.Values.TryGetValue((int) target, out var value))
 			{
-				label.SetManagedTextToDisplay(value);
+				label.ManagedTextToDisplay = value;
 				this.UpdateNameTo(value);
 			}
 

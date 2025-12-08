@@ -13,7 +13,7 @@ namespace UI.Layout.Elements
 		, IHierarchyChanged
 #endif
 	{
-		[SerializeField, AutoAssigned(AssignMode.Child, typeof(LayoutElement))]
+		[SerializeField, AutoAssigned(AssignModeFlags.Child, typeof(LayoutElement))]
 		private LayoutElement child;
 
 		private ILayoutElement m_lastElement;

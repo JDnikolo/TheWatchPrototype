@@ -63,7 +63,8 @@ namespace Editor
 			if (EditorApplication.isPlaying)
 			{
 				EditorGUILayout.Toggle("Selected", local.Selected);
-				local.FloatReceiver.Display("Callback Target");
+				if (m_wholeNumbers.boolValue) local.IntReceiver.Display("Callback Target");
+				else local.FloatReceiver.Display("Callback Target");
 			}
 		}
 	}

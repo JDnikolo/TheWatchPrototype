@@ -1,6 +1,7 @@
 ﻿using Attributes;
 using Managers.Persistent;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 namespace UI.Text
@@ -19,6 +20,13 @@ namespace UI.Text
 			else
 			{
 				SetVisible(true);
+#if UNITY_EDITOR
+				if (!EditorApplication.isPlaying)
+				{
+					Invoke(nameof(UpdateBackground), 0.1f);
+					return;
+				}
+#endif
 				GameManager.Instance.InvokeOnNextFrameUpdate(UpdateBackground);
 			}
 		}

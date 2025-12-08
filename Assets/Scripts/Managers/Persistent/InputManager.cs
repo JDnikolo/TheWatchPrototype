@@ -16,9 +16,9 @@ namespace Managers.Persistent
 		[SerializeField] private string uiMapName = "UI";
 		[SerializeField] private string persistentGameName = "PersistentGame";
 		
-		private InputMap m_playerMap = new(ControlMapEnum.Player);
-		private InputMap m_uiMap = new(ControlMapEnum.UI);
-		private InputMap m_persistentGameMap = new(ControlMapEnum.PersistentGame);
+		private InputMap m_playerMap = new(ControlMapFlags.Player);
+		private InputMap m_uiMap = new(ControlMapFlags.UI);
+		private InputMap m_persistentGameMap = new(ControlMapFlags.PersistentGame);
 		private ControlSchemeEnum m_controlScheme = ControlSchemeEnum.ENUM_LENGTH;
 		private Updatable m_updatable;
 		private int m_activeControls;
@@ -101,6 +101,10 @@ namespace Managers.Persistent
 
 		public static Vector2 PointerPosition => Pointer.current.position.ReadValue();
 
+		public static bool IsPointerPressed => Pointer.current.press.isPressed;
+		
+		public static bool WasPointPressedThisFrame => Pointer.current.press.wasPressedThisFrame;
+		
 		public static bool WasPointerReleasedThisFrame => Pointer.current.press.wasReleasedThisFrame;
 
 		public InputAction GetAction(GroupedControlEnum control)
@@ -367,15 +371,15 @@ namespace Managers.Persistent
 			else map.ForceDisable();
 		}
 		
-		private InputActionMap GetMapByControl(ControlMapEnum map)
+		private InputActionMap GetMapByControl(ControlMapFlags map)
 		{
 			switch (map)
 			{
-				case ControlMapEnum.Player:
+				case ControlMapFlags.Player:
 					return actionAsset.FindActionMap(playerMapName);
-				case ControlMapEnum.UI:
+				case ControlMapFlags.UI:
 					return actionAsset.FindActionMap(uiMapName);
-				case ControlMapEnum.PersistentGame:
+				case ControlMapFlags.PersistentGame:
 					return actionAsset.FindActionMap(persistentGameName);
 				default:
 					throw new ArgumentOutOfRangeException(nameof(map), map, null);

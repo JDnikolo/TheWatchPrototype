@@ -141,6 +141,7 @@ namespace Managers
 
 				m_tempStack.Clear();
 				element.Select();
+				if (element is ILayoutExplicit explicitElement) explicitElement.SelectExplicit();
 			}
 		}
 
@@ -153,6 +154,7 @@ namespace Managers
 
 		private void AssignNewElement(ILayoutElement element)
 		{
+			if (m_currentElement is ILayoutExplicit explicitElement) explicitElement.DeselectExplicit();
 			m_currentElement = element;
 			if (!m_ignoreUpdate) m_updatable.SetUpdating(m_currentElement != null, this);
 		}

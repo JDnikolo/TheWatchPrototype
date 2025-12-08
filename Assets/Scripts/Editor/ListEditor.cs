@@ -1,4 +1,5 @@
-﻿using UI.Layout;
+﻿using UI;
+using UI.Layout;
 using UI.Layout.Elements;
 using UnityEditor;
 using UnityEngine;
@@ -24,15 +25,15 @@ namespace Editor
 			base.OnInspectorGUIInternal();
 		}
 
-		protected override LayoutBlockedDirections GetBlockedDirections()
+		protected override DirectionFlags GetBlockedDirections()
 		{
-			LayoutBlockedDirections extraBlocks;
+			DirectionFlags extraBlocks;
 			if (m_mode == ListMode.Circular)
 			{
 				var local = (List) target;
 				extraBlocks = local.BlockedDirections;
 			} 
-			else extraBlocks = LayoutBlockedDirections.None;
+			else extraBlocks = DirectionFlags.None;
 			
 			return base.GetBlockedDirections() | extraBlocks;
 		}
@@ -53,13 +54,13 @@ namespace Editor
 				}
 				else
 				{
-					if ((localBlocks & LayoutBlockedDirections.Left) != 0)
+					if ((localBlocks & DirectionFlags.Left) != 0)
 						m_leftNeighbor.objectReferenceValue = null;
-					if ((localBlocks & LayoutBlockedDirections.Right) != 0)
+					if ((localBlocks & DirectionFlags.Right) != 0)
 						m_rightNeighbor.objectReferenceValue = null;
-					if ((localBlocks & LayoutBlockedDirections.Up) != 0)
+					if ((localBlocks & DirectionFlags.Up) != 0)
 						m_topNeighbor.objectReferenceValue = null;
-					if ((localBlocks & LayoutBlockedDirections.Down) != 0)
+					if ((localBlocks & DirectionFlags.Down) != 0)
 						m_bottomNeighbor.objectReferenceValue = null;
 				}
 			}
