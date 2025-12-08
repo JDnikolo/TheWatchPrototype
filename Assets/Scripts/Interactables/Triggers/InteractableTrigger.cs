@@ -7,5 +7,7 @@ namespace Interactables.Triggers
 		[SerializeField] private Interactable interactable;
 
 		protected void OnInteract() => interactable.Interact();
+		
+		public void SetInteractable(Interactable newInteractable) => this.interactable = newInteractable;
 	}
 }

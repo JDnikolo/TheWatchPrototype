@@ -13,5 +13,13 @@ namespace Interactables.Triggers
         private void Start() => ColliderTable.Instance?.Add(collider, this);
 
         public void OnGettingShouted() => OnInteract();
+
+        public void SetCollider(Collider newCollider)
+        {
+            if (!newCollider) return;
+            if (collider) ColliderTable.Instance?.Remove(collider);
+            collider = newCollider;
+            ColliderTable.Instance?.Add(collider, this);
+        }
     }
 }
