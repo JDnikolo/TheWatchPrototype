@@ -15,6 +15,7 @@ namespace Audio.Special
 		{
 			if (!UnityEngine.Physics.Raycast(transform.position,
 					Vector3.down, out var hit, 2, terrainLayerMask)) return;
+			if (!hit.collider.sharedMaterial) return;
 			if (!footstepSoundsDict.TryGetClips(hit.collider.sharedMaterial,
 					out m_currentAudios)) m_currentAudios = null;
 			if (player.IsPlaying) player.Stop();

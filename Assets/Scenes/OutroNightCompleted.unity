@@ -1403,6 +1403,14 @@ PrefabInstance:
       propertyPath: sceneName
       value: MainMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 8197453409264407113, guid: cd585d528b6a3ba44a7d5281af34297c, type: 3}
+      propertyPath: interactables.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8197453409264407113, guid: cd585d528b6a3ba44a7d5281af34297c, type: 3}
+      propertyPath: interactables.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8783412951891876495, guid: cd585d528b6a3ba44a7d5281af34297c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1754,11 +1762,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 890471893374071227, guid: 69b7dbbe1e29cde41b9eaee7dfb56778, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[0].Rotation.value.x
-      value: 0.00000003022678
+      value: 0.000000030226794
       objectReference: {fileID: 0}
     - target: {fileID: 890471893374071227, guid: 69b7dbbe1e29cde41b9eaee7dfb56778, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[0].Rotation.value.z
-      value: 0.00000005137084
+      value: 0.000000051370872
       objectReference: {fileID: 0}
     - target: {fileID: 890471893374071227, guid: 69b7dbbe1e29cde41b9eaee7dfb56778, type: 3}
       propertyPath: m_Splines.Array.data[0].m_Knots.Array.data[4].Rotation.value.w
@@ -1969,6 +1977,7 @@ GameObject:
   - component: {fileID: 1368433487}
   - component: {fileID: 1368433484}
   - component: {fileID: 1368433485}
+  - component: {fileID: 1368433488}
   m_Layer: 0
   m_Name: Part 2
   m_TagString: Untagged
@@ -2004,7 +2013,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 598465e66fc84c14975173352d1ac3d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactable: {fileID: 1043367526}
+  interactable: {fileID: 1368433488}
   enablePlayerInput: 0
 --- !u!4 &1368433487
 Transform:
@@ -2022,6 +2031,20 @@ Transform:
   - {fileID: 1043367527}
   m_Father: {fileID: 262988971}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1368433488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368433483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaab2aa4a307487d8376c165910cffbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactables:
+  - {fileID: 1043367526}
 --- !u!4 &1403462977 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7016750960896004073, guid: 69b7dbbe1e29cde41b9eaee7dfb56778, type: 3}
