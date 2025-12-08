@@ -20,8 +20,10 @@ namespace UI.Elements
 		
 		[CanBeNullInPrefab, SerializeField, HideInInspector]
 		private Interactable onPrimaryClick;
-		
-		[CustomDebug(nameof(DebugSecondary)), SerializeField, HideInInspector] 
+#if UNITY_EDITOR
+		[CustomDebug(nameof(DebugSecondary))]
+#endif
+		[SerializeField, HideInInspector]
 		private Interactable onSecondaryClick;
 
 		private InputAction m_primaryAction;

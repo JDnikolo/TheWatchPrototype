@@ -9,7 +9,10 @@ namespace Navigation
 	public sealed class NavigationPath : BaseBehaviour
 	{
 		// ReSharper disable once MissingLinebreak
-		[CustomDebug(nameof(DebugWaypoints)), SerializeField] private Transform[] waypoints;
+#if UNITY_EDITOR
+		[CustomDebug(nameof(DebugWaypoints))] 
+#endif
+		[SerializeField] private Transform[] waypoints;
 		[SerializeField] private bool circular;
 
 		public Transform this[int index] => waypoints[index];
