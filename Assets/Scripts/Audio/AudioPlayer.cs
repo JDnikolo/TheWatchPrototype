@@ -1,3 +1,4 @@
+using System;
 using Attributes;
 using Callbacks.Audio;
 using Callbacks.Pausing;
@@ -77,6 +78,20 @@ namespace Audio
             audioSource.Stop();
             AudioSource = null;
             m_updatable.SetUpdating(false, this);
+        }
+
+        public void Resume()
+        {
+            if (!AudioSource) throw new Exception("Set source first!");
+            if (!AudioSource.Settings.Loop) throw new Exception("Source must loop to resume!");
+            audioSource.Play();
+        }
+        
+        public void StopForResume()
+        {
+            if (!AudioSource) throw new Exception("Set source first!");
+            if (!AudioSource.Settings.Loop) throw new Exception("Source must loop to stop for resume!");
+            audioSource.Stop();
         }
 
         public void Pause()
