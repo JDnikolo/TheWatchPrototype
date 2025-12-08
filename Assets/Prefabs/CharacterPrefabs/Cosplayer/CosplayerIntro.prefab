@@ -245,52 +245,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   variable: {fileID: 11400000, guid: 8730e2c4e3db35f479c674580db2232d, type: 2}
   targetValue: 1
---- !u!1 &6883272652209968449
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8455649463155567696}
-  - component: {fileID: 7572686901388693027}
-  m_Layer: 3
-  m_Name: Stop Cosplayer Wander
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8455649463155567696
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6883272652209968449}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6139266951196826948}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7572686901388693027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6883272652209968449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac95c70be30a4e4fa2beccb89ea74c92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  behaviorToSet: {fileID: 0}
-  setEnabled: 0
 --- !u!1 &8095596907467383629
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,7 +710,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3194986755174060715, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.2
+      value: -5.2
       objectReference: {fileID: 0}
     - target: {fileID: 3194986755174060715, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -764,7 +718,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3194986755174060715, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 28.07
+      value: 35.3
       objectReference: {fileID: 0}
     - target: {fileID: 3194986755174060715, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -825,7 +779,7 @@ PrefabInstance:
     - target: {fileID: 4636399085013941790, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
       propertyPath: interactables.Array.data[2]
       value: 
-      objectReference: {fileID: 4604777486002294743}
+      objectReference: {fileID: 8774004844159020961}
     - target: {fileID: 6308106521979986094, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
       propertyPath: m_Name
       value: CosplayerAgentBrain
@@ -863,7 +817,7 @@ PrefabInstance:
       addedObject: {fileID: 4572578135627548550}
     - targetCorrespondingSourceObject: {fileID: 8432389283833901853, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4604777486002294743}
+      addedObject: {fileID: 8774004844159020961}
   m_SourcePrefab: {fileID: 100100000, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
 --- !u!114 &810333063239265542 stripped
 MonoBehaviour:
@@ -918,7 +872,7 @@ MonoBehaviour:
   animationToStart: 2
   duration: -1
   onAnimationEnd: {fileID: 0}
---- !u!114 &4604777486002294743
+--- !u!114 &8774004844159020961
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -927,11 +881,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7841095254982835940}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac95c70be30a4e4fa2beccb89ea74c92, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a113ae170e54b9e925c847ee2488aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  behaviorToSet: {fileID: 0}
-  setEnabled: 0
+  agentBrain: {fileID: 8323882806214690631}
 --- !u!114 &8323882806214690631 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7660808475149257406, guid: 79daa020f50b37645ac646426193b1cd, type: 3}
@@ -1980,7 +1933,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7901772033134685573, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       propertyPath: interactables.Array.size
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7901772033134685573, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       propertyPath: interactables.Array.data[0]
@@ -2001,7 +1954,7 @@ PrefabInstance:
     - target: {fileID: 7901772033134685573, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       propertyPath: interactables.Array.data[4]
       value: 
-      objectReference: {fileID: 7572686901388693027}
+      objectReference: {fileID: 1613283572297381000}
     - target: {fileID: 7901772033134685573, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       propertyPath: interactables.Array.data[5]
       value: 
@@ -2029,9 +1982,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2727495438541082248, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       insertIndex: -1
       addedObject: {fileID: 278342306057342677}
-    - targetCorrespondingSourceObject: {fileID: 2727495438541082248, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8455649463155567696}
     - targetCorrespondingSourceObject: {fileID: 2727495438541082248, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8142948432234983329}

@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a181bf10e369a794f9823d2f9920ddf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  variable: {fileID: 11400000, guid: 541258cc2fc59ac41b07d664c8a5e80c, type: 2}
+  variable: {fileID: 11400000, guid: b86e8edcfea24ff41b543dc87e0f5715, type: 2}
   numberToAdd: 1
 --- !u!1 &1728991625644433509
 GameObject:
@@ -353,7 +353,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   targetPosition: {fileID: 0}
-  objectToMove: {fileID: 0}
 --- !u!1 &6654250924513793924
 GameObject:
   m_ObjectHideFlags: 0
@@ -398,7 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a181bf10e369a794f9823d2f9920ddf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  variable: {fileID: 11400000, guid: 541258cc2fc59ac41b07d664c8a5e80c, type: 2}
+  variable: {fileID: 11400000, guid: b86e8edcfea24ff41b543dc87e0f5715, type: 2}
   numberToAdd: 1
 --- !u!1 &6943145945244494477
 GameObject:
@@ -635,6 +634,54 @@ MonoBehaviour:
   lookTarget: {fileID: 0}
   movementDuration: 1
   onMovementEnd: {fileID: 0}
+--- !u!1 &8280092654446101279
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5335231376213164766}
+  - component: {fileID: 7569212811857790199}
+  m_Layer: 3
+  m_Name: Victor Move to Sign
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5335231376213164766
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8280092654446101279}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1484589570667637923}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7569212811857790199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8280092654446101279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99aadedc5bd04d65ad8a1a24517bb563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 1224760387660133718}
+  pointToPointBehavior:
+    navigationPath: {fileID: 0}
+    switchDistance: 0.2
 --- !u!1 &8737253440589648163
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,7 +773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a181bf10e369a794f9823d2f9920ddf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  variable: {fileID: 11400000, guid: 541258cc2fc59ac41b07d664c8a5e80c, type: 2}
+  variable: {fileID: 11400000, guid: b86e8edcfea24ff41b543dc87e0f5715, type: 2}
   numberToAdd: 1
 --- !u!1 &9181262780093250394
 GameObject:
@@ -2583,6 +2630,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7941468970677539659, guid: df09256b7a73a1643a675efd7ed99472, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5335231376213164766}
     - targetCorrespondingSourceObject: {fileID: 4033684642668525739, guid: df09256b7a73a1643a675efd7ed99472, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2473923832582753279}
@@ -2643,6 +2693,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1af161475efc47078834e52ff0966a3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1484589570667637923 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7941468970677539659, guid: df09256b7a73a1643a675efd7ed99472, type: 3}
+  m_PrefabInstance: {fileID: 8840444767056789480}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4249249372733358582 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4636399085013941790, guid: df09256b7a73a1643a675efd7ed99472, type: 3}
