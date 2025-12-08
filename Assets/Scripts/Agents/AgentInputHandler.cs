@@ -84,7 +84,11 @@ namespace Agents
 			return false;
 		}
 		
-		private void Start() => GameManager.Instance.AddFrameUpdate(this);
+		private void Start()
+		{
+			GameManager.Instance.AddFrameUpdate(this);
+			rigidbody.maxLinearVelocity = movementData.MaxVelocity;
+		}
 
 		private void OnDestroy() => GameManager.Instance?.RemoveFrameUpdate(this);
 #if UNITY_EDITOR
@@ -99,16 +103,6 @@ namespace Agents
 
 		private void DrawPosition(Vector2 flatPosition) => 
 			Gizmos.DrawWireSphere(new Vector3(flatPosition.x, transform.position.y, flatPosition.y), 1f);
-
-		private void OnValidate()
-		{
-			var rigidBody = rigidbody;
-			if (rigidBody)
-			{
-				var data = movementData;
-				if (data) rigidBody.maxLinearVelocity = data.MaxVelocity;
-			}
-		}
 #endif
 	}
 }

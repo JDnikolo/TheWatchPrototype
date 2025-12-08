@@ -42,7 +42,8 @@ namespace Player
             rigidBody.AddForce(finalVector.FromFlatVector(), ForceMode.Acceleration);
         }
 
-        private void Start() {
+        private void Start() 
+        {
             inputHandler.Rigidbody.maxLinearVelocity = velocityData.MaxVelocity;
             GameManager.Instance.AddFixedUpdate(this);
         }

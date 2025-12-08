@@ -9,15 +9,10 @@ namespace Animation
         [SerializeField] private string idleAnimationBlendName = "Blend";
 
         private int m_blend;
-        private float m_maxSpeed = 1.0f;
 
         public override void SetBlendValues() => 
-            Animator.SetFloat(m_blend, rootRigidbody.velocity.magnitude / m_maxSpeed);
+            Animator.SetFloat(m_blend, rootRigidbody.velocity.magnitude / rootRigidbody.maxLinearVelocity);
 
-        private void Awake()
-        {
-            m_maxSpeed = rootRigidbody.maxLinearVelocity;
-            m_blend = Animator.StringToHash(idleAnimationBlendName);
-        }
+        private void Awake() => m_blend = Animator.StringToHash(idleAnimationBlendName);
     }
 }
