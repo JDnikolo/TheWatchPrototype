@@ -9,8 +9,8 @@ namespace Interactables.Actions.Scene
 		public override void Interact()
 		{
 			AudioManager.Instance.StopMusic();
-			PhysicsManager.Instance.Stop();
 			InputManager.Instance.Stop();
+			PhysicsManager.Instance.Stop();
 		}
 	}
 }

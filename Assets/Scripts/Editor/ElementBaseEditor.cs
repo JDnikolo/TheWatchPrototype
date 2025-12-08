@@ -7,14 +7,6 @@ namespace Editor
 	[CanEditMultipleObjects]
 	public class ElementBaseEditor : EditorBase
 	{
-		protected virtual void OnEnable()
-		{
-		}
-
-		protected virtual void OnDisable()
-		{
-		}
-
 		public override bool RequiresConstantRepaint() => EditorApplication.isPlaying;
 		
 		protected override void OnInspectorGUIInternal()

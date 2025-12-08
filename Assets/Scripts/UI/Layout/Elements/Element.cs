@@ -1,23 +1,15 @@
 ﻿using System;
 using Attributes;
 using Callbacks.Layout;
-using Callbacks.Prewarm;
 using Managers;
-using Runtime.Automation;
 using UnityEngine;
 using Utilities;
 
 namespace UI.Layout.Elements
 {
 	[AddComponentMenu("UI/Layout/Element")]
-	public class Element : LayoutElement, IPrewarm
-#if UNITY_EDITOR
-		, IHierarchyChanged
-#endif
+	public class Element : ParentBase
 	{
-		[CanBeNull, SerializeField, HideInInspector]
-		private LayoutElement parent;
-
 		[CanBeNull, SerializeField, HideInInspector]
 		private LayoutElement leftNeighbor;
 
@@ -32,8 +24,6 @@ namespace UI.Layout.Elements
 
 		private ILayoutCallback m_callback;
 		private ILayoutInputCallback m_inputCallback;
-
-		public sealed override ILayoutElement Parent { get; set; }
 
 		public sealed override ILayoutElement LeftNeighbor { get; set; }
 
@@ -80,9 +70,9 @@ namespace UI.Layout.Elements
 				controllingParent.OnMissedInput(axis, input);
 		}
 
-		public virtual void OnPrewarm()
+		public override void OnPrewarm()
 		{
-			Parent = parent;
+			base.OnPrewarm();
 			LeftNeighbor = leftNeighbor;
 			RightNeighbor = rightNeighbor;
 			TopNeighbor = topNeighbor;
@@ -119,13 +109,9 @@ namespace UI.Layout.Elements
 			set => this.DirtyReplaceObject(ref bottomNeighbor, value);
 		}
 
-		public LayoutElement GetParent() => parent;
-
-		public void SetParent(LayoutElement newParent) => this.DirtyReplaceObject(ref parent, newParent);
-
-		protected virtual void OnValidate()
+		protected override void OnValidate()
 		{
-			if (parent && parent is ILayoutParent && !transform.IsChildOf(parent.transform)) SetParent(null);
+			base.OnValidate();
 			TestNeighbor(Direction.Left);
 			TestNeighbor(Direction.Right);
 			TestNeighbor(Direction.Up);
@@ -182,8 +168,6 @@ namespace UI.Layout.Elements
 					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
 			}
 		}
-
-		public void OnHierarchyChanged() => OnValidate();
 #endif
 	}
 }

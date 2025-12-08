@@ -10,9 +10,17 @@ namespace Editor
 	{
 		private SerializedProperty m_layoutParent;
 
-		protected virtual void OnEnable() => m_layoutParent = serializedObject.FindProperty("layoutParent");
+		protected override void OnEnable()
+		{
+			base.OnEnable();
+			m_layoutParent = serializedObject.FindProperty("layoutParent");
+		}
 
-		protected virtual void OnDisable() => m_layoutParent = null;
+		protected override void OnDisable()
+		{
+			base.OnDisable();
+			m_layoutParent = null;
+		}
 
 		private bool m_displayHidden;
 

@@ -12,15 +12,15 @@ namespace UI.Elements
 	public abstract class ButtonBase : ElementBase, IPointerEnterCallback, IPointerExitCallback,
 		IPointerDownCallback, IPointerUpCallback, IPointerClickCallback, ILayoutCallback, IPrewarm
 	{
-		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(RectTransform))]  
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(RectTransform))]  
 		private RectTransform rectTransform;
 
-		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(Image))]
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(Image))]
 		private Image image;
 		
 		[SerializeField] private ElementColor color;
 
-		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(PointerReceptor))] 
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(PointerReceptor))] 
 		private PointerReceptor pointerReceptor;
 		
 		protected RectTransform RectTransform => rectTransform;

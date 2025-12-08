@@ -269,11 +269,6 @@ namespace UI.Layout.Elements
 		{
 			get
 			{
-				int count;
-				if (EditorApplication.isPlaying) count = m_elements.Count;
-				else count = transform.childCount;
-
-				if (count < 2) return LayoutBlockedDirections.All;
 				switch (direction)
 				{
 					case Axis.Horizontal:

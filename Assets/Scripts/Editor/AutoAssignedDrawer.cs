@@ -16,18 +16,18 @@ namespace Editor
 			if (property.serializedObject.targetObject is not Component targetComponent) 
 				throw new Exception("[" + nameof(AutoAssigned) +
 									"] only supports UnityEngine.Component parents.");
+			var targetTransform = targetComponent.transform;
 			var local = (AutoAssigned) attribute;
 			bool makeHidden;
 			if (property.objectReferenceValue is Component referenceComponent)
 			{
+				var referenceTransform = referenceComponent.transform;
 				makeHidden =
-					(local.AssignMode & AssignMode.Self) != 0 &&
-					referenceComponent.gameObject == targetComponent.gameObject ||
-					(local.AssignMode & AssignMode.Parent) != 0 &&
-					referenceComponent.transform == targetComponent.transform.parent ||
-					(local.AssignMode & AssignMode.Child) != 0 &&
-					referenceComponent.transform.parent == targetComponent.transform;
-				if ((local.AssignMode & AssignMode.Forced) != 0 && !makeHidden)
+					(local.AssignMode & AssignMode.Self) != 0 && referenceComponent.gameObject == targetComponent.gameObject ||
+					(local.AssignMode & AssignMode.Parent) != 0 && referenceTransform == targetTransform.parent ||
+					(local.AssignMode & AssignMode.Child) != 0 && referenceTransform.parent == targetTransform;
+
+				if (!makeHidden && !EditorApplication.isPlaying && GUILayout.Button("Force"))
 				{
 					property.objectReferenceValue = null;
 					ApplyModifications();
@@ -46,14 +46,19 @@ namespace Editor
 
 				if ((local.AssignMode & AssignMode.Parent) != 0)
 				{
-					component = targetComponent.GetComponentInParent(local.FieldType);
+					var parent = targetComponent.transform.parent;
+					if (parent) component = parent.GetComponent(local.FieldType);
 					if (component) goto Found;
 				}
 
 				if ((local.AssignMode & AssignMode.Child) != 0)
 				{
-					component = targetComponent.GetComponentInChildren(local.FieldType);
-					if (component) goto Found;
+					var childCount = targetTransform.childCount;
+					for (var i = 0; i < childCount; i++)
+					{
+						component = targetTransform.GetChild(i).GetComponent(local.FieldType);
+						if (component) goto Found;
+					}
 				}
 
 				Found:

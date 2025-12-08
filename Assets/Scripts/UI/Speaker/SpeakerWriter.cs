@@ -21,7 +21,7 @@ namespace UI.Speaker
 
 		[SerializeField] private TextWithBackground speakerWriter;
 
-		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(AudioPlayer))]
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(AudioPlayer))]
 		private AudioPlayer speakerPlayer;
 		
 		[SerializeField] private UnityEngine.UI.Slider slider;

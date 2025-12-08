@@ -1,6 +1,7 @@
 ﻿using Managers;
 using UI.Layout;
 using UnityEngine;
+using Utilities;
 
 namespace Interactables.Actions.Layout
 {
@@ -10,5 +11,12 @@ namespace Interactables.Actions.Layout
 		[SerializeField] private LayoutElement target;
 		
 		public override void Interact() => LayoutManager.Instance.Select(target);
+#if UNITY_EDITOR
+		public LayoutElement Target
+		{
+			get => target;
+			set => this.DirtyReplaceObject(ref target, value);
+		}
+#endif
 	}
 }

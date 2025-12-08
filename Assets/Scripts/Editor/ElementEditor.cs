@@ -1,47 +1,34 @@
 ﻿using UI.Layout;
 using UI.Layout.Elements;
 using UnityEditor;
-using Utilities;
 
 namespace Editor
 {
 	[CustomEditor(typeof(Element), true)]
 	[CanEditMultipleObjects]
-	public class ElementEditor : EditorBase
+	public class ElementEditor : ParentBaseEditor
 	{
-		protected SerializedProperty m_parent;
 		protected SerializedProperty m_leftNeighbor;
 		protected SerializedProperty m_rightNeighbor;
 		protected SerializedProperty m_topNeighbor;
 		protected SerializedProperty m_bottomNeighbor;
 		
-		protected virtual void OnEnable()
+		protected override void OnEnable()
 		{
-			m_parent = serializedObject.FindProperty("parent");
+			base.OnEnable();
 			m_leftNeighbor = serializedObject.FindProperty("leftNeighbor");
 			m_rightNeighbor = serializedObject.FindProperty("rightNeighbor");
 			m_topNeighbor = serializedObject.FindProperty("topNeighbor");
 			m_bottomNeighbor = serializedObject.FindProperty("bottomNeighbor");
 		}
 
-		protected virtual void OnDisable()
+		protected override void OnDisable()
 		{
-			m_parent = null;
+			base.OnDisable();
 			m_leftNeighbor = null;
 			m_rightNeighbor = null;
 			m_topNeighbor = null;
 			m_bottomNeighbor = null;
-		}
-
-		private bool m_displayHidden;
-
-		protected override void OnInspectorGUIInternal()
-		{
-			m_displayHidden = true;
-			if (!EditorApplication.isPlaying && m_parent.objectReferenceValue is not ILayoutParent)
-				m_displayHidden = false;
-			DisplayBeforeHidden();
-			using (new EditorGUI.DisabledScope(true)) DisplayHidden();
 		}
 		
 		private LayoutBlockedDirections m_blockedDirections;
@@ -51,9 +38,9 @@ namespace Editor
 				? controllingParent.BlockedDirections
 				: LayoutBlockedDirections.None;
 
-		protected virtual void DisplayBeforeHidden()
+		protected override void DisplayBeforeHidden()
 		{
-			if (!m_displayHidden) EditorGUILayout.PropertyField(m_parent);
+			base.DisplayBeforeHidden();
 			m_blockedDirections = GetBlockedDirections();
 			if (!EditorApplication.isPlaying)
 			{
@@ -69,29 +56,17 @@ namespace Editor
 			}
 		}
 
-		protected virtual void DisplayHidden()
+		protected override void DisplayHiddenEditor()
 		{
-			if (EditorApplication.isPlaying)
-			{
-				var local = (Element) target;
-				local.Parent.Display("Parent");
-				local.LeftNeighbor.Display("Left Neighbor");
-				local.RightNeighbor.Display("Right Neighbor");
-				local.TopNeighbor.Display("Top Neighbor");
-				local.BottomNeighbor.Display("Bottom Neighbor");
-			}
-			else
-			{
-				if (m_displayHidden) EditorGUILayout.PropertyField(m_parent);
-				if ((m_blockedDirections & LayoutBlockedDirections.Left) != 0)
-					EditorGUILayout.PropertyField(m_leftNeighbor);
-				if ((m_blockedDirections & LayoutBlockedDirections.Right) != 0)
-					EditorGUILayout.PropertyField(m_rightNeighbor);
-				if ((m_blockedDirections & LayoutBlockedDirections.Up) != 0)
-					EditorGUILayout.PropertyField(m_topNeighbor);
-				if ((m_blockedDirections & LayoutBlockedDirections.Down) != 0)
-					EditorGUILayout.PropertyField(m_bottomNeighbor);
-			}
+			base.DisplayHiddenEditor();
+			if ((m_blockedDirections & LayoutBlockedDirections.Left) != 0)
+				EditorGUILayout.PropertyField(m_leftNeighbor);
+			if ((m_blockedDirections & LayoutBlockedDirections.Right) != 0)
+				EditorGUILayout.PropertyField(m_rightNeighbor);
+			if ((m_blockedDirections & LayoutBlockedDirections.Up) != 0)
+				EditorGUILayout.PropertyField(m_topNeighbor);
+			if ((m_blockedDirections & LayoutBlockedDirections.Down) != 0)
+				EditorGUILayout.PropertyField(m_bottomNeighbor);
 		}
 	}
 }

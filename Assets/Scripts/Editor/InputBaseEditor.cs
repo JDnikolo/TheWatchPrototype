@@ -9,14 +9,16 @@ namespace Editor
 		private SerializedProperty m_actionReference;
 		private SerializedProperty m_textToDisplay;
 
-		private void OnEnable()
+		protected override void OnEnable()
 		{
+			base.OnEnable();
 			m_actionReference = serializedObject.FindProperty("actionReference");
 			m_textToDisplay = serializedObject.FindProperty("textToDisplay");
 		}
 
-		private void OnDisable()
+		protected override void OnDisable()
 		{
+			base.OnDisable();
 			m_actionReference = null;
 			m_textToDisplay = null;
 		}

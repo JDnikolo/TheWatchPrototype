@@ -7,7 +7,7 @@ namespace Interactables.Actions.Audio
 	[AddComponentMenu("Interactables/Input/Toggle Looping Audio")]
 	public sealed class InteractableToggleAudio : Interactable
 	{
-		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(AudioPlayer))]
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(AudioPlayer))]
 		private AudioPlayer player;
 
 		[SerializeField] private bool play;

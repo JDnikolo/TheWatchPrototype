@@ -8,7 +8,17 @@ namespace Editor
 		private bool m_markDirty;
 
 		protected virtual bool DrawDefault => true;
-		
+
+		protected virtual void OnEnable()
+		{
+		}
+
+		protected virtual void OnDisable()
+		{
+		}
+
+		private void OnDestroy() => OnDisable();
+
 		protected void ApplyModifications() => m_applyModifications = true;
 		protected void MarkDirty() => m_markDirty = true;
 

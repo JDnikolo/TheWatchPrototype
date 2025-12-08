@@ -13,7 +13,7 @@ namespace Audio
     [AddComponentMenu("Audio/Audio Player")]
     public sealed class AudioPlayer : BaseBehaviour, IFrameUpdatable, IPauseCallback, IAudioGroupVolumeChanged
     {
-        [SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(AudioSource))]
+        [SerializeField] [AutoAssigned(AssignMode.Self, typeof(AudioSource))]
         private AudioSource audioSource;
 
         [SerializeField] private bool standalone = true;

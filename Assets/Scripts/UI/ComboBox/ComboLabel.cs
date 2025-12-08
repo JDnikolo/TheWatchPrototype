@@ -8,9 +8,9 @@ namespace UI.ComboBox
 	[AddComponentMenu("UI/Elements/ComboBox/ComboBox Label")]
 	public sealed class ComboLabel : BaseBehaviour, IComboHook
 	{
-		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(RectTransform))]
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(RectTransform))]
 		private RectTransform rectTransform;
-		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(TextWriter))]
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 		
 		public void Initialize(TextObject text, Vector2 size)

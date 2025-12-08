@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 namespace Managers.Persistent
 {
 	[AddComponentMenu("Managers/Persistent/Input Manager")]
-	public sealed partial class InputManager : Singleton<InputManager>, IFrameUpdatable
+	public sealed partial class InputManager : Singleton<InputManager>
 	{
 		[SerializeField] private InputActionAsset actionAsset;
 		[SerializeField] private string playerMapName = "Player";
@@ -90,7 +90,6 @@ namespace Managers.Persistent
 				SetFromFlag(m_uiMap);
 				SetFromFlag(m_persistentGameMap);
 				ToggleCursor(value.CursorVisible);
-				CheckUpdate();
 			}
 		}
 		
@@ -336,7 +335,6 @@ namespace Managers.Persistent
 			m_uiMap.ForceDisable();
 			m_persistentGameMap.ForceDisable();
 			m_activeControls = 0;
-			CheckUpdate();
 		}
 
 		public void OnFrameUpdate() => InputSystem.Update();
@@ -356,14 +354,11 @@ namespace Managers.Persistent
 				Cursor.visible = false;
 			}
 		}
-		
-		private void CheckUpdate() => m_updatable.SetUpdating(m_activeControls != 0, this);
 
 		private void SetFlag(int mask, bool value)
 		{
 			if (value) m_activeControls |= mask;
 			else m_activeControls &= ~mask;
-			CheckUpdate();
 		}
 
 		private void SetFromFlag(InputMap map)

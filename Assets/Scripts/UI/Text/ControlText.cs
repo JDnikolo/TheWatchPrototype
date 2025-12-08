@@ -14,7 +14,7 @@ namespace UI.Text
 		[SerializeField] private GroupedControlEnum target;
 		[SerializeField] private GroupedControlText text;
 
-		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(TextWriter))]
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 		
 		public void OnBeforePlay()

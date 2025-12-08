@@ -1,5 +1,4 @@
-﻿using System;
-using Audio;
+﻿using Audio;
 using UnityEditor;
 using UnityEngine;
 using Utilities;
@@ -12,14 +11,16 @@ namespace Editor
 		private SerializedProperty m_groups;
 		private SerializedProperty m_volumes;
 
-		private void OnEnable()
+		protected override void OnEnable()
 		{
+			base.OnEnable();
 			m_groups = serializedObject.FindProperty("groups");
 			m_volumes = serializedObject.FindProperty("volumes");
 		}
 
-		private void OnDisable()
+		protected override void OnDisable()
 		{
+			base.OnDisable();
 			m_groups  = null;
 			m_volumes = null;
 		}
@@ -39,13 +40,15 @@ namespace Editor
 			
 			var groups = audioGroups.Groups;
 			var length = groups.SafeCount();
-			if (length < 1) return;
-			ApplyModifications();
-			if (m_volumes.arraySize != length) m_volumes.arraySize = length;
-			for (var i = 0; i < length; i++)
+			if (length > 0)
 			{
-				var volume = m_volumes.GetArrayElementAtIndex(i);
-				EditorGUILayout.PropertyField(volume, new GUIContent(groups[i].name));
+				ApplyModifications();
+				if (m_volumes.arraySize != length) m_volumes.arraySize = length;
+				for (var i = 0; i < length; i++)
+				{
+					var volume = m_volumes.GetArrayElementAtIndex(i);
+					EditorGUILayout.PropertyField(volume, new GUIContent(groups[i].name));
+				}
 			}
 		}
 	}

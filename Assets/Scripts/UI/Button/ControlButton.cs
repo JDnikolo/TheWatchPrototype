@@ -19,7 +19,7 @@ namespace UI.Button
 	{
 		[SerializeField] private string primaryActionName = "Primary";
 
-		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(TextWriter))]
+		[SerializeField] [AutoAssigned(AssignMode.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 
 		[SerializeField] [HideInInspector] private FullControlEnum target;

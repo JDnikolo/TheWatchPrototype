@@ -9,11 +9,17 @@ namespace Editor
 	{
 		private SerializedProperty m_textToDisplay;
 		
-		private void OnEnable() => m_textToDisplay = serializedObject.FindProperty("textToDisplay");
+		protected override void OnEnable()
+		{
+			base.OnEnable();
+			m_textToDisplay = serializedObject.FindProperty("textToDisplay");
+		}
 
-		private void OnDisable() => m_textToDisplay = null;
-
-		private void OnDestroy() => OnDisable();
+		protected override void OnDisable()
+		{
+			base.OnDisable();
+			m_textToDisplay = null;
+		}
 
 		protected override void OnInspectorGUIInternal()
 		{
