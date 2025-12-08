@@ -568,7 +568,7 @@ CapsuleCollider:
   m_Radius: 0.15
   m_Height: 0.81
   m_Direction: 1
-  m_Center: {x: 0, y: -0.08, z: 0}
+  m_Center: {x: 0, y: -0.01, z: 0}
 --- !u!114 &6132813403250289537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -608,6 +608,7 @@ GameObject:
   - component: {fileID: 4396493979380669201}
   - component: {fileID: 907686991807848012}
   - component: {fileID: 3389363523015265929}
+  - component: {fileID: 6024672052044361771}
   m_Layer: 3
   m_Name: Jump
   m_TagString: Untagged
@@ -665,6 +666,7 @@ MonoBehaviour:
   interactables:
   - {fileID: 3389363523015265929}
   - {fileID: 7257670765510755155}
+  - {fileID: 6024672052044361771}
 --- !u!114 &3389363523015265929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -679,6 +681,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   force: 5
   selfRigidbody: {fileID: 8815618043335294990}
+--- !u!114 &6024672052044361771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5840161016117951481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c70cc9bda654580b29fa0b2e5040d79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetAnimator: {fileID: 5602039092928295485}
+  rootMotionEnabled: 0
+  resetPosition: 1
 --- !u!1 &6478590866450192729
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,7 +828,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 8582574791283755029}
   targetPosition: {fileID: 0}
-  objectToMove: {fileID: 0}
 --- !u!1 &7786089294757794540
 GameObject:
   m_ObjectHideFlags: 0
@@ -2637,7 +2653,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: fd94912a01c544d4c8dce1b25cd0e841, type: 2}
     - target: {fileID: 1653877787189913731, guid: 251f64f2a3c901942b0ad6d1c87a6330, type: 3}
       propertyPath: m_ApplyRootMotion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1660672688228439512, guid: 251f64f2a3c901942b0ad6d1c87a6330, type: 3}
       propertyPath: m_Height
@@ -2673,7 +2689,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3194986755174060715, guid: 251f64f2a3c901942b0ad6d1c87a6330, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -24.052
+      value: -24.028
       objectReference: {fileID: 0}
     - target: {fileID: 3194986755174060715, guid: 251f64f2a3c901942b0ad6d1c87a6330, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2770,6 +2786,10 @@ PrefabInstance:
     - target: {fileID: 6421984476045316033, guid: 251f64f2a3c901942b0ad6d1c87a6330, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.137
+      objectReference: {fileID: 0}
+    - target: {fileID: 6491655264900912679, guid: 251f64f2a3c901942b0ad6d1c87a6330, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7972000506385066772, guid: 251f64f2a3c901942b0ad6d1c87a6330, type: 3}
       propertyPath: interactables.Array.size
