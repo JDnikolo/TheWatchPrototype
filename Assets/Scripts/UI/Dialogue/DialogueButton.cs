@@ -1,4 +1,5 @@
-﻿using Localization.Dialogue;
+﻿using System;
+using Localization.Dialogue;
 using Managers.Persistent;
 using Runtime.FrameUpdate;
 using UnityEngine;
@@ -11,12 +12,7 @@ namespace UI.Dialogue
 	[AddComponentMenu("UI/Dialogue/Dialogue Button")]
 	public class DialogueButton : BaseBehaviour, IFrameUpdatable
 	{
-		[Header("Colors")] [SerializeField] private Color normalColor = Color.white;
-		[SerializeField] private Color disabledColor = Color.black;
-
-		[Header("Modifiers")] [SerializeField] private Color hoverColor = Color.white;
-		[SerializeField] private Color pressedColor = Color.white;
-
+		[SerializeField] private ElementColor color;
 		[Header("Input")] [SerializeField] private RectTransform outerCircleRect;
 		[SerializeField] private RectTransform innerCircleRect;
 		[SerializeField] private string selectActionName = "SelectDialogue";
@@ -36,10 +32,15 @@ namespace UI.Dialogue
 
 		public void AssignDialogueOption(DialogueOption option)
 		{
-			GameManager.Instance.AddFrameUpdate(this);
 			m_option = option;
 			m_optionEnabled = m_option && m_option.Selectable;
-			image.color = GetButtonColor();
+			if (m_optionEnabled)
+			{
+				GameManager.Instance.AddFrameUpdate(this);
+				color.ApplyEnabled(image);
+			}
+			
+			else color.ApplyDisabled(image);
 			ResetButton();
 		}
 
@@ -59,6 +60,7 @@ namespace UI.Dialogue
 
 		public void OnFrameUpdate()
 		{
+			if (!m_optionEnabled) return;
 			var hovering = IsMouseOver(InputManager.PointerPosition);
 			if (m_hovering != hovering)
 			{
@@ -76,11 +78,10 @@ namespace UI.Dialogue
 				if (m_selected) parent.SelectOption(m_option);
 				m_selected = false;
 			}
-
-			var color = GetButtonColor();
-			if (hovering) color += hoverColor;
-			if (m_selected) color += pressedColor;
-			image.color = color;
+			
+			if (m_selected) color.ApplyPressed(image);
+			else if (hovering) color.ApplySelected(image);
+			else color.ApplyEnabled(image);
 		}
 
 		private bool IsMouseOver(Vector2 mousePosition)
@@ -159,10 +160,14 @@ namespace UI.Dialogue
 			return false;
 		}
 
-		private void OnEnable() => image.color = GetButtonColor();
+		private void OnEnable() => color.ApplyEnabled(image);
 
-		private void OnDisable() => image.color = GetButtonColor();
-
-		private Color GetButtonColor() => m_optionEnabled ? normalColor : disabledColor;
+		private void OnDisable() => color.ApplyDisabled(image);
+#if UNITY_EDITOR
+		private void OnValidate()
+		{
+			if (color && image) color.Validate(image, enabled);
+		}
+#endif
 	}
 }
