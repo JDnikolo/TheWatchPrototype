@@ -9,24 +9,24 @@ using UnityEngine.UI;
 
 namespace UI.Elements
 {
-	public class Parent : ElementBase, IPointerEnterCallback, IPointerExitCallback, 
+	public class Parent : ElementBase, IPointerEnterCallback, IPointerExitCallback,
 		ILayoutCallback, ILayoutExplicitCallback, IPrewarm
 	{
-		[SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(Image))]
+		[SerializeField, AutoAssigned(AssignModeFlags.Self, typeof(Image))]
 		private Image image;
-		
+
 		[SerializeField] private ElementColor color;
 
-		[SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(PointerReceptor))] 
+		[CanBeNull, SerializeField, AutoAssigned(AssignModeFlags.Self, typeof(PointerReceptor))]
 		private PointerReceptor pointerReceptor;
-		
+
 		private bool m_selected;
 		private bool m_explicit;
-		
+
 		protected Image Image => image;
-		
+
 		protected ElementColor Color => color;
-		
+
 		public bool Selected => m_selected;
 
 		public bool Explicit => m_explicit;
@@ -42,7 +42,7 @@ namespace UI.Elements
 			color.ApplyEnabled(image);
 			m_selected = false;
 		}
-		
+
 		public void OnSelected()
 		{
 			if (m_explicit) return;

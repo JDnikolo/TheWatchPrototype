@@ -14,14 +14,35 @@ namespace Navigation
 #endif
 		[SerializeField] private Transform[] waypoints;
 		[SerializeField] private bool circular;
+		[SerializeField] private bool patrol;
 
+		private bool m_reverse;
+		
 		public Transform this[int index] => waypoints[index];
 
 		public Transform MoveNext(ref int i)
 		{
-			if (i < waypoints.Length - 1) i += 1;
-			else if (circular) i = 0;
-			else i = waypoints.Length - 1;
+			if (m_reverse)
+			{
+				if (i > 0) i -= 1;
+				else if (circular) i = waypoints.Length - 1;
+				else
+				{
+					if (patrol) m_reverse = false;
+					i = 0;
+				}
+			}
+			else
+			{
+				if (i < waypoints.Length - 1) i += 1;
+				else if (circular) i = 0;
+				else
+				{
+					if (patrol) m_reverse = true;
+					i = waypoints.Length - 1;
+				}
+			}
+
 			return waypoints[i];
 		}
 #if UNITY_EDITOR
@@ -34,6 +55,10 @@ namespace Navigation
 		private void OnDrawGizmosSelected()
 		{
 			if (waypoints == null) return;
+			Color lineColor;
+			if (circular) lineColor = Color.green;
+			else if (patrol) lineColor = Color.blue;
+			else lineColor = Color.yellow;
 			var length = waypoints.Length;
 			if (length < 2) return;
 			Gizmos.color = Color.red;
@@ -42,13 +67,13 @@ namespace Navigation
 			{
 				Gizmos.color = Color.red;
 				Gizmos.DrawWireSphere(waypoints[i].position, 0.2f);
-				Gizmos.color = Color.yellow;
+				Gizmos.color = lineColor;
 				Gizmos.DrawLine(waypoints[i].position, waypoints[i - 1].position);
 			}
 
 			if (circular)
 			{
-				Gizmos.color = Color.yellow;
+				Gizmos.color = lineColor;
 				Gizmos.DrawLine(waypoints[length - 1].position, waypoints[0].position);
 			}
 		}
