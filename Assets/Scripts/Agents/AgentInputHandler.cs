@@ -1,8 +1,8 @@
-﻿using System;
-using Agents.Behaviors;
+﻿using Agents.Behaviors;
 using Attributes;
 using Callbacks.Agent;
 using Character;
+using Debugging;
 using Managers.Persistent;
 using Runtime.FrameUpdate;
 using UnityEngine;
@@ -92,17 +92,21 @@ namespace Agents
 
 		private void OnDestroy() => GameManager.Instance?.RemoveFrameUpdate(this);
 #if UNITY_EDITOR
+		private void OnDrawGizmos()
+		{
+			if (MovementBehavior is IDeferredGizmo deferredGizmo) deferredGizmo.OnDrawGizmosDeferred();
+		}
+		
 		private void OnDrawGizmosSelected()
 		{
 			if (MovementBehavior == null) return;
 			Gizmos.color = Color.red;
-			DrawPosition(MovementBehavior.MoveTarget);
+			Gizmos.DrawWireSphere(transform.FromFlatVector(MovementBehavior.MoveTarget), 1.25f);
 			Gizmos.color = Color.yellow;
-			DrawPosition(MovementBehavior.RotationTarget);
+			Gizmos.DrawWireSphere(transform.FromFlatVector(MovementBehavior.RotationTarget), 0.75f);
+			if (MovementBehavior is IDeferredGizmoSelected deferredGizmoSelected)
+				deferredGizmoSelected.OnDrawGizmosSelectedDeferred();
 		}
-
-		private void DrawPosition(Vector2 flatPosition) => 
-			Gizmos.DrawWireSphere(new Vector3(flatPosition.x, transform.position.y, flatPosition.y), 1f);
 #endif
 	}
 }

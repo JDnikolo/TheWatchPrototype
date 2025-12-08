@@ -18,9 +18,14 @@ namespace Agents.Behaviors
 		public override Vector2 RotationTarget => m_targetPosition;
 
 		public override float SlowDownMultiplier => 4f;
-
-		public void SetTarget(Transform target) => this.target = target;
 		
 		public void UpdateMovement(Vector3 position) => m_targetPosition = target.position.ToFlatVector();
+#if UNITY_EDITOR
+		public override void DisplayInEditor()
+		{
+			base.DisplayInEditor();
+			target.Display("Target");
+		}
+#endif
 	}
 }
