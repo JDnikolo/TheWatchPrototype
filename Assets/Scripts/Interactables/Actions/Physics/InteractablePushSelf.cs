@@ -14,7 +14,7 @@ namespace Interactables.Actions.Physics
         public override void Interact()
         {
             var direction = (selfRigidbody.transform.position - 
-                             PlayerManager.Instance.PlayerCamera.transform.position.normalized;
+                             PlayerManager.Instance.PlayerCamera.transform.position.normalized);
             if (selfRigidbody.isKinematic) selfRigidbody.isKinematic = false;
             selfRigidbody.AddForce(direction * force, ForceMode.Impulse);
         }
