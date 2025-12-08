@@ -25,6 +25,7 @@ namespace Agents.Behaviors
 		
 		public void Stop(MovementBehavior previousBehavior, Vector2 movePosition, Vector2 velocity)
 		{
+			if (previousBehavior is MovementStopBehavior) return;
 			m_previousBehavior = previousBehavior;
 			m_moveTarget = movePosition;
 			m_rotationTarget = movePosition + velocity.normalized;
@@ -37,5 +38,12 @@ namespace Agents.Behaviors
 			m_previousBehavior = null;
 			return behavior;
 		}
+#if UNITY_EDITOR
+		public override void DisplayInEditor()
+		{
+			base.DisplayInEditor();
+			m_previousBehavior.DisplayInEditor("Previous Behaviour");
+		}
+#endif
 	}
 }

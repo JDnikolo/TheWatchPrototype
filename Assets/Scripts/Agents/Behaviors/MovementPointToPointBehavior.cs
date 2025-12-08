@@ -30,5 +30,13 @@ namespace Agents.Behaviors
 			if (Vector2.SqrMagnitude(position.ToFlatVector() - m_target) > switchDistance * switchDistance) return;
 			m_target = navigationPath.MoveNext(ref m_index).position.ToFlatVector();
 		}
+#if UNITY_EDITOR
+		public override void DisplayInEditor()
+		{
+			base.DisplayInEditor();
+			navigationPath.Display("Navigation Path");
+			switchDistance.Display("Switch Distance");
+		}
+#endif
 	}
 }
