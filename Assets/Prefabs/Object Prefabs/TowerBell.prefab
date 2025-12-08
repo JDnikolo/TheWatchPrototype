@@ -89,8 +89,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1786809320666172923}
-  - component: {fileID: 4433915702974320010}
   - component: {fileID: 4172231424195844605}
+  - component: {fileID: 4701192601096094992}
   m_Layer: 3
   m_Name: TowerBell
   m_TagString: Untagged
@@ -120,27 +120,6 @@ Transform:
   - {fileID: 732938785759536818}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4433915702974320010
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 370828868888750143}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.05, y: 1, z: 1}
-  m_Center: {x: 0.03, y: 0, z: 0}
 --- !u!54 &4172231424195844605
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -168,6 +147,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4701192601096094992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370828868888750143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 294ddac9d525469aaa97da4c003ebc13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 4172231424195844605}
 --- !u!1 &1157224098974244140
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,6 +295,7 @@ GameObject:
   - component: {fileID: 5682608459616268524}
   - component: {fileID: 3563795955282040689}
   - component: {fileID: 95827863483846768}
+  - component: {fileID: 1941797283200654097}
   m_Layer: 3
   m_Name: Collision
   m_TagString: Untagged
@@ -360,6 +353,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactable: {fileID: 1453417726182000971}
   collider: {fileID: 3563795955282040689}
+--- !u!114 &1941797283200654097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3777375806442142435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f231ae0370eb4079be67bf47d6f629d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 3563795955282040689}
 --- !u!1 &4746164825728231875
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,6 +807,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7640558969779515294, guid: 9bfa637366ca4d242a41ba9625745757, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -4025470130324596155, guid: 9bfa637366ca4d242a41ba9625745757, type: 3}
       propertyPath: m_LocalPosition.y
       value: 4.77
@@ -808,6 +818,10 @@ PrefabInstance:
     - target: {fileID: -4025470130324596155, guid: 9bfa637366ca4d242a41ba9625745757, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -391268320553695201, guid: 9bfa637366ca4d242a41ba9625745757, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9bfa637366ca4d242a41ba9625745757, type: 3}
       propertyPath: m_Name
