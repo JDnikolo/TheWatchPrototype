@@ -6,7 +6,7 @@ namespace Editor
 {
 	[CustomEditor(typeof(Slider))]
 	[CanEditMultipleObjects]
-	public sealed class SliderEditor : ElementBaseEditor
+	public sealed class SliderEditor : ParentEditor
 	{
 		private SerializedProperty m_wholeNumbers;
 		private SerializedProperty m_lowerValue;
@@ -62,9 +62,11 @@ namespace Editor
 			var local = (Slider) target;
 			if (EditorApplication.isPlaying)
 			{
-				EditorGUILayout.Toggle("Selected", local.Selected);
-				if (m_wholeNumbers.boolValue) local.IntReceiver.Display("Callback Target");
-				else local.FloatReceiver.Display("Callback Target");
+				local.Position.Display("Position");
+				local.FloatValue.Display("Float Value");
+				local.FloatReceiver.Display("Float Callback");
+				local.IntValue.Display("Int Value");
+				local.IntReceiver.Display("Int Callback");
 			}
 		}
 	}

@@ -20,7 +20,9 @@ namespace Boxing
 			public static ImmutableRef<T> Request(T value)
 			{
 				if (m_stack.Count == 0) return new ImmutableRef<T>(value);
-				return m_stack.Pop();
+				var result = m_stack.Pop();
+				result.m_value = value;
+				return result;
 			}
 
 			public static void Return(ImmutableRef<T> value)
@@ -30,7 +32,7 @@ namespace Boxing
 			}
 		}
 
-		private readonly T m_value;
+		private T m_value;
 		
 		public T Value => m_value;
 

@@ -1,8 +1,11 @@
 ﻿using System;
+using Boxing;
 using Callbacks.Layout;
 using Callbacks.Pointer;
 using Callbacks.Slider;
 using Managers;
+using Managers.Persistent;
+using Runtime;
 using UI.Knob;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -195,7 +198,7 @@ namespace UI.Elements
 					newPosition = screenPosition.y - area.GetBottom();
 					break;
 				default:
-					throw new ArgumentOutOfRangeException();
+					return;
 			}
 
 			var newValue = Test(ref newPosition, upperBounds);
@@ -203,18 +206,29 @@ namespace UI.Elements
 			if (updatePosition) m_position = newPosition;
 			if (m_value == newValue) return;
 			m_value = newValue;
+			MoveKnob(upperBounds, newPosition, updatePosition, true);
+		}
+
+		private void ResetKnobs()
+		{
+			m_position = CalculateFloatPosition(GetUpperBounds());
+			ChangeFloating(m_position, true, false);
+		}
+		
+		private void MoveKnob(float upperBounds, float newPosition, bool updatePosition, bool callback)
+		{
 			if (wholeNumbers)
 			{
 				var newIntValue = CalculateIntegerFromFloat();
 				if (m_intValue != newIntValue)
 				{
 					m_intValue = newIntValue;
-					ChangeInteger(CalculateIntegerPosition(upperBounds), updatePosition, true);
+					ChangeInteger(CalculateIntegerPosition(upperBounds), updatePosition, callback);
 				}
 			}
-			else ChangeFloating(newPosition, updatePosition, true);
+			else ChangeFloating(newPosition, updatePosition, callback);
 		}
-
+		
 		private int CalculateIntegerFromFloat() => lowerValueInt + (int) ((upperValueInt - lowerValueInt) * m_value);
 		
 		private float CalculateIntegerPosition(float upperBounds) => 
@@ -266,6 +280,7 @@ namespace UI.Elements
 			if (Selected) knob.OnSelected();
 			else knob.OnDeselected();
 			knob.enabled = true;
+			Delayer.DelayedExecution(ResetKnobs, 2, UpdateEnum.FrameUpdate);
 		}
 
 		protected override void OnDisable()
@@ -288,8 +303,16 @@ namespace UI.Elements
 			m_intReceiver = null;
 		}
 #if UNITY_EDITOR
+		public bool MouseOver => m_mouseOver;
+		
+		public float Position => m_position;
+		
+		public float FloatValue => m_value;
+		
 		public ISliderFloatReceiver FloatReceiver => m_floatReceiver;
 
+		public int IntValue => m_intValue;
+		
 		public ISliderIntReceiver IntReceiver => m_intReceiver;
 		
 		protected override void OnValidate()

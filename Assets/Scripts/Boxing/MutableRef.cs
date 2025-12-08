@@ -20,7 +20,9 @@ namespace Boxing
 			public static MutableRef<T> Request(T value)
 			{
 				if (m_stack.Count == 0) return new MutableRef<T> {Value = value};
-				return m_stack.Pop();
+				var result = m_stack.Pop();
+				result.Value = value;
+				return result;
 			}
 
 			public static void Return(MutableRef<T> value)
