@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Interactables.Actions.Audio
 {
+	[AddComponentMenu("Interactables/Input/Toggle Looping Audio")]
 	public sealed class InteractableToggleAudio : Interactable
 	{
 		[SerializeField] [AutoAssigned(AssignMode.Self | AssignMode.Forced, typeof(AudioPlayer))]
