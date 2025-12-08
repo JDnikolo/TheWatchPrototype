@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Attributes;
 using Runtime;
 using Runtime.FrameUpdate;
 using TMPro;
@@ -45,12 +46,14 @@ namespace UI.Night
         private TextMeshProUGUI m_timerText;
 
         // References to the transforms of the clock hand sprites.
-        private RectTransform m_shiftStartHand;
-        private RectTransform m_shiftEndHand;
-        private RectTransform m_currentTimeHand;
-        private RectTransform m_secondsHand;
+        [SerializeField] private RectTransform m_shiftStartHand;
+        [SerializeField] private RectTransform m_shiftEndHand;
+        [SerializeField] private RectTransform m_currentTimeHand;
+        [SerializeField] private RectTransform m_secondsHand;
         // References to the timer's components used to display and hide it.
+        [SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(Image))] 
         private Image m_clockBackground;
+        [SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(RectMask2D))]
         private RectMask2D m_clockMask;
 
         public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.GameUI;
@@ -58,13 +61,6 @@ namespace UI.Night
         private void Awake()
         {
             m_timerText = GetComponentsInChildren<TextMeshProUGUI>()[1];
-            var clockHands = clockParent.GetComponentsInChildren<RectTransform>();
-            m_shiftStartHand = clockHands[1];
-            m_shiftEndHand = clockHands[2];
-            m_currentTimeHand = clockHands[3];
-            m_secondsHand = clockHands[4];
-            m_clockMask = GetComponent<RectMask2D>();
-            m_clockBackground = GetComponent<Image>();
             m_timeElapsed = 0.0f;
             m_updatable.SetUpdating(true, this);
         }
