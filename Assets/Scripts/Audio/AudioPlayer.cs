@@ -13,7 +13,7 @@ namespace Audio
     [AddComponentMenu("Audio/Audio Player")]
     public sealed class AudioPlayer : BaseBehaviour, IFrameUpdatable, IPauseCallback, IAudioGroupVolumeChanged
     {
-        [SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(AudioSource))]
+        [SerializeField, AutoAssigned(AssignModeFlags.Self, typeof(AudioSource))]
         private AudioSource audioSource;
 
         [SerializeField] private bool standalone = true;
@@ -35,11 +35,13 @@ namespace Audio
 
         public void OnAudioGroupVolumeChanged(AudioGroup group)
         {
+            if (!audioSource) return;
             if (AudioSource) AudioSource.Settings.Apply(audioSource, group);
         }
         
         public void OnFrameUpdate()
         {
+			if (!audioSource) return;
             if (audioSource.isPlaying) return;
             Stop();
         }
@@ -52,12 +54,14 @@ namespace Audio
         
         public void Play(AudioClip clip)
         {
+            if (!audioSource) return;
             audioSource.clip = clip.Clip;
             PostPlay(clip);
         }
 
         public void Play(AudioAggregate aggregate)
         {
+            if (!audioSource) return;
             audioSource.clip = aggregate.Clips.GetRandom();
             PostPlay(aggregate);
         }
@@ -74,6 +78,7 @@ namespace Audio
 
         public void Stop()
         {
+            if (!audioSource) return;
             if (standalone && AudioSource) AudioSource.Group.RemoveCallback(this);
             audioSource.Stop();
             AudioSource = null;
@@ -82,6 +87,7 @@ namespace Audio
 
         public void Resume()
         {
+            if (!audioSource) return;
             if (!AudioSource) throw new Exception("Set source first!");
             if (!AudioSource.Settings.Loop) throw new Exception("Source must loop to resume!");
             audioSource.Play();
@@ -89,6 +95,7 @@ namespace Audio
         
         public void StopForResume()
         {
+            if (!audioSource) return;
             if (!AudioSource) throw new Exception("Set source first!");
             if (!AudioSource.Settings.Loop) throw new Exception("Source must loop to stop for resume!");
             audioSource.Stop();
@@ -96,16 +103,19 @@ namespace Audio
 
         public void Pause()
         {
+            if (!audioSource) return;
             if (AudioSource) audioSource.Pause();
         }
 
         public void UnPause()
         {
+            if (!audioSource) return;
             if (AudioSource) audioSource.UnPause();
         }
 
         private void Start()
         {
+            if (!audioSource) return;
             if (pausable) PauseManager.Instance?.AddPausedCallback(this);
         }
 
