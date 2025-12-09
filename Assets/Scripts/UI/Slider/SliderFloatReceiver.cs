@@ -1,11 +1,11 @@
 ﻿using Attributes;
-using Callbacks.Prewarm;
 using Callbacks.Slider;
+using Managers.Persistent;
 using UnityEngine;
 
 namespace UI.Slider
 {
-	public abstract class SliderFloatReceiver : BaseBehaviour, ISliderFloatReceiver, IPrewarm
+	public abstract class SliderFloatReceiver : BaseBehaviour, ISliderReceiver, ISliderFloatReceiver
 	{
 		[SerializeField] [AutoAssigned(AssignModeFlags.Child, typeof(Elements.Slider))]
 		private Elements.Slider slider;
@@ -13,7 +13,13 @@ namespace UI.Slider
 		protected Elements.Slider Slider => slider;
 		
 		public abstract void OnSliderChanged(float value);
+		
+		public void OnSliderFinished() => SettingsManager.Instance.Save();
 
-		public virtual void OnPrewarm() => slider.SetFloatReceiver(this);
+		protected virtual void OnEnable()
+		{
+			slider.SetFloatReceiver(this);
+			slider.SetReceiver(this);
+		}
 	}
 }

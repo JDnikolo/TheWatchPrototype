@@ -17,8 +17,9 @@ namespace UI.ComboBox
 		
 		public void OnComboBoxSelectionChanged(ComboData data)
 		{
-			if (data.UserData is IRef<LanguageEnum> reference) 
-				LanguageManager.Instance.Language = reference.GetValue();
+			if (data.UserData is not IRef<LanguageEnum> reference) return;
+			LanguageManager.Instance.Language = reference.GetValue();
+			SettingsManager.Instance.Save();
 		}
 
 		public override void OnPrewarm()

@@ -28,6 +28,7 @@ namespace UI.Elements
 
 		private ISliderFloatReceiver m_floatReceiver;
 		private ISliderIntReceiver m_intReceiver;
+		private ISliderReceiver m_receiver;
 		private float m_position;
 		private float m_value;
 		private float m_intTimer;
@@ -39,6 +40,8 @@ namespace UI.Elements
 		public void SetFloatReceiver(ISliderFloatReceiver floatReceiver) => m_floatReceiver = floatReceiver;
 
 		public void SetIntReceiver(ISliderIntReceiver intReceiver) => m_intReceiver = intReceiver;
+		
+		public void SetReceiver(ISliderReceiver receiver) => m_receiver = receiver;
 
 		protected override void Select()
 		{
@@ -50,6 +53,7 @@ namespace UI.Elements
 		{
 			base.Deselect();
 			knob.OnDeselected();
+			m_receiver?.OnSliderFinished();
 		}
 
 		public void OnInput(Vector2 axis, ref Direction input)

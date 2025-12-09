@@ -20,6 +20,7 @@ namespace Managers.Persistent
 		
 		public void Load()
 		{
+			Debug.Log("Loading Settings");
 			if (GetInt(SETTINGS_LOADED) != SETTINGS_CORRECT) Save();
 			AudioManager.Instance.AmbianceVolume = GetFloat(nameof(AudioManager.AmbianceVolume));
 			AudioManager.Instance.EffectsVolume = GetFloat(nameof(AudioManager.EffectsVolume));
@@ -37,6 +38,7 @@ namespace Managers.Persistent
 
 		public void Save()
 		{
+			Debug.Log("Saving Settings");
 			SetInt(SETTINGS_LOADED, SETTINGS_CORRECT);
 			SetFloat(nameof(AudioManager.AmbianceVolume), AudioManager.Instance.AmbianceVolume);
 			SetFloat(nameof(AudioManager.EffectsVolume), AudioManager.Instance.EffectsVolume);

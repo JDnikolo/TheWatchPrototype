@@ -1,8 +1,6 @@
 ﻿using System;
 using Callbacks.Slider;
-using Localization.Text;
 using Managers.Persistent;
-using UI.Elements;
 using UnityEngine;
 
 namespace UI.Slider
@@ -21,9 +19,9 @@ namespace UI.Slider
 			Speaker,
 		}
 		
-		public override void OnPrewarm()
+		protected override void OnEnable()
 		{
-			base.OnPrewarm();
+			base.OnEnable();
 			float value;
 			switch (type)
 			{

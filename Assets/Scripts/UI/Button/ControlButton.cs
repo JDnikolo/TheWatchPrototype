@@ -63,8 +63,10 @@ namespace UI.Button
 			m_rebindingOperation.Dispose();
 			SetDisplayString();
 			if (m_enable) m_action.actionMap.Enable();
-			SettingsManager.Instance.SetString(nameof(InputManager.Instance.BindingOverridesJson),
-				InputManager.Instance.BindingOverridesJson);
+			var inputManager = InputManager.Instance;
+			var settingsManager = SettingsManager.Instance;
+			settingsManager.SetString(nameof(inputManager.BindingOverridesJson), inputManager.BindingOverridesJson);
+			settingsManager.Save();
 			ResetToThis();
 		}
 
