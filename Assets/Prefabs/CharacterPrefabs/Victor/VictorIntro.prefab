@@ -307,52 +307,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a48f005e6f846d08a0845d03c4ab208, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &5986864241955331715
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1865535445509513072}
-  - component: {fileID: 8574463350870117606}
-  m_Layer: 3
-  m_Name: Teleport Cosplayer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1865535445509513072
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5986864241955331715}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3426404619979161511}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8574463350870117606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5986864241955331715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc251e1986a74f66b5835ad4d344b7f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  targetPosition: {fileID: 0}
 --- !u!1 &6654250924513793924
 GameObject:
   m_ObjectHideFlags: 0
@@ -491,54 +445,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   variable: {fileID: 11400000, guid: 7f8283334c9922344bec67bd81b07f78, type: 2}
   targetValue: 1
---- !u!1 &7756322449317570784
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 350114933038435045}
-  - component: {fileID: 4945337015744412467}
-  m_Layer: 3
-  m_Name: Start Cosplayer Wandering
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &350114933038435045
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7756322449317570784}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3426404619979161511}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4945337015744412467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7756322449317570784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99aadedc5bd04d65ad8a1a24517bb563, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 0}
-  pointToPointBehavior:
-    navigationPath: {fileID: 0}
-    switchDistance: 0.2
 --- !u!1 &7775519886240897625
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,10 +775,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4192719878106017915}
     - target: {fileID: 7901772033134685573, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
-      propertyPath: interactables.Array.data[1]
-      value: 
-      objectReference: {fileID: 4945337015744412467}
-    - target: {fileID: 7901772033134685573, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       propertyPath: interactables.Array.data[2]
       value: 
       objectReference: {fileID: 539358747649030786}
@@ -888,10 +790,6 @@ PrefabInstance:
       propertyPath: interactables.Array.data[5]
       value: 
       objectReference: {fileID: 7193535905556726762}
-    - target: {fileID: 7901772033134685573, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
-      propertyPath: interactables.Array.data[6]
-      value: 
-      objectReference: {fileID: 8574463350870117606}
     - target: {fileID: 8913267747569659394, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       propertyPath: m_Name
       value: CloserAggregate
@@ -906,12 +804,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2727495438541082248, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7664011596762734367}
-    - targetCorrespondingSourceObject: {fileID: 2727495438541082248, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1865535445509513072}
-    - targetCorrespondingSourceObject: {fileID: 2727495438541082248, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 350114933038435045}
     - targetCorrespondingSourceObject: {fileID: 2727495438541082248, guid: 456a9284cf157754eaf1840ae1e42227, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3017230636876737326}
