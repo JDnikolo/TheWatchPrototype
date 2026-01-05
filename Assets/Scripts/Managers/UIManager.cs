@@ -4,10 +4,11 @@ using Managers.Persistent;
 using Runtime;
 using UI.Dialogue;
 using UI.Fade;
+using UI.Layout;
+using UI.Layout.Elements;
 using UI.Speaker;
 using UnityEngine;
 using UnityEngine.UI;
-using LayoutElement = UI.Layout.LayoutElement;
 
 namespace Managers
 {
@@ -31,7 +32,7 @@ namespace Managers
 
 		[Header("Misc")] 
 		// ReSharper disable once MissingLinebreak
-		[CanBeNull, SerializeField] private LayoutElement controlPanel;
+		[CanBeNull, SerializeField] private LayoutElementBase controlPanel;
 		[CanBeNull, SerializeField] private AudioSnapshot speakerSnapshot;
 		
 		private AudioManager.State m_state;
@@ -43,7 +44,7 @@ namespace Managers
 
 		public GraphicRaycaster Raycaster => raycaster;
 
-		public LayoutElement ControlPanel => controlPanel;
+		public LayoutElementBase ControlPanel => controlPanel;
 
 		public void ReturnSpeaker()
 		{

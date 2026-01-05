@@ -1,37 +1,58 @@
 ﻿using System;
+using Callbacks.Backing;
 using Exceptions;
 using Input;
 using Runtime;
+using Runtime.FrameUpdate;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utilities;
 
 namespace Managers.Persistent
 {
 	[AddComponentMenu("Managers/Persistent/Input Manager")]
-	public sealed partial class InputManager : Singleton<InputManager>
+	public sealed partial class InputManager : Singleton<InputManager>, IFrameUpdatable
 	{
 		[SerializeField] private InputActionAsset actionAsset;
 		[SerializeField] private string playerMapName = "Player";
 		[SerializeField] private string uiMapName = "UI";
 		[SerializeField] private string persistentGameName = "PersistentGame";
 		
+		//Input maps
 		private InputMap m_playerMap = new(ControlMapFlags.Player);
 		private InputMap m_uiMap = new(ControlMapFlags.UI);
 		private InputMap m_persistentGameMap = new(ControlMapFlags.PersistentGame);
+		
+		//Special inputs
+		[SerializeField] private SpecialInput<IBackHook> backSpecial;
+
+		//Manager variables
 		private ControlSchemeEnum m_controlScheme = ControlSchemeEnum.ENUM_LENGTH;
 		private Updatable m_updatable;
 		private int m_activeControls;
+		private int m_activeSpecials;
 		private bool m_cursorVisible = true;
-
-		private const string KeyboardAndMouse = "Keyboard&Mouse";
-		private const string Gamepad = "Gamepad";
 		
-		public static InputBinding KeyboardMask => InputBinding.MaskByGroup(KeyboardAndMouse);
+		//Group masks
+		private const string KeyboardAndMouseGroup = "Keyboard&Mouse";
+		private const string GamepadGroup = "Gamepad";
 		
-		public static InputBinding GamepadMask => InputBinding.MaskByGroup(Gamepad);
-		
+		//Runtime
 		protected override bool Override => false;
+		
+		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.InputManager;
+		
+		//Input maps
+		public InputMap PlayerMap => m_playerMap;
+		
+		public InputMap UIMap => m_uiMap;
+		
+		public InputMap PersistentGameMap => m_persistentGameMap;
+		
+		//Specials
+		public SpecialInput<IBackHook> BackSpecial => backSpecial;
 
+		//States
 		public InputBinding BindingMask
 		{
 			get
@@ -56,10 +77,10 @@ namespace Managers.Persistent
 				switch (m_controlScheme = value)
 				{
 					case ControlSchemeEnum.Keyboard:
-						actionAsset.bindingMask = KeyboardMask;
+						actionAsset.bindingMask = InputBinding.MaskByGroup(KeyboardAndMouseGroup);
 						break;
 					case ControlSchemeEnum.Gamepad:
-						actionAsset.bindingMask = GamepadMask;
+						actionAsset.bindingMask = InputBinding.MaskByGroup(GamepadGroup);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException();
@@ -83,19 +104,14 @@ namespace Managers.Persistent
 			set
 			{
 				m_activeControls = value.ActiveControls;
-				SetFromFlag(m_playerMap);
-				SetFromFlag(m_uiMap);
-				SetFromFlag(m_persistentGameMap);
+				SetMapFromFlag(m_playerMap);
+				SetMapFromFlag(m_uiMap);
+				SetMapFromFlag(m_persistentGameMap);
 				ToggleCursor(value.CursorVisible);
 			}
 		}
-		
-		public InputMap PlayerMap => m_playerMap;
-		
-		public InputMap UIMap => m_uiMap;
-		
-		public InputMap PersistentGameMap => m_persistentGameMap;
 
+		//Pointer
 		public static Vector2 PointerPosition => Pointer.current.position.ReadValue();
 
 		public static bool IsPointerPressed => Pointer.current.press.isPressed;
@@ -104,229 +120,50 @@ namespace Managers.Persistent
 		
 		public static bool WasPointerReleasedThisFrame => Pointer.current.press.wasReleasedThisFrame;
 
-		public InputAction GetAction(GroupedControlEnum control)
+		public void OnFrameUpdate()
 		{
-			switch (control)
-			{
-				case GroupedControlEnum.MoveForward:
-				case GroupedControlEnum.MoveBackward:
-				case GroupedControlEnum.MoveLeft:
-				case GroupedControlEnum.MoveRight:
-					return PlayerMap.GetAction("Move");
-				case GroupedControlEnum.Interact:
-					return PlayerMap.GetAction("Interact");
-				case GroupedControlEnum.Shout:
-					return PlayerMap.GetAction("Shout");
-				case GroupedControlEnum.Journal:
-					return PersistentGameMap.GetAction("Journal");
-				case GroupedControlEnum.Help:
-					return PersistentGameMap.GetAction("Help");
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
+			backSpecial.Update(ref m_activeSpecials);
 		}
 		
-		public int GetBindingIndex(FullControlEnum control, ref InputAction action, bool secondary = false)
+		public static InputBindingPair GetBindingIndexes(InputAction action, 
+			ControlSchemeEnum scheme, string name = null)
 		{
-			action ??= GetAction(GetGroupedControl(control));
-			InputBinding bindingMask;
-			switch (GetControlScheme(control))
+			var mask = InputBinding.MaskByGroup(GetGroup(scheme));
+			if (name != null) mask.name = name;
+			var bindings = action.bindings;
+			int baseIndex;
+			for (baseIndex = 0; baseIndex < bindings.Count; baseIndex++)
+			{
+				var binding = bindings[baseIndex];
+				if (!binding.isComposite && mask.Matches(binding)) break;
+			}
+
+			return new InputBindingPair(baseIndex, baseIndex + 1);
+		}
+
+		public static int GetBindingIndex(InputAction action, bool secondary, 
+			ControlSchemeEnum scheme, string name = null)
+		{
+			var pair = GetBindingIndexes(action, scheme, name);
+			return secondary ? pair.Secondary : pair.Primary;
+		}
+		
+		public InputBindingPair GetBindingIndexes(InputAction action, string name = null) => 
+			GetBindingIndexes(action, m_controlScheme, name);
+		
+		public int GetBindingIndex(InputAction action, bool secondary, string name = null) => 
+			GetBindingIndex(action, secondary, m_controlScheme, name);
+
+		public static string GetGroup(ControlSchemeEnum scheme)
+		{
+			switch (scheme)
 			{
 				case ControlSchemeEnum.Keyboard:
-					bindingMask = KeyboardMask;
-					break;
+					return KeyboardAndMouseGroup;
 				case ControlSchemeEnum.Gamepad:
-					bindingMask = GamepadMask;
-					break;
+					return GamepadGroup;
 				default:
-					throw new ArgumentOutOfRangeException();
-			}
-			
-			return GetBindingIndex(control, action.GetBindingIndex(bindingMask), secondary);
-		}
-		
-		private int GetBindingIndex(FullControlEnum control, int bindingIndex, bool secondary)
-		{
-			if (secondary) bindingIndex += 1;
-			switch (control)
-			{
-				case FullControlEnum.KeyboardMoveForward:
-				case FullControlEnum.KeyboardInteract:
-				case FullControlEnum.KeyboardShout:
-				case FullControlEnum.KeyboardJournal:
-				case FullControlEnum.KeyboardHelp:
-					return bindingIndex;
-				case FullControlEnum.KeyboardMoveBackward:
-					return bindingIndex + 2;
-				case FullControlEnum.KeyboardMoveLeft:
-					return bindingIndex + 4;
-				case FullControlEnum.KeyboardMoveRight:
-					return bindingIndex + 6;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
-		public (int, int) GetBindingIndex(GroupedControlEnum control, ref InputAction action)
-		{
-			action ??= GetAction(control);
-			var bindingIndex = action.GetBindingIndex(BindingMask);
-			var fullControl = GetFullControl(control);
-			var hasSecondary = HasSecondary(fullControl);
-			var firstIndex = GetBindingIndex(fullControl, bindingIndex, false);
-			if (hasSecondary)
-			{
-				return (firstIndex, GetBindingIndex(fullControl, bindingIndex, true));
-			}
-
-			return (firstIndex, -1);
-		}
-
-		public FullControlEnum GetFullControl(GroupedControlEnum control)
-		{
-			ControlSchemeEnum controlScheme;
-			switch (BindingMask.groups)
-			{
-				case KeyboardAndMouse:
-					controlScheme = ControlSchemeEnum.Keyboard;
-					break;
-				case Gamepad:
-					controlScheme = ControlSchemeEnum.Gamepad;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			switch (control)
-			{
-				case GroupedControlEnum.MoveForward:
-					switch (controlScheme)
-					{
-						case ControlSchemeEnum.Keyboard:
-							return FullControlEnum.KeyboardMoveForward;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-				case GroupedControlEnum.MoveBackward:
-					switch (controlScheme)
-					{
-						case ControlSchemeEnum.Keyboard:
-							return FullControlEnum.KeyboardMoveBackward;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-				case GroupedControlEnum.MoveLeft:
-					switch (controlScheme)
-					{
-						case ControlSchemeEnum.Keyboard:
-							return FullControlEnum.KeyboardMoveLeft;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-				case GroupedControlEnum.MoveRight:
-					switch (controlScheme)
-					{
-						case ControlSchemeEnum.Keyboard:
-							return FullControlEnum.KeyboardMoveRight;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-				case GroupedControlEnum.Interact:
-					switch (controlScheme)
-					{
-						case ControlSchemeEnum.Keyboard:
-							return FullControlEnum.KeyboardInteract;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-				case GroupedControlEnum.Shout:
-					switch (controlScheme)
-					{
-						case ControlSchemeEnum.Keyboard:
-							return FullControlEnum.KeyboardShout;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-				case GroupedControlEnum.Journal:
-					switch (controlScheme)
-					{
-						case ControlSchemeEnum.Keyboard:
-							return FullControlEnum.KeyboardJournal;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-				case GroupedControlEnum.Help:
-					switch (controlScheme)
-					{
-						case ControlSchemeEnum.Keyboard:
-							return FullControlEnum.KeyboardHelp;
-						default:
-							throw new ArgumentOutOfRangeException();
-					}
-				default:
-					throw new ArgumentOutOfRangeException(nameof(control), control, null);
-			}
-		}
-
-		public static GroupedControlEnum GetGroupedControl(FullControlEnum control)
-		{
-			switch (control)
-			{
-				case FullControlEnum.KeyboardMoveForward:
-					return GroupedControlEnum.MoveForward;
-				case FullControlEnum.KeyboardMoveBackward:
-					return GroupedControlEnum.MoveBackward;
-				case FullControlEnum.KeyboardMoveLeft:
-					return GroupedControlEnum.MoveLeft;
-				case FullControlEnum.KeyboardMoveRight:
-					return GroupedControlEnum.MoveRight;
-				case FullControlEnum.KeyboardInteract:
-					return GroupedControlEnum.Interact;
-				case FullControlEnum.KeyboardShout:
-					return GroupedControlEnum.Shout;
-				case FullControlEnum.KeyboardJournal:
-					return GroupedControlEnum.Journal;
-				case FullControlEnum.KeyboardHelp:
-					return GroupedControlEnum.Help;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(control), control, null);
-			}
-		}
-
-		public static ControlSchemeEnum GetControlScheme(FullControlEnum control)
-		{
-			switch (control)
-			{
-				case FullControlEnum.KeyboardMoveForward:
-				case FullControlEnum.KeyboardMoveBackward:
-				case FullControlEnum.KeyboardMoveLeft:
-				case FullControlEnum.KeyboardMoveRight:
-				case FullControlEnum.KeyboardInteract:
-				case FullControlEnum.KeyboardShout:
-				case FullControlEnum.KeyboardJournal:
-				case FullControlEnum.KeyboardHelp:
-					return ControlSchemeEnum.Keyboard;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(control), control, null);
-			}
-		}
-		
-		public static bool HasSecondary(FullControlEnum control)
-		{
-			switch (control)
-			{
-				case FullControlEnum.KeyboardMoveForward:
-				case FullControlEnum.KeyboardMoveBackward:
-				case FullControlEnum.KeyboardMoveLeft:
-				case FullControlEnum.KeyboardMoveRight:
-				case FullControlEnum.KeyboardInteract:
-				case FullControlEnum.KeyboardShout:
-					return true;
-				case FullControlEnum.KeyboardJournal:
-				case FullControlEnum.KeyboardHelp:
-					return false;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(control), control, null);
+					throw new ArgumentOutOfRangeException(nameof(scheme), scheme, null);
 			}
 		}
 		
@@ -342,7 +179,6 @@ namespace Managers.Persistent
 		{
 			if (m_cursorVisible == enable) return;
 			m_cursorVisible = enable;
-			m_updatable.SetUpdating(!m_cursorVisible);
 			if (enable)
 			{
 				Cursor.lockState = CursorLockMode.None;
@@ -355,13 +191,21 @@ namespace Managers.Persistent
 			}
 		}
 
-		private void SetFlag(int mask, bool value)
+		private void SetControlFlag(int mask, bool value) => SetFlag(ref m_activeControls, mask, value);
+		
+		private void SetSpecialFlag(int mask, bool value)
 		{
-			if (value) m_activeControls |= mask;
-			else m_activeControls &= ~mask;
+			SetFlag(ref m_activeSpecials, mask, value);
+			m_updatable.SetUpdating(m_activeSpecials != 0, this);
 		}
 
-		private void SetFromFlag(InputMap map)
+		private static void SetFlag(ref int flags, int mask, bool value)
+		{
+			if (value) flags |= mask;
+			else flags &= ~mask;
+		}
+
+		private void SetMapFromFlag(InputMap map)
 		{
 			if ((map.BitFlag & m_activeControls) != 0) map.ForceEnable();
 			else map.ForceDisable();
@@ -385,8 +229,12 @@ namespace Managers.Persistent
 		protected override void Awake()
 		{
 			base.Awake();
+			byte flag = 0;
+			backSpecial.Initialize(BackTriggered, flag++);
 			Stop();
 		}
+
+		private void BackTriggered(IBackHook arg1, InputAction arg2) => arg1.OnBackPressed(arg2.GetInputState());
 
 		protected override void OnDestroy()
 		{
@@ -400,6 +248,10 @@ namespace Managers.Persistent
 		}
 #if UNITY_EDITOR
 		public ControlSchemeEnum ControlSchemeEditor => m_controlScheme;
+		
+		public int ActiveControls => m_activeControls;
+		
+		public int ActiveSpecials => m_activeSpecials;
 #endif
 	}
 }

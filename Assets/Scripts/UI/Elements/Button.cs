@@ -3,7 +3,6 @@ using Attributes;
 using Callbacks.Layout;
 using Debugging;
 using Interactables;
-using Managers.Persistent;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utilities;
@@ -11,11 +10,10 @@ using Utilities;
 namespace UI.Elements
 {
 	[AddComponentMenu("UI/Elements/Button")]
-	public sealed class Button : ButtonBase, ILayoutInputCallback
+	public class Button : ButtonBase, ILayoutInputCallback
 	{
-		[SerializeField] private string primaryActionName = "Primary";
-		[SerializeField] private string secondaryActionName = "Secondary";
-
+		[SerializeField, HideInInspector] private InputActionReference primaryReference;
+		[SerializeField, HideInInspector] private InputActionReference secondaryReference;
 		[SerializeField, HideInInspector] private bool anyClick;
 		
 		[CanBeNullInPrefab, SerializeField, HideInInspector]
@@ -26,20 +24,21 @@ namespace UI.Elements
 		[SerializeField, HideInInspector]
 		private Interactable onSecondaryClick;
 
-		private InputAction m_primaryAction;
-		private InputAction m_secondaryAction;
-
 		private void OnPrimaryClick() => onPrimaryClick.Interact();
 
 		private void OnSecondaryClick() => onSecondaryClick.Interact();
 
 		public void OnInput(Vector2 axis, ref Direction input)
 		{
-			m_primaryAction ??= InputManager.Instance.UIMap.GetAction(primaryActionName);
-			m_secondaryAction ??= InputManager.Instance.UIMap.GetAction(secondaryActionName);
 			Action target = null;
-			if (m_primaryAction.WasPressedThisFrame()) target = OnPrimaryClick;
-			else if (m_secondaryAction.WasPressedThisFrame()) target = anyClick ? OnPrimaryClick : OnSecondaryClick;
+			if (anyClick)
+			{
+				if (primaryReference.action.WasPressedThisFrame()) target = OnPrimaryClick;
+			}
+			else if (primaryReference.action.WasPressedThisFrame()) target = OnPrimaryClick;
+			else if (secondaryReference.action.WasPressedThisFrame())
+				target = anyClick ? OnPrimaryClick : OnSecondaryClick;
+
 			target?.Invoke();
 		}
 

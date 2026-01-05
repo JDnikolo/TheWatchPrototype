@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8926096580591419151}
   - component: {fileID: 8926380359592449415}
   - component: {fileID: 4774675514135236911}
-  - component: {fileID: 1551875553365616551}
+  - component: {fileID: 2092044356826315294}
   m_Layer: 5
-  m_Name: MoveForward
+  m_Name: ControlButtonDouble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,15 +61,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4db093f1101480c997bd1becd723d8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layoutParent: {fileID: 1551875553365616551}
+  layoutParent: {fileID: 0}
   image: {fileID: 5893656571055500108}
   color: {fileID: 11400000, guid: 63492323169944b4d8996627a1ccc968, type: 2}
-  target: 0
+  target: {fileID: 0}
+  scheme: 0
+  text: {fileID: 0}
   label: {fileID: 2825938612845961161}
-  text: {fileID: 11400000, guid: d1dd5b4b07f6bd44d8825a96f98af1a4, type: 2}
   firstButton: {fileID: 5102889589862727185}
   secondButton: {fileID: 8967619982960733514}
---- !u!114 &1551875553365616551
+--- !u!114 &2092044356826315294
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,18 +79,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3102848600276007190}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17794d6c752141b4bc401248f0f81ba6, type: 3}
+  m_Script: {fileID: 11500000, guid: 360eb303a68a485fb3347da0b61c5e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  leftNeighbor: {fileID: 0}
-  rightNeighbor: {fileID: 0}
-  topNeighbor: {fileID: 0}
-  bottomNeighbor: {fileID: 0}
-  direction: 1
-  mode: 0
-  inverted: 0
-  autoReset: 1
+  elements:
+  - {fileID: 4336806002383909761}
+  - {fileID: 2002167417927354165}
 --- !u!1001 &101728077327317070
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -189,7 +184,7 @@ PrefabInstance:
     - target: {fileID: 5168006114486863455, guid: cf23993b2a1a3cc4fa21b8fc55625eae, type: 3}
       propertyPath: parent
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4774675514135236911}
     - target: {fileID: 5168006114486863455, guid: cf23993b2a1a3cc4fa21b8fc55625eae, type: 3}
       propertyPath: layoutParent
       value: 
@@ -239,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec1f184d8c3473e9d47b7d4043c1c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 1551875553365616551}
+  parent: {fileID: 0}
   leftNeighbor: {fileID: 0}
   rightNeighbor: {fileID: 2002167417927354165}
   topNeighbor: {fileID: 0}
@@ -342,15 +337,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5502591015024573916, guid: 35fcda6561e0dcf408d6572f5be4a5d6, type: 3}
       propertyPath: m_Color.b
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5502591015024573916, guid: 35fcda6561e0dcf408d6572f5be4a5d6, type: 3}
       propertyPath: m_Color.g
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5502591015024573916, guid: 35fcda6561e0dcf408d6572f5be4a5d6, type: 3}
       propertyPath: m_Color.r
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -483,10 +478,10 @@ PrefabInstance:
     - target: {fileID: 5168006114486863455, guid: cf23993b2a1a3cc4fa21b8fc55625eae, type: 3}
       propertyPath: parent
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4774675514135236911}
     - target: {fileID: 5168006114486863455, guid: cf23993b2a1a3cc4fa21b8fc55625eae, type: 3}
       propertyPath: secondary
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5168006114486863455, guid: cf23993b2a1a3cc4fa21b8fc55625eae, type: 3}
       propertyPath: layoutParent
@@ -526,7 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cec1f184d8c3473e9d47b7d4043c1c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 1551875553365616551}
+  parent: {fileID: 0}
   leftNeighbor: {fileID: 4336806002383909761}
   rightNeighbor: {fileID: 0}
   topNeighbor: {fileID: 0}

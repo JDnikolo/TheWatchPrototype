@@ -1,4 +1,4 @@
-﻿using Callbacks.Layout;
+﻿using UI.Layout.Elements;
 using UnityEngine;
 
 namespace UI.Layout
@@ -21,13 +21,13 @@ namespace UI.Layout
 		
 		void OnInput(Vector2 axis, Direction input);
 #if UNITY_EDITOR
-		LayoutElement LeftManagedNeighbor { get; set; }
+		LayoutElementBase LeftManagedNeighbor { get; set; }
 		
-		LayoutElement RightManagedNeighbor { get; set; }
+		LayoutElementBase RightManagedNeighbor { get; set; }
 		
-		LayoutElement TopManagedNeighbor { get; set; }
+		LayoutElementBase TopManagedNeighbor { get; set; }
 		
-		LayoutElement BottomManagedNeighbor { get; set; }
+		LayoutElementBase BottomManagedNeighbor { get; set; }
 #endif
 	}
 }

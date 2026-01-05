@@ -2,6 +2,7 @@ using Attributes;
 using Audio;
 using Character;
 using Localization.Text;
+using Logic.Boolean;
 using UnityEngine;
 
 namespace Localization.Speaker
@@ -11,9 +12,12 @@ namespace Localization.Speaker
     {
         [CanBeNull, SerializeField] private CharacterProfileData profile;
         [CanBeNull, SerializeField] private AudioAggregate audio;
+        [CanBeNull, SerializeField] private LogicBoolean allowSkip;
         
         public CharacterProfileData Profile => profile;
         
         public AudioAggregate Audio => audio;
+        
+        public LogicBoolean AllowSkip => allowSkip;
     }
 }

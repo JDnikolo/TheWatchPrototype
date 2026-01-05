@@ -1,5 +1,6 @@
 ﻿using Interactables.Actions.Layout;
 using UI.Layout;
+using UI.Layout.Elements;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace Editor
 			if (local.Target && GUILayout.Button("Double Connect"))
 			{
 				var other = local.Target.GetComponent<InteractableLayoutElement>();
-				if (other) other.Target = local.GetComponent<LayoutElement>();
+				if (other) other.Target = local.GetComponent<LayoutElementBase>();
 			}
 		}
 	}

@@ -15,14 +15,13 @@ namespace UI.Dialogue
 		[SerializeField] private ElementColor color;
 		[Header("Input")] [SerializeField] private RectTransform outerCircleRect;
 		[SerializeField] private RectTransform innerCircleRect;
-		[SerializeField] private string selectActionName = "SelectDialogue";
+		[SerializeField] private InputActionReference inputReference;
 		[SerializeField] private int split;
 		[SerializeField] private int part;
 
 		[Header("Fields")] [SerializeField] private Image image;
 		[SerializeField] private DialogueWriter parent;
-
-		private InputAction m_selectAction;
+		
 		private DialogueOption m_option;
 		private bool m_optionEnabled;
 		private bool m_hovering;
@@ -70,10 +69,10 @@ namespace UI.Dialogue
 			}
 
 			//Mouse was just pressed
-			var selectAction = m_selectAction ??= InputManager.Instance.UIMap.GetAction(selectActionName);
-			if (selectAction.WasPressedThisFrame()) m_selected = hovering;
+			var action = inputReference.action;
+			if (action.WasPressedThisFrame()) m_selected = hovering;
 			//Mouse was just released
-			else if (selectAction.WasReleasedThisFrame())
+			else if (action.WasReleasedThisFrame())
 			{
 				if (m_selected) parent.SelectOption(m_option);
 				m_selected = false;

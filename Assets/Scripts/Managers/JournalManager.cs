@@ -17,11 +17,10 @@ namespace Managers
     public sealed partial class JournalManager : Singleton<JournalManager>, IFrameUpdatable
     {
         [CanBeNullInPrefab, SerializeField] private JournalPanel journalPanel;
-        [SerializeField] private string journalActionName = "Journal";
+        [SerializeField] private InputActionReference inputReference;
         [SerializeField] private AudioSnapshot journalSnapshot;
         
         private PauseManager.State m_journalState;
-        private InputAction m_journalAction;
         private Updatable m_updatable;
         
         protected override bool Override => true;
@@ -42,8 +41,7 @@ namespace Managers
         
         public void OnFrameUpdate()
         {
-            m_journalAction ??= InputManager.Instance.PersistentGameMap.GetAction(journalActionName);
-            if (CanOpenJournal && m_journalAction.WasPressedThisFrame())
+            if (CanOpenJournal && inputReference.action.WasPressedThisFrame())
             {
                 var journalObject = journalPanel.gameObject;
                 if (!journalObject.activeInHierarchy)

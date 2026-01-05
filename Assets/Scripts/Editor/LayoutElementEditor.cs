@@ -1,39 +1,73 @@
-﻿using UI.Layout;
+﻿using UI;
+using UI.Layout;
+using UI.Layout.Elements;
 using UnityEditor;
-using Utilities;
 
 namespace Editor
 {
 	[CustomEditor(typeof(LayoutElement), true)]
 	[CanEditMultipleObjects]
-	public class LayoutElementEditor : EditorBase
+	public class LayoutElementEditor : LayoutParentBaseEditor
 	{
-		protected override void OnInspectorGUIInternal()
+		protected SerializedProperty m_leftNeighbor;
+		protected SerializedProperty m_rightNeighbor;
+		protected SerializedProperty m_topNeighbor;
+		protected SerializedProperty m_bottomNeighbor;
+		
+		protected override void OnEnable()
 		{
-			DisplayBeforeHidden();
-			using (new EditorGUI.DisabledScope(true)) DisplayHidden();
+			base.OnEnable();
+			m_leftNeighbor = serializedObject.FindProperty("leftNeighbor");
+			m_rightNeighbor = serializedObject.FindProperty("rightNeighbor");
+			m_topNeighbor = serializedObject.FindProperty("topNeighbor");
+			m_bottomNeighbor = serializedObject.FindProperty("bottomNeighbor");
+		}
+
+		protected override void OnDisable()
+		{
+			base.OnDisable();
+			m_leftNeighbor = null;
+			m_rightNeighbor = null;
+			m_topNeighbor = null;
+			m_bottomNeighbor = null;
 		}
 		
-		protected virtual void DisplayBeforeHidden()
-		{
-		}
+		private DirectionFlags m_blockedDirections;
 
-		protected virtual void DisplayHidden()
+		protected virtual DirectionFlags GetBlockedDirections() =>
+			m_parent.objectReferenceValue is ILayoutControllingParent controllingParent
+				? controllingParent.BlockedDirections
+				: DirectionFlags.None;
+
+		protected override void DisplayBeforeHidden()
 		{
-			if (EditorApplication.isPlaying)
+			base.DisplayBeforeHidden();
+			m_blockedDirections = GetBlockedDirections();
+			if (!EditorApplication.isPlaying)
 			{
-				var local = (LayoutElement) target;
-				local.Parent.Display("Parent");
-				local.LeftNeighbor.Display("Left Neighbor");
-				local.RightNeighbor.Display("Right Neighbor");
-				local.TopNeighbor.Display("Top Neighbor");
-				local.BottomNeighbor.Display("Bottom Neighbor");
+				if ((m_blockedDirections & DirectionFlags.Left) == 0) 
+					EditorGUILayout.PropertyField(m_leftNeighbor);
+				if ((m_blockedDirections & DirectionFlags.Right) == 0) 
+					EditorGUILayout.PropertyField(m_rightNeighbor);
+				if ((m_blockedDirections & DirectionFlags.Up) == 0) 
+					EditorGUILayout.PropertyField(m_topNeighbor);
+				if ((m_blockedDirections & DirectionFlags.Down) == 0) 
+					EditorGUILayout.PropertyField(m_bottomNeighbor);
+				ApplyModifications();
 			}
-			else DisplayHiddenEditor();
 		}
 
-		protected virtual void DisplayHiddenEditor()
+		protected override void DisplayHiddenEditor()
 		{
+			base.DisplayHiddenEditor();
+			if ((m_blockedDirections & DirectionFlags.Left) != 0)
+				EditorGUILayout.PropertyField(m_leftNeighbor);
+			if ((m_blockedDirections & DirectionFlags.Right) != 0)
+				EditorGUILayout.PropertyField(m_rightNeighbor);
+			if ((m_blockedDirections & DirectionFlags.Up) != 0)
+				EditorGUILayout.PropertyField(m_topNeighbor);
+			if ((m_blockedDirections & DirectionFlags.Down) != 0)
+				EditorGUILayout.PropertyField(m_bottomNeighbor);
 		}
 	}
 }

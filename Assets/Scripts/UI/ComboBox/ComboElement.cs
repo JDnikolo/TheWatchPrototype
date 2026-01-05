@@ -12,13 +12,13 @@ namespace UI.ComboBox
 	[AddComponentMenu("UI/Elements/ComboBox/ComboBox Element")]
 	public sealed class ComboElement : ButtonBase, ILayoutInputCallback, IComboHook
 	{
-		[CanBeNullInPrefab, SerializeField] [DisableInInspector] private ComboPanel comboParent;
-		[SerializeField] private string primaryActionName = "Primary";
+		[CanBeNullInPrefab, SerializeField] [DisableInInspector]
+		private ComboPanel comboParent;
+		
+		[SerializeField] private InputActionReference inputReference;
 
 		[SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
-		
-		private InputAction m_primaryAction;
 
 		public ComboData Data { get; private set; }
 
@@ -33,8 +33,7 @@ namespace UI.ComboBox
 
 		public void OnInput(Vector2 axis, ref Direction input)
 		{
-			m_primaryAction ??= InputManager.Instance.UIMap.GetAction(primaryActionName);
-			if (m_primaryAction.WasPressedThisFrame()) OnClick(0);
+			if (inputReference.action.WasPressedThisFrame()) OnClick(0);
 		}
 		
 		protected override void OnClick(int clicks) => comboParent.ElementSelected(this);

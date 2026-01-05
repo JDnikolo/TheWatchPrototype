@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Collections
 {
     public abstract class OrderedCollection<T> : ICollection<T>
     {
-        protected SortedDictionary<byte, HashSet<T>> m_collections = new();
-        private HashSet<T> m_toAdd = new();
-        private HashSet<T> m_toRemove = new();
+        private SortedDictionary<byte, HashSet<T>> m_collections = new();
+        private ConcurrentDictionary<T, bool> m_changes = new();
         private HashSet<T> m_contained = new();
 
         public int Count => m_collections.Count;
@@ -76,17 +76,20 @@ namespace Collections
         public void Add(T item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
-            if (m_contained.Contains(item)) return;
-            m_toRemove.Remove(item);
-            m_toAdd.Add(item);
+            if (m_contained.Contains(item))
+            {
+                m_changes.TryRemove(item, out _);
+                return;
+            }
+            
+            m_changes[item] = true;
         }
 
         public void Clear()
         {
             foreach (var collection in m_collections.Values) collection.Clear();
             m_collections.Clear();
-            m_toAdd.Clear();
-            m_toRemove.Clear();
+            m_changes.Clear();
             m_contained.Clear();
         }
         
@@ -97,48 +100,47 @@ namespace Collections
         public bool Remove(T item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
-            if (!m_contained.Contains(item)) return false;
-            m_toAdd.Remove(item);
-            return m_toRemove.Add(item);
+            if (!m_contained.Contains(item))
+            {
+                m_changes.TryRemove(item, out _);
+                return false;
+            }
+            
+            m_changes[item] = false;
+            return true;
         }
 
         public void Update(byte position)
         {
-            m_toRemove.RemoveWhere(RemoveFirst);
-            m_toAdd.RemoveWhere(AddLast);
+            if (m_changes.Count > 0)
+                foreach (var (item, add) in m_changes)
+                {
+                    m_changes.TryRemove(item, out _);
+                    var priority = GetPriority(item);
+                    if (add)
+                    {
+                        if (!m_collections.TryGetValue(priority, out var collection))
+                        {
+                            collection = new HashSet<T>();
+                            m_collections.Add(priority, collection);
+                        }
+
+                        m_contained.Add(item);
+                        collection.Add(item);
+                    }
+                    else if (m_collections.TryGetValue(priority, out var collection))
+                    {
+                        collection.Remove(item);
+                        m_contained.Remove(item);
+                        if (collection.Count == 0) m_collections.Remove(priority);
+                    }
+                }
+
             foreach (var pair in m_collections)
             {
                 if (pair.Key > position) break;
                 foreach (var item in pair.Value) Update(item);
             }
-        }
-
-        private bool AddLast(T item)
-        {
-            var priority = GetPriority(item);
-            if (!m_collections.TryGetValue(priority, out var collection))
-            {
-                collection = new HashSet<T>();
-                m_collections.Add(priority, collection);
-            }
-
-            m_toRemove.Remove(item);
-            m_contained.Add(item);
-            collection.Add(item);
-            return true;
-        }
-        
-        private bool RemoveFirst(T item)
-        {
-            var priority = GetPriority(item);
-            if (m_collections.TryGetValue(priority, out var collection))
-            {
-                collection.Remove(item);
-                m_contained.Remove(item);
-                if (collection.Count == 0) m_collections.Remove(priority);
-            }
-
-            return true;
         }
 
         protected abstract byte GetPriority(T item);

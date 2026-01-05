@@ -94,15 +94,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5535220083138823135, guid: 9ba1709cc8b794841b553226d4737bae, type: 3}
       propertyPath: m_Color.b
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5535220083138823135, guid: 9ba1709cc8b794841b553226d4737bae, type: 3}
       propertyPath: m_Color.g
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5535220083138823135, guid: 9ba1709cc8b794841b553226d4737bae, type: 3}
       propertyPath: m_Color.r
-      value: 0.25
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -147,12 +147,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   layoutParent: {fileID: 0}
-  rectTransform: {fileID: 5849016141353211822}
   image: {fileID: 306516007351973148}
   color: {fileID: 11400000, guid: 63492323169944b4d8996627a1ccc968, type: 2}
   pointerReceptor: {fileID: 4215920286490807430}
-  primaryActionName: Primary
-  secondaryActionName: Secondary
+  rectTransform: {fileID: 5849016141353211822}
+  primaryReference: {fileID: -4738732075646300323, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  secondaryReference: {fileID: 0}
   anyClick: 1
   onPrimaryClick: {fileID: 0}
   onSecondaryClick: {fileID: 0}

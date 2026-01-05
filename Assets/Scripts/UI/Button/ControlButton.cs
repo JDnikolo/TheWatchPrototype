@@ -1,5 +1,4 @@
 ﻿using Attributes;
-using Callbacks.Beforeplay;
 using Callbacks.Layout;
 using Debugging;
 using Input;
@@ -15,27 +14,26 @@ using Utilities;
 namespace UI.Button
 {
 	[AddComponentMenu("UI/Button/Assign Control Button")]
-	public sealed class ControlButton : ButtonBase, ILayoutInputCallback, IBeforePlay
+	public sealed class ControlButton : ButtonBase, ILayoutInputCallback
 	{
-		[SerializeField] private string primaryActionName = "Primary";
-
+		[SerializeField] private InputActionReference inputReference;
 		[SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 
-		[SerializeField] [HideInInspector] private FullControlEnum target;
-		[SerializeField] [HideInInspector] private bool secondary;
+		[SerializeField, HideInInspector] private InputActionReference target;
+		[SerializeField, HideInInspector] private ControlSchemeEnum scheme;
+		[SerializeField, HideInInspector] private string group;
+		[SerializeField, HideInInspector] private bool hasSecondary;
+		[SerializeField, HideInInspector] private bool secondary;
 
 		private InputActionRebindingExtensions.RebindingOperation m_rebindingOperation;
-		private InputAction m_action;
 		private int m_bindingIndex;
-
-		private InputAction m_primaryAction;
 		private bool m_deselectFirst;
 		private bool m_enable;
 
 		public void OnInput(Vector2 axis, ref Direction input)
 		{
-			if (m_primaryAction.WasReleasedThisFrame())
+			if (inputReference.action.WasReleasedThisFrame())
 			{
 				if (m_deselectFirst) m_deselectFirst = false;
 				else OnClick(-1);
@@ -45,15 +43,16 @@ namespace UI.Button
 		protected override void Select()
 		{
 			base.Select();
-			if (m_primaryAction.IsPressed()) m_deselectFirst = true;
+			if (inputReference.action.IsPressed()) m_deselectFirst = true;
 		}
 
 		protected override void OnClick(int clicks)
 		{
 			if (LayoutParent) LayoutManager.Instance.Select(UIManager.Instance.ControlPanel);
-			m_enable = m_action.actionMap.enabled;
-			m_action.actionMap.Disable();
-			m_rebindingOperation = m_action.PerformInteractiveRebinding(m_bindingIndex)
+			var action = target.action;
+			m_enable = action.actionMap.enabled;
+			action.actionMap.Disable();
+			m_rebindingOperation = action.PerformInteractiveRebinding(m_bindingIndex)
 				.OnComplete(OnCompleted).OnCancel(OnCancel);
 			m_rebindingOperation.Start();
 		}
@@ -62,7 +61,7 @@ namespace UI.Button
 		{
 			m_rebindingOperation.Dispose();
 			SetDisplayString();
-			if (m_enable) m_action.actionMap.Enable();
+			if (m_enable) target.action.actionMap.Enable();
 			var inputManager = InputManager.Instance;
 			var settingsManager = SettingsManager.Instance;
 			settingsManager.SetString(nameof(inputManager.BindingOverridesJson), inputManager.BindingOverridesJson);
@@ -73,7 +72,7 @@ namespace UI.Button
 		private void OnCancel(InputActionRebindingExtensions.RebindingOperation obj)
 		{
 			m_rebindingOperation.Dispose();
-			if (m_enable) m_action.actionMap.Enable();
+			if (m_enable) target.action.actionMap.Enable();
 			ResetToThis();
 		}
 
@@ -83,7 +82,7 @@ namespace UI.Button
 		}
 
 		private void SetDisplayString() =>
-			textWriter.WriteText(m_action.ToBindingDisplayString(m_bindingIndex));
+			textWriter.WriteText(target.action.ToBindingDisplayString(m_bindingIndex));
 
 		public override void OnPrewarm()
 		{
@@ -91,17 +90,11 @@ namespace UI.Button
 			if (LayoutParent) LayoutParent.SetInputCallback(this);
 		}
 
-		public void OnBeforePlay()
-		{
-			var inputManager = InputManager.Instance;
-			m_action = inputManager.GetAction(InputManager.GetGroupedControl(target));
-			m_primaryAction = inputManager.UIMap.GetAction(primaryActionName);
-		}
-
 		protected override void OnEnable()
 		{
 			base.OnEnable();
-			m_bindingIndex = InputManager.Instance.GetBindingIndex(target, ref m_action, secondary);
+			m_bindingIndex = InputManager.Instance.GetBindingIndex(target.action, secondary,
+				string.IsNullOrWhiteSpace(group) ? null : group);
 			SetDisplayString();
 		}
 #if UNITY_EDITOR
@@ -110,35 +103,39 @@ namespace UI.Button
 		private ControlButtonDouble parent;
 
 		// ReSharper disable once MissingLinebreak
+		[CustomDebug(nameof(DebugText)), SerializeField, HideInInspector]
+		private TextObject text;
+		
+		// ReSharper disable once MissingLinebreak
 		[CustomDebug(nameof(DebugLabel)), SerializeField, HideInInspector]
 		private Label label;
 
-		// ReSharper disable once MissingLinebreak
-		[CustomDebug(nameof(DebugText)), SerializeField, HideInInspector]
-		private InputActionText text;
-
-		public void SetFromParent(ControlButtonDouble newParent, FullControlEnum newTarget, bool newSecondary)
+		public void SetFromParent(ControlButtonDouble newParent, InputActionReference newTarget, 
+			ControlSchemeEnum newScheme, string newGroup, bool newSecondary)
 		{
 			this.DirtyReplaceObject(ref parent, newParent);
-			this.DirtyReplaceValue(ref target, newTarget);
+			this.DirtyReplaceObject(ref target, newTarget);
+			this.DirtyReplaceValue(ref scheme, newScheme);
+			this.DirtyReplaceReference(ref group, newGroup);
 			this.DirtyReplaceValue(ref secondary, newSecondary);
 		}
 
 		protected override void OnValidate()
 		{
 			base.OnValidate();
-			if (parent && parent.transform != transform.parent) SetFromParent(null, default, false);
-			if (label && text && text.Values.TryGetValue((int) target, out var value))
-				label.ManagedTextToDisplay = value;
-			if (secondary && !InputManager.HasSecondary(target))
+			if (parent && parent.transform != transform.parent) SetFromParent(null, null, default, null, false);
+			if (label && text) label.ManagedTextToDisplay = text;
+			if (secondary && InputManager.GetBindingIndex(target, secondary, scheme) < 0)
 				this.DirtyReplaceValue(ref secondary, false);
 		}
 
 		private bool DebugLabel(OperationData operationData, string path, FieldData fieldData) =>
-			parent != null || path.IsAssetPath() || operationData.TestObject(path, fieldData, label);
+			DebugPath(path) || operationData.TestObject(path, fieldData, label);
 
 		private bool DebugText(OperationData operationData, string path, FieldData fieldData) =>
-			parent != null || path.IsAssetPath() || operationData.TestObject(path, fieldData, text);
+			DebugPath(path) || operationData.TestObject(path, fieldData, text);
+
+		private bool DebugPath(string path) => parent != null || path.IsAssetPath();
 #endif
 	}
 }

@@ -8,6 +8,7 @@ using Runtime.FixedUpdate;
 using Runtime.FrameUpdate;
 using Runtime.LateUpdate;
 using UI.Layout;
+using UI.Layout.Elements;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utilities;
@@ -17,15 +18,14 @@ namespace Managers
 	[AddComponentMenu("Managers/Pause Manager")]
 	public sealed partial class PauseManager : Singleton<PauseManager>, IFrameUpdatable
 	{
-		[CanBeNullInPrefab, SerializeField] private LayoutElement pauseMenu;
-		[SerializeField] private string pauseActionName = "Pause";
+		[CanBeNullInPrefab, SerializeField] private LayoutElementBase pauseMenu;
+		[SerializeField] private InputActionReference inputReference;
 		[SerializeField] private AudioSnapshot pauseSnapshot;
 		
 		private HashSet<IPauseCallback> m_pauseCallbacks = new();
 		private State m_pauseState;
 		private bool m_paused;
 		
-		private InputAction m_pauseAction;
 		private Updatable m_updatable;
 		
 		protected override bool Override => true;
@@ -56,8 +56,7 @@ namespace Managers
 		
 		public void OnFrameUpdate()
 		{
-			m_pauseAction ??= InputManager.Instance.PersistentGameMap.GetAction(pauseActionName);
-			if (CanPause && m_pauseAction.WasPressedThisFrame())
+			if (CanPause && inputReference.action.WasPressedThisFrame())
 			{
 				var pauseObject = pauseMenu.gameObject;
 				var state = pauseObject.activeInHierarchy;

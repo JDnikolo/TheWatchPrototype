@@ -2,6 +2,7 @@ using System.Text;
 using Attributes;
 using Audio;
 using Callbacks.Speaker;
+using Logic.Boolean;
 using Managers;
 using Managers.Persistent;
 using Runtime.FrameUpdate;
@@ -26,8 +27,8 @@ namespace UI.Speaker
 		
 		[SerializeField] private UnityEngine.UI.Slider slider;
 
-		[Header("Control schemes")] [SerializeField]
-		private string skipActionName = "SkipDialogue";
+		[Header("Control schemes")] [SerializeField] 
+		private InputActionReference inputReference;
 
 		[Header("Delays")] [SerializeField] private float characterDelay;
 		[SerializeField] private float periodDelay;
@@ -37,7 +38,7 @@ namespace UI.Speaker
 		private readonly StringBuilder m_stringBuilder = new();
 
 		private ISpeakerWriterFinished m_onFinished;
-		private InputAction m_skipAction;
+		private LogicBoolean m_canSkip;
 		private AudioAggregate m_audio;
 		private string m_text;
 		private float m_timer;
@@ -58,6 +59,7 @@ namespace UI.Speaker
 			m_allowSkip = false;
 			m_firstSkip = false;
 			m_forceFinish = false;
+			m_canSkip = input.TextToDisplay.AllowSkip;
 			m_onFinished = input.OnTextWriterFinished;
 			var profile = input.TextToDisplay.Profile;
 			if (profile) speakerWriter.WriteText(profile.CharacterName);
@@ -65,7 +67,7 @@ namespace UI.Speaker
 			m_text = input.TextToDisplay.Text;
 			m_audio = input.TextToDisplay.Audio;
 			JournalManager.Instance?.AddText(input.TextToDisplay);
-			GameManager.Instance.InvokeOnNextFrameUpdate(EnableSkip);
+			GameManager.Instance?.InvokeOnNextFrameUpdate(EnableSkip);
 		}
 
 		public void EnableSkip() => m_allowSkip = true;
@@ -82,14 +84,9 @@ namespace UI.Speaker
 
 		public void OnFrameUpdate()
 		{
-			if (m_skipAction == null)
-			{
-				m_skipAction = InputManager.Instance.UIMap.GetAction(skipActionName);
-				slider.onValueChanged.AddListener(SliderChanged);
-			}
-
-			if (!m_firstSkip && !m_skipAction.IsPressed()) m_firstSkip = true;
-			var skipDialogue = m_skipAction.WasPressedThisFrame() && m_allowSkip && m_firstSkip;
+			var action = inputReference.action;
+			if (!m_firstSkip && !action.IsPressed()) m_firstSkip = true;
+			var skipDialogue = action.WasPressedThisFrame() && m_allowSkip && m_firstSkip;
 			if (m_forceFinish)
 			{
 				m_forceFinish = false;
@@ -98,7 +95,8 @@ namespace UI.Speaker
 
 			if (!m_write)
 			{
-				if (skipDialogue)
+				if (m_timer > 0f) m_timer -= Time.deltaTime;
+				else if (skipDialogue)
 				{
 					speakerPlayer.Stop();
 					if (m_onFinished != null)
@@ -118,13 +116,14 @@ namespace UI.Speaker
 			}
 
 			var changed = false;
-			if (skipDialogue)
+			if (skipDialogue && (!m_canSkip || m_canSkip.Evaluate()))
 			{
 				m_forceFinish = true;
 				m_write = false;
 				changed = true;
-				m_stringBuilder.Append(m_text.Substring(m_seek));
+				m_stringBuilder.Append(m_text[m_seek..]);
 				speakerPlayer.Stop();
+				m_timer = 1f;
 			}
 			else if (m_write)
 			{
@@ -253,5 +252,7 @@ namespace UI.Speaker
 			SetSlider(0);
 			slider.SetValueWithoutNotify(0f);
 		}
+
+		private void Awake() => slider.onValueChanged.AddListener(SliderChanged);
 	}
 }

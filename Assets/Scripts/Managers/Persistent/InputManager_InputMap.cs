@@ -22,9 +22,9 @@ namespace Managers.Persistent
 				get => Map.enabled;
 				set
 				{
-					if (Map.enabled == value) return;
+					if (Enabled == value) return;
 					Map.SetEnabled(value);
-					Instance.SetFlag(m_bitFlag, value);
+					Instance.SetControlFlag(m_bitFlag, value);
 				}
 			}
 		

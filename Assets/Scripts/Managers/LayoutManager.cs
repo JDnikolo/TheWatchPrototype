@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Managers.Persistent;
 using Runtime;
 using Runtime.FrameUpdate;
 using UI;
@@ -13,13 +12,12 @@ namespace Managers
 	[AddComponentMenu("Managers/Layout Manager")]
 	public sealed partial class LayoutManager : Singleton<LayoutManager>, IFrameUpdatable
 	{
-		[SerializeField] private string navigateActionName = "Navigate";
+		[SerializeField] private InputActionReference inputReference;
 
 		private List<ILayoutElement> m_parentHierarchy = new();
 		private ILayoutElement m_currentElement;
 
 		private Stack<ILayoutElement> m_tempStack = new();
-		private InputAction m_navigateAction;
 		private Direction m_input;
 		private Updatable m_updatable;
 		private bool m_ignoreUpdate;
@@ -47,14 +45,14 @@ namespace Managers
 
 		public void OnFrameUpdate()
 		{
-			m_navigateAction ??= InputManager.Instance.UIMap.GetAction(navigateActionName);
 			var currentElement = m_currentElement;
 			if (currentElement != null)
 			{
 				Direction input;
 				Vector2 axis;
-				if (!m_navigateAction.IsPressed()) axis = Vector2.zero;
-				else axis = m_navigateAction.ReadValue<Vector2>();
+				var action = inputReference.action;
+				if (!action.IsPressed()) axis = Vector2.zero;
+				else axis = action.ReadValue<Vector2>();
 				
 				if (axis.x < 0f) input = Direction.Left;
 				else if (axis.x > 0f) input = Direction.Right;

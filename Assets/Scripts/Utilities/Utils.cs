@@ -132,5 +132,13 @@ namespace Utilities
 			var childCount = transform.childCount;
 			for (var i = 0; i < childCount; i++) yield return transform.GetChild(i);
 		}
+
+		public static bool IsImmediateChildOf(this Transform transform, Transform other)
+		{
+			for (var i = 0; i < other.childCount; i++)
+				if (other.GetChild(i) == transform)
+					return true;
+			return false;
+		}
 	}
 }

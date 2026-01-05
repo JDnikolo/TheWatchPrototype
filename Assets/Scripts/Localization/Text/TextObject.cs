@@ -1,5 +1,6 @@
 ﻿using Attributes;
 using Managers.Persistent;
+using UnityEditor;
 using UnityEngine;
 
 namespace Localization.Text
@@ -10,6 +11,15 @@ namespace Localization.Text
 		[SerializeField] [EnumArray(typeof(LanguageEnum))]
 		private string[] texts;
 
-		public string Text => texts[(int) LanguageManager.Instance.Language];
+		public string Text
+		{
+			get
+			{
+#if UNITY_EDITOR
+				if (!EditorApplication.isPlaying) return texts[0];
+#endif
+				return texts[(int) LanguageManager.Instance.Language];
+			}
+		}
 	}
 }

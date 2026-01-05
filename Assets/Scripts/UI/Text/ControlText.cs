@@ -1,9 +1,9 @@
 ﻿using Attributes;
 using Callbacks.Beforeplay;
-using Input;
 using Localization.Text;
 using Managers.Persistent;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Utilities;
 
 namespace UI.Text
@@ -11,27 +11,28 @@ namespace UI.Text
 	[AddComponentMenu("UI/Text/Control Info Text")]
 	public sealed class ControlText : BaseBehaviour, IBeforePlay
 	{
-		[SerializeField] private GroupedControlEnum target;
-		[SerializeField] private GroupedControlText text;
+		[SerializeField] private InputActionReference target;
+		[SerializeField] private TextObject text;
 
 		[SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 		
 		public void OnBeforePlay()
 		{
-			var inputManager = InputManager.Instance;
-			var action = inputManager.GetAction(target);
-			var inputBindings = inputManager.GetBindingIndex(target, ref action);
-			var prefix = $"{text.Values[(int) target].Text}";
-			if (inputBindings.Item2 < 0)
+			var action = target.action;
+			var inputBindings = InputManager.Instance.GetBindingIndexes(action);
+			if (inputBindings.HasSecondary)
 				textWriter.WriteText(
-					$"{prefix} with {action.ToBindingDisplayString(inputBindings.Item1)}");
+					$"{text.Text}: {action.ToBindingDisplayString(inputBindings.Primary)}/{action.ToBindingDisplayString(inputBindings.Secondary)}");
 			else
 				textWriter.WriteText(
-					$"{prefix} with {action.ToBindingDisplayString(inputBindings.Item1)} or {action.ToBindingDisplayString(inputBindings.Item2)}");
+					$"{text.Text}: {action.ToBindingDisplayString(inputBindings.Primary)}");
 		}
 #if UNITY_EDITOR
-		private void OnValidate() => this.UpdateNameTo(target.ToString());
+		private void OnValidate()
+		{
+			if (target) this.UpdateNameTo(target.ToString());
+		}
 #endif
 	}
 }

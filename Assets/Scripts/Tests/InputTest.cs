@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Input;
+using Managers.Persistent;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Tests
@@ -6,20 +8,23 @@ namespace Tests
 	public sealed class InputTest : BaseBehaviour
 	{
 		[SerializeField] private InputActionReference actionReference;
-		[SerializeField] private string bindingId;
+		[SerializeField] private ControlSchemeEnum scheme;
+		[SerializeField] private int bindingOverride;
 		[SerializeField] private InputBinding.DisplayStringOptions options;
 
 		private void Start()
 		{
-			var bindings = actionReference.action.bindings;
-			var mask = actionReference.action.bindingMask;
-			if (!mask.HasValue) Debug.Log("Mask is null");
-			else Debug.Log(mask.Value.ToDisplayString(options));
+			var action = actionReference.action;
+			var bindings = action.bindings;
+			var groupMask = InputManager.GetGroup(ControlSchemeEnum.Keyboard);
+			var mask = InputBinding.MaskByGroup(groupMask);
 			for (var i = 0; i < bindings.Count; i++)
 			{
 				var binding = bindings[i];
-				Debug.Log(binding.ToDisplayString(options));
-				//Debug.Log(binding.);
+				if (mask.Matches(binding))
+				{
+					Debug.Log(binding.path);
+				}
 			}
 		}
 	}

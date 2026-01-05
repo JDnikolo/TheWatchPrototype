@@ -1,6 +1,7 @@
 ﻿using System;
+using Input;
 using UI;
-using UI.Layout;
+using UnityEngine.InputSystem;
 
 namespace Utilities
 {
@@ -8,6 +9,19 @@ namespace Utilities
 	{
 		public const string ENUM_LENGTH = nameof(ENUM_LENGTH);
 
+		public static Axis Perpendicular(this Axis axis)
+		{
+			switch (axis)
+			{
+				case Axis.Horizontal:
+					return Axis.Vertical;
+				case Axis.Vertical:
+					return Axis.Horizontal;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
+			}
+		}
+		
 		public static Direction Invert(this Direction direction)
 		{
 			switch (direction)
@@ -43,6 +57,15 @@ namespace Utilities
 					throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
 			}
 		}
+
+		public static InputState GetInputState(this InputAction action)
+		{
+			if (action.WasPressedThisFrame()) return InputState.Pressed;
+			if (action.IsPressed()) return InputState.Held;
+			if (action.WasReleasedThisFrame()) return InputState.Released;
+			return InputState.NotPressed;
+		}
+		
 #if UNITY_EDITOR
 		public static bool IsDirectionBlocked(this DirectionFlags blockedDirections, Direction direction)
 		{

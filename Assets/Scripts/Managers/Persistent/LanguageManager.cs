@@ -20,7 +20,7 @@ namespace Managers.Persistent
 		{
 			get
 			{
-				if (m_language >=  LanguageEnum.ENUM_LENGTH) throw new LoadFirstException();
+				if (m_language >= LanguageEnum.ENUM_LENGTH) throw new LoadFirstException();
 				return m_language;
 			}
 			set

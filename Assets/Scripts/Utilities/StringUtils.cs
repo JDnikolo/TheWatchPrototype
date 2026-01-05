@@ -33,7 +33,7 @@ namespace Utilities
 			sb.Clear();
 			return result;
 		}
-
+		
 		public static string ToBindingDisplayString(this InputAction action, int bindingIndex) => 
 			action.bindings[bindingIndex].ToDisplayString();
 	}

@@ -13,18 +13,16 @@ namespace UI.Text
 		, IBehaviourChecker
 #endif
 	{
-		[SerializeField] private string helpActionName = "Help";
+		[SerializeField] private InputActionReference inputReference;
 		[SerializeField] [DisableInInspector] private ControlText[] texts;
 
 		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.Default;
 
-		private InputAction m_helpAction;
 		private bool m_enabled = true;
 		
 		public void OnFrameUpdate()
 		{
-			m_helpAction ??= InputManager.Instance.PersistentGameMap.GetAction(helpActionName);
-			if (m_helpAction.WasPressedThisFrame()) SetEnabled(!m_enabled);
+			if (inputReference.action.WasPressedThisFrame()) SetEnabled(!m_enabled);
 		}
 
 		private void SetEnabled(bool enabled)

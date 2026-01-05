@@ -16,7 +16,7 @@ namespace Audio.Special
         [SerializeField] private ParticleSystem shoutParticles;
         [SerializeField] private AudioPlayer shoutPlayer;
         [SerializeField] private AudioAggregate shoutAudios;
-        [SerializeField] private string shoutActionName;
+        [SerializeField] private InputActionReference inputReference;
 
         [Header("Parameters")] 
         // ReSharper disable once MissingLinebreak
@@ -32,7 +32,6 @@ namespace Audio.Special
         private HashSet<InteractableShoutTrigger> m_singleInteractables = new();
         private Collider[] m_interactablesInner = new Collider[MaxInteractables];
         private Collider[] m_interactablesOuter = new Collider[MaxInteractables];
-        private InputAction m_shoutAction;
         private float m_shoutTimer;
 
         public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.Player;
@@ -45,8 +44,7 @@ namespace Audio.Special
                 return;
             }
             
-            m_shoutAction ??= InputManager.Instance.PlayerMap.GetAction(shoutActionName);
-            if (m_shoutAction.WasPressedThisFrame())
+            if (inputReference.action.WasPressedThisFrame())
             {
                 m_shoutTimer = 2f;
                 PlayShoutAudio();

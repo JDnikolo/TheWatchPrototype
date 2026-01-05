@@ -6,13 +6,13 @@ namespace UI.Elements
 {
 	public abstract class ListBase : BaseBehaviour
 	{
-		[SerializeField] [HideInInspector] private List layoutParent;
+		[SerializeField] [HideInInspector] private LayoutList layoutParent;
 
-		public List LayoutParent => layoutParent;
+		public LayoutList LayoutParent => layoutParent;
 #if UNITY_EDITOR
 		protected virtual void OnValidate()
 		{
-			if (TryGetComponent(out List newLayoutParent)) this.DirtyReplaceObject(ref layoutParent, newLayoutParent);
+			if (TryGetComponent(out LayoutList newLayoutParent)) this.DirtyReplaceObject(ref layoutParent, newLayoutParent);
 		}
 #endif
 	}

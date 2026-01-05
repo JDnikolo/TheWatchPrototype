@@ -1,6 +1,8 @@
 ﻿using Attributes;
+using Callbacks.Backing;
 using Callbacks.ComboBox;
 using Callbacks.Layout;
+using Input;
 using Managers;
 using Managers.Persistent;
 using UI.ComboBox;
@@ -12,10 +14,9 @@ using Utilities;
 namespace UI.Elements
 {
 	[AddComponentMenu("UI/Elements/ComboBox")]
-	public sealed class ComboBox : ButtonBase, IComboBoxFinished, ILayoutInputCallback
+	public sealed class ComboBox : ButtonBase, IComboBoxFinished, ILayoutInputCallback, IBackHook
 	{
-		[SerializeField] private string primaryActionName = "Primary";
-		[SerializeField] private string escapeActionName = "Escape";
+		[SerializeField] private InputActionReference inputReference;
 
 		[SerializeField, AutoAssigned(AssignModeFlags.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
@@ -24,8 +25,6 @@ namespace UI.Elements
 		private ComboDataProvider dataProvider;
 
 		private IComboBoxReceiver m_receiver;
-		private InputAction m_primaryAction;
-		private InputAction m_escapeAction;
 		private ComboData m_currentData;
 		private bool m_opened;
 
@@ -37,15 +36,26 @@ namespace UI.Elements
 		
 		public ComboData CurrentData => m_currentData;
 
+		private bool Opened
+		{
+			get => m_opened;
+			set
+			{
+				if (m_opened == value) return;
+				m_opened = value;
+				if (value) InputManager.Instance?.BackSpecial.AddHook(this);
+				else InputManager.Instance?.BackSpecial.RemoveHook(this);
+			}
+		}
+
 		public void SetReceiver(IComboBoxReceiver receiver) => m_receiver = receiver;
 		
 		public void OnInput(Vector2 axis, ref Direction input)
 		{
-			m_primaryAction ??= InputManager.Instance.UIMap.GetAction(primaryActionName);
-			m_escapeAction ??= InputManager.Instance.UIMap.GetAction(escapeActionName);
-			if (m_primaryAction.WasPressedThisFrame()) OpenPanel(false);
-			else if (m_escapeAction.WasPressedThisFrame()) ClosePanel();
+			if (inputReference.action.WasPressedThisFrame()) OpenPanel(false);
 		}
+		
+		public void OnBackPressed(InputState inputState) => ClosePanel();
 
 		public void OnComboBoxFinished()
 		{
@@ -63,22 +73,22 @@ namespace UI.Elements
 
 		private void OpenPanel(bool fromClick)
 		{
-			if (m_opened) return;
-			m_opened = true;
+			if (Opened) return;
+			Opened = true;
 			enabled = false;
 			ComboManager.Instance.OpenComboPanel(new ComboPanelInput(this, this), fromClick);
 		}
 
 		private void ClosePanel()
 		{
-			if (!m_opened) return;
+			if (!Opened) return;
 			ComboManager.Instance.CloseComboPanel();
 			ClosePanelInternal();
 		}
 
 		private void ClosePanelInternal()
 		{
-			m_opened = false;
+			Opened = false;
 			enabled = true;
 		}
 

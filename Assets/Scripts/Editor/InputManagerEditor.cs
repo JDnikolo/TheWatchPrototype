@@ -16,9 +16,12 @@ namespace Editor
 				using (new EditorGUI.DisabledScope(true))
 				{
 					EditorGUILayout.EnumPopup("Control Scheme", local.ControlSchemeEditor);
+					EditorGUILayout.IntField("Active Controls", local.ActiveControls);
+					EditorGUILayout.IntField("Active Specials", local.ActiveSpecials);
 					DisplayInputMap(local.PlayerMap, "Player Map");
 					DisplayInputMap(local.UIMap, "UI Map");
 					DisplayInputMap(local.PersistentGameMap, "Persistent Game Map");
+					DisplaySpecialInput(local.BackSpecial, "Back Special");
 				}
 		}
 
@@ -26,6 +29,13 @@ namespace Editor
 		{
 			if (inputMap == null) EditorGUILayout.TextField(name, Utils.NULL_STRING);
 			else EditorGUILayout.Toggle(name, inputMap.EditorEnabled);
+		}
+
+		private void DisplaySpecialInput<T>(InputManager.SpecialInput<T> input, string name)
+		{
+			EditorGUILayout.Toggle(name, input.Enabled);
+			EditorGUILayout.EnumPopup("State", input.Action.GetInputState());
+			input.Hooks.DisplayCollection("Hooks");
 		}
 	}
 }
