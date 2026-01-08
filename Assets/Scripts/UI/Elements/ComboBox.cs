@@ -27,6 +27,7 @@ namespace UI.Elements
 		private IComboBoxReceiver m_receiver;
 		private ComboData m_currentData;
 		private bool m_opened;
+		private bool m_fromClick;
 
 		public IComboDataProvider DataProvider => dataProvider;
 
@@ -48,6 +49,12 @@ namespace UI.Elements
 			}
 		}
 
+		protected override void Deselect()
+		{
+			base.Deselect();
+			Debug.Log("Deselect");
+		}
+
 		public void SetReceiver(IComboBoxReceiver receiver) => m_receiver = receiver;
 		
 		public void OnInput(Vector2 axis, ref Direction input)
@@ -55,13 +62,12 @@ namespace UI.Elements
 			if (inputReference.action.WasPressedThisFrame()) OpenPanel(false);
 		}
 		
-		public void OnBackPressed(InputState inputState) => ClosePanel();
-
-		public void OnComboBoxFinished()
+		public void OnBackPressed(InputState inputState)
 		{
-			ClosePanelInternal();
-			OnDeselected();
+			if (inputState == InputState.Pressed) ClosePanel();
 		}
+
+		public void OnComboBoxFinished() => ClosePanelInternal();
 
 		public void OnComboBoxFinished(ComboData data)
 		{
@@ -76,8 +82,12 @@ namespace UI.Elements
 			if (Opened) return;
 			Opened = true;
 			enabled = false;
-			ComboManager.Instance.OpenComboPanel(new ComboPanelInput(this, this), fromClick);
+			m_fromClick = fromClick;
+			GameManager.Instance.InvokeOnNextFrameUpdate(OpenDelayed);
 		}
+
+		private void OpenDelayed() => ComboManager.Instance.OpenComboPanel(
+			new ComboPanelInput(this, this), m_fromClick);
 
 		private void ClosePanel()
 		{
@@ -118,5 +128,8 @@ namespace UI.Elements
 			m_receiver = null;
 			InputManager.Instance?.BackSpecial.RemoveHook(this);
 		}
+#if UNITY_EDITOR
+		public bool EditorOpened => Opened;
+#endif
 	}
 }

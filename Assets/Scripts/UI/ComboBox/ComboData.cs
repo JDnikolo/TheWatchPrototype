@@ -34,10 +34,8 @@ namespace UI.ComboBox
 #if UNITY_EDITOR
 		public void DisplayInEditor()
 		{
-			EditorGUILayout.BeginHorizontal();
 			EditorGUILayout.ObjectField(Label, typeof(TextObject), false);
 			UserData.Display(null);
-			EditorGUILayout.EndHorizontal();
 		}
 
 		public void DisplayInEditor(string name) => name.DisplayIndented(DisplayInEditor);

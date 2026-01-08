@@ -45,6 +45,7 @@ namespace Managers
 		
 		public void OpenComboPanel(ComboPanelInput input, bool fromClick)
 		{
+			Debug.Log("OpenComboPanel");
 			GameManager.Instance.AddFrameUpdate(this);
 			if (fromClick) m_input = input;
 			else OpenComboPanelInternal(input);
@@ -58,12 +59,14 @@ namespace Managers
 			{
 				var layoutManager = LayoutManager.Instance; 
 				m_state = layoutManager.PauseState;
+				Debug.Log("Transfer to combo box");
 				layoutManager.ForceSelect(layoutParent);
 			}
 		}
 		
 		public void CloseComboPanel()
 		{
+			Debug.Log("CloseComboPanel");
 			GameManager.Instance.RemoveFrameUpdate(this);
 			LayoutManager.Instance.PauseState = m_state;
 			comboPanel.DisposeElements();

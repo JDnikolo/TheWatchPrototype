@@ -171,6 +171,7 @@ namespace UI.Layout.Elements
 		public void Clear()
 		{
 			m_elements.Clear();
+			m_nodes.Clear();
 			m_selectedNode = null;
 		}
 
