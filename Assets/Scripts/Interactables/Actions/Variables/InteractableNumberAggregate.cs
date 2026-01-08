@@ -1,5 +1,4 @@
-﻿using Attributes;
-using AYellowpaper.SerializedCollections;
+﻿using AYellowpaper.SerializedCollections;
 using UnityEngine;
 using Variables;
 

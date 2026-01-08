@@ -15,6 +15,8 @@ namespace Debugging
 			MinCount = minCount;
 			CustomDebug = customDebug;
 		}
+
+		public override string ToString() => $"O: {Obsolete} A: {AllowNull} M: {MinCount} C: {CustomDebug}";
 	}
 }
 #endif

@@ -62,7 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab54e5d439c14f5cb01e8a5720f9699d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  helpActionName: Help
+  inputReference: {fileID: -8307647403990855456, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   texts:
   - {fileID: 7622643786974467819}
   - {fileID: 4264141945035736196}
@@ -112,7 +112,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1599351766069650330, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: m_Name
-      value: Interact
+      value: InputSystem_Actions:Player/Interact
       objectReference: {fileID: 0}
     - target: {fileID: 5144833229114785792, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: m_Pivot.x
@@ -195,9 +195,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7593768543993696311, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
+      propertyPath: text
+      value: 
+      objectReference: {fileID: 11400000, guid: 1efdda7b824de814d903d5765358c16a, type: 2}
+    - target: {fileID: 7593768543993696311, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: target
-      value: 4
-      objectReference: {fileID: 0}
+      value: 
+      objectReference: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 8564011231032028229, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: texts.Array.size
       value: 1
@@ -241,7 +245,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1599351766069650330, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: m_Name
-      value: Shout
+      value: InputSystem_Actions:Player/Shout
       objectReference: {fileID: 0}
     - target: {fileID: 5144833229114785792, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: m_Pivot.x
@@ -324,9 +328,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7593768543993696311, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
+      propertyPath: text
+      value: 
+      objectReference: {fileID: 11400000, guid: 310f520d99d8f8d44a46238f42fd577a, type: 2}
+    - target: {fileID: 7593768543993696311, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: target
-      value: 5
-      objectReference: {fileID: 0}
+      value: 
+      objectReference: {fileID: 2172501871176948759, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 8564011231032028229, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: texts.Array.size
       value: 1
@@ -370,7 +378,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1599351766069650330, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: m_Name
-      value: Journal
+      value: InputSystem_Actions:PersistentGame/Journal
       objectReference: {fileID: 0}
     - target: {fileID: 5144833229114785792, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: m_Pivot.x
@@ -453,9 +461,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7593768543993696311, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
+      propertyPath: text
+      value: 
+      objectReference: {fileID: 11400000, guid: 336ba74cd8af9f64687a3187360dc8c2, type: 2}
+    - target: {fileID: 7593768543993696311, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: target
-      value: 6
-      objectReference: {fileID: 0}
+      value: 
+      objectReference: {fileID: 6353576963185412362, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 8564011231032028229, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: texts.Array.size
       value: 1
@@ -499,7 +511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1599351766069650330, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: m_Name
-      value: Help
+      value: InputSystem_Actions:PersistentGame/Help
       objectReference: {fileID: 0}
     - target: {fileID: 5144833229114785792, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: m_Pivot.x
@@ -582,9 +594,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7593768543993696311, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
+      propertyPath: text
+      value: 
+      objectReference: {fileID: 11400000, guid: 0deb768033c210c458a910b228547915, type: 2}
+    - target: {fileID: 7593768543993696311, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: target
-      value: 7
-      objectReference: {fileID: 0}
+      value: 
+      objectReference: {fileID: -8307647403990855456, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     - target: {fileID: 8564011231032028229, guid: b58b15ae0e2774445850301fde6bcef2, type: 3}
       propertyPath: texts.Array.size
       value: 1

@@ -20,7 +20,6 @@ namespace Editor
 					EditorGUILayout.IntField("Active Specials", local.ActiveSpecials);
 					DisplayInputMap(local.PlayerMap, "Player Map");
 					DisplayInputMap(local.UIMap, "UI Map");
-					DisplayInputMap(local.PersistentGameMap, "Persistent Game Map");
 					DisplaySpecialInput(local.BackSpecial, "Back Special");
 				}
 		}

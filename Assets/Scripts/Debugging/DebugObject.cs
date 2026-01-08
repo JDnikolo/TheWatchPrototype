@@ -1,6 +1,5 @@
 ﻿#if UNITY_EDITOR
 using System;
-using NUnit.Framework.Internal;
 using Object = UnityEngine.Object;
 
 namespace Debugging

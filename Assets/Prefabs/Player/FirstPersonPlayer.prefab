@@ -247,6 +247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 8623045036697053742}
+  standalone: 1
   pausable: 0
 --- !u!1 &2544714322132112406
 GameObject:
@@ -449,7 +450,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d40040fff65c8654a89f7452c9f6e05e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cinemachineCamera: {fileID: 0}
   inputHandler: {fileID: 7145102231624370597}
   velocityData: {fileID: 11400000, guid: 9eb368ab64aabdb40a871e58c17402fb, type: 2}
 --- !u!114 &5000607942218046469
@@ -464,8 +464,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c03319aac9aa6e42ae0c3fc3bf54463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cinemachinePanTilt: {fileID: 0}
   inputHandler: {fileID: 7145102231624370597}
+  panTilt: {fileID: 0}
   cameraSensitivityX: 20
   cameraSensitivityY: 20
 --- !u!1 &4110980113150417230
@@ -667,7 +667,7 @@ MonoBehaviour:
   shoutParticles: {fileID: 0}
   shoutPlayer: {fileID: 1086942936833318802}
   shoutAudios: {fileID: 11400000, guid: f231b092df042cf4f9378e2a5fa5ab4e, type: 2}
-  shoutActionName: Shout
+  inputReference: {fileID: 2172501871176948759, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   shoutInteractDistanceOuter: 5
   shoutWidthOuter: 3
   shoutInteractDistanceInner: 5
@@ -852,6 +852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 3604651048814991354}
+  standalone: 1
   pausable: 0
 --- !u!1 &8138365040519800164
 GameObject:

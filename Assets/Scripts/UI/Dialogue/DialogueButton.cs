@@ -1,5 +1,4 @@
-﻿using System;
-using Localization.Dialogue;
+﻿using Localization.Dialogue;
 using Managers.Persistent;
 using Runtime.FrameUpdate;
 using UnityEngine;

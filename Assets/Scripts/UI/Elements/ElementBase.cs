@@ -6,7 +6,7 @@ namespace UI.Elements
 {
 	public abstract class ElementBase : BaseBehaviour
 	{
-		[SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(LayoutElement))]
+		[CanBeNull, SerializeField, AutoAssigned(AssignModeFlags.Self, typeof(LayoutElement))]
 		private LayoutElement layoutParent;
 
 		public LayoutElement LayoutParent => layoutParent;

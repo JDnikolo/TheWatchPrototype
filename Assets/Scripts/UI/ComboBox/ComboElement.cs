@@ -1,6 +1,5 @@
 ﻿using Attributes;
 using Callbacks.Layout;
-using Managers.Persistent;
 using UI.Elements;
 using UI.Text;
 using UnityEngine;

@@ -13,58 +13,85 @@ namespace Utilities
 {
 	public static partial class Utils
 	{
+		private struct TypeFields : IEquatable<TypeFields>
+		{
+			public readonly Type Type;
+			public readonly FieldInfo[] Fields;
+
+			public TypeFields(Type type)
+			{
+				Type = type;
+				Fields = GetFields(type);
+			}
+
+			public bool Equals(TypeFields other) => Type == other.Type;
+
+			public override bool Equals(object obj) => obj is TypeFields other && Equals(other);
+
+			public override int GetHashCode() => (Type != null ? Type.GetHashCode() : 0);
+
+			public override string ToString() => Type.ToString();
+		}
+		
 		public static bool IsAssetPath(this string path) => path.StartsWith("Assets");
 
 		public static bool TestAny(this OperationData operationData, string path, object value)
 		{
 			if (value == null) throw new InvalidOperationException();
-			var fields = new List<FieldInfo>();
+			var typeFields = new List<TypeFields>();
 			var type = value.GetType();
-			fields.AddRange(GetFields(type));
+			typeFields.Add(new TypeFields(type));
 			var baseType = type.BaseType;
-			while (baseType != null && baseType != typeof(object) && 
+			while (baseType != null && baseType != typeof(object) &&
 					baseType != typeof(BaseBehaviour) && baseType != typeof(BaseObject))
 			{
-				fields.AddRange(GetFields(baseType));
+				typeFields.Add(new TypeFields(baseType));
 				baseType = baseType.BaseType;
 			}
-
-			for (var i = 0; i < fields.Count; i++)
+			
+			for (var i = 0; i < typeFields.Count; i++)
 			{
-				var field = fields[i];
-				var isSerialized = false;
-				var allowNull = false;
-				var obsolete = false;
-				var targetCount = 0;
-				string debugMethod = null;
-				foreach (var attribute in field.GetCustomAttributes())
+				var typeField = typeFields[i];
+				var fields = typeField.Fields;
+				for (var j = 0; j < fields.Length; j++)
 				{
-					if (attribute is SerializeField) isSerialized = true;
-					else if (attribute is ObsoleteAttribute) obsolete = true;
-					else if (attribute is CanBeNull) allowNull = true;
-					else if (attribute is CanBeNullInPath pathTester) allowNull = pathTester.AllowNull(path);
-					else if (attribute is MinCount minCount) targetCount = minCount.Target;
-					else if (attribute is CustomDebug customDebug) debugMethod = customDebug.MethodName;
-				}
+					var field = fields[j];
+					var isSerialized = false;
+					var allowNull = false;
+					var obsolete = false;
+					var targetCount = 0;
+					string debugMethod = null;
+					foreach (var attribute in field.GetCustomAttributes())
+					{
+						if (attribute is SerializeField) isSerialized = true;
+						else if (attribute is ObsoleteAttribute) obsolete = true;
+						else if (attribute is CanBeNull) allowNull = true;
+						else if (attribute is CanBeNullInPath pathTester) allowNull = pathTester.AllowNull(path);
+						else if (attribute is MinCount minCount) targetCount = minCount.Target;
+						else if (attribute is CustomDebug customDebug) debugMethod = customDebug.MethodName;
+					}
 				
-				if (!isSerialized) continue;
-				var fieldData = new FieldData(obsolete, allowNull, targetCount, debugMethod);
-				var fieldType = field.FieldType;
-				var typeData = fieldType.GetTypeData(false);
-				if (typeData == TypeData.NotTestable) continue;
-				path = $"{path}.{field.Name}";
-				if (!string.IsNullOrEmpty(fieldData.CustomDebug))
-				{
-					var method = type.GetMethod(fieldData.CustomDebug,
-						BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly,
-						null, CallingConventions.HasThis,
-						new[] {typeof(OperationData), typeof(string), typeof(FieldData)}, null);
-					if (method != null)
-						return (bool) method.Invoke(value, new object[] {operationData, path, fieldData});
+					if (!isSerialized) continue;
+					var fieldData = new FieldData(obsolete, allowNull, targetCount, debugMethod);
+					var fieldType = field.FieldType;
+					var typeData = fieldType.GetTypeData(false);
+					if (typeData == TypeData.NotTestable) continue;
+					var newPath = $"{path}.{field.Name}";
+					if (!string.IsNullOrEmpty(fieldData.CustomDebug))
+					{
+						var method = typeField.Type.GetMethod(fieldData.CustomDebug,
+							BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly,
+							null, CallingConventions.HasThis,
+							new[] {typeof(OperationData), typeof(string), typeof(FieldData)}, null);
+						if (method != null)
+						{
+							method.Invoke(value, new object[] {operationData, newPath, fieldData});
+							continue;
+						}
+					}
+				
+					operationData.TestType(newPath, fieldData, typeData, fieldType, field.GetValue(value));
 				}
-
-				//if (!operationData.TestType(path, fieldData, typeData, fieldType, field.GetValue(value))) return false;
-				operationData.TestType(path, fieldData, typeData, fieldType, field.GetValue(value));
 			}
 
 			return true;

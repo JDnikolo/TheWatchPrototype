@@ -1009,7 +1009,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 1425125534}
-  inputReference: {fileID: 0}
+  inputReference: {fileID: -6482483307479619536, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   pauseSnapshot: {fileID: 11400000, guid: d1d0c7eb241c00d4bb6ce547d393e484, type: 2}
 --- !u!114 &470417761
 MonoBehaviour:
@@ -1024,7 +1024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   journalPanel: {fileID: 620366083}
-  inputReference: {fileID: 0}
+  inputReference: {fileID: 6353576963185412362, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   journalSnapshot: {fileID: 11400000, guid: 490f42be3838ff64db5ce622f296a8e9, type: 2}
 --- !u!114 &470417762
 MonoBehaviour:
@@ -3550,8 +3550,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4691133969319685373, guid: 3500bab65e0cbde488ff0410ca4d8980, type: 3}
       propertyPath: interactables.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4691133969319685373, guid: 3500bab65e0cbde488ff0410ca4d8980, type: 3}
+      propertyPath: interactables.Array.data[2]
+      value: 
+      objectReference: {fileID: 1703525537}
     - target: {fileID: 4691133969319685373, guid: 3500bab65e0cbde488ff0410ca4d8980, type: 3}
       propertyPath: interactables.Array.data[3]
       value: 
@@ -5143,15 +5147,15 @@ PrefabInstance:
     - target: {fileID: 8446899581915120213, guid: 64d17f7d97a6115469b1bf838bc39fb9, type: 3}
       propertyPath: behaviours.Array.data[50]
       value: 
-      objectReference: {fileID: 870945221}
+      objectReference: {fileID: 916813461}
     - target: {fileID: 8446899581915120213, guid: 64d17f7d97a6115469b1bf838bc39fb9, type: 3}
       propertyPath: behaviours.Array.data[51]
       value: 
-      objectReference: {fileID: 184545100}
+      objectReference: {fileID: 870945221}
     - target: {fileID: 8446899581915120213, guid: 64d17f7d97a6115469b1bf838bc39fb9, type: 3}
       propertyPath: behaviours.Array.data[52]
       value: 
-      objectReference: {fileID: 916813461}
+      objectReference: {fileID: 184545100}
     - target: {fileID: 8446899581915120213, guid: 64d17f7d97a6115469b1bf838bc39fb9, type: 3}
       propertyPath: behaviours.Array.data[53]
       value: 

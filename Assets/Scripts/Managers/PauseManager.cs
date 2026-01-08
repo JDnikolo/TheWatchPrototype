@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using Attributes;
 using Audio;
+using Callbacks.Backing;
 using Callbacks.Pausing;
+using Input;
 using Managers.Persistent;
 using Runtime;
 using Runtime.FixedUpdate;
 using Runtime.FrameUpdate;
 using Runtime.LateUpdate;
-using UI.Layout;
 using UI.Layout.Elements;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,7 +17,7 @@ using Utilities;
 namespace Managers
 {
 	[AddComponentMenu("Managers/Pause Manager")]
-	public sealed partial class PauseManager : Singleton<PauseManager>, IFrameUpdatable
+	public sealed partial class PauseManager : Singleton<PauseManager>, IBackHook
 	{
 		[CanBeNullInPrefab, SerializeField] private LayoutElementBase pauseMenu;
 		[SerializeField] private InputActionReference inputReference;
@@ -26,17 +27,9 @@ namespace Managers
 		private State m_pauseState;
 		private bool m_paused;
 		
-		private Updatable m_updatable;
-		
 		protected override bool Override => true;
 
-		public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.PauseManager;
-
-		public bool CanPause
-		{
-			get => m_updatable.Updating;
-			set => m_updatable.SetUpdating(value, this);
-		}
+		public bool CanPause { get; set; }
 
 		private void SetPause(bool paused)
 		{
@@ -54,28 +47,32 @@ namespace Managers
 
 		public void RemovePausedCallback(IPauseCallback pausedCallback) => m_pauseCallbacks.Remove(pausedCallback);
 		
-		public void OnFrameUpdate()
+		public void OnBackPressed(InputState inputState)
 		{
-			if (CanPause && inputReference.action.WasPressedThisFrame())
+			if (inputState == InputState.Pressed)
 			{
-				var pauseObject = pauseMenu.gameObject;
-				var state = pauseObject.activeInHierarchy;
-				if (!state)
+				var state = pauseMenu.gameObject.activeInHierarchy;
+				if (state) m_pauseState.SaveStates(this);
+				else if (CanPause)
 				{
 					var audioManager = AudioManager.Instance;
 					audioManager.PreparePause(false, 0.2f);
 					m_pauseState.LoadStates(this);
 					audioManager.SetSnapshot(pauseSnapshot, false, 0.2f);
 					var gameManager = GameManager.Instance;
-					gameManager.FrameUpdateInvoke = FrameUpdatePosition.PauseManager;
+					gameManager.FrameUpdateInvoke = FrameUpdatePosition.LayoutManager;
 					gameManager.LateUpdateInvoke = LateUpdatePosition.None;
 					gameManager.FixedUpdateInvoke = FixedUpdatePosition.None;
 					InputManager.Instance.ForceUIInput();
 					LayoutManager.Instance.ForceSelect(pauseMenu);
 				}
-				else m_pauseState.SaveStates(this);
 			}
 		}
+
+		private void OnEnable() => InputManager.Instance?.BackSpecial.AddHook(this);
+
+		private void OnDisable() => InputManager.Instance?.BackSpecial.RemoveHook(this);
+
 #if UNITY_EDITOR
 		public State PauseState => m_pauseState;
 #endif

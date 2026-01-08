@@ -116,6 +116,7 @@ namespace UI.Elements
 		{
 			base.OnDestroy();
 			m_receiver = null;
+			InputManager.Instance?.BackSpecial.RemoveHook(this);
 		}
 	}
 }

@@ -21,7 +21,6 @@ namespace Managers.Persistent
 		//Input maps
 		private InputMap m_playerMap = new(ControlMapFlags.Player);
 		private InputMap m_uiMap = new(ControlMapFlags.UI);
-		private InputMap m_persistentGameMap = new(ControlMapFlags.PersistentGame);
 		
 		//Special inputs
 		[SerializeField] private SpecialInput<IBackHook> backSpecial;
@@ -46,8 +45,6 @@ namespace Managers.Persistent
 		public InputMap PlayerMap => m_playerMap;
 		
 		public InputMap UIMap => m_uiMap;
-		
-		public InputMap PersistentGameMap => m_persistentGameMap;
 		
 		//Specials
 		public SpecialInput<IBackHook> BackSpecial => backSpecial;
@@ -106,7 +103,6 @@ namespace Managers.Persistent
 				m_activeControls = value.ActiveControls;
 				SetMapFromFlag(m_playerMap);
 				SetMapFromFlag(m_uiMap);
-				SetMapFromFlag(m_persistentGameMap);
 				ToggleCursor(value.CursorVisible);
 			}
 		}
@@ -128,17 +124,23 @@ namespace Managers.Persistent
 		public static InputBindingPair GetBindingIndexes(InputAction action, 
 			ControlSchemeEnum scheme, string name = null)
 		{
+			if (action == null) return InputBindingPair.Invalid;
 			var mask = InputBinding.MaskByGroup(GetGroup(scheme));
 			if (name != null) mask.name = name;
 			var bindings = action.bindings;
-			int baseIndex;
-			for (baseIndex = 0; baseIndex < bindings.Count; baseIndex++)
+			var firstIndex = -1;
+			var secondIndex = -1;
+			for (var i = 0; i < bindings.Count; i++)
 			{
-				var binding = bindings[baseIndex];
-				if (!binding.isComposite && mask.Matches(binding)) break;
+				var binding = bindings[i];
+				if (!binding.isComposite && mask.Matches(binding))
+				{
+					if (firstIndex < 0) firstIndex = i;
+					else secondIndex = i;
+				}
 			}
 
-			return new InputBindingPair(baseIndex, baseIndex + 1);
+			return new InputBindingPair(firstIndex, secondIndex);
 		}
 
 		public static int GetBindingIndex(InputAction action, bool secondary, 
@@ -171,7 +173,6 @@ namespace Managers.Persistent
 		{
 			m_playerMap.ForceDisable();
 			m_uiMap.ForceDisable();
-			m_persistentGameMap.ForceDisable();
 			m_activeControls = 0;
 		}
 
@@ -243,8 +244,6 @@ namespace Managers.Persistent
 			m_playerMap = null;
 			m_uiMap.Dispose();
 			m_uiMap = null;
-			m_persistentGameMap.Dispose();
-			m_persistentGameMap = null;
 		}
 #if UNITY_EDITOR
 		public ControlSchemeEnum ControlSchemeEditor => m_controlScheme;

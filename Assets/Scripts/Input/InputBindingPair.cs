@@ -6,12 +6,8 @@
 		public int Secondary;
 
 		public bool HasSecondary => Secondary >= 0;
-		
-		public InputBindingPair(int primary)
-		{
-			Primary = primary;
-			Secondary = -1;
-		}
+
+		public static InputBindingPair Invalid = new(-1, -1);
 
 		public InputBindingPair(int primary, int secondary)
 		{

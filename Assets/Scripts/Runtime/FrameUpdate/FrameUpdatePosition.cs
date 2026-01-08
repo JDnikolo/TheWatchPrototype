@@ -9,7 +9,6 @@
 		InputManager,
 		ComboManager,
 		LayoutManager,
-		PauseManager,
 		JournalManager,
 		Player,
 		Agent,

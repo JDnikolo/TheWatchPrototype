@@ -13,7 +13,12 @@ namespace UI.Elements
 	public class Button : ButtonBase, ILayoutInputCallback
 	{
 		[SerializeField, HideInInspector] private InputActionReference primaryReference;
-		[SerializeField, HideInInspector] private InputActionReference secondaryReference;
+#if UNITY_EDITOR
+		[CustomDebug(nameof(DebugSecondary))]
+#endif
+		[SerializeField, HideInInspector] 
+		private InputActionReference secondaryReference;
+		
 		[SerializeField, HideInInspector] private bool anyClick;
 		
 		[CanBeNullInPrefab, SerializeField, HideInInspector]

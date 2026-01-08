@@ -22,9 +22,6 @@ namespace Interactables.Actions.Input
 				case InputMapEnum.UI:
 					inputMap = InputManager.Instance.UIMap;
 					break;
-				case InputMapEnum.PersistentGame:
-					inputMap = InputManager.Instance.PersistentGameMap;
-					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}

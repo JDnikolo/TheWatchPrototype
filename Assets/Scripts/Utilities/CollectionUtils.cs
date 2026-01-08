@@ -6,6 +6,11 @@ namespace Utilities
 {
 	public static partial class Utils
 	{
+		public static void AddRange<T>(this HashSet<T> set, IEnumerable<T> enumerable)
+		{
+			foreach (var item in enumerable) set.Add(item);
+		}
+		
 		public static int SafeCount<T>(this ICollection<T> collection) => collection?.Count ?? -1;
 		
 		public static bool ContainsKey<T>(this ICollection<T> collection, int key) =>
