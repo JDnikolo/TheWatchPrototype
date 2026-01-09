@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Attributes;
 using Interactables.Triggers;
 using LookupTables;
 using Managers;
@@ -13,7 +14,7 @@ namespace Audio.Special
 {
     public sealed class ShoutCaster : BaseBehaviour, IFrameUpdatable
     {
-        [SerializeField] private ParticleSystem shoutParticles;
+        [CanBeNullInPrefab, SerializeField] private ParticleSystem shoutParticles;
         [SerializeField] private AudioPlayer shoutPlayer;
         [SerializeField] private AudioAggregate shoutAudios;
         [SerializeField] private InputActionReference inputReference;

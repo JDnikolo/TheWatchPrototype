@@ -1,4 +1,5 @@
-﻿using Callbacks.Layout;
+﻿using Attributes;
+using Callbacks.Layout;
 using Callbacks.Prewarm;
 using Input;
 using Localization.Text;
@@ -11,11 +12,13 @@ using UnityEngine.UI;
 namespace UI.Button
 {
 	[AddComponentMenu("UI/Button/Assign Control Button with Secondary")]
-	public sealed class ControlButtonDouble : ElementBase, ILayoutCallback, IPrewarm
+	public sealed class ControlButtonDouble : BaseBehaviour, ILayoutCallback, IPrewarm
 	{
 		[SerializeField] private Image image;
 		[SerializeField] private ElementColor color;
-
+		[SerializeField] private ControlButton firstButton;
+		[SerializeField] private ControlButton secondButton;
+		
 		private bool m_selected;
 
 		public void OnSelected()
@@ -32,7 +35,7 @@ namespace UI.Button
 
 		public void OnPrewarm()
 		{
-			if (LayoutParent) LayoutParent.SetCallback(this);
+			//if (LayoutParent) LayoutParent.SetCallback(this);
 		}
 
 		private void OnEnable()
@@ -44,15 +47,13 @@ namespace UI.Button
 		private void OnDisable() => color.ApplyDisabled(image);
 #if UNITY_EDITOR
 		//Input info
-		[SerializeField] private InputActionReference target;
+		[CanBeNullInPrefab, SerializeField] private InputActionReference target;
 		[SerializeField] private ControlSchemeEnum scheme;
 		[SerializeField] private string group;
 		
 		//Control info
-		[SerializeField] private TextObject text;
+		[CanBeNullInPrefab, SerializeField] private TextObject text;
 		[SerializeField] private Label label;
-		[SerializeField] private ControlButton firstButton;
-		[SerializeField] private ControlButton secondButton;
 
 		private void OnValidate()
 		{

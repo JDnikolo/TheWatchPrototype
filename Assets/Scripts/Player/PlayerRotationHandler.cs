@@ -1,3 +1,4 @@
+using Attributes;
 using Managers.Persistent;
 using Runtime.FrameUpdate;
 using Unity.Cinemachine;
@@ -9,7 +10,7 @@ namespace Player
 	public sealed class PlayerRotationHandler : BaseBehaviour, IFrameUpdatable
 	{
 		[SerializeField] private PlayerInputHandler inputHandler;
-		[SerializeField] private CinemachinePanTilt panTilt;
+		[CanBeNullInPrefab, SerializeField] private CinemachinePanTilt panTilt;
 
 		[Header("Rotation")]
 		// ReSharper disable once MissingLinebreak

@@ -11,8 +11,8 @@ namespace UI.Text
 	[AddComponentMenu("UI/Text/Control Info Text")]
 	public sealed class ControlText : BaseBehaviour, IBeforePlay
 	{
-		[SerializeField] private InputActionReference target;
-		[SerializeField] private TextObject text;
+		[CanBeNullInPrefab, SerializeField] private InputActionReference target;
+		[CanBeNullInPrefab, SerializeField] private TextObject text;
 
 		[SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(TextWriter))]
 		private TextWriter textWriter;

@@ -90,7 +90,7 @@ namespace Managers
                 while (m_scheduledActions.Count > 0)
                 {
                     var timedInteractable = m_scheduledActions.Peek();
-                    if (!timedInteractable.TimeToPass.Passed(m_currentTime)) break;
+                    if (!m_currentTime.Passed(timedInteractable.TimeToPass)) break;
                     timedInteractable = m_scheduledActions.Dequeue();
                     timedInteractable.Interactable.Interact();
                 }
@@ -128,7 +128,8 @@ namespace Managers
             var list = new List<TimedInteractable>();
             foreach (var pair in scheduledActions) list.Add(new TimedInteractable(pair.Key, pair.Value));
             list.Sort(CompareTimes);
-            for (var i = 0; i < list.Count; i++) Debug.Log(list[i].TimeToPass);
+            for (var i = 0; i < list.Count; i++) m_scheduledActions.Enqueue(list[i]);
+            list.Clear();
         }
 
         private static int CompareTimes(TimedInteractable x, TimedInteractable y)

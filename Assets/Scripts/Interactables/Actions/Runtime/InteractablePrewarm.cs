@@ -12,7 +12,8 @@ namespace Interactables.Actions.Runtime
 		, IBehaviourChecker
 #endif
 	{
-		[SerializeField] [DisableInInspector] private MonoBehaviour[] behaviours;
+		[IgnoreDebug, SerializeField, DisableInInspector] 
+		private MonoBehaviour[] behaviours;
 
 		public override void Interact()
 		{

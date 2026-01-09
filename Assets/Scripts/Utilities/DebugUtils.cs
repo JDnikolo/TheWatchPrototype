@@ -56,6 +56,7 @@ namespace Utilities
 				for (var j = 0; j < fields.Length; j++)
 				{
 					var field = fields[j];
+					var ignoreDebug = false;
 					var isSerialized = false;
 					var allowNull = false;
 					var obsolete = false;
@@ -63,7 +64,8 @@ namespace Utilities
 					string debugMethod = null;
 					foreach (var attribute in field.GetCustomAttributes())
 					{
-						if (attribute is SerializeField) isSerialized = true;
+						if (attribute is IgnoreDebug) ignoreDebug = true;
+						else if (attribute is SerializeField) isSerialized = true;
 						else if (attribute is ObsoleteAttribute) obsolete = true;
 						else if (attribute is CanBeNull) allowNull = true;
 						else if (attribute is CanBeNullInPath pathTester) allowNull = pathTester.AllowNull(path);
@@ -71,7 +73,7 @@ namespace Utilities
 						else if (attribute is CustomDebug customDebug) debugMethod = customDebug.MethodName;
 					}
 				
-					if (!isSerialized) continue;
+					if (ignoreDebug || !isSerialized) continue;
 					var fieldData = new FieldData(obsolete, allowNull, targetCount, debugMethod);
 					var fieldType = field.FieldType;
 					var typeData = fieldType.GetTypeData(false);

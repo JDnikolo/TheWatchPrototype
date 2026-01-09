@@ -16,15 +16,25 @@ namespace UI.Button
 	[AddComponentMenu("UI/Button/Assign Control Button")]
 	public sealed class ControlButton : ButtonBase, ILayoutInputCallback
 	{
-		[SerializeField] private InputActionReference inputReference;
+		[CanBeNullInPrefab, SerializeField] private InputActionReference inputReference;
+
 		[SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(TextWriter))]
 		private TextWriter textWriter;
 
-		[SerializeField, HideInInspector] private InputActionReference target;
-		[SerializeField, HideInInspector] private ControlSchemeEnum scheme;
-		[SerializeField, HideInInspector] private string group;
-		[SerializeField, HideInInspector] private bool hasSecondary;
-		[SerializeField, HideInInspector] private bool secondary;
+		[CanBeNullInPrefab, SerializeField, HideInInspector]
+		private InputActionReference target;
+
+		[CanBeNullInPrefab, SerializeField, HideInInspector]
+		private ControlSchemeEnum scheme;
+
+		[CanBeNullInPrefab, SerializeField, HideInInspector]
+		private string group;
+
+		[CanBeNullInPrefab, SerializeField, HideInInspector]
+		private bool hasSecondary;
+
+		[CanBeNullInPrefab, SerializeField, HideInInspector]
+		private bool secondary;
 
 		private InputActionRebindingExtensions.RebindingOperation m_rebindingOperation;
 		private int m_bindingIndex;
@@ -105,12 +115,12 @@ namespace UI.Button
 		// ReSharper disable once MissingLinebreak
 		[CustomDebug(nameof(DebugText)), SerializeField, HideInInspector]
 		private TextObject text;
-		
+
 		// ReSharper disable once MissingLinebreak
 		[CustomDebug(nameof(DebugLabel)), SerializeField, HideInInspector]
 		private Label label;
 
-		public void SetFromParent(ControlButtonDouble newParent, InputActionReference newTarget, 
+		public void SetFromParent(ControlButtonDouble newParent, InputActionReference newTarget,
 			ControlSchemeEnum newScheme, string newGroup, bool newSecondary)
 		{
 			this.DirtyReplaceObject(ref parent, newParent);
