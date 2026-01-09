@@ -10,6 +10,7 @@
 		ComboManager,
 		LayoutManager,
 		JournalManager,
+		NightManager,
 		Player,
 		Agent,
 		Default,
