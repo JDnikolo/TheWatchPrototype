@@ -4,6 +4,7 @@ using System.ComponentModel;
 using Attributes;
 using AYellowpaper.SerializedCollections;
 using Interactables;
+using Managers.Persistent;
 using Night;
 using Runtime;
 using Runtime.FrameUpdate;
@@ -131,6 +132,10 @@ namespace Managers
             for (var i = 0; i < list.Count; i++) m_scheduledActions.Enqueue(list[i]);
             list.Clear();
         }
+
+        private void OnEnable() => GameManager.Instance?.AddFrameUpdate(this);
+
+        private void OnDisable() => GameManager.Instance?.RemoveFrameUpdate(this);
 
         private static int CompareTimes(TimedInteractable x, TimedInteractable y)
         {
