@@ -1,16 +1,18 @@
-﻿using Managers;
+﻿using Callbacks.Beforeplay;
+using Callbacks.Night;
+using Managers;
 using UnityEngine;
 
 namespace Night
 {
 	[AddComponentMenu("Night/Night Clock")]
-	public sealed class NightClock : BaseBehaviour
+	public sealed class NightClock : BaseBehaviour, ITimeChangedCallback, IBeforePlay
 	{
 		[SerializeField] private Transform secondHandle;
 		[SerializeField] private Transform minuteHandle;
 		[SerializeField] private Transform hourHandle;
 
-		private void OnTimeChanged(NightTime currentTime)
+		public void OnTimeChanged(NightTime currentTime)
 		{
 			RotateTo(secondHandle, currentTime.second / 60f);
 			RotateTo(minuteHandle, currentTime.minute / 60f);
@@ -24,16 +26,8 @@ namespace Night
 			transform.localEulerAngles = localEuler;
 		}
 
-		private void OnEnable()
-		{
-			var nightManager = NightManager.Instance;
-			if (nightManager) nightManager.OnTimeChanged += OnTimeChanged;
-		}
+		public void OnBeforePlay() => NightManager.Instance?.AddTimeChangedCallback(this);
 
-		private void OnDisable()
-		{
-			var nightManager = NightManager.Instance;
-			if (nightManager) nightManager.OnTimeChanged -= OnTimeChanged;
-		}
+		private void OnDisable() => NightManager.Instance?.RemoveTimeChangedCallback(this);
 	}
 }

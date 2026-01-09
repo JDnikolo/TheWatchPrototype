@@ -1,5 +1,6 @@
 ﻿using Managers;
 using UnityEditor;
+using Utilities;
 
 namespace Editor
 {
@@ -20,6 +21,7 @@ namespace Editor
 			using (new EditorGUI.DisabledScope(true))
 			{
 				local.CurrentTime.DisplayInEditor();
+				local.ChangedCallbacks.DisplayCollection("Callbacks");
 			}
 		}
 	}

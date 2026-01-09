@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Attributes;
 using AYellowpaper.SerializedCollections;
+using Callbacks.Night;
 using Interactables;
 using Managers.Persistent;
 using Night;
@@ -43,7 +44,8 @@ namespace Managers
         [Category("Night actions")] 
         [CanBeNullInPrefab, SerializeField] private Interactable nightEndActions;
         [CanBeNullInPrefab, SerializeField] private SerializedDictionary<NightTime, Interactable> scheduledActions;
-        
+
+        private HashSet<ITimeChangedCallback> m_changedCallbacks = new();
         private Queue<TimedInteractable> m_scheduledActions = new();
         private Dictionary<string, int> m_interactionLog = new();
         private NightTime m_currentTime;
@@ -56,13 +58,15 @@ namespace Managers
             WantsToFinish,
             Finished,
         }
-
-        public event Action<NightTime> OnTimeChanged;
         
         protected override bool Override => true;
 
         public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.NightManager;
 
+        public void AddTimeChangedCallback(ITimeChangedCallback callback) => m_changedCallbacks.Add(callback);
+        
+        public void RemoveTimeChangedCallback(ITimeChangedCallback callback) => m_changedCallbacks.Remove(callback);
+        
         public void OnFrameUpdate()
         {
             switch (m_state)
@@ -96,7 +100,7 @@ namespace Managers
                     timedInteractable.Interactable.Interact();
                 }
                 
-                OnTimeChanged?.Invoke(m_currentTime);
+                foreach (var callback in m_changedCallbacks) callback.OnTimeChanged(m_currentTime);
                 if (m_state == State.Counting && m_currentTime.Passed(endingTime)) m_state = State.WantsToFinish;
             }
         }
@@ -150,6 +154,8 @@ namespace Managers
         }
 #if UNITY_EDITOR
         public NightTime CurrentTime => m_currentTime;
+        
+        public HashSet<ITimeChangedCallback> ChangedCallbacks => m_changedCallbacks;
 #endif
     }
 }
