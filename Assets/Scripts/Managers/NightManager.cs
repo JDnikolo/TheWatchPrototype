@@ -25,7 +25,13 @@ namespace Managers
         private float repeatReduction = 0.1f;
         
         [CanBeNullInPrefab, SerializeField] private Interactable nightEndActions;
+        
+        [CanBeNullInPrefab, SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(NightActionScheduler))] 
+        private NightActionScheduler scheduler;
+
         private Dictionary<string, int> m_interactionLog = new();
+        
+        
 
         protected override bool Override => true;
 

@@ -5,6 +5,7 @@ using Runtime;
 using Runtime.FrameUpdate;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI.Night
@@ -21,11 +22,7 @@ namespace UI.Night
         /// Event invoked when the timer reaches its target time.
         /// </summary>
         public event Action TimerFinished;
-
-        [SerializeField]
-        [Tooltip("The parent GameObject containing the clock hand sprites.")]
-        private GameObject clockParent;
-
+        
         private float targetTime = 2 * 60 * 60.0f;
 
         /// <summary>
@@ -42,33 +39,22 @@ namespace UI.Night
         /// Boolean 
         /// </summary>
         private Updatable m_updatable;
-
-        private TextMeshProUGUI m_timerText;
-
-        // References to the transforms of the clock hand sprites.
-        [SerializeField] private RectTransform m_shiftStartHand;
-        [SerializeField] private RectTransform m_shiftEndHand;
-        [SerializeField] private RectTransform m_currentTimeHand;
-        [SerializeField] private RectTransform m_secondsHand;
-        // References to the timer's components used to display and hide it.
-        [SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(Image))] 
-        private Image m_clockBackground;
-        [SerializeField] [AutoAssigned(AssignModeFlags.Self, typeof(RectMask2D))]
-        private RectMask2D m_clockMask;
-
+        
         public FrameUpdatePosition FrameUpdateOrder => FrameUpdatePosition.GameUI;
+        
+        [FormerlySerializedAs("m_nightClock")] [SerializeField] private NightClockUI nightClockUI;
+        [SerializeField] [CanBeNull] private NightActionScheduler nightActionScheduler;
         
         private void Awake()
         {
-            m_timerText = GetComponentsInChildren<TextMeshProUGUI>()[1];
             m_timeElapsed = 0.0f;
             m_updatable.SetUpdating(true, this);
         }
 
         private void Start()
         {
-            UpdateText();
-            UpdateClock();
+            nightClockUI.UpdateText(m_timeElapsed, targetTime);
+            nightClockUI.UpdateClock(m_timeElapsed, targetTime);
         }
 
         public void OnFrameUpdate()
@@ -76,7 +62,7 @@ namespace UI.Night
             if (m_timeElapsed <= targetTime) m_timeElapsed += Time.deltaTime;
             else
             {
-                m_timerText.text = "Shift Over!";
+                nightClockUI.SetTimerText("Shift Over!");
                 TimerFinished?.Invoke();
                 m_updatable.SetUpdating(false, this);
             }
@@ -86,8 +72,9 @@ namespace UI.Night
             if (m_secondTimer <= 0)
             {
                 m_secondTimer += 1.0f;
-                UpdateText();
-                UpdateClock();
+                nightClockUI.UpdateText(m_timeElapsed, targetTime);
+                nightClockUI.UpdateClock(m_timeElapsed, targetTime);
+                nightActionScheduler?.CheckForScheduledActions(m_timeElapsed);
             }
         }
 
@@ -96,16 +83,14 @@ namespace UI.Night
         /// </summary>
         public void Hide()
         {
-            m_clockBackground.enabled = false;
-            m_clockMask.softness = new Vector2Int(30000, 30000);
+            nightClockUI.Hide();
         }
         /// <summary>
         /// Makes the timer visible.
         /// </summary>
         public void Show()
         {
-            m_clockBackground.enabled = true;
-            m_clockMask.softness = new Vector2Int(0, 0);
+            nightClockUI.Show();
         }
 
         /// <summary>
@@ -113,29 +98,9 @@ namespace UI.Night
         /// </summary>
         /// <param name="value">Set to true to enable, false to disable.</param>
         public void SetEnabled(bool value = true) => m_updatable.SetUpdating(value, this);
+        
 
-        /// <summary>
-        /// Updates the rotations of the timer's clock hands.
-        /// </summary>
-        private void UpdateClock()
-        {
-            var time = TimeSpan.FromSeconds(m_timeElapsed);
-            var secondsRotation = 90 - (time.Seconds) * 6f;
-            if (time.Seconds > 30) secondsRotation = -90 + (time.Seconds - 30) * 6f;
-            m_secondsHand.rotation = Quaternion.Euler(0, 0, secondsRotation);
-            m_currentTimeHand.rotation = Quaternion.Euler(0, 0,
-                90.0f - 180.0f * (m_timeElapsed / targetTime));
-        }
-
-        /// <summary>
-        /// Updates the timer's TextMeshPro countdown.
-        /// </summary>
-        private void UpdateText()
-        {
-            var time = TimeSpan.FromSeconds(targetTime - m_timeElapsed);
-            //The text is formated to display as 00:00:00.
-            m_timerText.text = $"{time.Hours,2:D2}:{time.Minutes,2:D2}:{time.Seconds,2:D2}";
-        }
+        
 
         /// <summary>
         /// Sets the timer's target time and resets the timer's graphical components
@@ -149,8 +114,8 @@ namespace UI.Night
             m_timeElapsed = 0.0f;
             m_secondTimer = 0.0f;
 
-            UpdateText();
-            UpdateClock();
+            nightClockUI.UpdateText(m_timeElapsed, targetTime);
+            nightClockUI.UpdateClock(m_timeElapsed, targetTime);
         }
 
         /// <summary>
@@ -160,8 +125,8 @@ namespace UI.Night
         public void FastForwardSeconds(float seconds)
         {
             m_timeElapsed += Mathf.Clamp(seconds, 0, targetTime - m_timeElapsed);
-            UpdateText();
-            UpdateClock();
+            nightClockUI.UpdateText(m_timeElapsed, targetTime);
+            nightClockUI.UpdateClock(m_timeElapsed, targetTime);
         }
 
         /// <summary>
@@ -172,8 +137,8 @@ namespace UI.Night
         {
             m_timeElapsed += Mathf.Clamp(targetTime * percent, 0, targetTime - m_timeElapsed);
 
-            UpdateText();
-            UpdateClock();
+            nightClockUI.UpdateText(m_timeElapsed, targetTime);
+            nightClockUI.UpdateClock(m_timeElapsed, targetTime);
         }
 
         /// <summary>
@@ -184,8 +149,8 @@ namespace UI.Night
         {
             m_timeElapsed = Mathf.Clamp(seconds, 0, Mathf.Infinity);
 
-            UpdateText();
-            UpdateClock();
+            nightClockUI.UpdateText(m_timeElapsed, targetTime);
+            nightClockUI.UpdateClock(m_timeElapsed, targetTime);
         }
 
         /// <summary>
@@ -203,8 +168,8 @@ namespace UI.Night
         {
             m_timeElapsed = Mathf.Clamp(percent * targetTime, 0, targetTime);
 
-            UpdateText();
-            UpdateClock();
+            nightClockUI.UpdateText(m_timeElapsed, targetTime);
+            nightClockUI.UpdateClock(m_timeElapsed, targetTime);
         }
     }
 }
