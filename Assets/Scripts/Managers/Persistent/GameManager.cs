@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Audio;
 using Callbacks.Beforeplay;
 using Collections;
@@ -9,7 +8,9 @@ using Runtime.FixedUpdate;
 using Runtime.FrameUpdate;
 using Runtime.LateUpdate;
 using UnityEngine;
-
+#if !UNITY_EDITOR
+using System.IO;
+#endif
 namespace Managers.Persistent
 {
 	[AddComponentMenu("Managers/Persistent/Game Manager")]
@@ -185,7 +186,6 @@ namespace Managers.Persistent
 			}
 			catch (Exception e)
 			{
-				throw;
 				CreateLog(e);
 				Application.Quit();
 			}
@@ -206,7 +206,6 @@ namespace Managers.Persistent
 			}
 			catch (Exception e)
 			{
-				throw;
 				CreateLog(e);
 				Application.Quit();
 			}
@@ -227,15 +226,14 @@ namespace Managers.Persistent
 			}
 			catch (Exception e)
 			{
-				throw;
 				CreateLog(e);
 				Application.Quit();
 			}
 #endif
 		}
-
+#if !UNITY_EDITOR
 		private void CreateLog(Exception e) => File.WriteAllText($"{Application.persistentDataPath}\\{DateTime.Now.ToLongDateString()}.crashdump",e.ToString());
-
+#endif
 		protected override void OnDestroy()
 		{
 			base.OnDestroy();
